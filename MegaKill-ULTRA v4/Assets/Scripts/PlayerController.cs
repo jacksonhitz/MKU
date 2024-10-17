@@ -4,50 +4,55 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpd;
-    public float runDrag;
-    public Transform orientation;
     float horzInput;
     float vertInput;
-    Vector3 moveDir;
+    public float runSpd;
+    public CharacterController controller; 
     Rigidbody rb;
 
     public bool isDriving;
     public Transform carPos;
 
+    public Camera cam;
+    public float range; 
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-
-        rb.drag = runDrag;
     }
     void Update()
     {
         if (!isDriving)
         {
-            Move();
+            horzInput = Input.GetAxisRaw("Horizontal");
+            vertInput = Input.GetAxisRaw("Vertical");
+
+            Vector3 move = transform.right * horzInput + transform.forward * vertInput;
+
+            controller.Move(move * runSpd * Time.deltaTime);
+
         }
         else
         {
             transform.position = carPos.position;
         }
-    }
 
-    void Move()
-    {
-        horzInput = Input.GetAxisRaw("Horizontal");
-        vertInput = Input.GetAxisRaw("Vertical");
-
-        Vector3 vel = new Vector3(rb.velocity.x, 0f, rb.velocity.y);
-        if (vel.magnitude > moveSpd)
+        if (Input.GetButtonDown("Fire1"))
         {
-            Vector3 clampedVel = vel.normalized * moveSpd;
-            rb.velocity = new Vector3(clampedVel.x, rb.velocity.y, clampedVel.z);
+            Shoot();
         }
 
-        moveDir = orientation.forward * vertInput + orientation.right * horzInput;
-        rb.AddForce(moveDir.normalized * moveSpd * 10f, ForceMode.Force);
+        
+    }
+
+    void Shoot()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, range))
+        {
+            Debug.Log(hit.transform.name);
+        }
 
     }
 }
