@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,33 +7,52 @@ public class CarController : MonoBehaviour
 {
     float horzInput;
     float vertInput;
-
+    float currentBrakeForce;
+    float steerAngle;
     bool isBraking;
+
+    public WheelCollider fl;
+    public WheelCollider fr;
+    public WheelCollider bl;
+    public WheelCollider br;
+    
+    public Transform flT;
+    public Transform frT;
+    public Transform blT;
+    public Transform brT;
 
     public float motorForce;
     public float brakeForce;
     public float maxSteer;
-    public float carDrag;
-    public float minTurnVel;
 
-    PlayerController player;
-    Rigidbody rb;
-    
+    public PlayerController player;
+
+    float MaxAngularVelocity = 1000000000F;
+
+
+
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        GameObject playerObj = GameObject.FindWithTag("Player");
-        player = playerObj.GetComponent<PlayerController>();
+        fl.attachedRigidbody.maxAngularVelocity = MaxAngularVelocity;
+        fr.attachedRigidbody.maxAngularVelocity = MaxAngularVelocity;
+        bl.attachedRigidbody.maxAngularVelocity = MaxAngularVelocity;
+        br.attachedRigidbody.maxAngularVelocity = MaxAngularVelocity;
     }
+
+
+
     void FixedUpdate()
     {
-        if (player.isDriving)
+        if (player.currentState == PlayerController.State.driving)
         {
             Inputs();
         }
-
         Motor();
         Steer();
+        Wheels();
+
+        Debug.Log(vertInput);
+
     }
 
     void Inputs()
@@ -42,31 +62,49 @@ public class CarController : MonoBehaviour
         isBraking = Input.GetKey(KeyCode.Space);
     }
     
-    void Motor()
+    void Motor()    
     {
-        Vector3 forwardMovement = transform.forward * vertInput * motorForce;
-        rb.AddForce(forwardMovement * Time.fixedDeltaTime, ForceMode.Force);
-        
-        if (vertInput == 0)
+        fl.motorTorque = vertInput * motorForce;
+        fr.motorTorque = vertInput * motorForce;
+        bl.motorTorque = vertInput * motorForce;
+        br.motorTorque = vertInput * motorForce;
+        Debug.Log(fl.motorTorque);
+
+
+        currentBrakeForce = isBraking ? brakeForce : 0f;
+        if (isBraking)
         {
-            rb.velocity *= carDrag;
+            Brake();
         }
-    } 
+    }
+    void Brake()
+    {
+        fl.brakeTorque = currentBrakeForce;
+        fr.brakeTorque = currentBrakeForce;
+        bl.brakeTorque = currentBrakeForce;
+        br.brakeTorque = currentBrakeForce;
+    }
 
     void Steer()
     {
-        if (rb.velocity.magnitude > minTurnVel)
-        {
-            float steer = horzInput * maxSteer;
-            transform.Rotate(0, steer * Time.fixedDeltaTime, 0);
-        }
+        steerAngle = maxSteer * horzInput;
+        fl.steerAngle = steerAngle;
+        fr.steerAngle = steerAngle;
     }
-
-    void Brake()
+    
+    void Wheels()
     {
-        if (isBraking)
-        {
-            rb.velocity *= brakeForce;
-        }
+        Single(fl,flT);
+        Single(fr,frT);
+        Single(bl,blT);
+        Single(br,brT);
+    }
+    void Single(WheelCollider wheelCollider, Transform wheelTransform)
+    {
+        Vector3 pos;
+        Quaternion rot;
+        wheelCollider.GetWorldPose(out pos, out rot);
+        wheelTransform.rotation = rot;
+        wheelTransform.position = pos;
     }
 }

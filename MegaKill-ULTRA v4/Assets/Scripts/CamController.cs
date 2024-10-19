@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class CamController : MonoBehaviour
 {
-     public Transform camPos;
+
     public float sensX;
     public float sensY;
-    public Transform orientation; 
+
+    public Transform player;
+
+
     float xRotation;
     float yRotation; 
 
@@ -18,17 +21,13 @@ public class CamController : MonoBehaviour
     }
     void Update()
     {
-        transform.position = camPos.position;
+        float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * sensX;
+        float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * sensY;
 
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
-
-        yRotation += mouseX;
         xRotation -= mouseY; 
-        
         xRotation = Mathf.Clamp(xRotation, -90f, 90f); 
 
-        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        player.Rotate(Vector3.up * mouseX);
     }
 }
