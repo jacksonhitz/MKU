@@ -15,7 +15,7 @@ public class CarController : MonoBehaviour
     public WheelCollider fr;
     public WheelCollider bl;
     public WheelCollider br;
-    
+
     public Transform flT;
     public Transform frT;
     public Transform blT;
@@ -27,20 +27,6 @@ public class CarController : MonoBehaviour
 
     public PlayerController player;
 
-    float MaxAngularVelocity = 1000000000F;
-
-
-
-    void Start()
-    {
-        fl.attachedRigidbody.maxAngularVelocity = MaxAngularVelocity;
-        fr.attachedRigidbody.maxAngularVelocity = MaxAngularVelocity;
-        bl.attachedRigidbody.maxAngularVelocity = MaxAngularVelocity;
-        br.attachedRigidbody.maxAngularVelocity = MaxAngularVelocity;
-    }
-
-
-
     void FixedUpdate()
     {
         if (player.currentState == PlayerController.State.driving)
@@ -49,11 +35,11 @@ public class CarController : MonoBehaviour
         }
         Motor();
         Steer();
-        Wheels();
+        //Wheels();
 
         Debug.Log(vertInput);
-
     }
+
 
     void Inputs()
     {
@@ -61,28 +47,36 @@ public class CarController : MonoBehaviour
         vertInput = Input.GetAxis("Vertical");
         isBraking = Input.GetKey(KeyCode.Space);
     }
-    
-    void Motor()    
-    {
-        fl.motorTorque = vertInput * motorForce;
-        fr.motorTorque = vertInput * motorForce;
-        bl.motorTorque = vertInput * motorForce;
-        br.motorTorque = vertInput * motorForce;
-        Debug.Log(fl.motorTorque);
 
+    void Motor()
+    {
+        if (!isBraking) // Only apply motor torque if not braking
+        {
+            fl.motorTorque = vertInput * motorForce;
+            fr.motorTorque = vertInput * motorForce;
+            bl.motorTorque = vertInput * motorForce;
+            br.motorTorque = vertInput * motorForce;
+            Debug.Log(fl.motorTorque);
+        }
 
         currentBrakeForce = isBraking ? brakeForce : 0f;
-        if (isBraking)
-        {
-            Brake();
-        }
+        ApplyBrake();
     }
-    void Brake()
+
+    void ApplyBrake()
     {
         fl.brakeTorque = currentBrakeForce;
         fr.brakeTorque = currentBrakeForce;
         bl.brakeTorque = currentBrakeForce;
         br.brakeTorque = currentBrakeForce;
+
+        if (!isBraking) // Reset brake torque when brake is not pressed
+        {
+            fl.brakeTorque = 0f;
+            fr.brakeTorque = 0f;
+            bl.brakeTorque = 0f;
+            br.brakeTorque = 0f;
+        }
     }
 
     void Steer()
@@ -91,14 +85,15 @@ public class CarController : MonoBehaviour
         fl.steerAngle = steerAngle;
         fr.steerAngle = steerAngle;
     }
-    
+
     void Wheels()
     {
-        Single(fl,flT);
-        Single(fr,frT);
-        Single(bl,blT);
-        Single(br,brT);
+        Single(fl, flT);
+        Single(fr, frT);
+        Single(bl, blT);
+        Single(br, brT);
     }
+
     void Single(WheelCollider wheelCollider, Transform wheelTransform)
     {
         Vector3 pos;

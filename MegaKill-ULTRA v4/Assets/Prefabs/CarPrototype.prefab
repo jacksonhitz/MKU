@@ -166,7 +166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3311311803080157842, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
       propertyPath: m_Name
-      value: Free Racing Car Gray Variant
+      value: CarPrototype
       objectReference: {fileID: 0}
     - target: {fileID: 3311311803080157842, guid: 133308cdb8794744caaef026bde9e1f0, type: 3}
       propertyPath: m_TagString
@@ -303,8 +303,8 @@ MonoBehaviour:
   frT: {fileID: 5911761416276583306}
   blT: {fileID: 2352917766354217622}
   brT: {fileID: 6865208882756961717}
-  motorForce: 1000
-  brakeForce: 3000
+  motorForce: 300
+  brakeForce: 1000
   maxSteer: 30
   player: {fileID: 0}
 --- !u!146 &8396281578130434796 stripped

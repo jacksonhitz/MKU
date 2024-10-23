@@ -43,6 +43,10 @@ public class PlayerController : MonoBehaviour
         {
             gun.Shoot();
         }
+        if (Input.GetKey(KeyCode.R))
+        {
+            gun.Reload();
+        }
         if (Input.GetKey(KeyCode.E))
         {
             Interact();
