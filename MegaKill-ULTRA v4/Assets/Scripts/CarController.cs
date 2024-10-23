@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-    float horzInput;
-    float vertInput;
+    public float horzInput;
+    public float vertInput;
     float currentBrakeForce;
     float steerAngle;
-    bool isBraking;
+    public bool isBraking;
 
     public WheelCollider fl;
     public WheelCollider fr;
