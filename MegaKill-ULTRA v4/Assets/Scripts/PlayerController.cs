@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour
     public State currentState = State.foot;
 
     public Gun gun;
-    public SoundManager soundManager;
 
 
     void Update()
@@ -43,7 +42,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Fire1"))
         {
             gun.Shoot();
-
         }
         if (Input.GetKey(KeyCode.R))
         {

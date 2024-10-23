@@ -19,6 +19,7 @@ public class EnemyPatrol : MonoBehaviour
     //state change
     [SerializeField] float sightRange;
     bool playerInSight;
+    [SerializeField] bool isHostile;
 
     // Start is called before the first frame update
     void Start()
@@ -31,8 +32,8 @@ public class EnemyPatrol : MonoBehaviour
     void Update()
     {
         playerInSight = Physics.CheckSphere(transform.position, sightRange, playerLayer);
-        if (!playerInSight) Patrol();
-        if (playerInSight) Chase();
+        Patrol();
+        if (playerInSight && isHostile) Chase();
     }
         
 

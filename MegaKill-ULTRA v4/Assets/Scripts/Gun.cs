@@ -9,12 +9,11 @@ public class Gun : MonoBehaviour
     Vector3 originalPos;
 
     public PlayerController player;
-    public SoundManager soundManager;
 
     float bullets = 6f;
 
-    public float reloadBackAmount = 0.2f; 
-    public float reloadSpeed = 2f; 
+    public float reloadBackAmount = 0.2f; // The amount to move the gun back when reloading
+    public float reloadSpeed = 2f; // The speed of the reload animation
 
     void Start()
     {
@@ -37,8 +36,6 @@ public class Gun : MonoBehaviour
     {
         if (bullets >= 1)
         {
-            soundManager.Gunshot();
-            
             Recoil();
 
             RaycastHit hit;
