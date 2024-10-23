@@ -381,7 +381,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 1
-  currentState: 0
+  currentState: 1
   gun: {fileID: 0}
 --- !u!54 &290387881
 Rigidbody:
@@ -1275,6 +1275,18 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6948587442945639655, guid: e9be6b9d71ce20345b55b654f6eca5d9, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 6948587442945639655, guid: e9be6b9d71ce20345b55b654f6eca5d9, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 6948587442945639655, guid: e9be6b9d71ce20345b55b654f6eca5d9, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 6948587442945639655, guid: e9be6b9d71ce20345b55b654f6eca5d9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11
       objectReference: {fileID: 0}
@@ -1379,9 +1391,9 @@ MonoBehaviour:
   frT: {fileID: 114390759}
   blT: {fileID: 1340755502}
   brT: {fileID: 325772848}
-  motorForce: 0
-  brakeForce: 0
-  maxSteer: 0
+  motorForce: 500
+  brakeForce: 1500
+  maxSteer: 50
   player: {fileID: 290387879}
 --- !u!4 &1308144489 stripped
 Transform:
