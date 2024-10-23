@@ -86,7 +86,8 @@ public class CamController : MonoBehaviour
     void Trip()
     {
         chromaticAberration.intensity.value = Mathf.Max(Mathf.PingPong(Time.time * chromSpd, 1f), 0.25f);
-        cam.fieldOfView = originalFOV + Mathf.Sin(Time.time * fovSpd) * 10f;
+        float fovChange = Mathf.Sin(Time.time * fovSpd) * 10f * postProcessVolume.weight;
+        cam.fieldOfView = originalFOV + fovChange;
         colorGrading.saturation.value = Mathf.PingPong(Time.time * satSpd, 100f) - 50f;
 
         float distortionValue = Mathf.PingPong(Time.time * lensSpd, lensMax - lensMin) + lensMin;

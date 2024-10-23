@@ -49,9 +49,26 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.E))
         {
-            Interact();
+            if (currentState == State.foot)
+            {
+                Interact();
+            }
         }
+
+        if (Input.GetKey(KeyCode.Q))
+        {
+            Bail();
+        }
+
     }
+
+    void Bail()
+    {
+        transform.position = transform.position + Vector3.left * 0.2f;
+        currentState = State.foot;
+    }
+
+
 
     void Move()
     {
@@ -74,9 +91,10 @@ public class PlayerController : MonoBehaviour
 
     void Drive()
     {
-        transform.position = currentCar.position + Vector3.up * .75f;
-        
+        transform.position = currentCar.position + Vector3.up * 0.7f + Vector3.left * 0.2f + Vector3.back * 0.15f;
     }
+
+
     void Interact()
     {
         RaycastHit hit;

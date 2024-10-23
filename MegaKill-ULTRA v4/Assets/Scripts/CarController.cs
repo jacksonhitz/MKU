@@ -27,6 +27,8 @@ public class CarController : MonoBehaviour
 
     public PlayerController player;
 
+    public BoxCollider boxCollider;
+
     void FixedUpdate()
     {
         if (player.currentState == PlayerController.State.driving)
@@ -46,6 +48,7 @@ public class CarController : MonoBehaviour
         horzInput = Input.GetAxis("Horizontal");
         vertInput = Input.GetAxis("Vertical");
         isBraking = Input.GetKey(KeyCode.Space);
+        isBraking = Input.GetKey(KeyCode.Q);
     }
 
     void Motor()
