@@ -9,6 +9,7 @@ public class Gun : MonoBehaviour
     Vector3 originalPos;
 
     public PlayerController player;
+    public SoundManager soundManager;
 
     float bullets = 6f;
 
@@ -36,6 +37,8 @@ public class Gun : MonoBehaviour
     {
         if (bullets >= 1)
         {
+            soundManager.Gunshot();
+            
             Recoil();
 
             RaycastHit hit;
