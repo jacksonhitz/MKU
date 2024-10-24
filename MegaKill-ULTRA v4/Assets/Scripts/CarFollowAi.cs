@@ -12,6 +12,10 @@ public class CarFollowAI : MonoBehaviour
     public float turnSpeedReductionFactor = 0.5f; // Factor to reduce speed when turning
     public PlayerController playerController;
 
+    private bool isReversing = false;
+    private float reverseDuration = 2f;
+    private float reverseTimer = 0f;
+
     void FixedUpdate()
     {
         // Check if player is driving car or not
@@ -23,6 +27,12 @@ public class CarFollowAI : MonoBehaviour
 
     void FollowTarget()
     {
+        if (isReversing)
+        {
+            ReverseAndTurn();
+            return;
+        }
+
         Vector3 directionToTarget = target.position - transform.position;
         float distanceToTarget = directionToTarget.magnitude;
         directionToTarget.Normalize();
@@ -49,6 +59,28 @@ public class CarFollowAI : MonoBehaviour
         else
         {
             carController.isBraking = false;
+        }
+    }
+
+    void ReverseAndTurn()
+    {
+        reverseTimer += Time.deltaTime;
+        carController.vertInput = -1f; // Reverse
+        carController.horzInput = Random.Range(-1f, 1f); // Randomly turn to avoid the wall
+
+        if (reverseTimer >= reverseDuration)
+        {
+            isReversing = false;
+            reverseTimer = 0f;
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        float distanceToPlayer = Vector3.Distance(transform.position, playerController.transform.position);
+        if (distanceToPlayer > targetRadius)
+        {
+            isReversing = true;
         }
     }
 }
