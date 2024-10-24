@@ -16,8 +16,14 @@ public class GameManager : MonoBehaviour
 
     public UX ux;
 
-    void Start()
+    public SoundManager soundManager;
+
+    void Awake()
     {
+        soundManager = FindObjectOfType<SoundManager>();
+        volume = FindAnyObjectByType<Volume>();
+        ux = FindAnyObjectByType<UX>();
+
         UpPhase();
     }
 
@@ -25,6 +31,7 @@ public class GameManager : MonoBehaviour
     {
         phase++;
         volume.weight = phase * .2f;
+        soundManager.PhaseCheck();
     }
 
     public void Score(int newScore)

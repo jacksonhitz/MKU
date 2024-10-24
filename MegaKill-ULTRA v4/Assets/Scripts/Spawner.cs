@@ -12,7 +12,6 @@ public class NPCSpawner : MonoBehaviour
     public float spawnAreaRadius = 50f;  
 
     private List<Vector3> spawnedPositions = new List<Vector3>();
-
     public GameManager gameManager;
 
     void Start()
@@ -29,8 +28,8 @@ public class NPCSpawner : MonoBehaviour
         {
             Vector3 randomPosition = GetRandomNavMeshPosition();
             
-            // Check if the new position is far enough from existing NPCs
-            if (IsPositionValid(randomPosition))
+            // Check if the position is valid and not the fallback Vector3.zero
+            if (IsPositionValid(randomPosition) && randomPosition != Vector3.zero)
             {
                 // Spawn the NPC at the valid position
                 Instantiate(npcPrefab, randomPosition, Quaternion.identity);
@@ -50,8 +49,8 @@ public class NPCSpawner : MonoBehaviour
         {
             Vector3 randomPosition = GetRandomNavMeshPosition();
             
-            // Check if the new position is far enough from existing NPCs and cops
-            if (IsPositionValid(randomPosition))
+            // Check if the position is valid and not the fallback Vector3.zero
+            if (IsPositionValid(randomPosition) && randomPosition != Vector3.zero)
             {
                 // Spawn the cop at the valid position
                 Instantiate(copPrefab, randomPosition, Quaternion.identity);

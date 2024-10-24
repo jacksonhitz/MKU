@@ -9,6 +9,8 @@ public class EnemyGun : MonoBehaviour
     Vector3 originalRot; 
     Vector3 originalPos;
 
+    public SoundManager soundManager;
+
     public float reloadBackAmount = 0.2f; 
     public float reloadSpeed = 2f; 
     public LayerMask hitMask; 
@@ -32,6 +34,9 @@ public class EnemyGun : MonoBehaviour
     public void Shoot(Transform player)
     {
         Recoil();
+
+        soundManager.Gunshot();
+
         Vector3 directionToPlayer = (player.position - transform.position).normalized;
         Ray ray = new Ray(transform.position, directionToPlayer);
 
@@ -42,7 +47,10 @@ public class EnemyGun : MonoBehaviour
             if (hit.transform.CompareTag("Player"))
             {
                 PlayerController playerController = hit.transform.GetComponent<PlayerController>();
-                playerController.Hit();
+                if (!playerController.isDead)
+                {
+                    playerController.Hit();
+                }
             }
         }
     }

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement; 
 public class PlayerController : MonoBehaviour
 {
     float horzInput;
@@ -31,6 +31,15 @@ public class PlayerController : MonoBehaviour
     bool hasBailed = false; 
 
     int health = 10;
+
+    SoundManager soundManager;
+
+    public bool isDead = false;
+
+    void Awake()
+    {
+        soundManager = FindObjectOfType<SoundManager>();
+    }
 
     void Update()
     {
@@ -146,13 +155,41 @@ public class PlayerController : MonoBehaviour
     {
         health--;
 
-        ux.Hit();
-
         if (health <= 0)
         {
-            Debug.Log("game over");
+            isDead = true;
+            ux.Died();
+            soundManager.Flatline();
+            StartCoroutine(Fall());
+        }
+        else
+        {
+            ux.Hit();
+            soundManager.Heartbeat();
         }
     }
+
+    IEnumerator Fall()
+    {
+        float duration = 1.5f;
+        float elapsed = 0f;
+        Quaternion initialRotation = transform.rotation;
+        Quaternion targetRotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(90f, 0f, 0f));
+
+        while (elapsed < duration)
+        {
+            transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.rotation = targetRotation;
+
+        yield return new WaitForSeconds(6f);
+
+        SceneManager.LoadScene(0);
+    }
+
 
     void HoverCheck()
     {

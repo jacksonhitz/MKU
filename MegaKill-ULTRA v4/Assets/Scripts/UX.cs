@@ -1,6 +1,6 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI; // Add this to use UI components
+using UnityEngine.UI; 
 using System.Collections;
 
 public class UX : MonoBehaviour
@@ -66,25 +66,22 @@ public class UX : MonoBehaviour
 
     private IEnumerator ShowPopup()
     {
-        float duration = 0.5f; // Duration to show the popup
+        float duration = 0.5f; 
         float elapsedTime = 0f;
 
         Vector3 startPosition = popup.rectTransform.anchoredPosition;
-        Vector3 targetPosition = startPosition + new Vector3(0, 50, 0); // Drift upwards by 50 units
+        Vector3 targetPosition = startPosition + new Vector3(0, 50, 0); 
 
         while (elapsedTime < duration)
         {
-            // Calculate the proportion of time elapsed
+           
             float t = elapsedTime / duration;
 
-            // Lerp the position for a smooth upward drift
             popup.rectTransform.anchoredPosition = Vector3.Lerp(startPosition, targetPosition, t);
 
-            elapsedTime += Time.deltaTime; // Increment the elapsed time
-            yield return null; // Wait for the next frame
+            elapsedTime += Time.deltaTime;
+            yield return null; 
         }
-
-        // Ensure the popup is disabled after the duration
         popup.gameObject.SetActive(false);
     }
 
@@ -95,7 +92,7 @@ public class UX : MonoBehaviour
     
     public void Off()
     {
-        
+        tutorial.enabled = false;
     }
     
     public void WASD()
@@ -128,34 +125,49 @@ public class UX : MonoBehaviour
         StartCoroutine(FlashRed());
     }
 
+    public void Died()
+    {
+        StartCoroutine(FadeRed());
+    }
+
     private IEnumerator FlashRed()
     {
-        // Set color to a vibrant red with increased opacity
-        flashImage.color = new Color(1, 0, 0, 0.6f); // More opaque red
-        flashImage.gameObject.SetActive(true); // Show the flash image
+        flashImage.color = new Color(1, 0, 0, 0.6f); 
+        flashImage.gameObject.SetActive(true); 
         
-        // Wait for a short duration
-        yield return new WaitForSeconds(0.2f); // Hold red for longer
+        yield return new WaitForSeconds(0.2f); 
         
-        // Fade out gradually
-        float fadeDuration = 0.5f; // Duration to fade out
+        float fadeDuration = 0.5f; 
         float elapsedTime = 0f;
 
         while (elapsedTime < fadeDuration)
         {
-            // Calculate the proportion of time elapsed
             float t = elapsedTime / fadeDuration;
-
-            // Lerp the alpha value for smooth fade out
-            flashImage.color = new Color(1, 0, 0, Mathf.Lerp(0.6f, 0f, t)); // Fade from 0.6 to 0
-
-            elapsedTime += Time.deltaTime; // Increment the elapsed time
-            yield return null; // Wait for the next frame
+            flashImage.color = new Color(1, 0, 0, Mathf.Lerp(0.6f, 0f, t)); 
+            elapsedTime += Time.deltaTime; 
+            yield return null; 
         }
 
-        flashImage.color = new Color(1, 0, 0, 0); // Ensure it is fully transparent
-        flashImage.gameObject.SetActive(false); // Hide the flash image
+        flashImage.color = new Color(1, 0, 0, 0); 
+        flashImage.gameObject.SetActive(false); 
     }
 
+    IEnumerator FadeRed()
+    {
+        float fadeDuration = 2.0f; 
+        float elapsedTime = 0f;
 
+        flashImage.color = new Color(0, 0, 0, 0); 
+        flashImage.gameObject.SetActive(true); 
+
+        while (elapsedTime < fadeDuration)
+        {
+            float t = elapsedTime / fadeDuration;
+            flashImage.color = new Color(1, 0, 0, Mathf.Lerp(0.6f, 1f, t)); 
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        flashImage.color = new Color(1, 0, 0, 1f); 
+    }
 }

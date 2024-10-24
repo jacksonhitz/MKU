@@ -2,35 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement; 
 
 public class Dialogue : MonoBehaviour
 {
     public TextMeshProUGUI textComponent;
+    public TextMeshProUGUI title;
     public string[] lines;
     public float textSpeed;
 
-    private int index;
-
-    void Start()
-    {
-        textComponent.text = string.Empty;
-        StartDialogue();
-    }
+    int index;
+    bool started = false;
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (textComponent.text == lines[index])
+            if (!started)
             {
-                NextLine();
+                started = true;
+            
+                textComponent.text = string.Empty;
+                StartDialogue();
             }
             else
             {
-                StopAllCoroutines();
-                textComponent.text = lines[index];
+                LoadNext();
             }
         }
+
     }
 
     void StartDialogue()
@@ -46,6 +46,10 @@ public class Dialogue : MonoBehaviour
             textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
         }
+
+        yield return new WaitForSeconds(1f);
+
+        NextLine();
     }
 
     void NextLine()
@@ -58,7 +62,15 @@ public class Dialogue : MonoBehaviour
         }
         else
         {
-            gameObject.SetActive(false);
+            StartCoroutine(LoadNext());
         }
+    }
+
+    IEnumerator LoadNext()
+    {
+        yield return new WaitForSeconds(1f);
+
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        SceneManager.LoadScene(nextSceneIndex);
     }
 }

@@ -10,10 +10,17 @@ public class Gun : MonoBehaviour
 
     public PlayerController player;
 
+    public SoundManager soundManager;
+
     float bullets = 6f;
 
     public float reloadBackAmount = 0.2f; 
     public float reloadSpeed = 2f; 
+
+    void Awake()
+    {
+        soundManager = FindObjectOfType<SoundManager>();
+    }
 
     void Start()
     {
@@ -38,6 +45,8 @@ public class Gun : MonoBehaviour
         {
             Recoil();
 
+            soundManager.Gunshot();
+
             RaycastHit hit;
             Ray ray = player.cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
 
@@ -52,10 +61,16 @@ public class Gun : MonoBehaviour
             }
             bullets--; 
         }
+        else
+        {
+            soundManager.Empty();
+        }
     }
 
     public void Reload()
     {
+        soundManager.Reload();
+        
         rot += new Vector3(mag, 0, 0f);
         bullets = 6f;
     }
