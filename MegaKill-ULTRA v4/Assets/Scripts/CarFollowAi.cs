@@ -15,9 +15,9 @@ public class CarFollowAI : MonoBehaviour
     void FixedUpdate()
     {
         // Check if player is driving car or not
-        if (playerController.currentState != PlayerController.State.driving)
+        if (playerController.currentState != PlayerController.State.driving || playerController.currentCar != transform)
         {
-            FollowTarget();
+            FollowTarget();  // AI takes control if the player isn't driving this car
         }
     }
 

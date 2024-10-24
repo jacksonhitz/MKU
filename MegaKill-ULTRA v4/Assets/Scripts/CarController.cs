@@ -31,10 +31,11 @@ public class CarController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (player.currentState == PlayerController.State.driving)
+        if (player.currentState == PlayerController.State.driving && player.currentCar == transform)
         {
-            Inputs();
+            Inputs();  // Only process player inputs for the current car
         }
+
         Motor();
         Steer();
         //Wheels();
