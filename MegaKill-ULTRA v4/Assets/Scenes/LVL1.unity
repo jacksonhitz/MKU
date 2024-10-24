@@ -2328,7 +2328,7 @@ GameObject:
   - component: {fileID: 64390443}
   m_Layer: 13
   m_Name: Cube (2)
-  m_TagString: Untagged
+  m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10821,7 +10821,7 @@ GameObject:
   - component: {fileID: 252158583}
   m_Layer: 13
   m_Name: Prism (1)
-  m_TagString: Untagged
+  m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16912,6 +16912,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 942126615}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &366680117 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 487730255661569625, guid: 6d921c05bfa6740dca3da752878a268c, type: 3}
+  m_PrefabInstance: {fileID: 1624051377}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &369666615
 Mesh:
   m_ObjectHideFlags: 0
@@ -19017,6 +19022,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 977022432191401187, guid: 6d921c05bfa6740dca3da752878a268c, type: 3}
   m_PrefabInstance: {fileID: 1624051377}
   m_PrefabAsset: {fileID: 0}
+--- !u!195 &419715035
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366680117}
+  m_Enabled: 1
+  m_AgentTypeID: -1372625422
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &422655773
 GameObject:
   m_ObjectHideFlags: 0
@@ -24901,7 +24928,7 @@ GameObject:
   - component: {fileID: 539887473}
   m_Layer: 13
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26623,7 +26650,7 @@ GameObject:
   - component: {fileID: 594010062}
   m_Layer: 13
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28672,7 +28699,7 @@ GameObject:
   - component: {fileID: 650937353}
   m_Layer: 13
   m_Name: Cube (104)
-  m_TagString: Untagged
+  m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51578,7 +51605,7 @@ GameObject:
   - component: {fileID: 1131907632}
   m_Layer: 13
   m_Name: Sprite (1)
-  m_TagString: Untagged
+  m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -54785,7 +54812,7 @@ GameObject:
   - component: {fileID: 1203254422}
   m_Layer: 13
   m_Name: Cube (12)
-  m_TagString: Untagged
+  m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73471,7 +73498,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 487730255661569625, guid: 6d921c05bfa6740dca3da752878a268c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 419715035}
   m_SourcePrefab: {fileID: 100100000, guid: 6d921c05bfa6740dca3da752878a268c, type: 3}
 --- !u!1001 &1625870551
 PrefabInstance:
@@ -78472,7 +78502,7 @@ GameObject:
   - component: {fileID: 1757300654}
   m_Layer: 13
   m_Name: Cube (96)
-  m_TagString: Untagged
+  m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -87618,7 +87648,7 @@ GameObject:
   - component: {fileID: 1938452932}
   m_Layer: 13
   m_Name: Cube (98)
-  m_TagString: Untagged
+  m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -90764,7 +90794,7 @@ GameObject:
   - component: {fileID: 2026761406}
   m_Layer: 13
   m_Name: Sprite (4)
-  m_TagString: Untagged
+  m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -92632,7 +92662,7 @@ GameObject:
   - component: {fileID: 2117953916}
   m_Layer: 13
   m_Name: Prism (2)
-  m_TagString: Untagged
+  m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -94265,7 +94295,7 @@ GameObject:
   - component: {fileID: 2146058084}
   m_Layer: 13
   m_Name: Cube (13)
-  m_TagString: Untagged
+  m_TagString: Ramp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
