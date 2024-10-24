@@ -90,17 +90,9 @@ public class UX : MonoBehaviour
         score.text = "SCORE: " + (gameManager.score);
     }
     
-    IEnumerator Off()
+    public void Off()
     {
-        yield return new WaitForSeconds(5f);
-        
         tutorial.enabled = false;
-    }
-
-    public void Police()
-    {
-        tutorial.text = "BEWARE THE POLICE. THEY WILL NOT UNDERSTAND."; 
-        StartCoroutine(Off());
     }
     
     public void WASD()

@@ -24,11 +24,14 @@ public class SoundManager : MonoBehaviour
 
     public bool controller;
 
-    
     void Awake()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        if (controller)
+        {
+            DontDestroyOnLoad(gameObject);
+        }
     }
+
     void Start()
     {
         if (controller)
@@ -38,13 +41,18 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void Stop()
+    void Update()
     {
-        music.Stop();
+        if (gameManager == null)
+        {
+            gameManager = FindObjectOfType<GameManager>();
+        }
     }
 
     public void PhaseCheck()
     {
+        music.Stop();
+        
         if (gameManager.phase == 1)
         {
             Hott();
@@ -75,12 +83,12 @@ public class SoundManager : MonoBehaviour
     
     public void Witch()
     {
-        music.clip = witch;
+        music.clip = hott;
         music.Play();
     }
     public void Threes()
     {
-        music.clip = threes;
+        music.clip = hott;
         music.Play();
     }
     public void Real()
@@ -90,7 +98,7 @@ public class SoundManager : MonoBehaviour
     }
     public void Life()
     {
-        music.clip = life;
+        music.clip = hott;
         music.Play();
     }
 

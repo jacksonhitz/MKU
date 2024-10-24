@@ -5,13 +5,15 @@ using UnityEngine;
 public class CarFollowAI : MonoBehaviour
 {
     public Transform target;
+
     public CarController carController;
+    public PlayerController playerController;
+
     public float targetRadius = 2f;
     public float maxDistance = 10f;
     public float brakeDistance = 3f;
     public float turnSpeedReductionFactor = 0.5f; // Factor to reduce speed when turning
-    public PlayerController playerController;
-
+    
     private bool isReversing = false;
     private float reverseDuration = 2f;
     private float reverseTimer = 0f;
@@ -81,8 +83,8 @@ public class CarFollowAI : MonoBehaviour
         Vector3 collisionDirection = collision.contacts[0].point - transform.position;
         float angle = Vector3.Angle(transform.forward, collisionDirection);
 
-        // Avoid reversing if the collision was with a ramp, a civilian, or from below
-        if (collision.gameObject.CompareTag("Ramp") || collision.gameObject.CompareTag("Civilian") || Vector3.Dot(collision.contacts[0].normal, Vector3.up) > 0.5f)
+        // Avoid reversing if the collision was with a ramp, a civilian, player's car, or from ground
+        if (collision.gameObject.CompareTag("Ramp") || collision.gameObject.CompareTag("Civilian") || collision.gameObject.CompareTag("NPC")|| Vector3.Dot(collision.contacts[0].normal, Vector3.up) > 0.5f)
         {
             return;
         }

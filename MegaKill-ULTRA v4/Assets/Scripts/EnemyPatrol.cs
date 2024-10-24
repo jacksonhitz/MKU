@@ -32,18 +32,18 @@ public class EnemyPatrol : MonoBehaviour
     void Update()
     {
         playerInSight = Physics.CheckSphere(transform.position, sightRange, playerLayer);
-        Patrol();
+        if (agent.isActiveAndEnabled) Patrol(); 
         if (playerInSight && isHostile) Chase();
     }
         
 
-    void Patrol()
+    void Patrol() // Enemy Patrols the map, navigating to random points on the map within a certain distance
     {
         if (!walkpointSet) DestSearch();
         if (walkpointSet) agent.SetDestination(destPoint);
         if (Vector3.Distance(transform.position, destPoint) < 10) walkpointSet = false;
     }
-    void DestSearch()
+    void DestSearch() // Enemy searches for a certain destination witihin a specified range
     {
         float z = Random.Range(-range, range);
         float x = Random.Range(-range, range);
@@ -56,7 +56,7 @@ public class EnemyPatrol : MonoBehaviour
         }
     }
 
-    void Chase()
+    void Chase() // Enemy Chases the player around the map
     {
         agent.SetDestination(player.transform.position);
     }
