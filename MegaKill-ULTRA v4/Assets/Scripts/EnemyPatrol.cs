@@ -32,7 +32,7 @@ public class EnemyPatrol : MonoBehaviour
     void Update()
     {
         playerInSight = Physics.CheckSphere(transform.position, sightRange, playerLayer);
-        Patrol();
+        if (agent.isActiveAndEnabled) Patrol();
         if (playerInSight && isHostile) Chase();
     }
         
