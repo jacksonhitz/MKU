@@ -43,6 +43,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.Return))
+        {
+            SceneManager.LoadScene(1);
+        }
+        
         switch (currentState)
         {
             case State.foot:
@@ -61,7 +66,6 @@ public class PlayerController : MonoBehaviour
             if (currentState == State.foot)
             {
                 Interact();
-                ux.Bail();
             }
         }
 
@@ -69,7 +73,7 @@ public class PlayerController : MonoBehaviour
         {
             if (!hasBailed)
             {
-                ux.Off();
+                ux.Police();
                 hasBailed = true;
             }
             Bail();
@@ -146,6 +150,7 @@ public class PlayerController : MonoBehaviour
                 {
                     currentState = State.driving;
                     currentCar = hit.transform;
+                    ux.Bail();
                 }
             }
         }
@@ -185,9 +190,9 @@ public class PlayerController : MonoBehaviour
 
         transform.rotation = targetRotation;
 
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(1f);
 
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 
 

@@ -33,6 +33,7 @@ public class EnemyGun : MonoBehaviour
 
     public void Shoot(Transform player)
     {
+        
         Recoil();
 
         soundManager.Gunshot();

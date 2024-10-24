@@ -39,6 +39,8 @@ public class NPC : MonoBehaviour
             gameManager.Score(50);
         } 
 
-        Destroy(this.gameObject);
+        this.gameObject.SetActive(false);
+
+        //Destroy(this.gameObject);
     }
 }
