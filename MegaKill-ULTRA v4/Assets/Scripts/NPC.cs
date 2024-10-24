@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
-    bool target;
+    public bool target;
 
     public GameObject pointer;
     public GameManager gameManager;
@@ -12,14 +12,15 @@ public class NPC : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
         
-        
         pointer.SetActive(false);
     }
 
-    public void Target()
+    void Update()
     {
-        target = true;
-        pointer.SetActive(true);
+        if (target)
+        {
+            pointer.SetActive(true);
+        }
     }
 
     public void Hit()

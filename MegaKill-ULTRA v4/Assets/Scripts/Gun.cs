@@ -12,8 +12,8 @@ public class Gun : MonoBehaviour
 
     float bullets = 6f;
 
-    public float reloadBackAmount = 0.2f; // The amount to move the gun back when reloading
-    public float reloadSpeed = 2f; // The speed of the reload animation
+    public float reloadBackAmount = 0.2f; 
+    public float reloadSpeed = 2f; 
 
     void Start()
     {
@@ -50,7 +50,7 @@ public class Gun : MonoBehaviour
                     npc.Hit();
                 }
             }
-            bullets--; // Decrease bullets after shooting
+            bullets--; 
         }
     }
 

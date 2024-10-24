@@ -23,7 +23,12 @@ public class PlayerController : MonoBehaviour
     public State currentState = State.foot;
 
     public Gun gun;
+    public UX ux;
 
+    bool hasMoved = false;
+    bool hasFired = false; 
+    bool hasReloaded = false; 
+    bool hasBailed = false; 
 
     void Update()
     {
@@ -32,6 +37,7 @@ public class PlayerController : MonoBehaviour
             case State.foot:
                 controller.enabled = true;
                 Move();
+                //HoverCheck();  
                 break;
             case State.driving:
                 controller.enabled = false;
@@ -39,27 +45,45 @@ public class PlayerController : MonoBehaviour
                 break;
         }
 
-        if (Input.GetButtonDown("Fire1"))
-        {
-            gun.Shoot();
-        }
-        if (Input.GetKey(KeyCode.R))
-        {
-            gun.Reload();
-        }
         if (Input.GetKey(KeyCode.E))
         {
             if (currentState == State.foot)
             {
                 Interact();
+                ux.Bail();
             }
         }
 
         if (Input.GetKey(KeyCode.Q))
         {
+            if (!hasBailed)
+            {
+                ux.Off();
+                hasBailed = true;
+            }
             Bail();
         }
 
+        if (Input.GetButtonDown("Fire1"))
+        {
+            gun.Shoot();
+
+            if (!hasFired)
+            {
+                ux.Reload();
+                hasFired = true; 
+            }
+        }
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            gun.Reload();
+            if (!hasReloaded)
+            {
+                ux.Drive();
+                hasReloaded = true; 
+            }
+        }
     }
 
     void Bail()
@@ -67,8 +91,6 @@ public class PlayerController : MonoBehaviour
         transform.position = transform.position + Vector3.left * 0.2f;
         currentState = State.foot;
     }
-
-
 
     void Move()
     {
@@ -83,6 +105,12 @@ public class PlayerController : MonoBehaviour
 
         Vector3 move = transform.right * horzInput + transform.forward * vertInput;
 
+        if (!hasMoved && (horzInput != 0 || vertInput != 0))
+        {
+            ux.Kill();
+            hasMoved = true; 
+        }
+
         vel.y += gravity * Time.deltaTime;
 
         controller.Move(move * runSpd * Time.deltaTime);
@@ -94,14 +122,12 @@ public class PlayerController : MonoBehaviour
         transform.position = currentCar.position + Vector3.up * 0.7f + Vector3.left * 0.2f + Vector3.back * 0.15f;
     }
 
-
     void Interact()
     {
         RaycastHit hit;
         Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         if (Physics.Raycast(ray, out hit, range))
         {
-            Debug.Log(hit.transform.name);
             if (hit.transform.CompareTag("Car"))
             {
                 float gap = Vector3.Distance(transform.position, hit.transform.position);
@@ -109,6 +135,23 @@ public class PlayerController : MonoBehaviour
                 {
                     currentState = State.driving;
                     currentCar = hit.transform;
+                }
+            }
+        }
+    }
+
+    void HoverCheck()
+    {
+        RaycastHit hit;
+        Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        if (Physics.Raycast(ray, out hit, range))
+        {
+            if (hit.transform.CompareTag("Car"))
+            {
+                float gap = Vector3.Distance(transform.position, hit.transform.position);
+                if (gap <= reach)
+                {
+                    
                 }
             }
         }
