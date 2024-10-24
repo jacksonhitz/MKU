@@ -27,10 +27,9 @@ public class Dialogue : MonoBehaviour
             }
             else
             {
-                LoadNext();
+                StartCoroutine(LoadNext());
             }
         }
-
     }
 
     void StartDialogue()
