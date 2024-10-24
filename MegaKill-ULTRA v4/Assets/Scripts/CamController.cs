@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class CamController : MonoBehaviour
 {
@@ -12,10 +13,11 @@ public class CamController : MonoBehaviour
     private float xRotation; 
     private float yRotation;
 
-    private PostProcessVolume postProcessVolume;
+    private Volume postProcessVolume;
     private ChromaticAberration chromaticAberration;
-    private ColorGrading colorGrading;
+    private ColorAdjustments colorGrading;
     private LensDistortion lensDistortion;
+    private ChannelMixer channelMixer;
 
     public float chromSpd = 2f;
     public float fovSpd = 1.2f;
@@ -43,13 +45,16 @@ public class CamController : MonoBehaviour
         cam = GetComponent<Camera>();
         originalFOV = cam.fieldOfView;
 
-        postProcessVolume = GetComponent<PostProcessVolume>();
-        postProcessVolume.profile.TryGetSettings(out chromaticAberration);
-        postProcessVolume.profile.TryGetSettings(out colorGrading);
-        postProcessVolume.profile.TryGetSettings(out lensDistortion);
+        // Get the Volume component for URP
+        postProcessVolume = GetComponent<Volume>();
+
+        // Try to get each post-processing effect from the Volume
+        postProcessVolume.profile.TryGet(out chromaticAberration);
+        postProcessVolume.profile.TryGet(out colorGrading);
+        postProcessVolume.profile.TryGet(out lensDistortion);
+        postProcessVolume.profile.TryGet(out channelMixer);
 
         SetClr();
-
     }
 
     void SetClr()
@@ -62,9 +67,12 @@ public class CamController : MonoBehaviour
         greenStart = Random.Range(-200, 0f);
         blueStart = Random.Range(-200f, 0f);
 
-        colorGrading.mixerRedOutRedIn.value = redStart;
-        colorGrading.mixerGreenOutGreenIn.value = greenStart;
-        colorGrading.mixerBlueOutBlueIn.value = blueStart; 
+        // Adjust the color grading using hue shift instead of mixer channels (URP doesn't have RGB mixing)
+        colorGrading.hueShift.value = redStart;
+
+        channelMixer.redOutRedIn.value = redStart;
+        channelMixer.greenOutGreenIn.value = greenStart;
+        channelMixer.blueOutBlueIn.value = blueStart;
     }
 
     void Update()
@@ -85,25 +93,50 @@ public class CamController : MonoBehaviour
 
     void Trip()
     {
-        chromaticAberration.intensity.value = Mathf.Max(Mathf.PingPong(Time.time * chromSpd, 1f), 0.25f);
+        // Chromatic Aberration
+        if (chromaticAberration != null)
+            chromaticAberration.intensity.value = Mathf.Max(Mathf.PingPong(Time.time * chromSpd, 1f), 0.25f);
+
+        // FOV change
         float fovChange = Mathf.Sin(Time.time * fovSpd) * 10f * postProcessVolume.weight;
         cam.fieldOfView = originalFOV + fovChange;
-        colorGrading.saturation.value = Mathf.PingPong(Time.time * satSpd, 100f) - 50f;
 
-        float distortionValue = Mathf.PingPong(Time.time * lensSpd, lensMax - lensMin) + lensMin;
-        lensDistortion.intensity.value = distortionValue;
+        // Saturation
+        if (colorGrading != null)
+            colorGrading.saturation.value = Mathf.PingPong(Time.time * satSpd, 100f) - 50f;
 
+        // Lens Distortion
+        if (lensDistortion != null)
+        {
+            float distortionValue = Mathf.PingPong(Time.time * lensSpd, lensMax - lensMin) + lensMin;
+            lensDistortion.intensity.value = distortionValue;
+        }
+
+        ClrAdjuster();
         ClrMixer();
     }
 
+    void ClrAdjuster()
+    {
+        // Adjust hue dynamically for effect similar to color mixing
+        float red = -200f + Mathf.PingPong(Time.time * clrSpd * redRandom, 200f);
+        float green = -200f + Mathf.PingPong(Time.time * clrSpd * greenRandom, 200f);
+        float blue = -200f + Mathf.PingPong(Time.time * clrSpd * blueRandom, 200f);
+
+        if (colorGrading != null)
+        {
+            // Adjust hue shift or any color grading property to simulate RGB mixing
+            colorGrading.hueShift.value = Mathf.Lerp(red, green, blue); // You can adjust this as per your visual needs
+        }
+    }
     void ClrMixer()
     {
-        float red = -200f + Mathf.PingPong(Time.time * clrSpd * redRandom, 200f);   
+        float red = -200f + Mathf.PingPong(Time.time * clrSpd * redRandom, 200f);
         float green = -200f + Mathf.PingPong(Time.time * clrSpd * greenRandom, 200f);
-        float blue = -200 + Mathf.PingPong(Time.time * clrSpd * blueRandom, 200f);
+        float blue = -200f + Mathf.PingPong(Time.time * clrSpd * blueRandom, 200f);
 
-        colorGrading.mixerRedOutRedIn.value = red;
-        colorGrading.mixerGreenOutGreenIn.value = green;
-        colorGrading.mixerBlueOutBlueIn.value = blue;   
+        channelMixer.redOutRedIn.value = red;
+        channelMixer.greenOutGreenIn.value = green;
+        channelMixer.blueOutBlueIn.value = blue;
     }
 }
