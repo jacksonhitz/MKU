@@ -66,7 +66,7 @@ public class CarFollowAI : MonoBehaviour
     {
         reverseTimer += Time.deltaTime;
         carController.vertInput = -1f; // Reverse
-        carController.horzInput = Random.Range(-1f, 1f); // Randomly turn to avoid the wall
+        carController.horzInput = Random.Range(-1f, 1f); // Randomly turn to avoid obstacles
 
         if (reverseTimer >= reverseDuration)
         {
@@ -77,10 +77,23 @@ public class CarFollowAI : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, playerController.transform.position);
-        if (distanceToPlayer > targetRadius)
+        // Check if the collision happened at the front of the car
+        Vector3 collisionDirection = collision.contacts[0].point - transform.position;
+        float angle = Vector3.Angle(transform.forward, collisionDirection);
+
+        // Avoid reversing if the collision was with a ramp, a civilian, or from below
+        if (collision.gameObject.CompareTag("Ramp") || collision.gameObject.CompareTag("Civilian") || Vector3.Dot(collision.contacts[0].normal, Vector3.up) > 0.5f)
         {
-            isReversing = true;
+            return;
+        }
+
+        if (angle < 45f) // Collision is in front of the car
+        {
+            float distanceToPlayer = Vector3.Distance(transform.position, playerController.transform.position);
+            if (distanceToPlayer > targetRadius)
+            {
+                isReversing = true;
+            }
         }
     }
 }
