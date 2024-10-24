@@ -6,32 +6,58 @@ using UnityEngine.Rendering.Universal;
 
 public class GameManager : MonoBehaviour
 {
-    GameObject[] npcs;
+    GameObject[] civilians;
 
     public int phase;
 
     public Volume volume;
 
+    public int score = 0;
+
+    public UX ux;
+
     void Start()
     {
-        ChooseTarget();
+        UpPhase();
     }
 
+    public void UpPhase()
+    {
+        phase++;
+        volume.weight = phase * .2f;
+    }
+
+    public void Score(int newScore)
+    {
+        Debug.Log("score");
+
+        score += newScore;
+        
+        ux.Score();
+        ux.PopUp(newScore);
+    }
 
     public void ChooseTarget()
     {
-        phase++;
+        civilians = GameObject.FindGameObjectsWithTag("Civilian");
         
-        volume.weight = (phase * 1f);
-        
-        npcs = GameObject.FindGameObjectsWithTag("NPC");
+        for (int i = 0; i < 25; i++)
+        {
+            int randomIndex = Random.Range(0, civilians.Length);
+            GameObject target = civilians[randomIndex];
+            Civilian targetScript = target.GetComponent<Civilian>();
 
-        Debug.Log("npcs: " + npcs.Length);
-
-        int randomIndex = Random.Range(0, npcs.Length);
-        GameObject target = npcs[randomIndex];
-        NPC targetScript = target.GetComponent<NPC>();
-        targetScript.target = true;
+            if (targetScript.target)
+            {
+                i--;
+            }
+            else
+            {
+                targetScript.target = true;
+                Debug.Log("targets+1");
+            }
+        }
+        Debug.Log("npcs: " + civilians.Length);
     }
 
 }

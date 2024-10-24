@@ -4,31 +4,41 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
-    public bool target;
-
-    public GameObject pointer;
     public GameManager gameManager;
+
+    public Civilian civilian;
+    public bool cop;
+
+    public GameObject blood;
+
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        
-        pointer.SetActive(false);
-    }
 
-    void Update()
-    {
-        if (target)
+        if (!cop)
         {
-            pointer.SetActive(true);
+            civilian = GetComponent<Civilian>();
         }
     }
 
     public void Hit()
     {
-        Destroy(this.gameObject);
-        if (target)
+        Instantiate(blood, transform.position, Quaternion.identity);
+
+        if (cop)
         {
-            gameManager.ChooseTarget();
+            gameManager.Score(100);
         }
+        else
+        {
+            if (civilian.target)
+            {
+                gameManager.Score(200);
+                gameManager.UpPhase();
+            }
+            gameManager.Score(50);
+        } 
+
+        Destroy(this.gameObject);
     }
 }

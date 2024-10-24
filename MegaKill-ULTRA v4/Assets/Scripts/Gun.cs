@@ -44,7 +44,7 @@ public class Gun : MonoBehaviour
             if (Physics.Raycast(ray, out hit, player.range))
             {
                 Debug.Log("Hit: " + hit.transform.name);
-                if (hit.transform.CompareTag("NPC"))
+                if (hit.transform.CompareTag("NPC") || hit.transform.CompareTag("Civilian"))
                 {
                     NPC npc = hit.transform.GetComponent<NPC>();
                     npc.Hit();

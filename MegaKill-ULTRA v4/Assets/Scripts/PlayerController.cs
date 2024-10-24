@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     bool hasReloaded = false; 
     bool hasBailed = false; 
 
+    int health = 10;
+
     void Update()
     {
         switch (currentState)
@@ -137,6 +139,18 @@ public class PlayerController : MonoBehaviour
                     currentCar = hit.transform;
                 }
             }
+        }
+    }
+
+    public void Hit()
+    {
+        health--;
+
+        ux.Hit();
+
+        if (health <= 0)
+        {
+            Debug.Log("game over");
         }
     }
 

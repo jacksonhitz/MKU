@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,34 +32,30 @@ public class CarController : MonoBehaviour
     {
         if (player.currentState == PlayerController.State.driving && player.currentCar == transform)
         {
-            Inputs();  // Only process player inputs for the current car
+            Inputs();
         }
 
         Motor();
         Steer();
-        //Wheels();
-
-        Debug.Log(vertInput);
+        // Wheels();
     }
-
 
     void Inputs()
     {
         horzInput = Input.GetAxis("Horizontal");
         vertInput = Input.GetAxis("Vertical");
         isBraking = Input.GetKey(KeyCode.Space);
-        isBraking = Input.GetKey(KeyCode.Q);
+        isBraking |= Input.GetKey(KeyCode.Q);
     }
 
     void Motor()
     {
-        if (!isBraking) // Only apply motor torque if not braking
+        if (!isBraking)
         {
             fl.motorTorque = vertInput * motorForce;
             fr.motorTorque = vertInput * motorForce;
             bl.motorTorque = vertInput * motorForce;
             br.motorTorque = vertInput * motorForce;
-            Debug.Log(fl.motorTorque);
         }
 
         currentBrakeForce = isBraking ? brakeForce : 0f;
@@ -74,7 +69,7 @@ public class CarController : MonoBehaviour
         bl.brakeTorque = currentBrakeForce;
         br.brakeTorque = currentBrakeForce;
 
-        if (!isBraking) // Reset brake torque when brake is not pressed
+        if (!isBraking)
         {
             fl.brakeTorque = 0f;
             fr.brakeTorque = 0f;
@@ -88,6 +83,15 @@ public class CarController : MonoBehaviour
         steerAngle = maxSteer * horzInput;
         fl.steerAngle = steerAngle;
         fr.steerAngle = steerAngle;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("NPC") && player.currentCar == transform)
+        {
+            NPC npc = collision.gameObject.GetComponent<NPC>();
+            npc.Hit();
+        }
     }
 
     void Wheels()

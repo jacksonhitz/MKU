@@ -11,15 +11,51 @@ public class SoundManager : MonoBehaviour
     public AudioClip witch;
     public AudioClip hott;
     public AudioClip threes;
+    public AudioClip life;
 
     public AudioClip gunShot;
     public AudioClip reload;
     public AudioClip empty;
 
+    public GameManager gameManager;
+
 
     void Start()
     {
         music.clip = title;
+        music.Play();
+    }
+
+    public void PhaseCheck()
+    {
+        if (gameManager.phase == 2)
+        {
+            
+        }
+    }
+
+    public void Hott()
+    {
+        music.clip = hott;
+        music.Play();
+    }
+    
+    public void Witch()
+    {
+        music.clip = hott;
+        music.Play();
+    }
+
+    public void Threes()
+    {
+        music.clip = hott;
+        music.Play();
+    }
+
+
+    public void Life()
+    {
+        music.clip = hott;
         music.Play();
     }
 
@@ -37,8 +73,6 @@ public class SoundManager : MonoBehaviour
     {
         sfx.clip = empty;
         sfx.Play();
-        sfx.Play();
-
     }
 
 
