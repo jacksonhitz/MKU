@@ -5,11 +5,13 @@ using UnityEngine;
 public class CarFollowAI : MonoBehaviour
 {
     public Transform target;
-    public CarController carController; 
-    public float targetRadius = 2f; 
+    public CarController carController;
+    public float targetRadius = 2f;
     public float maxDistance = 10f;
     public float brakeDistance = 3f;
+    public float turnSpeedReductionFactor = 0.5f; // Factor to reduce speed when turning
     public PlayerController playerController;
+
     void FixedUpdate()
     {
         // Check if player is driving car or not
@@ -25,12 +27,18 @@ public class CarFollowAI : MonoBehaviour
         float distanceToTarget = directionToTarget.magnitude;
         directionToTarget.Normalize();
 
-        // Adjust speed based on the distance to target
-        float speedFactor = Mathf.Clamp(distanceToTarget / maxDistance, 0, 1);
-        carController.vertInput = speedFactor;
-
         // Calculate the angle difference between the car's forward direction and the target direction
         float steerInput = Vector3.SignedAngle(transform.forward, directionToTarget, Vector3.up) / 45f;
+
+        // Reduce speed if turning
+        float turnFactor = 1f - Mathf.Abs(steerInput) * turnSpeedReductionFactor;
+        turnFactor = Mathf.Clamp(turnFactor, 0.3f, 1f); // Set minimum speed to avoid complete stop
+
+        // Adjust speed based on the distance to target and turn factor
+        float speedFactor = Mathf.Clamp(distanceToTarget / maxDistance, 0, 1) * turnFactor;
+        carController.vertInput = speedFactor;
+
+        // Set the steering input
         carController.horzInput = Mathf.Clamp(steerInput, -1f, 1f);
 
         // Apply braking when the car gets close to the target
@@ -41,13 +49,6 @@ public class CarFollowAI : MonoBehaviour
         else
         {
             carController.isBraking = false;
-            // Adjust speed based on the distance to target
-            speedFactor = Mathf.Clamp(distanceToTarget / maxDistance, 0, 1);
-            carController.vertInput = speedFactor;
-
-            // Calculate the angle difference between the car's forward direction and the target direction
-            steerInput = Vector3.SignedAngle(transform.forward, directionToTarget, Vector3.up) / 45f;
-            carController.horzInput = Mathf.Clamp(steerInput, -1f, 1f);
         }
     }
 }
