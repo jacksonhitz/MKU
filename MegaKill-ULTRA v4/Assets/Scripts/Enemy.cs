@@ -10,11 +10,14 @@ public class Enemy : MonoBehaviour
     public float fireRate = 1f;        
     public float fieldOfViewAngle = 110f; 
 
-    public GameManager gameManager;
+    GameManager gameManager;
 
     public Transform car;
 
     public bool isDriving;
+
+    public AudioClip gunShot;
+    public AudioSource sfx;
 
     void Start()
     {
@@ -41,6 +44,9 @@ public class Enemy : MonoBehaviour
                 if (gameManager.score > 0)
                 {
                     enemyGun.Shoot(player.transform);
+                    //soundManager.Gunshot();
+                    sfx.clip = gunShot;
+                    sfx.Play();
 
                     yield return new WaitForSeconds(fireRate);
                 }

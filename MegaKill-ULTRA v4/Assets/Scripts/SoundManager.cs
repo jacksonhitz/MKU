@@ -47,7 +47,7 @@ public class SoundManager : MonoBehaviour
     {
         if (gameManager.phase == 1)
         {
-            Hott();
+            Witch();
         }
         if (gameManager.phase == 2)
         {
@@ -98,6 +98,7 @@ public class SoundManager : MonoBehaviour
     {
         sfx.clip = gunShot;
         sfx.Play();
+        Debug.Log("called");
     }
     public void Reload()
     {

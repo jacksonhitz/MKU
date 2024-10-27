@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     public void UpPhase()
     {
         phase++;
-        volume.weight = phase * .2f;
+        //volume.weight = phase * .2f;
         soundManager.Stop();
         soundManager.PhaseCheck();
     }

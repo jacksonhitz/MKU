@@ -28,10 +28,8 @@ public class NPCSpawner : MonoBehaviour
         {
             Vector3 randomPosition = GetRandomNavMeshPosition();
             
-            // Check if the position is valid and not the fallback Vector3.zero
             if (IsPositionValid(randomPosition) && randomPosition != Vector3.zero)
             {
-                // Spawn the NPC at the valid position
                 Instantiate(npcPrefab, randomPosition, Quaternion.identity);
                 spawnedPositions.Add(randomPosition);
                 spawnedNPCs++;

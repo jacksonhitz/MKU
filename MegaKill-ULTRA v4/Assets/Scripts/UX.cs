@@ -128,36 +128,9 @@ public class UX : MonoBehaviour
         tutorial.text = "Q TO BAIL"; 
     }
 
-    public void Hit()
-    {
-        StartCoroutine(FlashRed());
-    }
-
     public void Died()
     {
         StartCoroutine(FadeRed());
-    }
-
-    private IEnumerator FlashRed()
-    {
-        flashImage.color = new Color(1, 0, 0, 0.6f); 
-        flashImage.gameObject.SetActive(true); 
-        
-        yield return new WaitForSeconds(0.2f); 
-        
-        float fadeDuration = 0.5f; 
-        float elapsedTime = 0f;
-
-        while (elapsedTime < fadeDuration)
-        {
-            float t = elapsedTime / fadeDuration;
-            flashImage.color = new Color(1, 0, 0, Mathf.Lerp(0.6f, 0f, t)); 
-            elapsedTime += Time.deltaTime; 
-            yield return null; 
-        }
-
-        flashImage.color = new Color(1, 0, 0, 0); 
-        flashImage.gameObject.SetActive(false); 
     }
 
     IEnumerator FadeRed()

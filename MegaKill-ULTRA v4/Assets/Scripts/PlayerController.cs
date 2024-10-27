@@ -1,23 +1,24 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
+
 public class PlayerController : MonoBehaviour
 {
     float horzInput;
     float vertInput;
     public float runSpd;
-    public float range; 
+    public float jumpHeight = 3f;
+    public float gravity = -9.81f; 
+    public float range;
     public float reach;
-    float gravity = -19.62f;
     public Camera cam;
-    public CharacterController controller; 
+    public CharacterController controller;
     Vector3 vel;
-    public Transform groundCheck;
-    public Transform currentCar;
-    float groundDistance = 0.4f;
-    public LayerMask groundMask;
     bool isGrounded;
+    public Transform groundCheck;
+    public LayerMask groundMask;
+    public float groundDistance;
+    public Transform currentCar;
 
     public enum State { foot, driving }
     public State currentState = State.foot;
@@ -26,15 +27,16 @@ public class PlayerController : MonoBehaviour
     public UX ux;
 
     bool hasMoved = false;
-    bool hasFired = false; 
-    bool hasReloaded = false; 
-    bool hasBailed = false; 
+    bool hasFired = false;
+    bool hasReloaded = false;
+    bool hasBailed = false;
 
     int health = 10;
 
     SoundManager soundManager;
 
     public bool isDead = false;
+
 
     void Awake()
     {
@@ -47,13 +49,12 @@ public class PlayerController : MonoBehaviour
         {
             SceneManager.LoadScene(1);
         }
-        
+
         switch (currentState)
         {
             case State.foot:
                 controller.enabled = true;
                 Move();
-                //HoverCheck();  
                 break;
             case State.driving:
                 controller.enabled = false;
@@ -69,24 +70,20 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.Q) && !hasBailed)
         {
-            if (!hasBailed)
-            {
-                ux.Police();
-                hasBailed = true;
-            }
+            ux.Police();
+            hasBailed = true;
             Bail();
         }
 
         if (Input.GetButtonDown("Fire1"))
         {
             gun.Shoot();
-
             if (!hasFired)
             {
                 ux.Reload();
-                hasFired = true; 
+                hasFired = true;
             }
         }
 
@@ -96,23 +93,38 @@ public class PlayerController : MonoBehaviour
             if (!hasReloaded)
             {
                 ux.Drive();
-                hasReloaded = true; 
+                hasReloaded = true;
             }
+        }
+
+        if (!controller.isGrounded)
+        {
+            vel.y += gravity * Time.deltaTime;
+            controller.Move(vel * Time.deltaTime);
         }
     }
 
     void Bail()
     {
-        transform.position = transform.position + Vector3.left * 0.2f;
+        transform.position += Vector3.left * 0.2f;
         currentState = State.foot;
     }
 
     void Move()
     {
+        Debug.Log(isGrounded);
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
         if (isGrounded && vel.y < 0)
         {
             vel.y = -2f;
+            
+        }
+        vel.y += gravity * Time.deltaTime;
+
+        if (Input.GetKey(KeyCode.Space) && isGrounded)
+        {
+            vel.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
         
         horzInput = Input.GetAxis("Horizontal");
@@ -123,13 +135,10 @@ public class PlayerController : MonoBehaviour
         if (!hasMoved && (horzInput != 0 || vertInput != 0))
         {
             ux.Kill();
-            hasMoved = true; 
+            hasMoved = true;
         }
 
-        vel.y += gravity * Time.deltaTime;
-
         controller.Move(move * runSpd * Time.deltaTime);
-        controller.Move(vel * Time.deltaTime);
     }
 
     void Drive()
@@ -169,7 +178,6 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            ux.Hit();
             soundManager.Heartbeat();
         }
     }
@@ -193,23 +201,5 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         SceneManager.LoadScene(1);
-    }
-
-
-    void HoverCheck()
-    {
-        RaycastHit hit;
-        Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-        if (Physics.Raycast(ray, out hit, range))
-        {
-            if (hit.transform.CompareTag("Car"))
-            {
-                float gap = Vector3.Distance(transform.position, hit.transform.position);
-                if (gap <= reach)
-                {
-                    
-                }
-            }
-        }
     }
 }
