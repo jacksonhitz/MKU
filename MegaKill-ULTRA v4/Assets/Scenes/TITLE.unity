@@ -998,6 +998,17 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 1203410349006532812, guid: 317511db597244b518300e9fa63c89cc, type: 3}
   m_PrefabInstance: {fileID: 1298888734}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1590671840 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5193728331882987758, guid: cca9edc3869ad4ad195c8ebbee2312de, type: 3}
+  m_PrefabInstance: {fileID: 1684242567}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1684242567
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1007,6 +1018,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 645826473046516641, guid: cca9edc3869ad4ad195c8ebbee2312de, type: 3}
+      propertyPath: vig
+      value: 
+      objectReference: {fileID: 1590671840}
+    - target: {fileID: 645826473046516641, guid: cca9edc3869ad4ad195c8ebbee2312de, type: 3}
       propertyPath: sensX
       value: 0
       objectReference: {fileID: 0}
@@ -1014,6 +1029,10 @@ PrefabInstance:
       propertyPath: sensY
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 645826473046516641, guid: cca9edc3869ad4ad195c8ebbee2312de, type: 3}
+      propertyPath: volume
+      value: 
+      objectReference: {fileID: 1590671840}
     - target: {fileID: 645826473046516641, guid: cca9edc3869ad4ad195c8ebbee2312de, type: 3}
       propertyPath: m_Enabled
       value: 1
