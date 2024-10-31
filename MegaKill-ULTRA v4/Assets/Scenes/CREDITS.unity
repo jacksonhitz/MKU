@@ -590,51 +590,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &765007133
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 765007134}
-  - component: {fileID: 765007135}
-  m_Layer: 0
-  m_Name: ShaderDamp
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &765007134
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 765007133}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 561.2522, y: 236.65236, z: -512.07196}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &765007135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 765007133}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c191e25a7f634ea699f2aa9ca0ee6f2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camMat: {fileID: 2100000, guid: 18302ca37fa754fde8df04e43ed20eb2, type: 2}
 --- !u!1 &786425949
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,6 +724,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 786425949}
   m_CullTransparentMesh: 1
+--- !u!1001 &903132922
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3604152571576420320, guid: a9c12b7cb767a440f899ed910a1c492c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 561.2522
+      objectReference: {fileID: 0}
+    - target: {fileID: 3604152571576420320, guid: a9c12b7cb767a440f899ed910a1c492c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 236.65236
+      objectReference: {fileID: 0}
+    - target: {fileID: 3604152571576420320, guid: a9c12b7cb767a440f899ed910a1c492c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -512.07196
+      objectReference: {fileID: 0}
+    - target: {fileID: 3604152571576420320, guid: a9c12b7cb767a440f899ed910a1c492c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3604152571576420320, guid: a9c12b7cb767a440f899ed910a1c492c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3604152571576420320, guid: a9c12b7cb767a440f899ed910a1c492c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3604152571576420320, guid: a9c12b7cb767a440f899ed910a1c492c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3604152571576420320, guid: a9c12b7cb767a440f899ed910a1c492c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3604152571576420320, guid: a9c12b7cb767a440f899ed910a1c492c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3604152571576420320, guid: a9c12b7cb767a440f899ed910a1c492c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062568489643158135, guid: a9c12b7cb767a440f899ed910a1c492c, type: 3}
+      propertyPath: m_Name
+      value: ShaderDamp
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a9c12b7cb767a440f899ed910a1c492c, type: 3}
 --- !u!1 &1110857396
 GameObject:
   m_ObjectHideFlags: 0
@@ -1337,12 +1349,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textComponent: {fileID: 2000385612}
   title: {fileID: 0}
+  creditsBox: {fileID: 0}
   lines:
   - "MegaKill-ULTRA is dedicated to those affected by the real-life experiments of
     MKULTRA, a CIA-led human experimentation program in the 1950s which included
     the usage of psychoactive drugs, such as LSD, on unknowing participants in the
-    attempt to manufacture a \u201Ctruth-serum\u201D and \"mind-control\" drug. The
-    project was officially started in 1953 and lasted twenty years before ending
+    attempt to manufacture a \u201Ctruth-serum\u201D and \"mind-control\" agent.
+    The project was officially started in 1953 and lasted twenty years before ending
     in 1973. It was officially exposed and unveiled to the public through investigations
     headed by senator Frank Church and president Gerald Ford in 1975, though orders
     to destroy all MKULTRA files in 1973 by the CIA director of the time, Richard
@@ -1448,4 +1461,4 @@ SceneRoots:
   - {fileID: 2107874147}
   - {fileID: 596243722}
   - {fileID: 415892776}
-  - {fileID: 765007134}
+  - {fileID: 903132922}

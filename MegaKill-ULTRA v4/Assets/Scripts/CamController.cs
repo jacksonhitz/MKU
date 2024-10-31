@@ -45,7 +45,7 @@ public class CamController : MonoBehaviour
     public void UpPhase(int phase)
     {
         swayIntensity += 0.1f;
-
+        clrSpd *= 2f;
     }
 
     void Start()
@@ -55,7 +55,7 @@ public class CamController : MonoBehaviour
 
         cam = GetComponent<Camera>();
         originalFOV = cam.fieldOfView;
-        originalPosition = transform.localPosition; 
+        originalPosition = transform.localPosition;
 
         volume.profile.TryGet(out chromaticAberration);
         volume.profile.TryGet(out colorGrading);
@@ -65,7 +65,40 @@ public class CamController : MonoBehaviour
         vig.profile.TryGet(out vignette);
 
         SetClr();
+
+        // Set initial exposure for a black screen
+        if (colorGrading != null)
+        {
+            colorGrading.postExposure.value = -10f; // Start fully dark
+        }
+
+        // Start the fade-in effect
+        StartCoroutine(FadeInExposure(2f)); // 2 seconds fade-in duration
     }
+
+    IEnumerator FadeInExposure(float duration)
+    {
+        float elapsed = 0f;
+        float initialExposure = -10f; // Starting black
+        float targetExposure = 0f; // Normal exposure
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            if (colorGrading != null)
+            {
+                colorGrading.postExposure.value = Mathf.Lerp(initialExposure, targetExposure, elapsed / duration);
+            }
+            yield return null;
+        }
+
+        // Ensure exposure ends at the target level
+        if (colorGrading != null)
+        {
+            colorGrading.postExposure.value = targetExposure;
+        }
+    }
+
 
     void SetClr()
     {
@@ -140,29 +173,22 @@ public class CamController : MonoBehaviour
 
     public void Damaged(Vector3 damagePos)
     {
-        // Reset the vignette center
-        vignette.center.value = new Vector2(0.5f, 0.5f); // Centered initially
+        vignette.center.value = new Vector2(0.5f, 0.5f);
 
-        // Calculate the direction based on the camera's forward direction
         Vector3 damageDirection = -(damagePos - cam.transform.position).normalized;
 
-        // Get the camera's forward direction
         Vector3 cameraForward = cam.transform.forward;
         
-        // Calculate the signed angle between the camera's forward direction and the damage direction
         float angle = Vector3.SignedAngle(cameraForward, damageDirection, Vector3.up);
         
-        // Calculate the offsets based on the angle
-        float xOffset = Mathf.Clamp(Mathf.Sin(angle * Mathf.Deg2Rad), -1f, 1f);  // X-axis movement based on damage direction
-        float yOffset = Mathf.Clamp(Mathf.Cos(angle * Mathf.Deg2Rad), -1f, 1f);  // Y-axis movement based on damage direction
+        float xOffset = Mathf.Clamp(Mathf.Sin(angle * Mathf.Deg2Rad), -1f, 1f);  
+        float yOffset = Mathf.Clamp(Mathf.Cos(angle * Mathf.Deg2Rad), -1f, 1f); 
 
-        // Normalize the offsets to a 0-1 range for vignette center
-        float xCenter = Mathf.Clamp01(0.5f + xOffset * 0.5f);  // Reduced influence for x-axis
-        float yCenter = Mathf.Clamp01(0.5f + yOffset * 0.5f);  // Increased influence for y-axis
+        float xCenter = Mathf.Clamp01(0.5f + xOffset * 0.5f);  
+        float yCenter = Mathf.Clamp01(0.5f + yOffset * 0.5f);  
 
-        // Set the vignette center based on calculated offsets
         vignette.center.value = new Vector2(xCenter, yCenter);
-        vignette.intensity.value = .6f;  
+        vignette.intensity.value = .75f;  
 
         StartCoroutine(FadeOutVig(2f));  
     }
@@ -179,7 +205,7 @@ public class CamController : MonoBehaviour
             yield return null;
         }
 
-        vignette.intensity.value = 0f; // Ensure it ends exactly at 0
+        vignette.intensity.value = 0f; 
     }
 
     void ClrAdjuster()

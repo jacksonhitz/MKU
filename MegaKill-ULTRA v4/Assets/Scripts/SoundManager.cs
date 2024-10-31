@@ -36,7 +36,7 @@ public class SoundManager : MonoBehaviour
     void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
-        tracks = new List<AudioClip> { witch, dj, could, all, hott, threes, life, real, four, };
+        tracks = new List<AudioClip> { witch, could, dj, all, hott, threes, life, real, four, };
     }
 
     void Start()

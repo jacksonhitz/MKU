@@ -3,51 +3,60 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+
 public class EnemyPatrol : MonoBehaviour
 {
     GameObject player;
     Gun gun;
     NavMeshAgent agent;
-   
+
     GameManager gameManager;
-    
+
     [SerializeField] LayerMask groundLayer, playerLayer;
 
-    //patrol
+    // Patrol variables
     Vector3 destPoint;
     bool walkpointSet;
     [SerializeField] float range;
     [SerializeField] float patrolSpeed = 3.5f;
     [SerializeField] float chaseSpeed = 6.0f;
     [SerializeField] float fleeSpeed = 6.0f;
-    //state change
+
     [SerializeField] float sightRange;
     [SerializeField] float attackRange;
-    bool playerInAttackRange;
-    //[SerializeField] bool playerInSight;
+    bool playerInAttackRange = false;
     [SerializeField] bool isHostile;
-
-    // Start is called before the first frame update
+    
+    public bool cop;
     void Start()
-    {  
+    {
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player");
         gameManager = FindObjectOfType<GameManager>();
         gun = FindObjectOfType<Gun>();
         agent.speed = patrolSpeed;
+
+        if (cop)
+        {
+            InvokeRepeating(nameof(HostilityCheck), 20f, 20f);
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //playerInSight = Physics.CheckSphere(transform.position, sightRange, playerLayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
+        playerInAttackRange = Vector3.Distance(transform.position, player.transform.position) <= attackRange;
+
         if (!isHostile) Patrol();
         if (isHostile && gameManager.score == 0) Patrol();
         if (isHostile && gameManager.score > 0) Chase();
         if (isHostile && playerInAttackRange && gameManager.score > 0) Attack();
     }
-        
+
+    void HostilityCheck()
+    {
+        // 50% chance to toggle hostility
+        isHostile = Random.Range(0, 4) == 0;
+    }
 
     void Patrol()
     {
@@ -56,6 +65,7 @@ public class EnemyPatrol : MonoBehaviour
         if (walkpointSet) agent.SetDestination(destPoint);
         if (Vector3.Distance(transform.position, destPoint) < 10) walkpointSet = false;
     }
+
     void DestSearch()
     {
         float z = Random.Range(-range, range);
@@ -63,22 +73,24 @@ public class EnemyPatrol : MonoBehaviour
 
         destPoint = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z);
 
-        if(Physics.Raycast(destPoint, Vector3.down, groundLayer))
+        if (Physics.Raycast(destPoint, Vector3.down, groundLayer))
         {
             walkpointSet = true;
         }
     }
 
-     void Attack()
-     {
-         agent.SetDestination(transform.position);
-     }
+    void Attack()
+    {
+        agent.SetDestination(transform.position);
+    }
+
     void Chase()
     {
-        agent.speed = chaseSpeed; 
+        agent.speed = chaseSpeed;
         agent.SetDestination(player.transform.position);
     }
-     public void Flee()
+
+    public void Flee()
     {
         agent.speed = fleeSpeed;
 
@@ -88,5 +100,4 @@ public class EnemyPatrol : MonoBehaviour
 
         agent.SetDestination(fleeTarget);
     }
-
 }

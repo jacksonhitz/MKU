@@ -14,8 +14,6 @@ public class UX : MonoBehaviour
     public TextMeshProUGUI popup; 
     public GameManager gameManager;
 
-    public Image flashImage;
-
     void Update()
     {
         UpdateCanvas();
@@ -92,7 +90,7 @@ public class UX : MonoBehaviour
     
     IEnumerator Off()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         
         tutorial.enabled = false;
     }
@@ -116,39 +114,5 @@ public class UX : MonoBehaviour
     public void Reload()
     {
         tutorial.text = "R TO RELOAD";
-    }
-
-    public void Drive()
-    {
-        tutorial.text = "E TO DRIVE"; 
-    }
-    
-    public void Bail()
-    {
-        tutorial.text = "Q TO BAIL"; 
-    }
-
-    public void Died()
-    {
-        StartCoroutine(FadeRed());
-    }
-
-    IEnumerator FadeRed()
-    {
-        float fadeDuration = 2.0f; 
-        float elapsedTime = 0f;
-
-        flashImage.color = new Color(0, 0, 0, 0); 
-        flashImage.gameObject.SetActive(true); 
-
-        while (elapsedTime < fadeDuration)
-        {
-            float t = elapsedTime / fadeDuration;
-            flashImage.color = new Color(1, 0, 0, Mathf.Lerp(0.6f, 1f, t)); 
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        flashImage.color = new Color(1, 0, 0, 1f); 
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class GameManager : MonoBehaviour
     public UX ux;
 
     public SoundManager soundManager;
+    public PlayerController player;
 
     public Pointer pointer;
     public CamController cam;
@@ -28,6 +30,8 @@ public class GameManager : MonoBehaviour
     float currentSpeed;
 
     float tempLerp;
+
+    public bool fadeOut;
 
     void Start()
     {
@@ -45,42 +49,72 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        float currentLerp = camMat.GetFloat("_Lerp");
-        float capLerp = 0.05f * phase; 
-        float currentFrequency = camMat.GetFloat("_Frequency");
-        float capFrequency = 5f * phase; 
-        float currentAmplitude = camMat.GetFloat("_Amplitude");
-        float capAmplitude = 0.1f * phase; 
-        float currentSpeed = camMat.GetFloat("_Speed");
-        float capSpeed = 0.1f * phase; 
-        
-        if (currentLerp < capLerp)
+        if (!fadeOut)
         {
-            currentLerp += 0.0001f; 
-            camMat.SetFloat("_Lerp", currentLerp); 
+            float currentLerp = camMat.GetFloat("_Lerp");
+            float capLerp = 0.05f * phase; 
+            float currentFrequency = camMat.GetFloat("_Frequency");
+            float capFrequency = 5f * phase; 
+            float currentAmplitude = camMat.GetFloat("_Amplitude");
+            float capAmplitude = 0.1f * phase; 
+            float currentSpeed = camMat.GetFloat("_Speed");
+            float capSpeed = 0.1f * phase; 
+
+            if (currentLerp < capLerp)
+            {
+                currentLerp += 0.0001f; 
+                camMat.SetFloat("_Lerp", currentLerp); 
+            }
+            if (currentFrequency < capFrequency)
+            {
+                currentFrequency += 0.01f; 
+                camMat.SetFloat("_Frequency", currentFrequency); 
+            }
+            if (currentAmplitude < capAmplitude)
+            {
+                currentAmplitude += 0.0002f; 
+                camMat.SetFloat("_Amplitude", currentAmplitude); 
+            }
+            if (currentSpeed < capSpeed)
+            {
+                currentSpeed += 0.0002f; 
+                camMat.SetFloat("_Speed", currentSpeed); 
+            }
         }
-        if (currentFrequency < capFrequency)
+        else
         {
-            currentFrequency += 0.01f; 
-            camMat.SetFloat("_Frequency", currentFrequency); 
-        }
-        if (currentAmplitude < capAmplitude)
-        {
-            currentAmplitude += 0.0002f; 
-            camMat.SetFloat("_Amplitude", currentAmplitude); 
-        }
-        if (currentSpeed < capSpeed)
-        {
-            currentSpeed += 0.0002f; 
-            camMat.SetFloat("_Speed", currentSpeed); 
+            float accLerp = camMat.GetFloat("_Lerp");
+            float accFrequency = camMat.GetFloat("_Frequency");
+
+            accLerp += 0.0025f;
+            accFrequency += 0.025f;
+
+            camMat.SetFloat("_Lerp", accLerp); 
+            camMat.SetFloat("_Frequency", accFrequency); 
         }
     }
 
 
     public void UpPhase()
     {
-        phase++;
-        ChooseTarget();
+        if (phase == 5)
+        {
+            StartCoroutine(Win());
+        }
+        else
+        {
+            phase++;
+            ChooseTarget();
+
+        }
+    }
+    IEnumerator Win()
+    {
+        fadeOut = true;
+
+        yield return new WaitForSeconds (5f);
+
+        SceneManager.LoadScene(2);
     }
 
     public void Score(int newScore)

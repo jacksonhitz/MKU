@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     public float range;
     public float reach;
     public Camera cam;
+    public CamController camController;
     public CharacterController controller;
     Vector3 vel;
     bool isGrounded;
@@ -29,10 +30,10 @@ public class PlayerController : MonoBehaviour
     bool hasMoved = false;
     bool hasFired = false;
     bool hasReloaded = false;
-    bool hasBailed = false;
 
-    int health = 10;
+    int health = 25;
 
+    GameManager gameManager;
     SoundManager soundManager;
 
     public bool isDead = false;
@@ -41,15 +42,11 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>();
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Return))
-        {
-            SceneManager.LoadScene(1);
-        }
-
         switch (currentState)
         {
             case State.foot:
@@ -70,13 +67,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.Q) && !hasBailed)
-        {
-            ux.Police();
-            hasBailed = true;
-            Bail();
-        }
-
         if (Input.GetButtonDown("Fire1"))
         {
             gun.Shoot();
@@ -92,7 +82,7 @@ public class PlayerController : MonoBehaviour
             gun.Reload();
             if (!hasReloaded)
             {
-                ux.Drive();
+                ux.Police();
                 hasReloaded = true;
             }
         }
@@ -159,7 +149,6 @@ public class PlayerController : MonoBehaviour
                 {
                     currentState = State.driving;
                     currentCar = hit.transform;
-                    ux.Bail();
                 }
             }
         }
@@ -172,9 +161,10 @@ public class PlayerController : MonoBehaviour
         if (health <= 0)
         {
             isDead = true;
-            ux.Died();
+            gameManager.fadeOut = true;
             soundManager.Flatline();
-            StartCoroutine(Fall());
+            StartCoroutine(Dead());
+            Debug.Log("KILLED");
         }
         else
         {
@@ -182,23 +172,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator Fall()
+    IEnumerator Dead()
     {
-        float duration = 1.5f;
-        float elapsed = 0f;
-        Quaternion initialRotation = transform.rotation;
-        Quaternion targetRotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(90f, 0f, 0f));
-
-        while (elapsed < duration)
-        {
-            transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.rotation = targetRotation;
-
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds (5f);
 
         SceneManager.LoadScene(1);
     }

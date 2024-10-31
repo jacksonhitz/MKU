@@ -7,6 +7,7 @@ public class Dialogue : MonoBehaviour
 {
     public TextMeshProUGUI textComponent;
     public TextMeshProUGUI title;
+    public TextMeshProUGUI creditsBox;
     public string[] lines;
     public float textSpeed;
 
@@ -32,14 +33,19 @@ public class Dialogue : MonoBehaviour
         {
             started = true;
             textComponent.text = string.Empty;
+            creditsBox.text = string.Empty;
             StartDialogue();
         }
-
         else if (Input.GetKeyDown(KeyCode.Return) && waiting)
         {
             waiting = false;
             playerInput.Clear();
             NextLine();
+        }
+
+        if (Input.GetKeyDown(KeyCode.C) && !started)
+        {
+            SceneManager.LoadScene(2);
         }
     }
 
