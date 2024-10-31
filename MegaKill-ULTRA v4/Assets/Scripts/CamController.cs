@@ -38,9 +38,9 @@ public class CamController : MonoBehaviour
     float originalFOV;
 
     public Material mat;
-    private Vector3 originalPosition; // Store original position for swaying
+    private Vector3 originalPosition;
 
-    public float swayIntensity = 0.3f; // Adjust this to control sway amount
+    public float swayIntensity = 0.2f;
 
     void Start()
     {
@@ -49,7 +49,7 @@ public class CamController : MonoBehaviour
 
         cam = GetComponent<Camera>();
         originalFOV = cam.fieldOfView;
-        originalPosition = transform.localPosition; // Store initial position for sway
+        originalPosition = transform.localPosition; 
 
         volume.profile.TryGet(out chromaticAberration);
         volume.profile.TryGet(out colorGrading);
@@ -67,9 +67,9 @@ public class CamController : MonoBehaviour
         greenRandom = Random.Range(.75f, 1.25f);
         blueRandom = Random.Range(.75f, 1.25f);
 
-        redStart = Random.Range(-200f, 0f);
-        greenStart = Random.Range(-200f, 0f);
-        blueStart = Random.Range(-200f, 0f);
+        redStart = Random.Range(-200f, -150f);
+        greenStart = Random.Range(-200f, -150f);
+        blueStart = Random.Range(-200f, -150f);
 
         colorGrading.hueShift.value = redStart;
 
@@ -190,9 +190,9 @@ public class CamController : MonoBehaviour
 
     void ClrMixer()
     {
-        float red = -200f + Mathf.PingPong(Time.time * clrSpd * redRandom, 200f);
-        float green = -200f + Mathf.PingPong(Time.time * clrSpd * greenRandom, 200f);
-        float blue = -200f + Mathf.PingPong(Time.time * clrSpd * blueRandom, 200f);
+        float red = -200f + Mathf.PingPong(Time.time * clrSpd * redRandom, 50f);
+        float green = -200f + Mathf.PingPong(Time.time * clrSpd * greenRandom, 50f);
+        float blue = -200f + Mathf.PingPong(Time.time * clrSpd * blueRandom, 50f);
 
         channelMixer.redOutRedIn.value = red;
         channelMixer.greenOutGreenIn.value = green;

@@ -511,13 +511,15 @@ MonoBehaviour:
   sensX: 2000
   sensY: 2000
   player: {fileID: 6900556800088551255}
+  volume: {fileID: 0}
+  vig: {fileID: 0}
   chromSpd: 1
   fovSpd: 0.75
   satSpd: 10
   clrSpd: 100
   lensSpd: 0.8
-  lensMin: -50
-  lensMax: 25
+  mat: {fileID: 0}
+  swayIntensity: 0.3
 --- !u!114 &1518562305214784948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -590,7 +592,7 @@ GameObject:
   - component: {fileID: 6900556800088551255}
   - component: {fileID: 2859404310503414730}
   - component: {fileID: 6222285770651117563}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -628,18 +630,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runSpd: 7.5
+  jumpHeight: 3
+  gravity: -9.81
   range: 1000
   reach: 1000
   cam: {fileID: 7255819801429229646}
   controller: {fileID: 6222285770651117563}
   groundCheck: {fileID: 6311440314607054359}
-  currentCar: {fileID: 0}
   groundMask:
     serializedVersion: 2
     m_Bits: 8
+  groundDistance: 0
+  currentCar: {fileID: 0}
   currentState: 0
   gun: {fileID: 4315066349358353289}
   ux: {fileID: 5704069476745910162}
+  isDead: 0
 --- !u!143 &6222285770651117563
 CharacterController:
   m_ObjectHideFlags: 0
@@ -6258,3 +6264,4 @@ MonoBehaviour:
   soundManager: {fileID: 0}
   reloadBackAmount: 0.2
   reloadSpeed: 2
+  tracerDuration: 0.2
