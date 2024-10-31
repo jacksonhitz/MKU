@@ -10,7 +10,7 @@ public class EnemyPatrol : MonoBehaviour
 
     NavMeshAgent agent;
    
-    Enemy enemy;
+    GameManager gameManager;
     
     [SerializeField] LayerMask groundLayer, playerLayer;
 
@@ -32,7 +32,7 @@ public class EnemyPatrol : MonoBehaviour
     {  
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player");
-        enemy = GetComponent<Enemy>();
+        gameManager = FindObjectOfType<GameManager>();
         agent.speed = patrolSpeed;
     }
 
@@ -42,9 +42,9 @@ public class EnemyPatrol : MonoBehaviour
         //playerInSight = Physics.CheckSphere(transform.position, sightRange, playerLayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
         if (!isHostile) Patrol();
-        if (isHostile && !enemy.playerWanted) Patrol();
-        if (isHostile && enemy.playerWanted) Chase();
-        if (isHostile && playerInAttackRange && enemy.playerWanted) Attack();
+        if (isHostile && gameManager.score == 0) Patrol();
+        if (isHostile && gameManager.score > 0) Chase();
+        if (isHostile && playerInAttackRange && gameManager.score > 0) Attack();
     }
         
 
