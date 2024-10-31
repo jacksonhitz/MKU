@@ -55,22 +55,50 @@ public class GameManager : MonoBehaviour
     }
 
     public void ChooseTarget()
+{
+    civilians = GameObject.FindGameObjectsWithTag("Civilian");
+
+    Debug.Log("civs: " + civilians.Length);
+    
+    // If no civilians found, return
+    if (civilians.Length == 0)
     {
-        civilians = GameObject.FindGameObjectsWithTag("Civilian");
-        Debug.Log("civs: " + civilians.Length);
-        
+        Debug.LogWarning("No civilians available to target.");
+        return;
+    }
+
+    GameObject target = null;
+
+    // Loop until a non-null target is found
+    for (int attempts = 0; attempts < civilians.Length; attempts++)
+    {
         int randomIndex = Random.Range(0, civilians.Length);
-        GameObject target = civilians[randomIndex];
-
-        if (target == null)
-        {
-            ChooseTarget();
-        }
-
-        Civilian targetScript = target.GetComponent<Civilian>();
+        target = civilians[randomIndex];
         
+        if (target != null)
+        {
+            break;
+        }
+    }
+
+    // If still null, log a warning and return
+    if (target == null)
+    {
+        Debug.LogWarning("No valid target found after multiple attempts.");
+        return;
+    }
+
+    Civilian targetScript = target.GetComponent<Civilian>();
+    
+    if (targetScript != null)
+    {
         targetScript.target = true;
         pointer.target = target.transform;
     }
-    
+    else
+    {
+        Debug.LogWarning("Target does not have a Civilian script attached.");
+    }
+}
+
 }

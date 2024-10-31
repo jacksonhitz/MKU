@@ -185,8 +185,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   range: 100
+  patrolSpeed: 3.5
+  chaseSpeed: 6
   sightRange: 1000
-  isHostile: 1
+  attackRange: 0
+  isHostile: 0
 --- !u!54 &5695312884780171535
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -230,6 +233,7 @@ MonoBehaviour:
   civilian: {fileID: 0}
   cop: 0
   blood: {fileID: 8853266473761700966, guid: b1da43f1588a840748c686b0733ad393, type: 3}
+  squelch: {fileID: 0}
 --- !u!114 &4252307529725697189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,6 +248,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: 0
   pointer: {fileID: 945291299243942887}
+  scream1: {fileID: 0}
+  scream2: {fileID: 0}
+  scream3: {fileID: 0}
 --- !u!1 &7588594976589435098
 GameObject:
   m_ObjectHideFlags: 0
