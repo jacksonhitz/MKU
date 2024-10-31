@@ -53,19 +53,12 @@ public class GameManager : MonoBehaviour
         civilians = GameObject.FindGameObjectsWithTag("Civilian");
         Debug.Log("civs: " + civilians.Length);
         
-        if (civilians.Length > 0)
-        {
-            int randomIndex = Random.Range(0, civilians.Length);
-            GameObject target = civilians[randomIndex];
-            Civilian targetScript = target.GetComponent<Civilian>();
-            
-            targetScript.target = true;
-            pointer.target = target.transform;
-        }
-        else
-        {
-            Debug.LogWarning("No civilians found to choose as a target.");
-        }
+        int randomIndex = Random.Range(0, civilians.Length);
+        GameObject target = civilians[randomIndex];
+        Civilian targetScript = target.GetComponent<Civilian>();
+        
+        //targetScript.target = true;
+        pointer.target = target.transform;
     }
     
 }

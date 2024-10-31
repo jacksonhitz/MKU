@@ -81,7 +81,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   range: 100
+  patrolSpeed: 3.5
+  chaseSpeed: 6
   sightRange: 1000
+  attackRange: 0
   isHostile: 1
 --- !u!54 &702199438110912032
 Rigidbody:
@@ -129,6 +132,7 @@ MonoBehaviour:
   fieldOfViewAngle: 360
   car: {fileID: 0}
   isDriving: 0
+  playerWanted: 0
   gunShot: {fileID: 8300000, guid: 7e4455803fc6549d6a1a346440652aab, type: 3}
   sfx: {fileID: 4715759597277492169}
 --- !u!114 &2832640651528474637
@@ -147,6 +151,7 @@ MonoBehaviour:
   civilian: {fileID: 0}
   cop: 1
   blood: {fileID: 8853266473761700966, guid: b1da43f1588a840748c686b0733ad393, type: 3}
+  squelch: {fileID: 0}
 --- !u!82 &4715759597277492169
 AudioSource:
   m_ObjectHideFlags: 0
@@ -159,7 +164,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7e4455803fc6549d6a1a346440652aab, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.01
   m_Pitch: 1
   Loop: 0
   Mute: 0
