@@ -6,6 +6,7 @@ public class SoundManager : MonoBehaviour
 {
     public AudioSource music;
     public AudioSource sfx;
+    public AudioSource enemySfx;
 
     public AudioClip title;
     public AudioClip witch;
@@ -13,6 +14,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip threes;
     public AudioClip life;
     public AudioClip real;
+    public AudioClip could;
 
     public AudioClip gunShot;
     public AudioClip reload;
@@ -20,15 +22,20 @@ public class SoundManager : MonoBehaviour
     public AudioClip heartbeat;
     public AudioClip flatline;
 
-    public GameManager gameManager;
+    public AudioClip squelch;
 
+    public GameManager gameManager;
     public bool controller;
 
-    
+    private List<AudioClip> musicTracks;
+    private int currentTrackIndex = 0;
+
     void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
+        musicTracks = new List<AudioClip> { witch, hott, threes, life, real, could };
     }
+
     void Start()
     {
         if (controller)
@@ -38,59 +45,41 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (controller && !music.isPlaying)
+        {
+            NewTrack();
+        }
+    }
+
     public void Stop()
     {
         music.Stop();
     }
 
-    public void PhaseCheck()
+    public void NewTrack()
     {
-        if (gameManager.phase == 1)
-        {
-            Witch();
-        }
-        if (gameManager.phase == 2)
-        {
-            Threes();
-        }
-        if (gameManager.phase == 3)
-        {
-            Real();
-        }
-        if (gameManager.phase == 4)
-        {
-            Life();
-        }
-        if (gameManager.phase == 5)
-        {
-            Witch();
-        }
+        currentTrackIndex = (currentTrackIndex + 1) % musicTracks.Count;
+        music.clip = musicTracks[currentTrackIndex];
+        music.Play();
     }
 
-    public void Hott()
+    public void Squelch()
     {
-        music.clip = hott;
-        music.Play();
+        enemySfx.clip = squelch;
+        enemySfx.Play();
     }
-    
-    public void Witch()
+
+    public void Hott() => PlayTrack(hott);
+    public void Witch() => PlayTrack(witch);
+    public void Threes() => PlayTrack(threes);
+    public void Real() => PlayTrack(real);
+    public void Life() => PlayTrack(life);
+
+    private void PlayTrack(AudioClip track)
     {
-        music.clip = witch;
-        music.Play();
-    }
-    public void Threes()
-    {
-        music.clip = threes;
-        music.Play();
-    }
-    public void Real()
-    {
-        music.clip = real;
-        music.Play();
-    }
-    public void Life()
-    {
-        music.clip = life;
+        music.clip = track;
         music.Play();
     }
 
@@ -98,29 +87,16 @@ public class SoundManager : MonoBehaviour
     {
         sfx.clip = gunShot;
         sfx.Play();
-        Debug.Log("called");
     }
-    public void Reload()
-    {
-        sfx.clip = reload;
-        sfx.Play();
-    }
-    public void Empty()
-    {
-        sfx.clip = empty;
-        sfx.Play();
-    }
+    
+    public void Reload() => PlaySfx(reload);
+    public void Empty() => PlaySfx(empty);
+    public void Heartbeat() => PlaySfx(heartbeat);
+    public void Flatline() => PlaySfx(flatline);
 
-    public void Heartbeat()
+    private void PlaySfx(AudioClip clip)
     {
-        sfx.clip = heartbeat;
+        sfx.clip = clip;
         sfx.Play();
     }
-    public void Flatline()
-    {
-        sfx.clip = flatline;
-        sfx.Play();
-    }
-
-
 }

@@ -10,10 +10,13 @@ public class NPC : MonoBehaviour
     public bool cop;
 
     public GameObject blood;
+    AudioSource sfx;
+    public AudioClip squelch;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+    sfx = GetComponent<AudioSource>();
 
         if (!cop)
         {
@@ -25,6 +28,8 @@ public class NPC : MonoBehaviour
     {
         Instantiate(blood, transform.position, Quaternion.identity);
 
+        this.gameObject.SetActive(false);
+
         if (cop)
         {
             gameManager.Score(100);
@@ -33,14 +38,10 @@ public class NPC : MonoBehaviour
         {
             if (civilian.target)
             {
-                gameManager.Score(200);
-                gameManager.UpPhase();
+                gameManager.Score(1000);
+                gameManager.ChooseTarget();
             }
             gameManager.Score(50);
         } 
-
-        this.gameObject.SetActive(false);
-
-        //Destroy(this.gameObject);
     }
 }

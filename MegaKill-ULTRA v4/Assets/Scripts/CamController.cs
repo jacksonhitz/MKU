@@ -38,9 +38,15 @@ public class CamController : MonoBehaviour
     float originalFOV;
 
     public Material mat;
-    private Vector3 originalPosition;
+    private Vector3 originalPosition; 
+    public float swayIntensity = 0.1f;
 
-    public float swayIntensity = 0.2f;
+
+    public void UpPhase(int phase)
+    {
+        swayIntensity += 0.1f;
+
+    }
 
     void Start()
     {
@@ -84,7 +90,7 @@ public class CamController : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * sensY;
 
         xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        xRotation = Mathf.Clamp(xRotation, -89.9f, 89.9f);
 
         yRotation += mouseX;
 
