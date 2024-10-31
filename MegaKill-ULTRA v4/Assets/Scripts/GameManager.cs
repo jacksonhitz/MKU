@@ -72,4 +72,5 @@ public class GameManager : MonoBehaviour
         targetScript.target = true;
         pointer.target = target.transform;
     }
+    
 }
