@@ -81,7 +81,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   range: 100
+  patrolSpeed: 3.5
+  chaseSpeed: 6
   sightRange: 1000
+  attackRange: 0
   isHostile: 1
 --- !u!54 &1538504031022476056
 Rigidbody:
@@ -156,7 +159,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.01
   m_Pitch: 1
   Loop: 0
   Mute: 0

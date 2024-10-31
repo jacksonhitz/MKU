@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
         GameObject target = civilians[randomIndex];
         Civilian targetScript = target.GetComponent<Civilian>();
         
-        targetScript.target = true;
+        //targetScript.target = true;
         pointer.target = target.transform;
     }
 }
