@@ -27,6 +27,8 @@ public class EnemyPatrol : MonoBehaviour
     bool playerInAttackRange;
     //[SerializeField] bool playerInSight;
     [SerializeField] bool isHostile;
+    [SerializeField] Transform[] waypoints;
+    int currentWaypointIndex = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -53,23 +55,19 @@ public class EnemyPatrol : MonoBehaviour
     void Patrol()
     {
         agent.speed = patrolSpeed;
-        if (!walkpointSet) DestSearch();
-        if (walkpointSet) agent.SetDestination(destPoint);
-        if (Vector3.Distance(transform.position, destPoint) < 10) walkpointSet = false;
-    }
-    void DestSearch()
-    {
-        float z = Random.Range(-range, range);
-        float x = Random.Range(-range, range);
-
-        destPoint = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z);
-
-        if(Physics.Raycast(destPoint, Vector3.down, groundLayer))
+        if (!agent.hasPath || agent.remainingDistance < 2f)
         {
-            walkpointSet = true;
+            SetNextWaypoint();
         }
     }
 
+    void SetNextWaypoint()
+    {
+        if (waypoints.Length == 0) return;
+
+        currentWaypointIndex = Random.Range(0, waypoints.Length);
+        agent.SetDestination(waypoints[currentWaypointIndex].position);
+    }
      void Attack()
      {
          agent.SetDestination(transform.position);
