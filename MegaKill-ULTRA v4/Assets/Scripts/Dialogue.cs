@@ -16,14 +16,25 @@ public class Dialogue : MonoBehaviour
 
     public PlayerInput playerInput;
 
+    public bool credits;
+
+    void Start()
+    {
+        if (credits)
+        {
+            StartDialogue();
+        }
+    }
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !started)
+        if (Input.GetKeyDown(KeyCode.Space) && !started && !credits)
         {
             started = true;
             textComponent.text = string.Empty;
             StartDialogue();
         }
+
         else if (Input.GetKeyDown(KeyCode.Return) && waiting)
         {
             waiting = false;
@@ -76,7 +87,14 @@ public class Dialogue : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        SceneManager.LoadScene(nextSceneIndex);
+        if (!credits)
+        {
+            int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+            SceneManager.LoadScene(nextSceneIndex);
+        }
+        else
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 }

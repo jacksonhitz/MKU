@@ -56,22 +56,22 @@ public class GameManager : MonoBehaviour
         
         if (currentLerp < capLerp)
         {
-            currentLerp += 0.00001f; 
+            currentLerp += 0.0001f; 
             camMat.SetFloat("_Lerp", currentLerp); 
         }
         if (currentFrequency < capFrequency)
         {
-            currentLerp += 0.001f; 
+            currentFrequency += 0.01f; 
             camMat.SetFloat("_Frequency", currentFrequency); 
         }
         if (currentAmplitude < capAmplitude)
         {
-            currentSpeed += 0.0001f; 
+            currentAmplitude += 0.0002f; 
             camMat.SetFloat("_Amplitude", currentAmplitude); 
         }
         if (currentSpeed < capSpeed)
         {
-            currentLerp += 0.0001f; 
+            currentSpeed += 0.0002f; 
             camMat.SetFloat("_Speed", currentSpeed); 
         }
     }

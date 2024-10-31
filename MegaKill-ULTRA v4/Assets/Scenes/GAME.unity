@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.19557647, g: 0.23695676, b: 0.3105412, a: 1}
+  m_IndirectSpecularColor: {r: 0.19557342, g: 0.23694669, b: 0.3105145, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -63962,8 +63962,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 315a576ad49794414a6a063fe5eb219a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcPrefab: {fileID: 4903709290917824817, guid: 9d5472aeb7aec4f078655989715c4125, type: 3}
-  copPrefab: {fileID: 4903709290917824817, guid: e09c3eb3dac164952a852d4f1033ae17, type: 3}
+  npcPrefab: {fileID: 7069844480337968315, guid: be7deccadab5c4815ad77d8dc67c2477, type: 3}
+  copPrefab: {fileID: 7102115608583721869, guid: d97f2e6d091b24837985fe33041c3406, type: 3}
   npcCount: 250
   copCount: 20
   minSpawnRadius: 0.5
@@ -91627,6 +91627,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 199063550861400989, guid: d014f3102b4824428ab60060f0d46974, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2509132486315097633, guid: d014f3102b4824428ab60060f0d46974, type: 3}
       propertyPath: m_Name
       value: SoundManager 1
@@ -91675,6 +91679,14 @@ PrefabInstance:
       propertyPath: gameManager
       value: 
       objectReference: {fileID: 1238548644}
+    - target: {fileID: 4049863611097302040, guid: d014f3102b4824428ab60060f0d46974, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4133267345801564010, guid: d014f3102b4824428ab60060f0d46974, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
