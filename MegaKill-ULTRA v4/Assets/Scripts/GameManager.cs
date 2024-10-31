@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviour
     public Pointer pointer;
     public CamController cam;
 
+    public Material camMat;
+    float setLerp = 0.5f;
+
     void Start()
     {
         soundManager = FindObjectOfType<SoundManager>();
@@ -28,14 +31,17 @@ public class GameManager : MonoBehaviour
         ux = FindAnyObjectByType<UX>();
 
         ChooseTarget();
-
-        UpPhase();
     }
 
     public void UpPhase()
     {
         phase++;
         cam.UpPhase(phase);
+
+        setLerp = (setLerp * phase);
+
+        camMat.SetFloat("_Lerp", setLerp);
+
     }
 
     public void Score(int newScore)
@@ -55,9 +61,15 @@ public class GameManager : MonoBehaviour
         
         int randomIndex = Random.Range(0, civilians.Length);
         GameObject target = civilians[randomIndex];
+
+        if (target == null)
+        {
+            ChooseTarget();
+        }
+
         Civilian targetScript = target.GetComponent<Civilian>();
         
-        //targetScript.target = true;
+        targetScript.target = true;
         pointer.target = target.transform;
     }
 }

@@ -55456,6 +55456,7 @@ MonoBehaviour:
   soundManager: {fileID: 329463581}
   pointer: {fileID: 1546980835}
   cam: {fileID: 4127734314986556957}
+  camMat: {fileID: 0}
 --- !u!1001 &1253600453
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -95459,7 +95460,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2263147896608135403, guid: a91c812fc9e0b4f77bace9e97ee4d294, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3829937108956720199, guid: a91c812fc9e0b4f77bace9e97ee4d294, type: 3}
       propertyPath: m_LocalPosition.y
