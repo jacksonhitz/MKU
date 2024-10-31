@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     GameObject[] civilians;
 
-    public int phase;
+    int phase;
 
     public Volume volume;
 
@@ -22,7 +22,12 @@ public class GameManager : MonoBehaviour
     public CamController cam;
 
     public Material camMat;
-    float setLerp = 0.5f;
+    float currentLerp;
+    float currentFrequency;
+    float currentAmplitude;
+    float currentSpeed;
+
+    float tempLerp;
 
     void Start()
     {
@@ -30,18 +35,52 @@ public class GameManager : MonoBehaviour
         volume = FindAnyObjectByType<Volume>();
         ux = FindAnyObjectByType<UX>();
 
-        ChooseTarget();
+        UpPhase();
+
+        camMat.SetFloat("_Lerp", currentLerp);
+        camMat.SetFloat("_Frequency", currentFrequency);
+        camMat.SetFloat("_Amplitude", currentAmplitude);
+        camMat.SetFloat("_Speed", currentSpeed);
     }
+
+    void Update()
+    {
+        float currentLerp = camMat.GetFloat("_Lerp");
+        float capLerp = 0.05f * phase; 
+        float currentFrequency = camMat.GetFloat("_Frequency");
+        float capFrequency = 5f * phase; 
+        float currentAmplitude = camMat.GetFloat("_Amplitude");
+        float capAmplitude = 0.1f * phase; 
+        float currentSpeed = camMat.GetFloat("_Speed");
+        float capSpeed = 0.1f * phase; 
+        
+        if (currentLerp < capLerp)
+        {
+            currentLerp += 0.00001f; 
+            camMat.SetFloat("_Lerp", currentLerp); 
+        }
+        if (currentFrequency < capFrequency)
+        {
+            currentLerp += 0.001f; 
+            camMat.SetFloat("_Frequency", currentFrequency); 
+        }
+        if (currentAmplitude < capAmplitude)
+        {
+            currentSpeed += 0.0001f; 
+            camMat.SetFloat("_Amplitude", currentAmplitude); 
+        }
+        if (currentSpeed < capSpeed)
+        {
+            currentLerp += 0.0001f; 
+            camMat.SetFloat("_Speed", currentSpeed); 
+        }
+    }
+
 
     public void UpPhase()
     {
         phase++;
-        cam.UpPhase(phase);
-
-        setLerp = (setLerp * phase);
-
-        camMat.SetFloat("_Lerp", setLerp);
-
+        ChooseTarget();
     }
 
     public void Score(int newScore)
@@ -61,11 +100,6 @@ public class GameManager : MonoBehaviour
         
         int randomIndex = Random.Range(0, civilians.Length);
         GameObject target = civilians[randomIndex];
-
-        if (target == null)
-        {
-            ChooseTarget();
-        }
 
         Civilian targetScript = target.GetComponent<Civilian>();
         

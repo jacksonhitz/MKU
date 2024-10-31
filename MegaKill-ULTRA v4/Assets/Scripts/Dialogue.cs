@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
 
 public class Dialogue : MonoBehaviour
 {
@@ -13,22 +12,23 @@ public class Dialogue : MonoBehaviour
 
     int index;
     bool started = false;
+    bool waiting = false;
+
+    public PlayerInput playerInput;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !started)
         {
-            if (!started)
-            {
-                started = true;
-            
-                textComponent.text = string.Empty;
-                StartDialogue();
-            }
-            else
-            {
-                StartCoroutine(LoadNext());
-            }
+            started = true;
+            textComponent.text = string.Empty;
+            StartDialogue();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return) && waiting)
+        {
+            waiting = false;
+            playerInput.Clear();
+            NextLine();
         }
     }
 
@@ -46,9 +46,16 @@ public class Dialogue : MonoBehaviour
             yield return new WaitForSeconds(textSpeed);
         }
 
-        yield return new WaitForSeconds(1f);
-
-        NextLine();
+        if (lines[index].EndsWith("?"))
+        {
+            waiting = true;
+            playerInput.InputBox();
+        }
+        else
+        {
+            yield return new WaitForSeconds(1f);
+            NextLine();
+        }
     }
 
     void NextLine()

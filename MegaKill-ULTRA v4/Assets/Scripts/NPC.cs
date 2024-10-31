@@ -39,7 +39,7 @@ public class NPC : MonoBehaviour
             if (civilian.target)
             {
                 gameManager.Score(1000);
-                gameManager.ChooseTarget();
+                gameManager.UpPhase();
             }
             gameManager.Score(50);
         } 

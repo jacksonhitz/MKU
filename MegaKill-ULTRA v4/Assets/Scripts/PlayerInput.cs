@@ -1,23 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using TMPro;
 
 public class PlayerInput : MonoBehaviour
 {
     public TMP_InputField inputField;
-    private List<string> playerAnswer = new List<string>();
+    List<string> playerAnswer = new List<string>();
 
-    private void Start()
+    public void InputBox()
     {
-        if (inputField != null)
-        {
-            inputField.onSubmit.AddListener(delegate { inputField.ActivateInputField(); });
-        }
-        else
-        {
-            Debug.LogError("Input Field is not assigned in the inspector");
-        }
+        inputField.ActivateInputField();
+        EventSystem.current.SetSelectedGameObject(inputField.gameObject);
+    }
+    public void Clear()
+    {
+        inputField.text = "";
     }
     public void StoreAnswer()
     {
