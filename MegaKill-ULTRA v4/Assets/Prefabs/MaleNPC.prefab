@@ -396,6 +396,7 @@ MonoBehaviour:
   attackRange: 10
   isHostile: 0
   cop: 0
+  animator: {fileID: 3451997002041470754}
 --- !u!54 &5815055682650688547
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -644,6 +645,11 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7909986694228055425, guid: fd2ce4076dab5a84bb7a042979a53e82, type: 3}
+--- !u!95 &3451997002041470754 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: fd2ce4076dab5a84bb7a042979a53e82, type: 3}
+  m_PrefabInstance: {fileID: 9119051825774170803}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8721176901497451864 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: fd2ce4076dab5a84bb7a042979a53e82, type: 3}

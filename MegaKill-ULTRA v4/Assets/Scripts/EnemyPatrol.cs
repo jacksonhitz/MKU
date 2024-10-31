@@ -28,6 +28,8 @@ public class EnemyPatrol : MonoBehaviour
     [SerializeField] bool isHostile;
     
     public bool cop;
+    public Animator animator;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -50,6 +52,13 @@ public class EnemyPatrol : MonoBehaviour
         if (isHostile && gameManager.score == 0) Patrol();
         if (isHostile && gameManager.score > 0) Chase();
         if (isHostile && playerInAttackRange && gameManager.score > 0) Attack();
+
+        RotateDir();
+
+        if (!cop)
+        {
+            UpdateAnim();
+        }
     }
 
     void HostilityCheck()
@@ -99,5 +108,28 @@ public class EnemyPatrol : MonoBehaviour
         Vector3 fleeTarget = transform.position + fleeDirection.normalized * gun.scaredRad;
 
         agent.SetDestination(fleeTarget);
+    }
+
+    void RotateDir()
+    {
+        Vector3 velocity = agent.velocity;
+        if (velocity.magnitude > 0.1f) 
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(velocity);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+        }
+    }
+
+    void UpdateAnim()
+    {
+        bool isMoving = agent.velocity.magnitude > 0.1f;
+        if (!isMoving)
+        {
+            animator.speed = 0;
+        }
+        else
+        {
+            animator.speed = 1;
+        }
     }
 }
