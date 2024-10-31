@@ -15,6 +15,9 @@ public class SoundManager : MonoBehaviour
     public AudioClip life;
     public AudioClip real;
     public AudioClip could;
+    public AudioClip dj;
+    public AudioClip four;
+    public AudioClip all;
 
     public AudioClip gunShot;
     public AudioClip reload;
@@ -27,13 +30,13 @@ public class SoundManager : MonoBehaviour
     public GameManager gameManager;
     public bool controller;
 
-    private List<AudioClip> musicTracks;
-    private int currentTrackIndex = 0;
+    List<AudioClip> tracks;
+    int trackIndex = 0;
 
     void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
-        musicTracks = new List<AudioClip> { witch, hott, threes, life, real, could };
+        tracks = new List<AudioClip> { witch, dj, could, all, hott, threes, life, real, four, };
     }
 
     void Start()
@@ -47,7 +50,7 @@ public class SoundManager : MonoBehaviour
 
     void Update()
     {
-        if (controller && !music.isPlaying)
+        if (!music.isPlaying)
         {
             NewTrack();
         }
@@ -60,9 +63,18 @@ public class SoundManager : MonoBehaviour
 
     public void NewTrack()
     {
-        currentTrackIndex = (currentTrackIndex + 1) % musicTracks.Count;
-        music.clip = musicTracks[currentTrackIndex];
+        trackIndex = (trackIndex + 1) % tracks.Count;
+        music.clip = tracks[trackIndex];
         music.Play();
+
+        if (music.clip == dj || music.clip == four)
+        {
+            music.volume = .05f;
+        }
+        else
+        {
+            music.volume = .01f;
+        }
     }
 
     public void Squelch()
@@ -71,23 +83,7 @@ public class SoundManager : MonoBehaviour
         enemySfx.Play();
     }
 
-    public void Hott() => PlayTrack(hott);
-    public void Witch() => PlayTrack(witch);
-    public void Threes() => PlayTrack(threes);
-    public void Real() => PlayTrack(real);
-    public void Life() => PlayTrack(life);
-
-    private void PlayTrack(AudioClip track)
-    {
-        music.clip = track;
-        music.Play();
-    }
-
-    public void Gunshot()
-    {
-        sfx.clip = gunShot;
-        sfx.Play();
-    }
+    public void Gunshot() => PlaySfx(gunShot);
     
     public void Reload() => PlaySfx(reload);
     public void Empty() => PlaySfx(empty);

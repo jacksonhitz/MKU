@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
 
     public bool isDriving;
     
-    public bool playerWanted;
+   
     public AudioClip gunShot;
     public AudioSource sfx;
 
@@ -30,7 +30,6 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if (gameManager.score > 0) playerWanted = true;
         if (isDriving)
         {
             transform.position = car.position;
@@ -43,7 +42,7 @@ public class Enemy : MonoBehaviour
         {
             if (IsPlayerInRange() && HasLineOfSight())
             {
-                if (playerWanted)
+                if (gameManager.score > 0)
                 {
                     enemyGun.Shoot(player.transform);
                     //soundManager.Gunshot();
