@@ -172,6 +172,7 @@ MonoBehaviour:
   attackRange: 1
   isHostile: 0
   cop: 1
+  animator: {fileID: 0}
 --- !u!54 &2806828380579600799
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -249,7 +250,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7e4455803fc6549d6a1a346440652aab, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.01
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0

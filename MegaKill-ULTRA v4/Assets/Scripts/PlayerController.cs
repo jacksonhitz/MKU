@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     bool hasFired = false;
     bool hasReloaded = false;
 
-    int health = 25;
+    int health = 1000;
 
     GameManager gameManager;
     SoundManager soundManager;

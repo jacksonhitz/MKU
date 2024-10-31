@@ -69,11 +69,11 @@ public class SoundManager : MonoBehaviour
 
         if (music.clip == dj || music.clip == four)
         {
-            music.volume = .05f;
+            music.volume = .5f;
         }
         else
         {
-            music.volume = .01f;
+            music.volume = .1f;
         }
     }
 
