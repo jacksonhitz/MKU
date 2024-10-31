@@ -18,11 +18,16 @@ public class GameManager : MonoBehaviour
 
     public SoundManager soundManager;
 
+    public Pointer pointer;
+    public CamController cam;
+
     void Start()
     {
         soundManager = FindObjectOfType<SoundManager>();
         volume = FindAnyObjectByType<Volume>();
         ux = FindAnyObjectByType<UX>();
+
+        ChooseTarget();
 
         UpPhase();
     }
@@ -30,9 +35,7 @@ public class GameManager : MonoBehaviour
     public void UpPhase()
     {
         phase++;
-        //volume.weight = phase * .2f;
-        soundManager.Stop();
-        soundManager.PhaseCheck();
+        cam.UpPhase(phase);
     }
 
     public void Score(int newScore)
@@ -48,24 +51,13 @@ public class GameManager : MonoBehaviour
     public void ChooseTarget()
     {
         civilians = GameObject.FindGameObjectsWithTag("Civilian");
+        Debug.Log("civs: " + civilians.Length);
         
-        for (int i = 0; i < 25; i++)
-        {
-            int randomIndex = Random.Range(0, civilians.Length);
-            GameObject target = civilians[randomIndex];
-            Civilian targetScript = target.GetComponent<Civilian>();
-
-            if (targetScript.target)
-            {
-                i--;
-            }
-            else
-            {
-                targetScript.target = true;
-                Debug.Log("targets+1");
-            }
-        }
-        Debug.Log("npcs: " + civilians.Length);
+        int randomIndex = Random.Range(0, civilians.Length);
+        GameObject target = civilians[randomIndex];
+        Civilian targetScript = target.GetComponent<Civilian>();
+        
+        targetScript.target = true;
+        pointer.target = target.transform;
     }
-
 }

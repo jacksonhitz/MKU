@@ -18,7 +18,9 @@ public class Gun : MonoBehaviour
     public float reloadBackAmount = 0.2f; 
     public float reloadSpeed = 2f; 
 
-    public float tracerDuration = 0.2f; 
+    public float tracerDuration = 0.2f;
+
+    public float scaredRad = 50f; 
 
     void Awake()
     {
@@ -52,6 +54,23 @@ public class Gun : MonoBehaviour
             RaycastHit hit;
             Ray ray = player.cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
 
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, scaredRad);
+            foreach (var collider in hitColliders)
+            {
+                Debug.Log("colliders");
+                if (collider.CompareTag("Civilian"))
+                 {
+                    Debug.Log("colliders2");
+                    Civilian civilian = collider.transform.parent.GetComponent<Civilian>();
+                    if (civilian != null)
+                    {
+                        civilian.Scared(); 
+                        Debug.Log("calledCivs");
+
+                    }
+                }
+            }
+
             if (Physics.Raycast(ray, out hit, player.range))
             {
                 Debug.Log("Hit: " + hit.transform.name);
@@ -59,7 +78,10 @@ public class Gun : MonoBehaviour
                 {
                     NPC npc = hit.transform.GetComponent<NPC>();
                     npc.Hit();
+                    soundManager.Squelch();
                 }
+
+                
 
                 CreateBulletTracer(ray.origin, hit.point);
             }
