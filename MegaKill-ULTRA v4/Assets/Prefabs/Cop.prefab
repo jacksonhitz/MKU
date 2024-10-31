@@ -164,11 +164,11 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 1024
-  waypoints: []
+  range: 0
   patrolSpeed: 3.5
   chaseSpeed: 6
   sightRange: 1000
-  attackRange: 0
+  attackRange: 15
   isHostile: 1
 --- !u!54 &2806828380579600799
 Rigidbody:
