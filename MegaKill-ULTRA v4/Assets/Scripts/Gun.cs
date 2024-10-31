@@ -11,6 +11,7 @@ public class Gun : MonoBehaviour
 
     public PlayerController player;
 
+    EnemyPatrol npc;
     public SoundManager soundManager;
 
     float bullets = 6f;
@@ -33,6 +34,7 @@ public class Gun : MonoBehaviour
     {
         originalRot = transform.localEulerAngles;
         originalPos = transform.localPosition; 
+        npc = FindObjectOfType<EnemyPatrol>();
     }
 
     void Update()
@@ -65,6 +67,7 @@ public class Gun : MonoBehaviour
                     if (civilian != null)
                     {
                         civilian.Scared(); 
+                        npc.Flee();
                     }
                 }
             }
