@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,17 +9,22 @@ public class EnemyPatrol : MonoBehaviour
     GameObject player;
 
     NavMeshAgent agent;
-
+   
+    Enemy enemy;
+    
     [SerializeField] LayerMask groundLayer, playerLayer;
 
     //patrol
     Vector3 destPoint;
     bool walkpointSet;
     [SerializeField] float range;
-
+    [SerializeField] float patrolSpeed = 3.5f;
+    [SerializeField] float chaseSpeed = 6.0f;
     //state change
     [SerializeField] float sightRange;
-    bool playerInSight;
+    [SerializeField] float attackRange;
+    bool playerInAttackRange;
+    //bool playerInSight;
     [SerializeField] bool isHostile;
 
     // Start is called before the first frame update
@@ -26,19 +32,25 @@ public class EnemyPatrol : MonoBehaviour
     {  
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.Find("Player");
+        enemy = GetComponent<Enemy>();
+        agent.speed = patrolSpeed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        playerInSight = Physics.CheckSphere(transform.position, sightRange, playerLayer);
-        Patrol();
-        if (playerInSight && isHostile) Chase();
+        //playerInSight = Physics.CheckSphere(transform.position, sightRange, playerLayer);
+        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
+        if (!isHostile) Patrol();
+        if (isHostile && !enemy.playerWanted) Patrol();
+        if (isHostile && enemy.playerWanted) Chase();
+        if (isHostile && playerInAttackRange && enemy.playerWanted) Attack();
     }
         
 
     void Patrol()
     {
+        agent.speed = patrolSpeed;
         if (!walkpointSet) DestSearch();
         if (walkpointSet) agent.SetDestination(destPoint);
         if (Vector3.Distance(transform.position, destPoint) < 10) walkpointSet = false;
@@ -56,8 +68,13 @@ public class EnemyPatrol : MonoBehaviour
         }
     }
 
+     void Attack()
+     {
+         agent.SetDestination(transform.position);
+     }
     void Chase()
     {
+        agent.speed = chaseSpeed; 
         agent.SetDestination(player.transform.position);
     }
 }
