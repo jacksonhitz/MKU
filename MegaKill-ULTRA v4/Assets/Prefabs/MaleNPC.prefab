@@ -377,7 +377,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7069844480337968315}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a56c4c85599dd7249acc4f2876a444ad, type: 3}
   m_Name: 
@@ -388,12 +388,13 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 1024
-  waypoints: []
+  range: 1000
   patrolSpeed: 3.5
   chaseSpeed: 6
+  fleeSpeed: 6
   sightRange: 1000
-  attackRange: 0
-  isHostile: 1
+  attackRange: 10
+  isHostile: 0
 --- !u!54 &5815055682650688547
 Rigidbody:
   m_ObjectHideFlags: 0

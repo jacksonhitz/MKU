@@ -96,15 +96,33 @@ public class GameManager : MonoBehaviour
     public void ChooseTarget()
     {
         civilians = GameObject.FindGameObjectsWithTag("Civilian");
+        if (civilians == null || civilians.Length == 0)
+        {
+            Debug.LogWarning("No civilians found");
+            return;
+        }
+
         Debug.Log("civs: " + civilians.Length);
         
         int randomIndex = Random.Range(0, civilians.Length);
         GameObject target = civilians[randomIndex];
 
         Civilian targetScript = target.GetComponent<Civilian>();
+        if (targetScript == null)
+        {
+            Debug.LogWarning("No Civilian component found on target");
+            return;
+        }
         
         targetScript.target = true;
-        pointer.target = target.transform;
+        if (pointer != null)
+        {
+            pointer.target = target.transform;
+        }
+        else
+        {
+            Debug.LogWarning("Pointer not found");
+        }
     }
     
 }
