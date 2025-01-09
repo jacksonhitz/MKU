@@ -43,6 +43,11 @@ public class Dialogue : MonoBehaviour
             NextLine();
         }
 
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            SceneManager.LoadScene(1);
+        }
+
         if (Input.GetKeyDown(KeyCode.C) && !started)
         {
             SceneManager.LoadScene(2);

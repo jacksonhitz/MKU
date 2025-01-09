@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     bool hasFired = false;
     bool hasReloaded = false;
 
-    int health = 1000;
+    int health = 100;
 
     GameManager gameManager;
     SoundManager soundManager;
@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
             gun.Shoot();
             if (!hasFired)
             {
-                ux.Reload();
+                ux.Reload();    
                 hasFired = true;
             }
         }
