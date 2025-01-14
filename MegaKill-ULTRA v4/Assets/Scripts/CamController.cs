@@ -66,21 +66,19 @@ public class CamController : MonoBehaviour
 
         SetClr();
 
-        // Set initial exposure for a black screen
         if (colorGrading != null)
         {
-            colorGrading.postExposure.value = -10f; // Start fully dark
+            colorGrading.postExposure.value = -10f; 
         }
 
-        // Start the fade-in effect
-        StartCoroutine(FadeInExposure(2f)); // 2 seconds fade-in duration
+        StartCoroutine(FadeIn(2f)); 
     }
 
-    IEnumerator FadeInExposure(float duration)
+    IEnumerator FadeIn(float duration)
     {
         float elapsed = 0f;
-        float initialExposure = -10f; // Starting black
-        float targetExposure = 0f; // Normal exposure
+        float initialExposure = -10f; 
+        float targetExposure = 0f; 
 
         while (elapsed < duration)
         {
@@ -92,7 +90,6 @@ public class CamController : MonoBehaviour
             yield return null;
         }
 
-        // Ensure exposure ends at the target level
         if (colorGrading != null)
         {
             colorGrading.postExposure.value = targetExposure;

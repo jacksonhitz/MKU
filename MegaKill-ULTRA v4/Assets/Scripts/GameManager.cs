@@ -132,7 +132,6 @@ public class GameManager : MonoBehaviour
         civilians = GameObject.FindGameObjectsWithTag("Civilian");
         if (civilians == null || civilians.Length == 0)
         {
-            Debug.LogWarning("No civilians found");
             return;
         }
 
@@ -144,7 +143,6 @@ public class GameManager : MonoBehaviour
         Civilian targetScript = target.GetComponent<Civilian>();
         if (targetScript == null)
         {
-            Debug.LogWarning("No Civilian component found on target");
             return;
         }
         
@@ -153,10 +151,5 @@ public class GameManager : MonoBehaviour
         {
             pointer.target = target.transform;
         }
-        else
-        {
-            Debug.LogWarning("Pointer not found");
-        }
     }
-    
 }

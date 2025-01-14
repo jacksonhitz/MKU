@@ -14,7 +14,6 @@ public class EnemyPatrol : MonoBehaviour
 
     [SerializeField] LayerMask groundLayer, playerLayer;
 
-    // Patrol variables
     Vector3 destPoint;
     bool walkpointSet;
     [SerializeField] float range;
@@ -103,7 +102,6 @@ public class EnemyPatrol : MonoBehaviour
     {
         agent.speed = fleeSpeed;
 
-        // Flee in the opposite direction from the gunshot
         Vector3 fleeDirection = transform.position - player.transform.position;
         Vector3 fleeTarget = transform.position + fleeDirection.normalized * gun.scaredRad;
 

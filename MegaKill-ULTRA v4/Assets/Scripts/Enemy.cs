@@ -45,7 +45,6 @@ public class Enemy : MonoBehaviour
                 if (gameManager.score > 0)
                 {
                     enemyGun.Shoot(player.transform);
-                    //soundManager.Gunshot();
                     sfx.clip = gunShot;
                     sfx.Play();
 

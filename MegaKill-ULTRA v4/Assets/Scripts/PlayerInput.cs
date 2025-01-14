@@ -23,12 +23,8 @@ public class PlayerInput : MonoBehaviour
         if (inputField != null && !string.IsNullOrEmpty(inputField.text))
         {
             playerAnswer.Add(inputField.text);
-            Debug.Log("Answer recorded: " + playerAnswer[playerAnswer.Count - 1]);
+            Debug.Log("Answer: " + playerAnswer[playerAnswer.Count - 1]);
             inputField.text = "";
-        }
-        else
-        {
-            Debug.LogWarning("Input Field is empty or not assigned.");
         }
     }
 
