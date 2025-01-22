@@ -153,12 +153,12 @@ public class CamController : MonoBehaviour
             lensDistortion.intensity.value = distortionValue;
         }
 
-        // Camera Sway based on volume weight
+        // Camera Sway 
         float swayAmountX = Mathf.Sin(Time.time * 2f) * swayIntensity * volume.weight;
         float swayAmountY = Mathf.Cos(Time.time * 2f) * swayIntensity * volume.weight;
         transform.localPosition = originalPosition + new Vector3(swayAmountX, swayAmountY, 0);
 
-        // Camera Rotation Sway
+        // Camera Rot Sway
         float rotationSwayX = Mathf.Sin(Time.time * 1.5f) * swayIntensity * 0.5f * volume.weight; // Slight pitch tilt
         float rotationSwayY = Mathf.Cos(Time.time * 1.5f) * swayIntensity * 0.5f * volume.weight; // Slight yaw tilt
         transform.localRotation = Quaternion.Euler(rotationSwayX, rotationSwayY, 0) * Quaternion.Euler(xRotation, 0f, 0f);
