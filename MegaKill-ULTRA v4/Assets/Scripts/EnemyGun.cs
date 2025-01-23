@@ -8,21 +8,16 @@ public class EnemyGun : MonoBehaviour
     public float fireRate;
     public float bulletSpd;
 
-    
     public GameObject projectilePrefab;
     public Transform firePoint;
-
 
     public TrailRenderer tracerPrefab; 
     Vector3 rot = Vector3.zero;
     Vector3 originalRot;
     Vector3 originalPos;
 
-
     public SoundManager soundManager;
     private CamController cam;
-
-
 
     void Start()
     {
@@ -53,31 +48,20 @@ public class EnemyGun : MonoBehaviour
         rb.velocity = targetDir * bulletSpd;
 
         TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
-        StartCoroutine(HandleTracer(tracer, firePoint.position, player.position));
+        StartCoroutine(HandleTracer(tracer, bullet));
     }
 
-    IEnumerator HandleTracer(TrailRenderer tracer, Vector3 start, Vector3 target)
+    IEnumerator HandleTracer(TrailRenderer tracer, GameObject bullet)
     {
-        tracer.transform.position = start;
-
-        float travelTime = Vector3.Distance(start, target) / bulletSpd;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < travelTime)
+        while (bullet != null)
         {
-            elapsedTime += Time.deltaTime;
-            float t = elapsedTime / travelTime;
-
-            tracer.transform.position = Vector3.Lerp(start, target, t);
-
+            tracer.transform.position = bullet.transform.position;
             yield return null;
         }
 
-        tracer.transform.position = target;
-
+        // Wait until the tracer finishes
         yield return new WaitForSeconds(tracer.time);
 
         Destroy(tracer.gameObject);
     }
-
 }

@@ -13,25 +13,17 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject, lifeTime);
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider collider)
     {
         Debug.Log("hit called");
-        
-        if (((1 << other.gameObject.layer) & hitMask) != 0)
-        {
-            Debug.Log(other);
             
-            if (other.CompareTag("Player"))
-            {
-                PlayerController playerController = other.GetComponent<PlayerController>();
-                if (playerController != null && !playerController.isDead)
-                {
-                    playerController.Hit();
-                    Debug.Log("player hit");
-                }
-            }
-            Destroy(gameObject);
+        if (collider.CompareTag("Player"))
+        {
+            Debug.Log("player hit");
+            PlayerController playerController = collider.GetComponent<PlayerController>();
+            playerController.Hit();
         }
+        //Destroy(gameObject);
     }
 }
 

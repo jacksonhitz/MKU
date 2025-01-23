@@ -25,6 +25,9 @@ public class Gun : MonoBehaviour
 
     public LayerMask npcMask;
 
+    public TrailRenderer tracerPrefab;  // Add this for tracer effect
+    public Transform firePoint; // To use as the origin of the tracer
+
     void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>();
@@ -62,7 +65,7 @@ public class Gun : MonoBehaviour
             foreach (var collider in hitColliders)
             {
                 if (collider.CompareTag("Civilian"))
-                 {
+                {
                     Civilian civilian = collider.transform.parent.GetComponent<Civilian>();
                     if (civilian != null)
                     {
@@ -82,9 +85,9 @@ public class Gun : MonoBehaviour
                     soundManager.Squelch();
                 }
 
-                
-
-                CreateBulletTracer(ray.origin, hit.point);
+                // Spawn the tracer and make it follow the raycast
+                TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
+                StartCoroutine(HandleTracer(tracer, hit.point));  
             }
 
             bullets--; 
@@ -102,38 +105,24 @@ public class Gun : MonoBehaviour
         bullets = 6f;
     }
 
-    void CreateBulletTracer(Vector3 startPosition, Vector3 endPosition)
+    IEnumerator HandleTracer(TrailRenderer tracer, Vector3 hitPoint)
     {
-        GameObject tracer = new GameObject("BulletTracer");
-        LineRenderer lineRenderer = tracer.AddComponent<LineRenderer>();
+        tracer.transform.position = firePoint.position;
+        
+        Vector3 endPosition = hitPoint;
 
-        lineRenderer.startWidth = 0.1f;  
-        lineRenderer.endWidth = 0.1f;   
-        lineRenderer.material = new Material(Shader.Find("Sprites/Default")); 
-        lineRenderer.startColor = Color.white; 
-        lineRenderer.endColor = Color.white;   
-        lineRenderer.positionCount = 2; 
+        tracer.transform.position = firePoint.position;
+        tracer.transform.LookAt(endPosition);  
 
-        lineRenderer.SetPosition(0, startPosition);
-        lineRenderer.SetPosition(1, endPosition);
-
-        StartCoroutine(FadeOutTracer(tracer, tracerDuration));
-    }
-
-    IEnumerator FadeOutTracer(GameObject tracer, float duration)
-    {
-        float startTime = Time.time;
-        LineRenderer lineRenderer = tracer.GetComponent<LineRenderer>();
-
-        Color startColor = lineRenderer.startColor;
-        while (Time.time < startTime + duration)
+        float elapsedTime = 0f;
+        while (elapsedTime < tracerDuration)
         {
-            float t = (Time.time - startTime) / duration;
-            Color currentColor = Color.Lerp(startColor, new Color(startColor.r, startColor.g, startColor.b, 0), t);
-            lineRenderer.startColor = currentColor;
-            lineRenderer.endColor = currentColor;
+            tracer.transform.position = Vector3.Lerp(firePoint.position, hitPoint, elapsedTime / tracerDuration);
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
-        Destroy(tracer);
+        yield return new WaitForSeconds(tracer.time);
+
+        Destroy(tracer.gameObject);
     }
 }

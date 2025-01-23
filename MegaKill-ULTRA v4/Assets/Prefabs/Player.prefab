@@ -132,6 +132,7 @@ MonoBehaviour:
   range: 1000
   reach: 1000
   cam: {fileID: 1219442242868809474}
+  camController: {fileID: 0}
   controller: {fileID: 884453956642669735}
   groundCheck: {fileID: 2407676442310176456}
   groundMask:
@@ -169,6 +170,37 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &638332571970882588
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3453878788295288222}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3453878788295288222
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638332571970882588}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.30974317, y: -0.11525041, z: 1.1015005}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1100610309520666820}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &642484941687091671
 GameObject:
   m_ObjectHideFlags: 0
@@ -5410,6 +5442,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3453878788295288222}
   - {fileID: 301255372806101696}
   - {fileID: 4466782544353339058}
   - {fileID: 923509080464129789}
@@ -6841,7 +6874,6 @@ MonoBehaviour:
   score: {fileID: 4430821035401068043}
   popup: {fileID: 4352306191248654722}
   gameManager: {fileID: 0}
-  flashImage: {fileID: 0}
 --- !u!1001 &6830849158350865138
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6996,3 +7028,5 @@ MonoBehaviour:
   npcMask:
     serializedVersion: 2
     m_Bits: 4096
+  tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
+  firePoint: {fileID: 3453878788295288222}

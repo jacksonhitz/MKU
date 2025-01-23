@@ -40,7 +40,7 @@ public class CamController : MonoBehaviour
     public Material mat;
     private Vector3 originalPosition; 
     public float swayIntensity = 0.1f;
-
+    BulletTime bulletTime;
 
     public void UpPhase(int phase)
     {
@@ -71,6 +71,8 @@ public class CamController : MonoBehaviour
             colorGrading.postExposure.value = -10f; 
         }
 
+        bulletTime = FindObjectOfType<BulletTime>();
+
         StartCoroutine(FadeIn(2f)); 
     }
 
@@ -96,7 +98,6 @@ public class CamController : MonoBehaviour
         }
     }
 
-
     void SetClr()
     {
         redRandom = Random.Range(.75f, 1.25f);
@@ -116,8 +117,8 @@ public class CamController : MonoBehaviour
 
     void Update()
     {
-        float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * sensX;
-        float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * sensY;
+        float mouseX = (Input.GetAxis("Mouse X") * Time.deltaTime * sensX) / Time.timeScale;
+        float mouseY = (Input.GetAxis("Mouse Y") * Time.deltaTime * sensY) / Time.timeScale;
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -89.9f, 89.9f);
@@ -166,7 +167,6 @@ public class CamController : MonoBehaviour
         ClrAdjuster();
         ClrMixer();
     }
-
 
     public void Damaged(Vector3 damagePos)
     {

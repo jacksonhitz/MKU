@@ -95,4 +95,17 @@ public class SoundManager : MonoBehaviour
         sfx.clip = clip;
         sfx.Play();
     }
+
+    public void Slow()
+    {
+        music.pitch = 0.75f;
+        sfx.pitch = 0.75f;
+        enemySfx.pitch = 0.75f;
+    }
+    public void Reg()
+    {
+        music.pitch = 1;
+        sfx.pitch = 1;
+        enemySfx.pitch = 1;
+    }
 }
