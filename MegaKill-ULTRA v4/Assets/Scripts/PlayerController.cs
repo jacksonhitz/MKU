@@ -32,17 +32,27 @@ public class PlayerController : MonoBehaviour
     bool hasReloaded = false;
 
     int health = 100;
+    int maxHealth = 100; //added for healthbar
 
     GameManager gameManager;
     SoundManager soundManager;
 
     public bool isDead = false;
 
+    [SerializeField] FloatingHealthBar healthBar; //added for healthbar
+
+    private void Start()
+    {
+        maxHealth = 100;
+        health = maxHealth;
+        healthBar.UpdateHealthBar(health, maxHealth);
+    }
 
     void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
+        healthBar = GetComponentInChildren<FloatingHealthBar>(); //added for healthbar
     }
 
     void Update()
@@ -157,6 +167,7 @@ public class PlayerController : MonoBehaviour
     public void Hit()
     {
         health--;
+        healthBar.UpdateHealthBar(health, maxHealth); //added for healthbar
 
         if (health <= 0)
         {
