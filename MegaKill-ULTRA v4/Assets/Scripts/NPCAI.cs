@@ -13,11 +13,8 @@ public class NPCAI : MonoBehaviour
 
     void Start()
     {
-        if (moveable == null)
-        {
-            enabled = false;
-            return;
-        }
+        GameObject moveableObj = GameObject.Find("Moveable");
+        moveable = moveableObj.GetComponent<Collider>();
 
         SetDestination();
     }

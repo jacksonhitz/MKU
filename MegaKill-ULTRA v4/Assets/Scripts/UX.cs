@@ -85,7 +85,7 @@ public class UX : MonoBehaviour
 
     public void Score()
     {
-        score.text = "SCORE: " + (gameManager.score);
+        //score.text = "SCORE: " + (gameManager.score);
     }
     
     IEnumerator Off()

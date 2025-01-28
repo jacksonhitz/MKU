@@ -43,42 +43,55 @@ public class PlayerController : MonoBehaviour
 
     public int weapon = 2;
 
+    public GameObject revolver;
+    public GameObject shotgun;
+
+
 
     void Start()
     {
         maxHealth = 100;
         health = maxHealth;
-        healthBar.UpdateHealthBar(health, maxHealth);
+        //healthBar.UpdateHealthBar(health, maxHealth);
+
     }
 
     void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
-        healthBar = GetComponentInChildren<FloatingHealthBar>(); 
+        //healthBar = GetComponentInChildren<FloatingHealthBar>(); 
     }
 
     void Update()
     {
-        switch (currentState)
-        {
-            case State.foot:
-                controller.enabled = true;
-                Move();
-                break;
-            case State.driving:
-                controller.enabled = false;
-                Drive();
-                break;
-        }
+        Move();
 
         if (Input.GetKey(KeyCode.E))
         {
-            if (currentState == State.foot)
-            {
-                Interact();
-            }
+            Interact();
         }
+
+        if (Input.GetKey(KeyCode.Alpha1))
+        {
+            weapon = 0;
+            shotgun.SetActive(false);
+            revolver.SetActive(false);
+        }
+        if (Input.GetKey(KeyCode.Alpha2))
+        {
+            weapon = 1;
+            revolver.SetActive(true);
+            shotgun.SetActive(false);
+            
+        }
+        if (Input.GetKey(KeyCode.Alpha3))
+        {
+            weapon = 2;
+            shotgun.SetActive(true);
+            revolver.SetActive(false);
+        }
+
 
         if (Input.GetButtonDown("Fire1"))
         {
@@ -86,7 +99,7 @@ public class PlayerController : MonoBehaviour
             {
                 if(gun.bullets > 0)
                 {
-                    gun.Revolver();
+                    gun.Shotgun();
                 }
                 else
                 {

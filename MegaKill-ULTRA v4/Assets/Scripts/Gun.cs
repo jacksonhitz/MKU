@@ -3,34 +3,33 @@ using System.Collections;
 
 public class Gun : MonoBehaviour
 {
-    float mag = 75f;
+    float mag = 40f;
     float spd = 5f;
     Vector3 rot = Vector3.zero;
-    Vector3 originalRot; 
+
+    Vector3 originalRot;
     Vector3 originalPos;
+    Vector3 stowedPos = new Vector3(-0.5f, -0.5f, 0f); // Example stowed position
+    Vector3 stowedRot = new Vector3(45f, 0f, 0f);       // Example stowed rotation
 
     public PlayerController player;
-
-    EnemyPatrol npc;
     public SoundManager soundManager;
 
     public float bullets = 6f;
     public float shells = 2f;
-
-    public float reloadBackAmount = 0.2f; 
-    public float reloadSpeed = 2f; 
-
+    public float reloadBackAmount = 0.2f;
+    public float reloadSpeed = 2f;
     public float tracerDuration = 0.2f;
-
-    public float scaredRad = 50f; 
+    public float scaredRad = 50f;
 
     public LayerMask npcMask;
+    public TrailRenderer tracerPrefab;
+    public Transform firePoint;
+    public int pellets = 12;
+    public float spreadAngle = 5f;
 
-    public TrailRenderer tracerPrefab;  
-    public Transform firePoint; 
-    public int pellets = 12; 
-    public float spreadAngle = 5f; 
-
+    private bool isStowing = false;
+    private float switchSpeed = 5f;
 
     void Awake()
     {
@@ -40,8 +39,7 @@ public class Gun : MonoBehaviour
     void Start()
     {
         originalRot = transform.localEulerAngles;
-        originalPos = transform.localPosition; 
-        npc = FindObjectOfType<EnemyPatrol>();
+        originalPos = transform.localPosition;
     }
 
     void Update()
@@ -50,16 +48,37 @@ public class Gun : MonoBehaviour
         transform.localEulerAngles = originalRot + rot;
     }
 
+    public void StowWeapon(bool stow)
+    {
+        isStowing = stow;
+        StopAllCoroutines();
+        if (stow)
+            StartCoroutine(SmoothTransition(stowedPos, stowedRot));
+        else
+            StartCoroutine(SmoothTransition(originalPos, originalRot));
+    }
+
+    private IEnumerator SmoothTransition(Vector3 targetPos, Vector3 targetRot)
+    {
+        Vector3 startPos = transform.localPosition;
+        Vector3 startRot = transform.localEulerAngles;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < 1f)
+        {
+            transform.localPosition = Vector3.Lerp(startPos, targetPos, elapsedTime);
+            transform.localEulerAngles = Vector3.Lerp(startRot, targetRot, elapsedTime);
+            elapsedTime += Time.deltaTime * switchSpeed;
+            yield return null;
+        }
+
+        transform.localPosition = targetPos;
+        transform.localEulerAngles = targetRot;
+    }
+
     public void Recoil()
     {
-        if (player.weapon == 2)
-        {
-            rot += new Vector3(mag, 0, 0f);
-        }
-        else
-        {
-            rot += new Vector3(-mag, 0, 0f);
-        }
+        rot += new Vector3(-mag, 0, 0f);
     }
 
     public void Revolver()
@@ -80,10 +99,11 @@ public class Gun : MonoBehaviour
                 soundManager.Squelch();
             }
             TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
-            StartCoroutine(HandleTracer(tracer, hit.point));  
+            StartCoroutine(HandleTracer(tracer, hit.point));
         }
-        bullets--; 
+        bullets--;
     }
+
     public void Shotgun()
     {
         Recoil();
@@ -91,8 +111,7 @@ public class Gun : MonoBehaviour
 
         for (int i = 0; i < pellets; i++)
         {
-            Vector3 spread = new Vector3( Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0f);
-
+            Vector3 spread = new Vector3(Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0f);
             Quaternion rotation = Quaternion.Euler(player.cam.transform.eulerAngles + spread);
             Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
 
@@ -130,11 +149,8 @@ public class Gun : MonoBehaviour
     IEnumerator HandleTracer(TrailRenderer tracer, Vector3 hitPoint)
     {
         tracer.transform.position = firePoint.position;
-        
-        Vector3 endPosition = hitPoint;
 
-        tracer.transform.position = firePoint.position;
-        tracer.transform.LookAt(endPosition);  
+        Vector3 endPosition = hitPoint;
 
         float elapsedTime = 0f;
         while (elapsedTime < tracerDuration)
