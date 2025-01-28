@@ -39,9 +39,12 @@ public class PlayerController : MonoBehaviour
 
     public bool isDead = false;
 
-    [SerializeField] FloatingHealthBar healthBar; //added for healthbar
+    [SerializeField] FloatingHealthBar healthBar; 
 
-    private void Start()
+    public int weapon = 2;
+
+
+    void Start()
     {
         maxHealth = 100;
         health = maxHealth;
@@ -52,7 +55,7 @@ public class PlayerController : MonoBehaviour
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
-        healthBar = GetComponentInChildren<FloatingHealthBar>(); //added for healthbar
+        healthBar = GetComponentInChildren<FloatingHealthBar>(); 
     }
 
     void Update()
@@ -79,7 +82,30 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            gun.Shoot();
+            if (weapon == 2)
+            {
+                if(gun.bullets > 0)
+                {
+                    gun.Revolver();
+                }
+                else
+                {
+                    soundManager.Empty();
+                }
+            }
+            else if(weapon == 1)
+            {
+                if(gun.bullets > 0)
+                {
+                    gun.Revolver();
+                }
+                else
+                {
+                    soundManager.Empty();
+                }
+            }
+
+
             if (!hasFired)
             {
                 ux.Reload();    

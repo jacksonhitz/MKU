@@ -36,7 +36,7 @@ public class NPCSpawner : MonoBehaviour
             }
         }
 
-        gameManager.ChooseTarget();
+        //gameManager.ChooseTarget();
     }
 
     void SpawnCops()

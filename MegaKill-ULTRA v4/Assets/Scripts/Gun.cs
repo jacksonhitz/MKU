@@ -14,7 +14,8 @@ public class Gun : MonoBehaviour
     EnemyPatrol npc;
     public SoundManager soundManager;
 
-    float bullets = 6f;
+    public float bullets = 6f;
+    public float shells = 2f;
 
     public float reloadBackAmount = 0.2f; 
     public float reloadSpeed = 2f; 
@@ -25,8 +26,11 @@ public class Gun : MonoBehaviour
 
     public LayerMask npcMask;
 
-    public TrailRenderer tracerPrefab;  // Add this for tracer effect
-    public Transform firePoint; // To use as the origin of the tracer
+    public TrailRenderer tracerPrefab;  
+    public Transform firePoint; 
+    public int pellets = 12; 
+    public float spreadAngle = 5f; 
+
 
     void Awake()
     {
@@ -48,34 +52,51 @@ public class Gun : MonoBehaviour
 
     public void Recoil()
     {
-        rot += new Vector3(-mag, 0, 0f);
+        if (player.weapon == 2)
+        {
+            rot += new Vector3(mag, 0, 0f);
+        }
+        else
+        {
+            rot += new Vector3(-mag, 0, 0f);
+        }
     }
 
-    public void Shoot()
+    public void Revolver()
     {
-        if (bullets >= 1)
+        Recoil();
+        soundManager.Gunshot();
+
+        RaycastHit hit;
+        Ray ray = player.cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+
+        if (Physics.Raycast(ray, out hit, player.range))
         {
-            Recoil();
-            soundManager.Gunshot();
-
-            RaycastHit hit;
-            Ray ray = player.cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, scaredRad, npcMask);
-            foreach (var collider in hitColliders)
+            Debug.Log("Hit: " + hit.transform.name);
+            if (hit.transform.CompareTag("NPC") || hit.transform.CompareTag("Civilian"))
             {
-                if (collider.CompareTag("Civilian"))
-                {
-                    Civilian civilian = collider.transform.parent.GetComponent<Civilian>();
-                    if (civilian != null)
-                    {
-                        civilian.Scared(); 
-                        npc.Flee();
-                    }
-                }
+                NPC npc = hit.transform.GetComponent<NPC>();
+                npc.Hit();
+                soundManager.Squelch();
             }
+            TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
+            StartCoroutine(HandleTracer(tracer, hit.point));  
+        }
+        bullets--; 
+    }
+    public void Shotgun()
+    {
+        Recoil();
+        soundManager.Gunshot();
 
-            if (Physics.Raycast(ray, out hit, player.range))
+        for (int i = 0; i < pellets; i++)
+        {
+            Vector3 spread = new Vector3( Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0f);
+
+            Quaternion rotation = Quaternion.Euler(player.cam.transform.eulerAngles + spread);
+            Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
+
+            if (Physics.Raycast(ray, out RaycastHit hit, player.range))
             {
                 Debug.Log("Hit: " + hit.transform.name);
                 if (hit.transform.CompareTag("NPC") || hit.transform.CompareTag("Civilian"))
@@ -84,25 +105,26 @@ public class Gun : MonoBehaviour
                     npc.Hit();
                     soundManager.Squelch();
                 }
-
-                // Spawn the tracer and make it follow the raycast
                 TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
-                StartCoroutine(HandleTracer(tracer, hit.point));  
+                StartCoroutine(HandleTracer(tracer, hit.point));
             }
-
-            bullets--; 
         }
-        else
-        {
-            soundManager.Empty();
-        }
+        shells -= 1;
     }
 
     public void Reload()
     {
         soundManager.Reload();
         rot += new Vector3(mag, 0, 0f);
-        bullets = 6f;
+
+        if (player.weapon == 2)
+        {
+            shells = 2f;
+        }
+        else if (player.weapon == 1)
+        {
+            bullets = 6f;
+        }
     }
 
     IEnumerator HandleTracer(TrailRenderer tracer, Vector3 hitPoint)

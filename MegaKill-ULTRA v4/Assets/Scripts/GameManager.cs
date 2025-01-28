@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    GameObject[] civilians;
+    List<NPCAI> civs;
 
     int phase;
 
@@ -18,7 +17,6 @@ public class GameManager : MonoBehaviour
     public UX ux;
 
     public SoundManager soundManager;
-    public PlayerController player;
 
     public Pointer pointer;
     public CamController cam;
@@ -29,15 +27,17 @@ public class GameManager : MonoBehaviour
     float currentAmplitude;
     float currentSpeed;
 
-    float tempLerp;
-
     public bool fadeOut;
+
+    GameObject player;
 
     void Start()
     {
-        soundManager = FindObjectOfType<SoundManager>();
-        volume = FindAnyObjectByType<Volume>();
-        ux = FindAnyObjectByType<UX>();
+        civs = new List<NPCAI>(FindObjectsOfType<NPCAI>()); 
+        soundManager = FindObjectOfType<SoundManager>(); 
+        volume = FindObjectOfType<Volume>(); 
+        ux = FindObjectOfType<UX>(); 
+        player = GameObject.FindGameObjectWithTag("Player");
 
         UpPhase();
 
@@ -47,17 +47,22 @@ public class GameManager : MonoBehaviour
         camMat.SetFloat("_Speed", currentSpeed);
     }
 
+    public void ScareNPCs()
+    {
+        foreach(NPCAI civ in civs)
+        {
+            
+            civ.CallFlee(player.transform.position);
+        }
+    }
+
     void Update()
     {
         if (!fadeOut)
         {
-            float currentLerp = camMat.GetFloat("_Lerp");
             float capLerp = 0.05f * phase; 
-            float currentFrequency = camMat.GetFloat("_Frequency");
             float capFrequency = 5f * phase; 
-            float currentAmplitude = camMat.GetFloat("_Amplitude");
             float capAmplitude = 0.1f * phase; 
-            float currentSpeed = camMat.GetFloat("_Speed");
             float capSpeed = 0.1f * phase; 
 
             if (currentLerp < capLerp)
@@ -83,17 +88,13 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            float accLerp = camMat.GetFloat("_Lerp");
-            float accFrequency = camMat.GetFloat("_Frequency");
+            currentLerp += 0.0025f;
+            currentFrequency += 0.025f;
 
-            accLerp += 0.0025f;
-            accFrequency += 0.025f;
-
-            camMat.SetFloat("_Lerp", accLerp); 
-            camMat.SetFloat("_Frequency", accFrequency); 
+            camMat.SetFloat("_Lerp", currentLerp); 
+            camMat.SetFloat("_Frequency", currentFrequency); 
         }
     }
-
 
     public void UpPhase()
     {
@@ -104,15 +105,14 @@ public class GameManager : MonoBehaviour
         else
         {
             phase++;
-            ChooseTarget();
-
         }
     }
+
     IEnumerator Win()
     {
         fadeOut = true;
 
-        yield return new WaitForSeconds (5f);
+        yield return new WaitForSeconds(5f);
 
         SceneManager.LoadScene(2);
     }
@@ -125,31 +125,5 @@ public class GameManager : MonoBehaviour
         
         ux.Score();
         ux.PopUp(newScore);
-    }
-
-    public void ChooseTarget()
-    {
-        civilians = GameObject.FindGameObjectsWithTag("Civilian");
-        if (civilians == null || civilians.Length == 0)
-        {
-            return;
-        }
-
-        Debug.Log("civs: " + civilians.Length);
-        
-        int randomIndex = Random.Range(0, civilians.Length);
-        GameObject target = civilians[randomIndex];
-
-        Civilian targetScript = target.GetComponent<Civilian>();
-        if (targetScript == null)
-        {
-            return;
-        }
-        
-        targetScript.target = true;
-        if (pointer != null)
-        {
-            pointer.target = target.transform;
-        }
     }
 }
