@@ -1,14 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class PathfindingCube : MonoBehaviour
+public class Pathfinding : MonoBehaviour
 {
     public LayerMask moveableLayer;  // Layer for identifying moveable areas
     public Vector3 cubeOrigin;       // Origin point of the cube
     public Vector3 cubeSize = new Vector3(10, 10, 10); // Size of the cube in units
     public float nodeSpacing = 1f;   // Distance between nodes
 
-    private List<Node> nodes = new List<Node>();
+    public List<Node> nodes = new List<Node>();
 
     void Start()
     {
@@ -21,23 +21,19 @@ public class PathfindingCube : MonoBehaviour
         Vector3 startPoint = cubeOrigin - halfSize;
 
         int countX = Mathf.RoundToInt(cubeSize.x / nodeSpacing);
-        int countY = Mathf.RoundToInt(cubeSize.y / nodeSpacing);
         int countZ = Mathf.RoundToInt(cubeSize.z / nodeSpacing);
 
         for (int x = 0; x < countX; x++)
         {
-            for (int y = 0; y < countY; y++)
+            for (int z = 0; z < countZ; z++)
             {
-                for (int z = 0; z < countZ; z++)
-                {
-                    Vector3 worldPoint = startPoint + new Vector3(x * nodeSpacing, y * nodeSpacing, z * nodeSpacing) + Vector3.one * (nodeSpacing / 2);
-                    bool walkable = Physics.CheckSphere(worldPoint, nodeSpacing * 0.45f, moveableLayer);
+                Vector3 worldPoint = startPoint + new Vector3(x * nodeSpacing, 0, z * nodeSpacing) + Vector3.one * (nodeSpacing / 2);
 
-                    // Only add nodes in walkable areas
-                    if (walkable)
-                    {
-                        nodes.Add(new Node(walkable, worldPoint));
-                    }
+                RaycastHit hit;
+                if (Physics.Raycast(worldPoint + Vector3.up * 50f, Vector3.down, out hit, 100f, moveableLayer))
+                {
+                    Vector3 nodePosition = new Vector3(worldPoint.x, hit.point.y, worldPoint.z);
+                    nodes.Add(new Node(true, nodePosition));
                 }
             }
         }

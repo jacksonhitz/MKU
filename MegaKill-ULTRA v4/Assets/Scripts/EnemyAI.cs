@@ -1,61 +1,28 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    public GameObject player;
-    public float detectionRadius = 10f;
-    public int numRays = 8;
-    public float moveSpeed = 5f;
+    NavMeshAgent agent;
+    GameObject player;
 
-    Vector3 targetPosition;
+    public float yLevelThreshold = 1f; 
 
     void Start()
     {
+        agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
     void Update()
     {
-        Pathfind();
-        Move();
-    }
-
-    void Pathfind()
-    {
-        Vector3 closestPoint = Vector3.zero;
-        float shortestDistance = Mathf.Infinity;
-
-        for (int i = 0; i < numRays; i++)
+        if (Mathf.Abs(transform.position.y - player.transform.position.y) <= yLevelThreshold)
         {
-            float angle = (360f / numRays) * i;
-            Vector3 direction = new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle), 0, Mathf.Sin(Mathf.Deg2Rad * angle));
-
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, direction, out hit, detectionRadius))
-            {
-                float distanceToPlayer = Vector3.Distance(hit.point, player.transform.position);
-                if (distanceToPlayer < shortestDistance)
-                {
-                    shortestDistance = distanceToPlayer;
-                    closestPoint = hit.point;
-                }
-            }
+            agent.SetDestination(player.transform.position);
         }
-
-        if (closestPoint == Vector3.zero)
+        else
         {
-            closestPoint = player.transform.position;
-        }
-
-        targetPosition = closestPoint;
-    }
-
-    void Move()
-    {
-        if (targetPosition != Vector3.zero)
-        {
-            Vector3 direction = (targetPosition - transform.position).normalized;
-            transform.position += direction * moveSpeed * Time.deltaTime;
+            agent.ResetPath();
         }
     }
 }
