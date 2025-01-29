@@ -34,6 +34,7 @@ public class Dialogue : MonoBehaviour
             started = true;
             textComponent.text = string.Empty;
             creditsBox.text = string.Empty;
+            title.text = string.Empty;
             StartDialogue();
         }
         else if (Input.GetKeyDown(KeyCode.Return) && waiting)

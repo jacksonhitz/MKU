@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Barrier : MonoBehaviour
 {
+    UX ux;
     void Start()
     {
         GetComponent<Collider>().isTrigger = true;
+        ux = FindObjectOfType<UX>(); 
     }
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("Player"))
-        {
-            Debug.Log("Player has collided with the invisible barrier!");
-        }
+        ux.Warning();
+        
     }
 }

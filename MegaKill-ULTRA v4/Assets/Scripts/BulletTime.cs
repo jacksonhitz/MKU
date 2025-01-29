@@ -8,13 +8,16 @@ public class BulletTime : MonoBehaviour
     public float transitionDuration = 0.5f; 
     float originalSpd;
     bool isSlowed = false;
+    bool wasSlowed = false;
 
     SoundManager soundManager;
+
+    UX ux;
 
     void Start()
     {
         originalSpd = Time.timeScale;
-
+        ux = FindObjectOfType<UX>(); 
         soundManager = FindAnyObjectByType<SoundManager>();
     }
 
@@ -24,6 +27,11 @@ public class BulletTime : MonoBehaviour
         {
             if (!isSlowed)
                 Slow();
+
+                if (!wasSlowed)
+                {
+                    ux.Arms();
+                }
         }
         else
         {

@@ -73,6 +73,25 @@ public class PlayerController : MonoBehaviour
         {
             Interact();
         }
+        if (Input.GetKey(KeyCode.Q))
+        {
+            if (weapon == 1)
+            {
+                weapon = 0;
+                revolver.SetActive(true);
+                shotgun.SetActive(false);
+                ux.UpdateAmmo();
+                soundManager.Hammer();
+            }
+            else if (weapon == 0)
+            {
+                weapon = 1;
+                shotgun.SetActive(true);
+                revolver.SetActive(false);
+                ux.UpdateAmmo();
+                soundManager.Pump();
+            }
+        }
 
         if (Input.GetKey(KeyCode.Alpha1))
         {
@@ -139,7 +158,7 @@ public class PlayerController : MonoBehaviour
             gun.Reload();
             if (!hasReloaded)
             {
-                ux.Police();
+                ux.Slow();
                 hasReloaded = true;
             }
         }
@@ -229,6 +248,6 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds (5f);
 
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
     }
 }

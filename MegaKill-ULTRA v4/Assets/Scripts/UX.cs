@@ -114,20 +114,30 @@ public class UX : MonoBehaviour
     
     IEnumerator Off()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5f);
         
         tutorial.enabled = false;
-    }
-
-    public void Police()
-    {
-        tutorial.text = "BEWARE THE POLICE. THEY WILL NOT UNDERSTAND."; 
-        StartCoroutine(Off());
     }
     
     public void WASD()
     {
         tutorial.text = "WASD TO MOVE"; 
+    }
+    public void Slow()
+    {
+        tutorial.text = "SHIFT TO SLOW"; 
+    }
+
+    public void Arms()
+    {
+        tutorial.text = "Q TO SWITCH";
+    }
+
+    public void Warning()
+    {
+        tutorial.enabled = true;
+        tutorial.text = "Not time to play in the sun yet, theres still plenty of Bad people to take care of down here..."; 
+        StartCoroutine(Off());
     }
 
     public void Kill()
