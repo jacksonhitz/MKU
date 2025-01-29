@@ -17,15 +17,15 @@ public class EnemyAI : MonoBehaviour
 
     GameManager gameManager;
 
-    public Transform car;
-    public AudioClip gunShot;
-    public AudioSource sfx;
+
+    //public AudioClip gunShot;
+    //public AudioSource sfx;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         playerObj = GameObject.FindGameObjectWithTag("Player");
-        player = GetComponent<PlayerController>();
+        player = FindAnyObjectByType<PlayerController>();
 
         gameManager = FindObjectOfType<GameManager>();
 
@@ -53,8 +53,8 @@ public class EnemyAI : MonoBehaviour
                 if (gameManager.score > 0)
                 {
                     enemyGun.Shoot(player.transform);
-                    sfx.clip = gunShot;
-                    sfx.Play();
+                    //sfx.clip = gunShot;
+                    //sfx.Play();
 
                     yield return new WaitForSeconds(fireRate);
                 }
