@@ -29843,9 +29843,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3772405943064830635, guid: d014f3102b4824428ab60060f0d46974, type: 3}
-      propertyPath: hammer
+      propertyPath: pump
       value: 
       objectReference: {fileID: 8300000, guid: 4f5bbbebe075b483bbbbbb9719552748, type: 3}
+    - target: {fileID: 3772405943064830635, guid: d014f3102b4824428ab60060f0d46974, type: 3}
+      propertyPath: hammer
+      value: 
+      objectReference: {fileID: 8300000, guid: 1d715846055f548a3a1c8f16a367fb03, type: 3}
     - target: {fileID: 3772405943064830635, guid: d014f3102b4824428ab60060f0d46974, type: 3}
       propertyPath: gameManager
       value: 
@@ -40623,6 +40627,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2298683201600166327, guid: 7551af1bf9ad64cdfa0d4c207dc32980, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 350
+      objectReference: {fileID: 0}
     - target: {fileID: 2915189947299141569, guid: 7551af1bf9ad64cdfa0d4c207dc32980, type: 3}
       propertyPath: m_LocalPosition.x
       value: 30.64

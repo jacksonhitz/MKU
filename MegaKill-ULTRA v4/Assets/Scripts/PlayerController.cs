@@ -46,6 +46,9 @@ public class PlayerController : MonoBehaviour
     public GameObject revolver;
     public GameObject shotgun;
 
+    float swapCooldown = .5f;
+    bool onSwap = false;
+
 
 
     void Start()
@@ -75,21 +78,25 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.Q))
         {
-            if (weapon == 1)
+            if (!onSwap)
             {
-                weapon = 0;
-                revolver.SetActive(true);
-                shotgun.SetActive(false);
-                ux.UpdateAmmo();
-                soundManager.Hammer();
-            }
-            else if (weapon == 0)
-            {
-                weapon = 1;
-                shotgun.SetActive(true);
-                revolver.SetActive(false);
-                ux.UpdateAmmo();
-                soundManager.Pump();
+                if (weapon == 1)
+                {
+                    weapon = 0;
+                    revolver.SetActive(true);
+                    shotgun.SetActive(false);
+                    ux.UpdateAmmo();
+                    soundManager.Hammer();
+                }
+                else if (weapon == 0)
+                {
+                    weapon = 1;
+                    shotgun.SetActive(true);
+                    revolver.SetActive(false);
+                    ux.UpdateAmmo();
+                    soundManager.Pump();
+                }
+                StartCoroutine(Swap());
             }
         }
 
@@ -168,6 +175,15 @@ public class PlayerController : MonoBehaviour
             vel.y += gravity * Time.deltaTime;
             controller.Move(vel * Time.deltaTime);
         }
+    }
+
+    IEnumerator Swap()
+    {
+        onSwap = true;
+        yield return new WaitForSeconds (swapCooldown);
+        onSwap = false;
+
+
     }
 
     void Bail()

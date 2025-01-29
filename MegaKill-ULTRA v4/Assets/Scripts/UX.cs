@@ -130,7 +130,8 @@ public class UX : MonoBehaviour
 
     public void Arms()
     {
-        tutorial.text = "Q TO SWITCH";
+        tutorial.text = "1 AND 2 TO SWITCH WEAPONS";
+        StartCoroutine(Off());
     }
 
     public void Warning()
