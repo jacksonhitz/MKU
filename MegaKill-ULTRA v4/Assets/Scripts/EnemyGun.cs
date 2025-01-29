@@ -5,43 +5,64 @@ public class EnemyGun : MonoBehaviour
 {
     float reloadMag = 40f;
     float reloadSpd = 2f;
-    float fireRate = 5f;
+    float fireRate = 2f;
     float bulletSpd = 50f;
+    float range = 40f;
 
     public GameObject projectilePrefab;
     public Transform firePoint;
+    public TrailRenderer tracerPrefab;
 
-    public TrailRenderer tracerPrefab; 
-    Vector3 rot = Vector3.zero;
-    Vector3 originalRot;
-    Vector3 originalPos;
+    private Vector3 rot = Vector3.zero;
+    private Vector3 originalRot;
+    private Vector3 originalPos;
 
     public SoundManager soundManager;
-    CamController cam;
+    private CamController cam;
+    private Enemy enemy;
+    private GameObject player;
+    private bool isAttacking = false;
 
     void Start()
     {
-        originalRot = transform.localEulerAngles;
-        originalPos = transform.localPosition;
+        enemy = GetComponent<Enemy>();
+        player = GameObject.FindGameObjectWithTag("Player");
         cam = FindObjectOfType<CamController>();
+
+        fireRate = Random.Range(1f, 3f);
     }
 
     void Update()
     {
-        rot = Vector3.Lerp(rot, Vector3.zero, reloadSpd * Time.deltaTime);
-        transform.localEulerAngles = originalRot + rot;
+        if (enemy.los && InRange() && !isAttacking)
+        {
+            StartCoroutine(CallAttack());
+        }
     }
 
-    public void Recoil()
+    IEnumerator CallAttack()
+    {
+        isAttacking = true;
+        yield return new WaitForSeconds(fireRate);
+        Attack();
+        isAttacking = false;
+    }
+
+    bool InRange()
+    {
+        return Vector3.Distance(transform.position, player.transform.position) <= range;
+    }
+
+    void Recoil()
     {
         rot += new Vector3(-reloadMag, 0, 0f);
     }
 
-    public void Shoot(Transform player)
+    void Attack()
     {
-        Recoil();
+        //Recoil();
 
-        Vector3 targetDir = (player.position - firePoint.position).normalized;
+        Vector3 targetDir = (player.transform.position - firePoint.position).normalized;
 
         GameObject bullet = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         Rigidbody rb = bullet.GetComponent<Rigidbody>();

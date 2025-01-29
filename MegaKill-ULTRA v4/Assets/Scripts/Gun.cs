@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Gun : MonoBehaviour
 {
-    float mag = 25f;
+    float mag = 75f;
     float spd = 5f;
     Vector3 rot = Vector3.zero;
 

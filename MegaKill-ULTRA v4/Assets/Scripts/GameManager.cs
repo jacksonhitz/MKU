@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
         camMat.SetFloat("_Speed", currentSpeed);
 
         StartCoroutine(UpPhase());
+
+        ux.gameObject.SetActive(true);
     }
 
     public void ScareNPCs()

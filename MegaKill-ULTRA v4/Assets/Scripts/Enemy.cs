@@ -7,17 +7,14 @@ public class Enemy : MonoBehaviour
     NavMeshAgent agent;
     GameObject playerObj;
     PlayerController player;
-
-    EnemyGun enemyGun;
     float detectionRange = 50f;
     float pathfindingRange = 50f;
     float followDistanceX = 5f;
     float followDistanceZ = 5f;
-    float fireRate; 
 
     GameManager gameManager;
     bool detectedPlayer = false;
-    bool seesPlayer = false;
+    public bool los = false;
     bool isFiring = false;
 
     public GameObject blood;
@@ -25,31 +22,32 @@ public class Enemy : MonoBehaviour
     public AudioClip gunshot;
     AudioSource sfx;
 
-    public bool melee;
-
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         playerObj = GameObject.FindGameObjectWithTag("Player");
         player = FindAnyObjectByType<PlayerController>();
-        enemyGun = GetComponentInChildren<EnemyGun>();
         sfx = GetComponent<AudioSource>();
         gameManager = FindObjectOfType<GameManager>();
-
-        fireRate = Random.Range(1f, 3f); 
-        StartCoroutine(FireRaycastRoutine());
     }
 
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, playerObj.transform.position);
 
-        if ((distanceToPlayer <= pathfindingRange || detectedPlayer) && seesPlayer)
+        if ((distanceToPlayer <= pathfindingRange || detectedPlayer) && los)
         {
             detectedPlayer = true;
 
             Vector3 targetPosition = playerObj.transform.position;
             Vector3 directionToPlayer = targetPosition - transform.position;
+
+            Vector3 lookDirection = new Vector3(directionToPlayer.x, 0, directionToPlayer.z);
+            if (lookDirection != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+            }
 
             float clampedX = Mathf.Clamp(transform.position.x + directionToPlayer.x, targetPosition.x - followDistanceX, targetPosition.x + followDistanceX);
             float clampedZ = Mathf.Clamp(transform.position.z + directionToPlayer.z, targetPosition.z - followDistanceZ, targetPosition.z + followDistanceZ);
@@ -61,18 +59,11 @@ public class Enemy : MonoBehaviour
         {
             agent.ResetPath();
         }
+
+        LOS();
     }
 
-    IEnumerator FireRaycastRoutine()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(fireRate);
-            FireRaycast();
-        }
-    }
-
-    void FireRaycast()
+    void LOS()
     {
         if (playerObj == null) return;
 
@@ -84,16 +75,16 @@ public class Enemy : MonoBehaviour
         {
             if (hit.collider.CompareTag("Player"))
             {
-                if (!melee)
-                {
-                    enemyGun.Shoot(playerObj.transform);
-                    sfx.clip = gunshot;
-                    sfx.Play();
-                }
-                seesPlayer = true;
+                los = true;
+                Debug.Log("los");
+            }
+            else
+            {
+                los = false;
             }
         }
     }
+
     public void Hit()
     {
         Instantiate(blood, transform.position, Quaternion.identity);

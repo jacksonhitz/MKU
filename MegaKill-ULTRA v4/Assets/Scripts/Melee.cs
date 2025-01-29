@@ -1,18 +1,46 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Dog : MonoBehaviour
+public class Melee : MonoBehaviour
 {
-    // Start is called before the first frame update
+    float fireRate = 1f;
+    float range = 2f;
+    Enemy enemy;
+    GameObject player;
+    PlayerController playerController;
+    bool isAttacking = false;
+
     void Start()
     {
-        
+        enemy = GetComponent<Enemy>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerController = player.GetComponent<PlayerController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log("dog can see: " + enemy.los);
+        if (enemy.los && InRange() && !isAttacking)
+        {
+            StartCoroutine(CallAttack());
+        }
+    }
+
+    bool InRange()
+    {
+        return Vector3.Distance(transform.position, player.transform.position) <= range;
+    }
+
+    IEnumerator CallAttack()
+    {
+        isAttacking = true;
+        Attack();
+        yield return new WaitForSeconds(fireRate);
+        isAttacking = false;
+    }
+
+    void Attack()
+    {
+        playerController.Hit();
     }
 }
