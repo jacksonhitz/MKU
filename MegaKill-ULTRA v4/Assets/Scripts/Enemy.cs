@@ -19,7 +19,6 @@ public class Enemy : MonoBehaviour
 
     public GameObject blood;
     public AudioClip squelch;
-    public AudioClip gunshot;
     AudioSource sfx;
 
     void Start()

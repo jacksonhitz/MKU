@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     public GameObject barrier;
 
 
-    void Start()
+    void Awake()
     {
         civs = new List<NPCAI>(FindObjectsOfType<NPCAI>()); 
         enemies = new List<Enemy>(FindObjectsOfType<Enemy>()); 

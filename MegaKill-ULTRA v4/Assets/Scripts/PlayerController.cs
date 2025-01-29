@@ -217,7 +217,7 @@ public class PlayerController : MonoBehaviour
             soundManager.Flatline();
             StartCoroutine(Dead());
             Debug.Log("KILLED");
-            ux.gameObject.SetActive(false);
+            //ux.gameObject.SetActive(false);
         }
         else
         {

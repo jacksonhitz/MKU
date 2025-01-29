@@ -23,11 +23,16 @@ public class EnemyGun : MonoBehaviour
     private GameObject player;
     private bool isAttacking = false;
 
+    AudioSource sfx;
+    public AudioClip gunshot;
+
     void Start()
     {
         enemy = GetComponent<Enemy>();
+        sfx = GetComponent<AudioSource>();
         player = GameObject.FindGameObjectWithTag("Player");
         cam = FindObjectOfType<CamController>();
+        
 
         fireRate = Random.Range(1f, 3f);
     }
@@ -61,6 +66,13 @@ public class EnemyGun : MonoBehaviour
     void Attack()
     {
         //Recoil();
+
+        sfx.clip = gunshot;
+        sfx.Play();
+
+        
+
+        
 
         Vector3 targetDir = (player.transform.position - firePoint.position).normalized;
 
