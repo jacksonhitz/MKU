@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     bool hasReloaded = false;
 
     int health = 100;
-    int maxHealth = 100; //added for healthbar
+    int maxHealth = 100; 
 
     GameManager gameManager;
     SoundManager soundManager;
@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour
         {
             if (weapon == 2)
             {
-                if(gun.bullets > 0)
+                if(gun.shells > 0)
                 {
                     gun.Shotgun();
                 }

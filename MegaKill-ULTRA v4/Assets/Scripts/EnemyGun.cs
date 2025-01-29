@@ -3,10 +3,10 @@ using System.Collections;
 
 public class EnemyGun : MonoBehaviour
 {
-    public float reloadMag;
-    public float reloadSpd;
-    public float fireRate;
-    public float bulletSpd;
+    float reloadMag = 40f;
+    float reloadSpd = 2f;
+    float fireRate = 5f;
+    float bulletSpd = 50f;
 
     public GameObject projectilePrefab;
     public Transform firePoint;
@@ -59,7 +59,6 @@ public class EnemyGun : MonoBehaviour
             yield return null;
         }
 
-        // Wait until the tracer finishes
         yield return new WaitForSeconds(tracer.time);
 
         Destroy(tracer.gameObject);

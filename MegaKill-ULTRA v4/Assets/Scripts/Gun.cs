@@ -9,8 +9,8 @@ public class Gun : MonoBehaviour
 
     Vector3 originalRot;
     Vector3 originalPos;
-    Vector3 stowedPos = new Vector3(-0.5f, -0.5f, 0f); // Example stowed position
-    Vector3 stowedRot = new Vector3(45f, 0f, 0f);       // Example stowed rotation
+    Vector3 stowedPos = new Vector3(-0.5f, -0.5f, 0f);
+    Vector3 stowedRot = new Vector3(45f, 0f, 0f);       
 
     public PlayerController player;
     public SoundManager soundManager;
@@ -91,15 +91,21 @@ public class Gun : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, player.range))
         {
-            Debug.Log("Hit: " + hit.transform.name);
             if (hit.transform.CompareTag("NPC") || hit.transform.CompareTag("Civilian"))
             {
                 NPC npc = hit.transform.GetComponent<NPC>();
                 npc.Hit();
                 soundManager.Squelch();
             }
+
             TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
             StartCoroutine(HandleTracer(tracer, hit.point));
+        }
+        else
+        {
+            Vector3 fallbackDestination = ray.origin + ray.direction * 100f;
+            TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
+            StartCoroutine(HandleTracer(tracer, fallbackDestination));
         }
         bullets--;
     }
@@ -117,18 +123,24 @@ public class Gun : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, player.range))
             {
-                Debug.Log("Hit: " + hit.transform.name);
                 if (hit.transform.CompareTag("NPC") || hit.transform.CompareTag("Civilian"))
                 {
                     NPC npc = hit.transform.GetComponent<NPC>();
                     npc.Hit();
                     soundManager.Squelch();
                 }
+
                 TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
                 StartCoroutine(HandleTracer(tracer, hit.point));
             }
+            else
+            {
+                Vector3 fallbackDestination = ray.origin + ray.direction * 100f;
+                TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
+                StartCoroutine(HandleTracer(tracer, fallbackDestination));
+            }
         }
-        shells -= 1;
+        shells--;
     }
 
     public void Reload()

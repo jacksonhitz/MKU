@@ -13,10 +13,7 @@ public class Enemy : MonoBehaviour
     GameManager gameManager;
 
     public Transform car;
-
-    public bool isDriving;
     
-   
     public AudioClip gunShot;
     public AudioSource sfx;
 
@@ -26,14 +23,6 @@ public class Enemy : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
 
         StartCoroutine(FireRaycasts());
-    }
-
-    void Update()
-    {
-        if (isDriving)
-        {
-            transform.position = car.position;
-        }
     }
 
     IEnumerator FireRaycasts()
