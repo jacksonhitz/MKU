@@ -9,8 +9,8 @@ public class Enemy : MonoBehaviour
     PlayerController player;
 
     EnemyGun enemyGun;
-    float detectionRange = 40f;
-    float pathfindingRange = 40f;
+    float detectionRange = 50f;
+    float pathfindingRange = 50f;
     float followDistanceX = 5f;
     float followDistanceZ = 5f;
     float fireRate; 
@@ -24,6 +24,8 @@ public class Enemy : MonoBehaviour
     public AudioClip squelch;
     public AudioClip gunshot;
     AudioSource sfx;
+
+    public bool melee;
 
     void Start()
     {
@@ -82,9 +84,12 @@ public class Enemy : MonoBehaviour
         {
             if (hit.collider.CompareTag("Player"))
             {
-                enemyGun.Shoot(playerObj.transform);
-                sfx.clip = gunshot;
-                sfx.Play();
+                if (!melee)
+                {
+                    enemyGun.Shoot(playerObj.transform);
+                    sfx.clip = gunshot;
+                    sfx.Play();
+                }
                 seesPlayer = true;
             }
         }
