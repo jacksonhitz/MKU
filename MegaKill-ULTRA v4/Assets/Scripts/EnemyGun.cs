@@ -17,7 +17,7 @@ public class EnemyGun : MonoBehaviour
     Vector3 originalPos;
 
     public SoundManager soundManager;
-    private CamController cam;
+    CamController cam;
 
     void Start()
     {

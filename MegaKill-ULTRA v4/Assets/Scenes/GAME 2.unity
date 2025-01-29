@@ -361,11 +361,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8011428536980071720, guid: f573d7193913c4cea8010a0a0cde0686, type: 3}
---- !u!4 &696663991 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5545307486928478343, guid: 3eff608b34a8a4b659ed8cb6a264742b, type: 3}
-  m_PrefabInstance: {fileID: 1299878782}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &699429117
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1919,32 +1914,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &1910197916 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4419219268666159708, guid: b47a4149474bf461bbdfd21c35a64bdd, type: 3}
-  m_PrefabInstance: {fileID: 2671048204966605966}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1910197918
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1910197916}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ec6f01bd22be2994f9dceb265685f0cc, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1982765595
 GameObject:
   m_ObjectHideFlags: 0
@@ -2134,29 +2103,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2502938595226922145, guid: b47a4149474bf461bbdfd21c35a64bdd, type: 3}
-      propertyPath: speed
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2502938595226922145, guid: b47a4149474bf461bbdfd21c35a64bdd, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 696663991}
-    - target: {fileID: 2502938595226922145, guid: b47a4149474bf461bbdfd21c35a64bdd, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2502938595226922145, guid: b47a4149474bf461bbdfd21c35a64bdd, type: 3}
-      propertyPath: nodeReachThreshold
-      value: 0.03
-      objectReference: {fileID: 0}
     - target: {fileID: 4209133741286685928, guid: b47a4149474bf461bbdfd21c35a64bdd, type: 3}
       propertyPath: m_Name
       value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: b47a4149474bf461bbdfd21c35a64bdd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4209133741286685928, guid: b47a4149474bf461bbdfd21c35a64bdd, type: 3}
       propertyPath: m_TagString
@@ -2173,10 +2122,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4419219268666159708, guid: b47a4149474bf461bbdfd21c35a64bdd, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1910197918}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b47a4149474bf461bbdfd21c35a64bdd, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

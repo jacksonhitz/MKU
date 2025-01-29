@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     bool hasFired = false;
     bool hasReloaded = false;
 
-    int health = 100;
+    int health;
     int maxHealth = 100; 
 
     GameManager gameManager;
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] FloatingHealthBar healthBar; 
 
-    public int weapon = 2;
+    public int weapon = 0;
 
     public GameObject revolver;
     public GameObject shotgun;
@@ -50,17 +50,19 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        maxHealth = 100;
         health = maxHealth;
-        //healthBar.UpdateHealthBar(health, maxHealth);
+        healthBar.UpdateHealthBar(health, maxHealth);
 
+        soundManager.Hammer();
+
+        transform.Rotate(0f, 90f, 0f);
     }
 
     void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
-        //healthBar = GetComponentInChildren<FloatingHealthBar>(); 
+        healthBar = GetComponentInChildren<FloatingHealthBar>(); 
     }
 
     void Update()
@@ -75,42 +77,48 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.Alpha1))
         {
             weapon = 0;
+            revolver.SetActive(true);
             shotgun.SetActive(false);
-            revolver.SetActive(false);
+            ux.UpdateAmmo();
+            soundManager.Hammer();
         }
         if (Input.GetKey(KeyCode.Alpha2))
         {
             weapon = 1;
-            revolver.SetActive(true);
-            shotgun.SetActive(false);
-            
+            shotgun.SetActive(true);
+            revolver.SetActive(false);
+            ux.UpdateAmmo();
+            soundManager.Pump();
         }
         if (Input.GetKey(KeyCode.Alpha3))
         {
             weapon = 2;
-            shotgun.SetActive(true);
+            shotgun.SetActive(false);
             revolver.SetActive(false);
+            ux.UpdateAmmo();
         }
 
 
         if (Input.GetButtonDown("Fire1"))
         {
-            if (weapon == 2)
+            if (weapon == 1)
             {
                 if(gun.shells > 0)
                 {
-                    gun.Shotgun();
+                    gun.ShotgunFire();
+                    ux.UpdateAmmo();
                 }
                 else
                 {
                     soundManager.Empty();
                 }
             }
-            else if(weapon == 1)
+            if(weapon == 0)
             {
                 if(gun.bullets > 0)
                 {
-                    gun.Revolver();
+                    gun.RevolverFire();
+                    ux.UpdateAmmo();
                 }
                 else
                 {
@@ -151,7 +159,6 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        Debug.Log(isGrounded);
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && vel.y < 0)
@@ -180,11 +187,6 @@ public class PlayerController : MonoBehaviour
         controller.Move(move * runSpd * Time.deltaTime);
     }
 
-    void Drive()
-    {
-        transform.position = currentCar.position + Vector3.up * 0.7f + Vector3.left * 0.2f + Vector3.back * 0.15f;
-    }
-
     void Interact()
     {
         RaycastHit hit;
@@ -205,8 +207,8 @@ public class PlayerController : MonoBehaviour
 
     public void Hit()
     {
-        health--;
-        healthBar.UpdateHealthBar(health, maxHealth); //added for healthbar
+        health -= 4;
+        healthBar.UpdateHealthBar(health, maxHealth); 
 
         if (health <= 0)
         {

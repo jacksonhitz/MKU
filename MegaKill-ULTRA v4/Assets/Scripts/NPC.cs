@@ -6,9 +6,6 @@ public class NPC : MonoBehaviour
 {
     public GameManager gameManager;
 
-    public Civilian civilian;
-    public bool cop;
-
     public GameObject blood;
     AudioSource sfx;
     public AudioClip squelch;
@@ -16,32 +13,16 @@ public class NPC : MonoBehaviour
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-    sfx = GetComponent<AudioSource>();
-
-        if (!cop)
-        {
-            civilian = GetComponent<Civilian>();
-        }
+        sfx = GetComponent<AudioSource>();
     }
 
     public void Hit()
     {
         Instantiate(blood, transform.position, Quaternion.identity);
 
-        this.gameObject.SetActive(false);
+        //gameManager.RemoveEnemy(this);
 
-        if (cop)
-        {
-            gameManager.Score(100);
-        }
-        else
-        {
-            if (civilian.target)
-            {
-                gameManager.Score(1000);
-                gameManager.UpPhase();
-            }
-            gameManager.Score(50);
-        } 
+        this.gameObject.SetActive(false);
+        gameManager.Score(100);
     }
 }

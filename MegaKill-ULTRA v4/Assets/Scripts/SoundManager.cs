@@ -22,6 +22,8 @@ public class SoundManager : MonoBehaviour
     public AudioClip gunShot;
     public AudioClip reload;
     public AudioClip empty;
+    public AudioClip pump;
+    public AudioClip hammer;
     public AudioClip heartbeat;
     public AudioClip flatline;
 
@@ -82,15 +84,16 @@ public class SoundManager : MonoBehaviour
         enemySfx.clip = squelch;
         enemySfx.Play();
     }
-
     public void Gunshot() => PlaySfx(gunShot);
     
     public void Reload() => PlaySfx(reload);
     public void Empty() => PlaySfx(empty);
+    public void Hammer() => PlaySfx(hammer);
+    public void Pump() => PlaySfx(pump);
     public void Heartbeat() => PlaySfx(heartbeat);
     public void Flatline() => PlaySfx(flatline);
 
-    private void PlaySfx(AudioClip clip)
+    void PlaySfx(AudioClip clip)
     {
         sfx.clip = clip;
         sfx.Play();

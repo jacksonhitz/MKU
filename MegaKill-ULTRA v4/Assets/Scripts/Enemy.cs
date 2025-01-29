@@ -1,76 +1,103 @@
 using UnityEngine;
-using System.Collections; 
+using UnityEngine.AI;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
-    public Transform player;     
+    NavMeshAgent agent;
+    GameObject playerObj;
+    PlayerController player;
 
-    public EnemyGun enemyGun;      
-    public float detectionRange = 20f; 
-    public float fireRate = 1f;        
-    public float fieldOfViewAngle = 110f; 
+    EnemyGun enemyGun;
+    float detectionRange = 40f;
+    float pathfindingRange = 40f;
+    float followDistanceX = 5f;
+    float followDistanceZ = 5f;
+    float fireRate; 
 
     GameManager gameManager;
+    bool detectedPlayer = false;
+    bool seesPlayer = false;
+    bool isFiring = false;
 
-    public Transform car;
-    
-    public AudioClip gunShot;
-    public AudioSource sfx;
+    public GameObject blood;
+    public AudioClip squelch;
+    public AudioClip gunshot;
+    AudioSource sfx;
 
     void Start()
     {
-        player = GameObject.FindWithTag("Player").transform;
+        agent = GetComponent<NavMeshAgent>();
+        playerObj = GameObject.FindGameObjectWithTag("Player");
+        player = FindAnyObjectByType<PlayerController>();
+        enemyGun = GetComponentInChildren<EnemyGun>();
+        sfx = GetComponent<AudioSource>();
         gameManager = FindObjectOfType<GameManager>();
 
-        StartCoroutine(FireRaycasts());
+        fireRate = Random.Range(1f, 3f); 
+        StartCoroutine(FireRaycastRoutine());
     }
 
-    IEnumerator FireRaycasts()
+    void Update()
+    {
+        float distanceToPlayer = Vector3.Distance(transform.position, playerObj.transform.position);
+
+        if ((distanceToPlayer <= pathfindingRange || detectedPlayer) && seesPlayer)
+        {
+            detectedPlayer = true;
+
+            Vector3 targetPosition = playerObj.transform.position;
+            Vector3 directionToPlayer = targetPosition - transform.position;
+
+            float clampedX = Mathf.Clamp(transform.position.x + directionToPlayer.x, targetPosition.x - followDistanceX, targetPosition.x + followDistanceX);
+            float clampedZ = Mathf.Clamp(transform.position.z + directionToPlayer.z, targetPosition.z - followDistanceZ, targetPosition.z + followDistanceZ);
+
+            Vector3 destination = new Vector3(clampedX, transform.position.y, clampedZ);
+            agent.SetDestination(destination);
+        }
+        else
+        {
+            agent.ResetPath();
+        }
+    }
+
+    IEnumerator FireRaycastRoutine()
     {
         while (true)
         {
-            if (IsPlayerInRange() && HasLineOfSight())
-            {
-                if (gameManager.score > 0)
-                {
-                    enemyGun.Shoot(player.transform);
-                    sfx.clip = gunShot;
-                    sfx.Play();
-
-                    yield return new WaitForSeconds(fireRate);
-                }
-                else
-                {
-                    yield return null;
-                }
-            }
-            else
-            {
-                yield return null;
-            }
+            yield return new WaitForSeconds(fireRate);
+            FireRaycast();
         }
     }
 
-    bool IsPlayerInRange()
+    void FireRaycast()
     {
-        return Vector3.Distance(transform.position, player.position) <= detectionRange;
-    }
+        if (playerObj == null) return;
 
-    bool HasLineOfSight()
-    {
-        Vector3 directionToPlayer = (player.position - transform.position).normalized;
-        float angle = Vector3.Angle(transform.forward, directionToPlayer);
-        if (angle < fieldOfViewAngle / 2)
+        Vector3 direction = (playerObj.transform.position - transform.position).normalized;
+        Ray ray = new Ray(transform.position, direction);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, detectionRange))
         {
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position, directionToPlayer, out hit, detectionRange))
+            if (hit.collider.CompareTag("Player"))
             {
-                if (hit.transform == player)
-                {
-                    return true;
-                }
+                enemyGun.Shoot(playerObj.transform);
+                sfx.clip = gunshot;
+                sfx.Play();
+                seesPlayer = true;
             }
         }
-        return false;
+    }
+    public void Hit()
+    {
+        Instantiate(blood, transform.position, Quaternion.identity);
+        sfx.clip = squelch;
+        sfx.Play();
+
+        gameManager.RemoveEnemy(this);
+
+        this.gameObject.SetActive(false);
+        gameManager.Score(100);
     }
 }

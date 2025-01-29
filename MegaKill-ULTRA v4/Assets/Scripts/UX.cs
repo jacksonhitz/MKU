@@ -5,14 +5,16 @@ using System.Collections;
 
 public class UX : MonoBehaviour
 {
-    public Camera cam; 
+    Camera cam; 
     public Vector3 offset; 
-    public float camDistance = 2f;
+    float camDistance = 0.5f;
 
     public TextMeshProUGUI tutorial; 
     public TextMeshProUGUI score; 
     public TextMeshProUGUI popup; 
-    public GameManager gameManager;
+    public TextMeshProUGUI ammo; 
+    GameManager gameManager;
+    PlayerController player;
 
     void Update()
     {
@@ -21,7 +23,29 @@ public class UX : MonoBehaviour
 
     void Start()
     {
+        cam = FindObjectOfType<Camera>();
+        gameManager = FindObjectOfType<GameManager>();
+        player = FindAnyObjectByType<PlayerController>();
+        
+        UpdateAmmo();
         WASD();
+    }
+
+    public void UpdateAmmo()
+    {
+        if (player.weapon == 0)
+        {
+            ammo.text = player.gun.bullets.ToString();
+            
+        }
+        else if (player.weapon == 1)
+        {
+            ammo.text = player.gun.shells.ToString();
+        }
+        else
+        {
+            ammo.text = "";
+        }
     }
 
     void UpdateCanvas()
