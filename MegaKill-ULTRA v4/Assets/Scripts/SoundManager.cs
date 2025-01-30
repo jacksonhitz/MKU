@@ -9,6 +9,7 @@ public class SoundManager : MonoBehaviour
     public AudioSource enemySfx;
 
     public AudioClip title;
+    public AudioClip acid;
     public AudioClip witch;
     public AudioClip hott;
     public AudioClip threes;
@@ -38,7 +39,7 @@ public class SoundManager : MonoBehaviour
     void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
-        tracks = new List<AudioClip> { witch, could, dj, all, hott, threes, life, real, four, };
+        tracks = new List<AudioClip> { acid, witch, could, dj, all, hott, threes, life, real, four, };
     }
 
     void Start()
@@ -85,7 +86,7 @@ public class SoundManager : MonoBehaviour
         enemySfx.Play();
     }
     public void Gunshot() => PlaySfx(gunShot);
-    
+
     public void Reload() => PlaySfx(reload);
     public void Empty() => PlaySfx(empty);
     public void Hammer() => PlaySfx(hammer);

@@ -29794,10 +29794,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 199063550861400989, guid: d014f3102b4824428ab60060f0d46974, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2509132486315097633, guid: d014f3102b4824428ab60060f0d46974, type: 3}
       propertyPath: m_Name
       value: SoundManager
@@ -29842,26 +29838,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3772405943064830635, guid: d014f3102b4824428ab60060f0d46974, type: 3}
-      propertyPath: pump
+    - target: {fileID: 8339826160230438239, guid: d014f3102b4824428ab60060f0d46974, type: 3}
+      propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: 4f5bbbebe075b483bbbbbb9719552748, type: 3}
-    - target: {fileID: 3772405943064830635, guid: d014f3102b4824428ab60060f0d46974, type: 3}
-      propertyPath: hammer
-      value: 
-      objectReference: {fileID: 8300000, guid: 1d715846055f548a3a1c8f16a367fb03, type: 3}
-    - target: {fileID: 3772405943064830635, guid: d014f3102b4824428ab60060f0d46974, type: 3}
-      propertyPath: gameManager
-      value: 
-      objectReference: {fileID: 1238548644}
-    - target: {fileID: 4049863611097302040, guid: d014f3102b4824428ab60060f0d46974, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4133267345801564010, guid: d014f3102b4824428ab60060f0d46974, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8300000, guid: bd668044136f0483698904fb03493760, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
