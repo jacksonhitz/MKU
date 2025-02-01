@@ -140,7 +140,7 @@ public class CamController : MonoBehaviour
         }
 
         // FOV change
-        float fovChange = Mathf.Sin(Time.time * fovSpd) * 10f * volume.weight;
+        float fovChange = Mathf.Sin(Time.time * fovSpd) * 3f * volume.weight;
         cam.fieldOfView = originalFOV + fovChange;
 
         // Saturation
