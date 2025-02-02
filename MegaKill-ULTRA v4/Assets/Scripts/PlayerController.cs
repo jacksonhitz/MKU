@@ -256,7 +256,6 @@ public class PlayerController : MonoBehaviour
         Destroy(weaponObject); // Remove the pickup item
     }
 
-
     void Interact()
 {
     // fires raycast to check if player is looking at weapon
@@ -267,6 +266,15 @@ public class PlayerController : MonoBehaviour
     {
         if (hit.transform.CompareTag("WeaponPickups"))
         {
+            /*if (hit.transform.CompareTag("Car"))
+            {
+                float gap = Vector3.Distance(transform.position, hit.transform.position);
+                if (gap <= reach)
+                {
+                    currentState = State.driving;
+                    currentCar = hit.transform;
+                }
+            }*/
             PickupWeapon(hit.transform.gameObject); // pick up the weapon
         }
     }
