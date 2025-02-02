@@ -49,14 +49,21 @@ public class PlayerController : MonoBehaviour
     float swapCooldown = .5f;
     bool onSwap = false;
 
+    // track if weapons have been picked up
+    bool hasRevolver = false;
+    bool hasShotgun = false;
 
 
     void Start()
     {
         health = maxHealth;
         healthBar.UpdateHealthBar(health, maxHealth);
-
         soundManager.Hammer();
+
+        // disable weapons at start of game
+        revolver.SetActive(false);
+        shotgun.SetActive(false);
+        weapon = -1; // No weapon equipped
 
         transform.Rotate(0f, 90f, 0f);
     }
@@ -100,7 +107,8 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKey(KeyCode.Alpha1))
+        // Allow switching only if the weapon has been picked up
+        if (Input.GetKey(KeyCode.Alpha1) && hasRevolver)
         {
             weapon = 0;
             revolver.SetActive(true);
@@ -108,7 +116,8 @@ public class PlayerController : MonoBehaviour
             ux.UpdateAmmo();
             soundManager.Hammer();
         }
-        if (Input.GetKey(KeyCode.Alpha2))
+
+        if (Input.GetKey(KeyCode.Alpha2) && hasShotgun)
         {
             weapon = 1;
             shotgun.SetActive(true);
@@ -116,6 +125,8 @@ public class PlayerController : MonoBehaviour
             ux.UpdateAmmo();
             soundManager.Pump();
         }
+
+
         if (Input.GetKey(KeyCode.Alpha3))
         {
             weapon = 2;
@@ -222,23 +233,44 @@ public class PlayerController : MonoBehaviour
         controller.Move(move * runSpd * Time.deltaTime);
     }
 
-    void Interact()
+    void PickupWeapon(GameObject weaponObject)
     {
-        RaycastHit hit;
-        Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-        if (Physics.Raycast(ray, out hit, range))
+        // Disable currently equipped weapon to prevent overlapping models
+        if (weapon == 0) revolver.SetActive(false);
+        if (weapon == 1) shotgun.SetActive(false);
+
+        // Enable the picked-up weapon and update tracking
+        if (weaponObject.name.Contains("Revolver"))
         {
-            if (hit.transform.CompareTag("Car"))
-            {
-                float gap = Vector3.Distance(transform.position, hit.transform.position);
-                if (gap <= reach)
-                {
-                    currentState = State.driving;
-                    currentCar = hit.transform;
-                }
-            }
+            revolver.SetActive(true);
+            weapon = 0;
+            hasRevolver = true; // Mark as picked up
+        }
+        else if (weaponObject.name.Contains("Shotgun"))
+        {
+            shotgun.SetActive(true);
+            weapon = 1;
+            hasShotgun = true; // Mark as picked up
+        }
+
+        Destroy(weaponObject); // Remove the pickup item
+    }
+
+
+    void Interact()
+{
+    // fires raycast to check if player is looking at weapon
+    RaycastHit hit;
+    Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+
+    if (Physics.Raycast(ray, out hit, range))
+    {
+        if (hit.transform.CompareTag("WeaponPickups"))
+        {
+            PickupWeapon(hit.transform.gameObject); // pick up the weapon
         }
     }
+}
 
     public void Hit()
     {
