@@ -39,7 +39,8 @@ public class PlayerController : MonoBehaviour
 
     public bool isDead = false;
 
-    [SerializeField] FloatingHealthBar healthBar; 
+    [SerializeField] FloatingHealthBar healthBar;
+    [SerializeField] private float pickupRange = 3f;  // Weapon pick up range
 
     public int weapon = 0;
 
@@ -257,28 +258,37 @@ public class PlayerController : MonoBehaviour
     }
 
     void Interact()
-{
-    // fires raycast to check if player is looking at weapon
-    RaycastHit hit;
-    Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-
-    if (Physics.Raycast(ray, out hit, range))
     {
-        if (hit.transform.CompareTag("WeaponPickups"))
+        // Fires raycast to check if the player is looking at a weapon
+        RaycastHit hit;
+        Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+
+        if (Physics.Raycast(ray, out hit, range))
         {
-            /*if (hit.transform.CompareTag("Car"))
+            // Check if the hit object is a weapon pickup
+            if (hit.transform.CompareTag("WeaponPickups"))
             {
-                float gap = Vector3.Distance(transform.position, hit.transform.position);
-                if (gap <= reach)
+                /*if (hit.transform.CompareTag("Car"))
                 {
-                    currentState = State.driving;
-                    currentCar = hit.transform;
+                    float gap = Vector3.Distance(transform.position, hit.transform.position);
+                    if (gap <= reach)
+                    {
+                        currentState = State.driving;
+                        currentCar = hit.transform;
+                    }
+                }*/
+
+                // Calculate the distance between the player and the weapon pickup
+                float distanceToPickup = Vector3.Distance(transform.position, hit.transform.position);
+
+                // Only allow interaction if the weapon is within the specified pick up range
+                if (distanceToPickup <= pickupRange)
+                {
+                    PickupWeapon(hit.transform.gameObject); // Pick up the weapon
                 }
-            }*/
-            PickupWeapon(hit.transform.gameObject); // pick up the weapon
+            }
         }
     }
-}
 
     public void Hit()
     {
