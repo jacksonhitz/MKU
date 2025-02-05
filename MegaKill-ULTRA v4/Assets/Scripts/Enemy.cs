@@ -8,9 +8,8 @@ public class Enemy : MonoBehaviour
     GameObject playerObj;
     PlayerController player;
     float detectionRange = 50f;
-    float pathfindingRange = 50f;
-    float followDistanceX = 5f;
-    float followDistanceZ = 5f;
+    float pathfindingRange = 100f;
+    float shootingRange = 30f; 
 
     GameManager gameManager;
     bool detectedPlayer = false;
@@ -22,6 +21,7 @@ public class Enemy : MonoBehaviour
     AudioSource sfx;
 
     public Animator animator;
+
 
     void Start()
     {
@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
     {
         float distanceToPlayer = Vector3.Distance(transform.position, playerObj.transform.position);
 
-        if ((distanceToPlayer <= pathfindingRange && detectedPlayer))
+        if (distanceToPlayer <= pathfindingRange && detectedPlayer)
         {
             Vector3 targetPosition = playerObj.transform.position;
             Vector3 directionToPlayer = targetPosition - transform.position;
@@ -48,8 +48,8 @@ public class Enemy : MonoBehaviour
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
             }
 
-            float clampedX = Mathf.Clamp(transform.position.x + directionToPlayer.x, targetPosition.x - followDistanceX, targetPosition.x + followDistanceX);
-            float clampedZ = Mathf.Clamp(transform.position.z + directionToPlayer.z, targetPosition.z - followDistanceZ, targetPosition.z + followDistanceZ);
+            float clampedX = Mathf.Clamp(transform.position.x + directionToPlayer.x, targetPosition.x, targetPosition.x);
+            float clampedZ = Mathf.Clamp(transform.position.z + directionToPlayer.z, targetPosition.z, targetPosition.z);
 
             Vector3 destination = new Vector3(clampedX, transform.position.y, clampedZ);
             agent.SetDestination(destination);
@@ -66,8 +66,6 @@ public class Enemy : MonoBehaviour
 
     void LOS()
     {
-        if (playerObj == null) return;
-
         Vector3 direction = (playerObj.transform.position - transform.position).normalized;
         Ray ray = new Ray(transform.position, direction);
         RaycastHit hit;

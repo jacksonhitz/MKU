@@ -7,7 +7,7 @@ public class EnemyGun : MonoBehaviour
     float reloadSpd = 2f;
     float fireRate = 2f;
     float bulletSpd = 50f;
-    float range = 40f;
+    float range = 1000f;
 
     public GameObject projectilePrefab;
     public Transform firePoint;
@@ -53,7 +53,7 @@ public class EnemyGun : MonoBehaviour
         isAttacking = false;
     }
 
-    bool InRange()
+    public bool InRange()
     {
         return Vector3.Distance(transform.position, player.transform.position) <= range;
     }
@@ -69,10 +69,6 @@ public class EnemyGun : MonoBehaviour
 
         sfx.clip = gunshot;
         sfx.Play();
-
-        
-
-        
 
         Vector3 targetDir = (player.transform.position - firePoint.position).normalized;
 

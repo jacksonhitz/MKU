@@ -8,6 +8,7 @@ public class Melee : MonoBehaviour
     Enemy enemy;
     GameObject player;
     PlayerController playerController;
+    public Animator animator;
     bool isAttacking = false;
 
     void Start()
@@ -33,8 +34,11 @@ public class Melee : MonoBehaviour
     IEnumerator CallAttack()
     {
         isAttacking = true;
+        animator.SetBool("isAttacking", true);
+        yield return new WaitForSeconds(0.2f);
         Attack();
         yield return new WaitForSeconds(fireRate);
+        animator.SetBool("isAttacking", false);
         isAttacking = false;
     }
 
