@@ -1,30 +1,27 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MeleeWeapon : MonoBehaviour
 {
-    public float damage = 25f;
-    public float swingRange = 2f;
-    public float swingAngle = 60f;
-    public float swingSpeed = 10f;
-
     public Transform weapon;
     public LayerMask enemyLayer;
     public Animator animator;
-
+    public PlayerController player;
+    public SphereCollider hitbox;
+    public SoundManager soundManager;
     bool isSwinging;
-    float initialRotation;
 
     void Start()
     {
-        initialRotation = this.transform.localEulerAngles.x;
+        soundManager = FindObjectOfType<SoundManager>();
     }
 
     public void Attack()
     {
         if (!isSwinging)
         {
-            animator.SetBool("BatSwing", true);
+            animator.SetBool("Swing", true);
             StartCoroutine(Swing());
         }
     }
@@ -32,31 +29,26 @@ public class MeleeWeapon : MonoBehaviour
     IEnumerator Swing()
     {
         isSwinging = true;
-
-        yield return new WaitForSeconds(1f);
-        animator.SetBool("BatSwing", false);
-        DealDamage();
+        yield return new WaitForSeconds(0.3f);
+        Hit();
+        yield return new WaitForSeconds(0.5f);
+        animator.SetBool("Swing", false);
         isSwinging = false;
     }
 
-    void DealDamage()
+    void Hit()
     {
-        Collider[] hitEnemies = Physics.OverlapSphere(this.transform.position, swingRange, enemyLayer);
 
-        foreach (Collider enemy in hitEnemies)
+        Collider[] colliders = Physics.OverlapSphere(hitbox.bounds.center, hitbox.radius * hitbox.transform.lossyScale.x);
+
+        foreach (Collider collider in colliders)
         {
-            Vector3 directionToEnemy = enemy.transform.position - transform.position;
-            float angleToEnemy = Vector3.Angle(transform.forward, directionToEnemy);
-
-            if (angleToEnemy <= swingAngle / 2f)
+            if (collider.CompareTag("NPC"))
             {
+                Enemy enemy = collider.transform.parent?.parent?.GetComponent<Enemy>();
+                enemy?.Hit();
+                soundManager.Squelch();
             }
         }
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(this.transform.position, swingRange);
     }
 }

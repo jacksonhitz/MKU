@@ -35,7 +35,7 @@ public class UX : MonoBehaviour
             initialCanvasScale = canvas.transform.localScale;
         }
 
-        UpdateAmmo();
+        ammo.text = "";
         WASD();
     }
 

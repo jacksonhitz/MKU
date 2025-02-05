@@ -75,7 +75,6 @@ public class Enemy : MonoBehaviour
             if (hit.collider.CompareTag("Player"))
             {
                 los = true;
-                Debug.Log("los");
             }
             else
             {
