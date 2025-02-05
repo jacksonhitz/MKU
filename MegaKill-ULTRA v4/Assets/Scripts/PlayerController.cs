@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
 
     public enum State { foot, driving }
     public State currentState = State.foot;
-
+    public MeleeWeapon melee;
     public Gun gun;
     public UX ux;
 
@@ -40,12 +40,13 @@ public class PlayerController : MonoBehaviour
     public bool isDead = false;
 
     [SerializeField] FloatingHealthBar healthBar;
-    [SerializeField] private float pickupRange = 3f;  // Weapon pick up range
+    [SerializeField] private float pickupRange = 3f; 
 
-    public int weapon = 0;
+    public int weapon;
 
     public GameObject revolver;
     public GameObject shotgun;
+    public GameObject bat;
 
     float swapCooldown = .5f;
     bool onSwap = false;
@@ -53,6 +54,7 @@ public class PlayerController : MonoBehaviour
     // track if weapons have been picked up
     bool hasRevolver = false;
     bool hasShotgun = false;
+    bool hasBat = false;
 
 
     void Start()
@@ -64,7 +66,8 @@ public class PlayerController : MonoBehaviour
         // disable weapons at start of game
         revolver.SetActive(false);
         shotgun.SetActive(false);
-        weapon = -1; // No weapon equipped
+        //bat.SetActive(false);
+        weapon = 2; 
 
         transform.Rotate(0f, 90f, 0f);
     }
@@ -128,7 +131,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if (Input.GetKey(KeyCode.Alpha3))
+        if (Input.GetKey(KeyCode.Alpha3) && hasBat)
         {
             weapon = 2;
             shotgun.SetActive(false);
@@ -139,18 +142,6 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Fire1"))
         {
-            if (weapon == 1)
-            {
-                if(gun.shells > 0)
-                {
-                    gun.ShotgunFire();
-                    ux.UpdateAmmo();
-                }
-                else
-                {
-                    soundManager.Empty();
-                }
-            }
             if(weapon == 0)
             {
                 if(gun.bullets > 0)
@@ -162,6 +153,22 @@ public class PlayerController : MonoBehaviour
                 {
                     soundManager.Empty();
                 }
+            }
+            else if (weapon == 1)
+            {
+                if(gun.shells > 0)
+                {
+                    gun.ShotgunFire();
+                    ux.UpdateAmmo();
+                }
+                else
+                {
+                    soundManager.Empty();
+                }
+            }
+            else if (weapon == 2)
+            {
+                melee.Attack();
             }
 
 
@@ -194,8 +201,6 @@ public class PlayerController : MonoBehaviour
         onSwap = true;
         yield return new WaitForSeconds (swapCooldown);
         onSwap = false;
-
-
     }
 
     void Bail()

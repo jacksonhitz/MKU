@@ -19,7 +19,6 @@ public class Melee : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("dog can see: " + enemy.los);
         if (enemy.los && InRange() && !isAttacking)
         {
             StartCoroutine(CallAttack());
