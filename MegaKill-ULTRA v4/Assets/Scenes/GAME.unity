@@ -23435,7 +23435,6 @@ MonoBehaviour:
   cam: {fileID: 0}
   camMat: {fileID: -876546973899608171, guid: a79a40f83dc6f4a0f8b6ca0f61778ec5, type: 3}
   fadeOut: 0
-  barrier: {fileID: 0}
 --- !u!114 &1238548645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42627,6 +42626,10 @@ PrefabInstance:
       propertyPath: bulletTime
       value: 
       objectReference: {fileID: 1238548645}
+    - target: {fileID: 1573515169825413247, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
+      propertyPath: currentSlot
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 2978397082138484745, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 30.64

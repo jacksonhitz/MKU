@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
 
     public enum WeaponState { None, Revolver, Shotgun, Bat }
     public WeaponState[] weaponSlots = new WeaponState[3]; 
-    public int currentSlot = 0;
+    public int currentSlot = -1;
     public WeaponState currentWeapon = WeaponState.None;
 
     public MeleeWeapon melee;
@@ -272,6 +272,7 @@ public class PlayerController : MonoBehaviour
             if (weaponSlots[i] == WeaponState.None)
             {
                 weaponSlots[i] = weapon;
+                currentSlot++;
                 EquipWeapon(weapon);
                 break;
             }
