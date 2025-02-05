@@ -21,6 +21,8 @@ public class Enemy : MonoBehaviour
     public AudioClip squelch;
     AudioSource sfx;
 
+    public Animator animator;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -34,10 +36,8 @@ public class Enemy : MonoBehaviour
     {
         float distanceToPlayer = Vector3.Distance(transform.position, playerObj.transform.position);
 
-        if ((distanceToPlayer <= pathfindingRange || detectedPlayer) && los)
+        if ((distanceToPlayer <= pathfindingRange && detectedPlayer))
         {
-            detectedPlayer = true;
-
             Vector3 targetPosition = playerObj.transform.position;
             Vector3 directionToPlayer = targetPosition - transform.position;
 
@@ -59,6 +59,8 @@ public class Enemy : MonoBehaviour
             agent.ResetPath();
         }
 
+        animator.SetFloat("spd", agent.velocity.magnitude);
+
         LOS();
     }
 
@@ -75,6 +77,7 @@ public class Enemy : MonoBehaviour
             if (hit.collider.CompareTag("Player"))
             {
                 los = true;
+                detectedPlayer = true;
             }
             else
             {
