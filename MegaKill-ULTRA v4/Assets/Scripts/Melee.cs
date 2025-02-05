@@ -37,7 +37,7 @@ public class Melee : MonoBehaviour
         animator.SetBool("isAttacking", true);
         yield return new WaitForSeconds(0.2f);
         Attack();
-        yield return new WaitForSeconds(fireRate);
+        yield return new WaitForSeconds(0.2f);
         animator.SetBool("isAttacking", false);
         isAttacking = false;
     }

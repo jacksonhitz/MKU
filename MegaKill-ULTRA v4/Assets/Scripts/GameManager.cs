@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    int phase;
+    public int phase;
 
     public int score = 0;
 
@@ -29,7 +29,6 @@ public class GameManager : MonoBehaviour
 
     public bool fadeOut;
 
-    public GameObject barrier;
 
 
     void Awake()
@@ -46,7 +45,7 @@ public class GameManager : MonoBehaviour
         camMat.SetFloat("_Amplitude", currentAmplitude);
         camMat.SetFloat("_Speed", currentSpeed);
 
-        StartCoroutine(UpPhase());
+        //StartCoroutine(UpPhase());
 
         ux.gameObject.SetActive(true);
     }
@@ -59,50 +58,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void RemoveEnemy(Enemy enemy)
-    {
-        enemies.Remove(enemy);
-
-        if (enemies.Count <= 3)
-        {
-            barrier.SetActive(false);
-            Debug.Log("freedom!");
-        }
-    }
-
     void Update()
     {
         if (!fadeOut)
         {
-            float currentLerp = camMat.GetFloat("_Lerp");
-            float capLerp = 0.05f * phase; 
-            float currentFrequency = camMat.GetFloat("_Frequency");
-            float capFrequency = 5f * phase; 
-            float currentAmplitude = camMat.GetFloat("_Amplitude");
-            float capAmplitude = 0.1f * phase; 
-            float currentSpeed = camMat.GetFloat("_Speed");
-            float capSpeed = 0.1f * phase; 
-
-            if (currentLerp < capLerp)
-            {
-                currentLerp += 0.00001f; 
-                camMat.SetFloat("_Lerp", currentLerp); 
-            }
-            if (currentFrequency < capFrequency)
-            {
-                currentFrequency += 0.001f; 
-                camMat.SetFloat("_Frequency", currentFrequency); 
-            }
-            if (currentAmplitude < capAmplitude)
-            {
-                currentAmplitude += 0.00002f; 
-                camMat.SetFloat("_Amplitude", currentAmplitude); 
-            }
-            if (currentSpeed < capSpeed)
-            {
-                currentSpeed += 0.00002f; 
-                camMat.SetFloat("_Speed", currentSpeed); 
-            }
+            float currentLerp = 0.0125f * phase; 
+            camMat.SetFloat("_Lerp", currentLerp); 
+            float currentFrequency = 1.25f * phase; 
+            camMat.SetFloat("_Frequency", currentFrequency); 
+            float currentAmplitude = 0.025f * phase; 
+            camMat.SetFloat("_Amplitude", currentAmplitude); 
+            float currentSpeed = 0.025f * phase; 
+            camMat.SetFloat("_Speed", currentSpeed); 
         }
         else
         {

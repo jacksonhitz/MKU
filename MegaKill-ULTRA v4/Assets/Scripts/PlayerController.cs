@@ -8,9 +8,8 @@ public class PlayerController : MonoBehaviour
     float vertInput;
     public float runSpd;
     public float jumpHeight = 3f;
-    public float gravity = -9.81f; 
+    public float gravity = -9.81f;
     public float range;
-    public float reach;
     public Camera cam;
     public CamController camController;
     public CharacterController controller;
@@ -21,53 +20,55 @@ public class PlayerController : MonoBehaviour
     public float groundDistance;
     public Transform currentCar;
 
-    public enum State { foot, driving }
-    public State currentState = State.foot;
+    public enum WeaponState { None, Revolver, Shotgun, Bat }
+    public WeaponState[] weaponSlots = new WeaponState[3]; 
+    public int currentSlot = 0;
+    public WeaponState currentWeapon = WeaponState.None;
+
     public MeleeWeapon melee;
     public Gun gun;
     public UX ux;
 
-    bool hasMoved = false;
-    bool hasFired = false;
-    bool hasReloaded = false;
-
-    int health;
-    int maxHealth = 100; 
+    float health;
+    float maxHealth = 100;
+    float focus;
+    float maxFocus = 100;
 
     GameManager gameManager;
     SoundManager soundManager;
 
     public bool isDead = false;
-
-    [SerializeField] FloatingHealthBar healthBar;
-    [SerializeField] private float pickupRange = 3f; 
-
-    public int weapon;
+    float pickupRange = 10f;
 
     public GameObject revolver;
     public GameObject shotgun;
     public GameObject bat;
 
-    float swapCooldown = .5f;
+    float swapCooldown = 0.1f; 
     bool onSwap = false;
 
-    // track if weapons have been picked up
     bool hasRevolver = false;
     bool hasShotgun = false;
     bool hasBat = false;
 
+    public BulletTime bulletTime;
 
     void Start()
     {
         health = maxHealth;
-        healthBar.UpdateHealthBar(health, maxHealth);
-        soundManager.Hammer();
+        focus = maxFocus / 2;
 
-        // disable weapons at start of game
+        ux.UpdateHealth(health, maxHealth);
+        ux.UpdateFocus(focus, maxFocus);
+
         revolver.SetActive(false);
         shotgun.SetActive(false);
-        //bat.SetActive(false);
-        weapon = 2; 
+        bat.SetActive(false);
+
+        for (int i = 0; i < weaponSlots.Length; i++)
+        {
+            weaponSlots[i] = WeaponState.None;
+        }
 
         transform.Rotate(0f, 90f, 0f);
     }
@@ -76,7 +77,6 @@ public class PlayerController : MonoBehaviour
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
-        healthBar = GetComponentInChildren<FloatingHealthBar>(); 
     }
 
     void Update()
@@ -87,105 +87,71 @@ public class PlayerController : MonoBehaviour
         {
             Interact();
         }
-        if (Input.GetKey(KeyCode.Q))
+
+        if (Input.GetKey(KeyCode.LeftShift))
         {
-            if (!onSwap)
+            if(focus > 0)
             {
-                if (weapon == 1)
+                focus -= 0.05f;
+                ux.UpdateFocus(focus, maxFocus);
+                
+                bulletTime.Slow();
+
+                if (ux.currentState == UX.TutorialState.Slow)
                 {
-                    weapon = 0;
-                    revolver.SetActive(true);
-                    shotgun.SetActive(false);
-                    ux.UpdateAmmo();
-                    soundManager.Hammer();
+                    ux.Tutorial(UX.TutorialState.Grab);
                 }
-                else if (weapon == 0)
-                {
-                    weapon = 1;
-                    shotgun.SetActive(true);
-                    revolver.SetActive(false);
-                    ux.UpdateAmmo();
-                    soundManager.Pump();
-                }
-                StartCoroutine(Swap());
+            }
+            else
+            {
+                bulletTime.Reg();
             }
         }
-
-        // Allow switching only if the weapon has been picked up
-        if (Input.GetKey(KeyCode.Alpha1) && hasRevolver)
+        else
         {
-            weapon = 0;
-            revolver.SetActive(true);
-            shotgun.SetActive(false);
-            ux.UpdateAmmo();
-            soundManager.Hammer();
+            bulletTime.Reg();
         }
 
-        if (Input.GetKey(KeyCode.Alpha2) && hasShotgun)
+        if (Input.GetKey(KeyCode.Q) && !onSwap)
         {
-            weapon = 1;
-            shotgun.SetActive(true);
-            revolver.SetActive(false);
-            ux.UpdateAmmo();
-            soundManager.Pump();
+            if (ux.currentState == UX.TutorialState.Swap)
+            {
+                ux.Tutorial(UX.TutorialState.Kill);
+            }
+            
+            CycleWeapons();
+            StartCoroutine(SwapCooldown());
         }
 
-
-        if (Input.GetKey(KeyCode.Alpha3) && hasBat)
+        if (Input.GetKey(KeyCode.Alpha1) && hasBat)
         {
-            weapon = 2;
-            shotgun.SetActive(false);
-            revolver.SetActive(false);
-            ux.UpdateAmmo();
+            EquipWeapon(WeaponState.Bat);
         }
 
+        if (Input.GetKey(KeyCode.Alpha2) && hasRevolver)
+        {
+            EquipWeapon(WeaponState.Revolver);
+        }
+
+        if (Input.GetKey(KeyCode.Alpha3) && hasShotgun)
+        {
+            EquipWeapon(WeaponState.Shotgun);
+        }
 
         if (Input.GetButtonDown("Fire1"))
         {
-            if(weapon == 0)
-            {
-                if(gun.bullets > 0)
-                {
-                    gun.RevolverFire();
-                    ux.UpdateAmmo();
-                }
-                else
-                {
-                    soundManager.Empty();
-                }
-            }
-            else if (weapon == 1)
-            {
-                if(gun.shells > 0)
-                {
-                    gun.ShotgunFire();
-                    ux.UpdateAmmo();
-                }
-                else
-                {
-                    soundManager.Empty();
-                }
-            }
-            else if (weapon == 2)
-            {
-                melee.Attack();
-            }
-
-
-            if (!hasFired)
-            {
-                ux.Reload();    
-                hasFired = true;
-            }
+            HandleFire();
         }
 
         if (Input.GetKey(KeyCode.R))
         {
-            gun.Reload();
-            if (!hasReloaded)
+            if (currentWeapon == WeaponState.Shotgun || currentWeapon == WeaponState.Revolver)
             {
-                ux.Slow();
-                hasReloaded = true;
+                gun.Reload();
+                if (ux.currentState == UX.TutorialState.Reload)
+                {
+                    ux.Tutorial(UX.TutorialState.Off);
+                }
             }
         }
 
@@ -196,100 +162,157 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator Swap()
+    IEnumerator SwapCooldown()
     {
         onSwap = true;
-        yield return new WaitForSeconds (swapCooldown);
+        yield return new WaitForSeconds(swapCooldown);
         onSwap = false;
     }
 
-    void Bail()
+    void EquipWeapon(WeaponState weapon)
     {
-        transform.position += Vector3.left * 0.2f;
-        currentState = State.foot;
+        currentWeapon = weapon;
+        revolver.SetActive(weapon == WeaponState.Revolver);
+        shotgun.SetActive(weapon == WeaponState.Shotgun);
+        bat.SetActive(weapon == WeaponState.Bat);
+        ux.UpdateAmmo();
+    }
+
+    void HandleFire()
+    {
+        if (ux.currentState == UX.TutorialState.Kill)
+        {
+            ux.Tutorial(UX.TutorialState.Reload);
+        }
+
+        if (currentWeapon == WeaponState.Revolver || currentWeapon == WeaponState.Shotgun)
+        {
+            gun.FireWeapon();
+            ux.UpdateAmmo();
+        }
+        else if (currentWeapon == WeaponState.Bat)
+        {
+            melee.Attack();
+        }
     }
 
     void Move()
     {
+        if (ux.currentState == UX.TutorialState.WASD && (horzInput != 0 || vertInput != 0))
+        {
+            ux.Tutorial(UX.TutorialState.Jump);
+        }
+
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && vel.y < 0)
         {
             vel.y = -2f;
-            
         }
+
         vel.y += gravity * Time.deltaTime;
 
         if (Input.GetKey(KeyCode.Space) && isGrounded)
         {
             vel.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+
+            if (ux.currentState == UX.TutorialState.Jump)
+            {
+                ux.Tutorial(UX.TutorialState.Slow);
+            }
         }
-        
+
         horzInput = Input.GetAxis("Horizontal");
         vertInput = Input.GetAxis("Vertical");
 
         Vector3 move = transform.right * horzInput + transform.forward * vertInput;
 
-        if (!hasMoved && (horzInput != 0 || vertInput != 0))
-        {
-            ux.Kill();
-            hasMoved = true;
-        }
-
         controller.Move(move * runSpd * Time.deltaTime);
     }
 
-    void PickupWeapon(GameObject weaponObject)
+    void Pickup(GameObject item)
     {
-        // Disable currently equipped weapon to prevent overlapping models
-        if (weapon == 0) revolver.SetActive(false);
-        if (weapon == 1) shotgun.SetActive(false);
-
-        // Enable the picked-up weapon and update tracking
-        if (weaponObject.name.Contains("Revolver"))
+        if (item.name.Contains("Pills"))
         {
-            revolver.SetActive(true);
-            weapon = 0;
-            hasRevolver = true; // Mark as picked up
+            focus = maxFocus;
+            ux.UpdateFocus(focus, maxFocus);
         }
-        else if (weaponObject.name.Contains("Shotgun"))
+        else
         {
-            shotgun.SetActive(true);
-            weapon = 1;
-            hasShotgun = true; // Mark as picked up
-        }
+            revolver.SetActive(false);
+            shotgun.SetActive(false);
+            bat.SetActive(false);
 
-        Destroy(weaponObject); // Remove the pickup item
+            if (item.name.Contains("Revolver") && !hasRevolver)
+            {
+                AddWeaponToSlot(WeaponState.Revolver);
+                hasRevolver = true;
+            }
+            else if (item.name.Contains("Shotgun") && !hasShotgun)
+            {
+                AddWeaponToSlot(WeaponState.Shotgun);
+                hasShotgun = true;
+            }
+            else if (item.name.Contains("Bat") && !hasBat)
+            {
+                AddWeaponToSlot(WeaponState.Bat);
+                hasBat = true;
+            }
+
+        }
+        
+
+        Destroy(item);
+    }
+
+    void AddWeaponToSlot(WeaponState weapon)
+    {
+        for (int i = 0; i < weaponSlots.Length; i++)
+        {
+            if (weaponSlots[i] == WeaponState.None)
+            {
+                weaponSlots[i] = weapon;
+                EquipWeapon(weapon);
+                break;
+            }
+        }
+    }
+
+    void CycleWeapons()
+    {
+        int startSlot = currentSlot;
+        do
+        {
+            currentSlot = (currentSlot + 1) % weaponSlots.Length;
+            if (weaponSlots[currentSlot] != WeaponState.None)
+            {
+                EquipWeapon(weaponSlots[currentSlot]);
+                break;
+            }
+        } while (currentSlot != startSlot);
     }
 
     void Interact()
     {
-        // Fires raycast to check if the player is looking at a weapon
         RaycastHit hit;
         Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
 
-        if (Physics.Raycast(ray, out hit, range))
-        {
-            // Check if the hit object is a weapon pickup
-            if (hit.transform.CompareTag("WeaponPickups"))
-            {
-                /*if (hit.transform.CompareTag("Car"))
-                {
-                    float gap = Vector3.Distance(transform.position, hit.transform.position);
-                    if (gap <= reach)
-                    {
-                        currentState = State.driving;
-                        currentCar = hit.transform;
-                    }
-                }*/
+        int layerMask = LayerMask.GetMask("Ground", "Item");
 
-                // Calculate the distance between the player and the weapon pickup
+        if (Physics.Raycast(ray, out hit, range, layerMask))
+        {
+            if (hit.transform.CompareTag("Item"))
+            {
                 float distanceToPickup = Vector3.Distance(transform.position, hit.transform.position);
 
-                // Only allow interaction if the weapon is within the specified pick up range
                 if (distanceToPickup <= pickupRange)
                 {
-                    PickupWeapon(hit.transform.gameObject); // Pick up the weapon
+                    Pickup(hit.transform.gameObject);
+
+                    if (ux.currentState == UX.TutorialState.Grab)
+                    {
+                        ux.Tutorial(UX.TutorialState.Swap);
+                    }
                 }
             }
         }
@@ -298,7 +321,7 @@ public class PlayerController : MonoBehaviour
     public void Hit()
     {
         health -= 4;
-        healthBar.UpdateHealthBar(health, maxHealth); 
+        ux.UpdateHealth(health, maxHealth);
 
         if (health <= 0)
         {
@@ -307,7 +330,6 @@ public class PlayerController : MonoBehaviour
             soundManager.Flatline();
             StartCoroutine(Dead());
             Debug.Log("KILLED");
-            //ux.gameObject.SetActive(false);
         }
         else
         {
@@ -317,8 +339,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Dead()
     {
-        yield return new WaitForSeconds (5f);
-
+        yield return new WaitForSeconds(5f);
         SceneManager.LoadScene(0);
     }
 }

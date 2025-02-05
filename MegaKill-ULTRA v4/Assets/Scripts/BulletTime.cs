@@ -12,32 +12,10 @@ public class BulletTime : MonoBehaviour
 
     SoundManager soundManager;
 
-    UX ux;
-
     void Start()
     {
         originalSpd = Time.timeScale;
-        ux = FindObjectOfType<UX>(); 
         soundManager = FindAnyObjectByType<SoundManager>();
-    }
-
-    void Update()
-    {
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            if (!isSlowed)
-                Slow();
-
-                if (!wasSlowed)
-                {
-                    ux.Arms();
-                }
-        }
-        else
-        {
-            if (isSlowed)
-                Reg();
-        }
     }
 
     public void Slow()

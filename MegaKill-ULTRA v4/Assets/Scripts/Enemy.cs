@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     PlayerController player;
     float detectionRange = 50f;
     float pathfindingRange = 100f;
-    float shootingRange = 30f; 
+    float shootingRange = 30f;
 
     GameManager gameManager;
     bool detectedPlayer = false;
@@ -17,11 +17,11 @@ public class Enemy : MonoBehaviour
     bool isFiring = false;
 
     public GameObject blood;
+    public GameObject weaponPrefab; 
     public AudioClip squelch;
     AudioSource sfx;
 
     public Animator animator;
-
 
     void Start()
     {
@@ -70,7 +70,9 @@ public class Enemy : MonoBehaviour
         Ray ray = new Ray(transform.position, direction);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, detectionRange))
+        LayerMask layerMask = LayerMask.GetMask("Ground", "Player");
+
+        if (Physics.Raycast(ray, out hit, detectionRange, layerMask))
         {
             if (hit.collider.CompareTag("Player"))
             {
@@ -90,9 +92,9 @@ public class Enemy : MonoBehaviour
         sfx.clip = squelch;
         sfx.Play();
 
-        gameManager.RemoveEnemy(this);
-
         this.gameObject.SetActive(false);
         gameManager.Score(100);
     }
+
+    
 }

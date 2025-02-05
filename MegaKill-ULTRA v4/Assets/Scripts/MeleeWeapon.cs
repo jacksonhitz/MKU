@@ -9,12 +9,14 @@ public class MeleeWeapon : MonoBehaviour
     public Animator animator;
     public PlayerController player;
     public SphereCollider hitbox;
-    public SoundManager soundManager;
+    SoundManager soundManager;
+    GameManager gameManager;
     bool isSwinging;
 
     void Start()
     {
         soundManager = FindObjectOfType<SoundManager>();
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     public void Attack()
@@ -46,8 +48,13 @@ public class MeleeWeapon : MonoBehaviour
             if (collider.CompareTag("NPC"))
             {
                 Enemy enemy = collider.transform.parent?.parent?.GetComponent<Enemy>();
+                if (enemy == null)
+                {
+                    enemy = collider.transform.GetComponent<Enemy>();
+                }
                 enemy?.Hit();
                 soundManager.Squelch();
+                gameManager.phase++;
             }
         }
     }

@@ -325,6 +325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   los: 0
   blood: {fileID: 8853266473761700966, guid: b1da43f1588a840748c686b0733ad393, type: 3}
+  weaponPrefab: {fileID: 0}
   squelch: {fileID: 8300000, guid: e8cb3bf84e4de4416b4392a55efa6068, type: 3}
   animator: {fileID: 59742549101180192}
 --- !u!114 &2503784164314848031
@@ -343,7 +344,7 @@ MonoBehaviour:
   firePoint: {fileID: 1044479799408127624}
   tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
   soundManager: {fileID: 0}
-  gunshot: {fileID: 8300000, guid: 7e4455803fc6549d6a1a346440652aab, type: 3}
+  gunshot: {fileID: 8300000, guid: 499ed6eb79f334e219c4fe087b4825ab, type: 3}
 --- !u!82 &5884394538128816031
 AudioSource:
   m_ObjectHideFlags: 0
@@ -354,7 +355,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7e4455803fc6549d6a1a346440652aab, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 499ed6eb79f334e219c4fe087b4825ab, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.1
   m_Pitch: 1

@@ -1,23 +1,42 @@
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 using System.Collections;
+using UnityEngine.UI;
 
 public class UX : MonoBehaviour
 {
     private Camera cam;
     public Vector3 offset;
-    public Canvas canvas; // Canvas containing the UI elements
-
+    public Canvas canvas; 
     public TextMeshProUGUI tutorial;
     public TextMeshProUGUI score;
     public TextMeshProUGUI popup;
     public TextMeshProUGUI ammo;
 
+    public Slider healthBar;
+    public Slider focusBar;
+
     private GameManager gameManager;
     private PlayerController player;
     private float initialFoV;
     private Vector3 initialCanvasScale;
+
+    public GameObject ammoIcon;
+
+    public enum TutorialState
+    {
+        None,
+        WASD,
+        Jump,
+        Slow,
+        Grab,
+        Swap,
+        Kill,
+        Reload,
+        Off
+    }
+
+    public TutorialState currentState;
 
     void Start()
     {
@@ -34,9 +53,8 @@ public class UX : MonoBehaviour
         {
             initialCanvasScale = canvas.transform.localScale;
         }
-
-        ammo.text = "";
-        WASD();
+        ammoIcon.SetActive(false);
+        Tutorial(TutorialState.WASD);
     }
 
     void Update()
@@ -44,23 +62,35 @@ public class UX : MonoBehaviour
         UpdateCanvasFoVScaling();
     }
 
+    public void UpdateHealth(float health, float maxHealth)
+    {
+        healthBar.value = health / maxHealth;
+    }
+
+    public void UpdateFocus(float focus, float maxFocus)
+    {
+        focusBar.value = focus / maxFocus;
+    }
+
     public void UpdateAmmo()
     {
-        if (player.weapon == 0)
+        switch (player.currentWeapon)
         {
-            ammo.text = player.gun.bullets.ToString();
-        }
-        else if (player.weapon == 1)
-        {
-            ammo.text = player.gun.shells.ToString();
-        }
-        else
-        {
-            ammo.text = "";
+            case PlayerController.WeaponState.Revolver:
+                ammoIcon.SetActive(true);
+                ammo.text = player.gun.bullets.ToString();
+                break;
+            case PlayerController.WeaponState.Shotgun:
+                ammoIcon.SetActive(true);
+                ammo.text = player.gun.shells.ToString();
+                break;
+            default:
+                ammoIcon.SetActive(false);
+                break;
         }
     }
 
-    private void UpdateCanvasFoVScaling()
+    void UpdateCanvasFoVScaling()
     {
         if (cam != null && canvas != null)
         {
@@ -84,7 +114,7 @@ public class UX : MonoBehaviour
         StartCoroutine(ShowPopup());
     }
 
-    private IEnumerator ShowPopup()
+    IEnumerator ShowPopup()
     {
         float duration = 0.5f;
         float elapsedTime = 0f;
@@ -107,42 +137,41 @@ public class UX : MonoBehaviour
         // score.text = "SCORE: " + gameManager.score;
     }
 
-    private IEnumerator Off()
-    {
-        yield return new WaitForSeconds(5f);
-        tutorial.enabled = false;
-    }
 
-    public void WASD()
-    {
-        tutorial.text = "WASD TO MOVE";
-    }
 
-    public void Slow()
+    public void Tutorial(TutorialState newState)
     {
-        tutorial.text = "SHIFT TO SLOW";
-    }
+        currentState = newState;
 
-    public void Arms()
-    {
-        tutorial.text = "1 AND 2 TO SWITCH WEAPONS";
-        StartCoroutine(Off());
-    }
-
-    public void Warning()
-    {
-        tutorial.enabled = true;
-        tutorial.text = "Not time to play in the sun yet, there's still plenty of bad people to take care of down here...";
-        StartCoroutine(Off());
-    }
-
-    public void Kill()
-    {
-        tutorial.text = "MOUSE TO KILL";
-    }
-
-    public void Reload()
-    {
-        tutorial.text = "R TO RELOAD";
+        switch (currentState)
+        {
+            case TutorialState.WASD:
+                tutorial.text = "WASD TO MOVE";
+                break;
+             case TutorialState.Jump:
+                tutorial.text = "SPACE TO JUMP";
+                break;
+            case TutorialState.Grab:
+                tutorial.text = "E TO GRAB ITEMS AND WEAPONS";
+                break;   
+            case TutorialState.Slow:
+                tutorial.text = "HOLD SHIFT TO SLOW. HYPER-FOCUS IS COSTLY. FIND PILLS TO RESTORE YOUR FOCUS";
+                break;
+            case TutorialState.Swap:
+                tutorial.text = "Q TO SWAP WEAPONS";
+                break;
+            case TutorialState.Kill:
+                tutorial.text = "MOUSE TO KILL";
+                break;
+            case TutorialState.Reload:
+                tutorial.text = "R TO RELOAD";
+                break;
+            case TutorialState.Off:
+                tutorial.text = "";
+                break;
+            default:
+                tutorial.text = "";
+                break;
+        }
     }
 }

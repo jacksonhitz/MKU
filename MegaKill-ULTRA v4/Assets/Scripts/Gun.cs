@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
@@ -12,8 +12,9 @@ public class Gun : MonoBehaviour
     Vector3 stowedPos = new Vector3(-0.5f, -0.5f, 0f);
     Vector3 stowedRot = new Vector3(45f, 0f, 0f);
 
-    public PlayerController player;
-    public SoundManager soundManager;
+    PlayerController player;
+    SoundManager soundManager;
+    GameManager gameManager;
 
     public float bullets = 6f;
     public float shells = 2f;
@@ -39,11 +40,12 @@ public class Gun : MonoBehaviour
     void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>();
+        gameManager = FindObjectOfType<GameManager>();
+        player = FindObjectOfType<PlayerController>();
     }
 
     void Start()
     {
-        
         originalRot = transform.localEulerAngles;
         originalPos = transform.localPosition;
     }
@@ -51,11 +53,12 @@ public class Gun : MonoBehaviour
     void Update()
     {
         rot = Vector3.Lerp(rot, Vector3.zero, spd * Time.deltaTime);
-        if (player.weapon == 0)
+
+        if (player.currentWeapon == PlayerController.WeaponState.Revolver)
         {
-            revolver.localEulerAngles = originalRot + rot;
+            revolver.localEulerAngles = originalRot + new Vector3(-90f, 0f, 0f) + rot;
         }
-        if (player.weapon == 1)
+        else if (player.currentWeapon == PlayerController.WeaponState.Shotgun)
         {
             shotgun.localEulerAngles = originalRot + new Vector3(-90f, 0f, 180f) + rot;
         }
@@ -94,35 +97,46 @@ public class Gun : MonoBehaviour
         rot += new Vector3(-mag, 0, 0f);
     }
 
-    public void RevolverFire()
+    public void FireWeapon()
     {
-        if (!canFire || bullets <= 0) return;
-        StartCoroutine(FireCooldown());
-
-        Recoil();
-        soundManager.Gunshot();
-        bullets--;
-
-        Ray ray = player.cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-        Hitscan(ray);
-    }
-
-    public void ShotgunFire()
-    {
-        if (!canFire || shells <= 0) return;
-        StartCoroutine(FireCooldown());
-
-        Recoil();
-        soundManager.Gunshot();
-        shells--;
-
-        for (int i = 0; i < pellets; i++)
+        if (!canFire) return;
+        if (player.currentWeapon == PlayerController.WeaponState.Revolver)
         {
-            Vector3 spread = new Vector3(Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0f);
-            Quaternion rotation = Quaternion.Euler(player.cam.transform.eulerAngles + spread);
-            Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
+            if (bullets > 0)
+            {
+                StartCoroutine(FireCooldown());
+                Recoil();
+                soundManager.RevShot();
+                bullets--;
+                Ray ray = player.cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+                Hitscan(ray);
+            }
+            else
+            {
+                soundManager.RevEmpty();
+            }
+        }
+        else if (player.currentWeapon == PlayerController.WeaponState.Shotgun && shells > 0)
+        {
+            if (shells > 0)
+            {
+                StartCoroutine(FireCooldown());
+                Recoil();
+                soundManager.ShotShot();
+                shells--;
 
-            Hitscan(ray);
+                for (int i = 0; i < pellets; i++)
+                {
+                    Vector3 spread = new Vector3(Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0f);
+                    Quaternion rotation = Quaternion.Euler(player.cam.transform.eulerAngles + spread);
+                    Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
+                    Hitscan(ray);
+                }
+            }
+            else
+            {
+                soundManager.ShotEmpty();
+            }
         }
     }
 
@@ -134,6 +148,8 @@ public class Gun : MonoBehaviour
             {
                 Enemy enemy = hit.transform.GetComponent<Enemy>();
                 enemy?.Hit();
+                soundManager.Squelch();
+                gameManager.phase++;
             }
 
             TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
@@ -149,17 +165,18 @@ public class Gun : MonoBehaviour
 
     public void Reload()
     {
-        soundManager.Reload();
         rot += new Vector3(mag, 0, 0f);
 
-        if (player.weapon == 1)
+        if (player.currentWeapon == PlayerController.WeaponState.Shotgun)
         {
             shells = 2f;
+            soundManager.ShotReload();
             player.ux.UpdateAmmo();
         }
-        else if (player.weapon == 0)
+        else if (player.currentWeapon == PlayerController.WeaponState.Revolver)
         {
             bullets = 6f;
+            soundManager.RevReload();
             player.ux.UpdateAmmo();
         }
     }
