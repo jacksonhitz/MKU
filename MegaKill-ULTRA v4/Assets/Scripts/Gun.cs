@@ -116,8 +116,9 @@ public class Gun : MonoBehaviour
                 soundManager.RevEmpty();
             }
         }
-        else if (player.currentWeapon == PlayerController.WeaponState.Shotgun && shells > 0)
+        else if (player.currentWeapon == PlayerController.WeaponState.Shotgun)
         {
+            
             if (shells > 0)
             {
                 StartCoroutine(FireCooldown());
