@@ -130,4 +130,25 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }
+
 }
+
+    //public void Hit()
+    //{
+        //Instantiate(blood, transform.position, Quaternion.identity);
+        //if (ranged)
+        //{
+            //soundManager.PlayRangedDeath();
+        //}
+        //else
+        //{
+            //soundManager.PlayMeleeDeath();
+        //}
+    
+        //model.SetActive(false);
+        // = false;
+        //gameManager.Score(100);
+
+        //StartCoroutine(Dead());
+    //}
+//}   
