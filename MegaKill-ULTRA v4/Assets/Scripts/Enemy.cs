@@ -7,11 +7,15 @@ public class Enemy : MonoBehaviour
     NavMeshAgent agent;
     GameObject playerObj;
     PlayerController player;
-    float detectionRange = 50f;
-    float pathfindingRange = 100f;
-    float shootingRange = 30f;
-
     GameManager gameManager;
+    SoundManager soundManager;
+
+
+    float detectionRange = 50f;
+    float pathfindingRange = 50f;
+    float attackRange;
+    
+
     bool detectedPlayer = false;
     public bool los = false;
     bool isFiring = false;
@@ -20,8 +24,10 @@ public class Enemy : MonoBehaviour
     public GameObject weaponPrefab; 
     public AudioClip squelch;
     AudioSource sfx;
-
     public Animator animator;
+    public GameObject model;
+
+    public bool ranged;
 
     void Start()
     {
@@ -30,13 +36,39 @@ public class Enemy : MonoBehaviour
         player = FindAnyObjectByType<PlayerController>();
         sfx = GetComponent<AudioSource>();
         gameManager = FindObjectOfType<GameManager>();
+        soundManager = FindObjectOfType<SoundManager>();
+        
+        if (ranged)
+        {
+            attackRange = Random.Range(10f, 20f);
+        }
+        else
+        {
+            attackRange = 0;
+        }
     }
 
     void Update()
     {
+        LOS();
+        animator.SetFloat("spd", agent.velocity.magnitude);
+        
         float distanceToPlayer = Vector3.Distance(transform.position, playerObj.transform.position);
 
-        if (distanceToPlayer <= pathfindingRange && detectedPlayer)
+        if (distanceToPlayer < attackRange && los)
+        {
+            agent.ResetPath();
+            Vector3 targetPosition = playerObj.transform.position;
+            Vector3 directionToPlayer = targetPosition - transform.position;
+
+            Vector3 lookDirection = new Vector3(directionToPlayer.x, 0, directionToPlayer.z);
+            if (lookDirection != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+            }
+        }
+        else if (distanceToPlayer <= pathfindingRange && detectedPlayer)
         {
             Vector3 targetPosition = playerObj.transform.position;
             Vector3 directionToPlayer = targetPosition - transform.position;
@@ -58,10 +90,6 @@ public class Enemy : MonoBehaviour
         {
             agent.ResetPath();
         }
-
-        animator.SetFloat("spd", agent.velocity.magnitude);
-
-        LOS();
     }
 
     void LOS()
@@ -89,12 +117,17 @@ public class Enemy : MonoBehaviour
     public void Hit()
     {
         Instantiate(blood, transform.position, Quaternion.identity);
-        sfx.clip = squelch;
-        sfx.Play();
-
-        this.gameObject.SetActive(false);
+        soundManager.EnemySFX(sfx, squelch);
+        model.SetActive(false);
+        enabled = false;
         gameManager.Score(100);
+
+        StartCoroutine(Dead());
     }
 
-    
+    IEnumerator Dead()
+    {
+        yield return new WaitForSeconds(1f);
+        Destroy(gameObject);
+    }
 }

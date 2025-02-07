@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
+    public enum GameSpeed
+    {
+        Regular,
+        Slow
+    }
+
     public AudioSource music;
     public AudioSource sfx;
     public AudioSource enemySfx;
@@ -28,7 +34,6 @@ public class SoundManager : MonoBehaviour
     public AudioClip shotReload;
     public AudioClip shotEmpty;
 
-
     public AudioClip heartbeat;
     public AudioClip flatline;
 
@@ -37,13 +42,15 @@ public class SoundManager : MonoBehaviour
     public GameManager gameManager;
     public bool controller;
 
-    List<AudioClip> tracks;
-    int trackIndex = 0;
+    private List<AudioClip> tracks;
+    private int trackIndex = 0;
+
+    public GameSpeed currentSpeed = GameSpeed.Regular;
 
     void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
-        tracks = new List<AudioClip> { acid, witch, could, dj, all, hott, threes, life, real, four, };
+        tracks = new List<AudioClip> { acid, witch, could, dj, all, hott, threes, life, real, four };
     }
 
     void Start()
@@ -63,6 +70,13 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public void EnemySFX(AudioSource source, AudioClip sound)
+    {
+        source.clip = sound;
+        source.pitch = currentSpeed == GameSpeed.Slow ? 0.75f : 1f;
+        source.Play();  
+    }
+
     public void Stop()
     {
         music.Stop();
@@ -74,25 +88,13 @@ public class SoundManager : MonoBehaviour
         music.clip = tracks[trackIndex];
         music.Play();
 
-        if (music.clip == dj || music.clip == four)
-        {
-            music.volume = .5f;
-        }
-        else
-        {
-            music.volume = .1f;
-        }
+        music.volume = (music.clip == dj || music.clip == four) ? 0.5f : 0.1f;
     }
 
-    public void Squelch()
-    {
-        enemySfx.clip = squelch;
-        enemySfx.Play();
-    }
     public void RevShot() => PlaySfx(revShot);
     public void RevReload() => PlaySfx(revReload);
     public void RevEmpty() => PlaySfx(revEmpty);
-    
+
     public void ShotShot() => PlaySfx(shotShot);
     public void ShotReload() => PlaySfx(shotReload);
     public void ShotEmpty() => PlaySfx(shotEmpty);
@@ -105,16 +107,13 @@ public class SoundManager : MonoBehaviour
         sfx.Play();
     }
 
-    public void Slow()
+    public void SetSpeed(GameSpeed speed)
     {
-        music.pitch = 0.75f;
-        sfx.pitch = 0.75f;
-        enemySfx.pitch = 0.75f;
-    }
-    public void Reg()
-    {
-        music.pitch = 1;
-        sfx.pitch = 1;
-        enemySfx.pitch = 1;
+        currentSpeed = speed;
+
+        float pitchValue = speed == GameSpeed.Slow ? 0.75f : 1f;
+        music.pitch = pitchValue;
+        sfx.pitch = pitchValue;
+        enemySfx.pitch = pitchValue;
     }
 }

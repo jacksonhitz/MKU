@@ -148,7 +148,6 @@ public class Gun : MonoBehaviour
             {
                 Enemy enemy = hit.transform.GetComponent<Enemy>();
                 enemy?.Hit();
-                soundManager.Squelch();
                 gameManager.phase++;
             }
 

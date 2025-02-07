@@ -6,11 +6,11 @@ public class BulletTime : MonoBehaviour
 {
     public float slowSpd = 0.05f; 
     public float transitionDuration = 0.5f; 
-    float originalSpd;
-    bool isSlowed = false;
-    bool wasSlowed = false;
+    private float originalSpd;
+    private bool isSlowed = false;
+    private bool wasSlowed = false;
 
-    SoundManager soundManager;
+    private SoundManager soundManager;
 
     void Start()
     {
@@ -23,19 +23,24 @@ public class BulletTime : MonoBehaviour
         isSlowed = true;
         StartCoroutine(LerpTime(slowSpd));
 
-        soundManager.Slow();
-
+        if (soundManager != null)
+        {
+            soundManager.SetSpeed(SoundManager.GameSpeed.Slow);
+        }
     }
 
     public void Reg()
     {
         isSlowed = false;
         StartCoroutine(LerpTime(originalSpd));
-        
-        soundManager.Reg();
+
+        if (soundManager != null)
+        {
+            soundManager.SetSpeed(SoundManager.GameSpeed.Regular);
+        }
     }
 
-    IEnumerator LerpTime(float targetTimeScale)
+    private IEnumerator LerpTime(float targetTimeScale)
     {
         float startScale = Time.timeScale;
         float t = 0f;

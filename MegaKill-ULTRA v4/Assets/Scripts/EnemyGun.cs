@@ -15,13 +15,13 @@ public class EnemyGun : MonoBehaviour
 
     private Vector3 rot = Vector3.zero;
     private Vector3 originalRot;
-    private Vector3 originalPos;
+    Vector3 originalPos;
 
-    public SoundManager soundManager;
-    private CamController cam;
-    private Enemy enemy;
-    private GameObject player;
-    private bool isAttacking = false;
+    SoundManager soundManager;
+    CamController cam;
+    Enemy enemy;
+    GameObject player;
+    bool isAttacking = false;
 
     AudioSource sfx;
     public AudioClip gunshot;
@@ -32,6 +32,7 @@ public class EnemyGun : MonoBehaviour
         sfx = GetComponent<AudioSource>();
         player = GameObject.FindGameObjectWithTag("Player");
         cam = FindObjectOfType<CamController>();
+        soundManager = FindObjectOfType<SoundManager>();
         
 
         fireRate = Random.Range(1f, 3f);
@@ -49,7 +50,10 @@ public class EnemyGun : MonoBehaviour
     {
         isAttacking = true;
         yield return new WaitForSeconds(fireRate);
-        Attack();
+        if (enemy.enabled)
+        {
+            Attack();
+        }
         isAttacking = false;
     }
 
@@ -65,10 +69,7 @@ public class EnemyGun : MonoBehaviour
 
     void Attack()
     {
-        //Recoil();
-
-        sfx.clip = gunshot;
-        sfx.Play();
+        soundManager.EnemySFX(sfx, gunshot);
 
         Vector3 targetDir = (player.transform.position - firePoint.position).normalized;
 

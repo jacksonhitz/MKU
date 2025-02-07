@@ -53,7 +53,6 @@ public class MeleeWeapon : MonoBehaviour
                     enemy = collider.transform.GetComponent<Enemy>();
                 }
                 enemy?.Hit();
-                soundManager.Squelch();
                 gameManager.phase++;
             }
         }
