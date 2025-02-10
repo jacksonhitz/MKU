@@ -75,9 +75,11 @@ MonoBehaviour:
   los: 0
   blood: {fileID: 8853266473761700966, guid: b1da43f1588a840748c686b0733ad393, type: 3}
   weaponPrefab: {fileID: 0}
-  squelch: {fileID: 8300000, guid: e8cb3bf84e4de4416b4392a55efa6068, type: 3}
+  rangedSquelch: {fileID: 0}
+  meleeSquelch: {fileID: 8300000, guid: 02fadc0adf0ba064da39feacdca9c9f2, type: 3}
   animator: {fileID: 5966705359488437535}
   model: {fileID: 7708446972887021684}
+  ranged: 0
 --- !u!114 &9221990856153062687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,7 +89,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6812792687230274983}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d3f5c2e3d4554a0bbcf2b73068f7458, type: 3}
+  m_Script: {fileID: 11500000, guid: 594aa498658e54d78a834210c9d9b245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 5966705359488437535}

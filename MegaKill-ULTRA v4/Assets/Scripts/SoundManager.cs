@@ -36,8 +36,8 @@ public class SoundManager : MonoBehaviour
     
     public AudioClip batSwing;
 
-    //public AudioClip meleeSquelch;
-    //public AudioClip rangedSquelch;
+    public AudioClip meleeSquelch;
+    public AudioClip rangedSquelch;
 
     public AudioClip heartbeat;
     public AudioClip flatline;
@@ -103,6 +103,7 @@ public class SoundManager : MonoBehaviour
     public void ShotShot() => PlaySfx(shotShot);
     public void ShotReload() => PlaySfx(shotReload);
     public void ShotEmpty() => PlaySfx(shotEmpty);
+    public void BatSwing() => PlaySfx(batSwing);
 
     public void Heartbeat() => PlaySfx(heartbeat);
     public void Flatline() => PlaySfx(flatline);

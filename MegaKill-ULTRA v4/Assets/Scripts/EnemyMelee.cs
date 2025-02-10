@@ -8,6 +8,7 @@ public class Melee : MonoBehaviour
     Enemy enemy;
     GameObject player;
     PlayerController playerController;
+
     public Animator animator;
     bool isAttacking = false;
 

@@ -33,6 +33,7 @@ public class MeleeWeapon : MonoBehaviour
         isSwinging = true;
         yield return new WaitForSeconds(0.3f);
         Hit();
+        soundManager.BatSwing();
         yield return new WaitForSeconds(0.5f);
         animator.SetBool("Swing", false);
         isSwinging = false;

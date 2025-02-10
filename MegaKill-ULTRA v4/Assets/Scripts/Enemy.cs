@@ -22,7 +22,9 @@ public class Enemy : MonoBehaviour
 
     public GameObject blood;
     public GameObject weaponPrefab; 
-    public AudioClip squelch;
+    public AudioClip rangedSquelch;
+    public AudioClip meleeSquelch;
+
     AudioSource sfx;
     public Animator animator;
     public GameObject model;
@@ -117,7 +119,16 @@ public class Enemy : MonoBehaviour
     public void Hit()
     {
         Instantiate(blood, transform.position, Quaternion.identity);
-        soundManager.EnemySFX(sfx, squelch);
+
+        if(ranged)
+        {
+            soundManager.EnemySFX(sfx, rangedSquelch);
+        }
+        else
+        {
+            soundManager.EnemySFX(sfx, meleeSquelch);
+        }
+        
         model.SetActive(false);
         enabled = false;
         gameManager.Score(100);

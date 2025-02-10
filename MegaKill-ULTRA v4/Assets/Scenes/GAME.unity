@@ -30858,7 +30858,23 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: f902fcae5ad7b40f6bd83ae79677bcfc, type: 3}
     - target: {fileID: 4694733214259568557, guid: d014f3102b4824428ab60060f0d46974, type: 3}
       propertyPath: m_Volume
-      value: 0.3
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694733214259568557, guid: d014f3102b4824428ab60060f0d46974, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: aa06d59834d23ee42b32deba5b7ace23, type: 3}
+    - target: {fileID: 4694733214259568557, guid: d014f3102b4824428ab60060f0d46974, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8339826160230438239, guid: d014f3102b4824428ab60060f0d46974, type: 3}
+      propertyPath: m_Volume
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8339826160230438239, guid: d014f3102b4824428ab60060f0d46974, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8339826160230438239, guid: d014f3102b4824428ab60060f0d46974, type: 3}
       propertyPath: m_audioClip
@@ -31227,18 +31243,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 631b31237a62d427da9d1c78a198a50a, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: -4770390735465466038, guid: a1a8babdd4e3dae4f9156d070f5edc48, type: 3}
-    - target: {fileID: -7511558181221131132, guid: 631b31237a62d427da9d1c78a198a50a, type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: -4973734387028869240, guid: 0e863bf60bc8d244d9f1236e00d4489b, type: 3}
-    - target: {fileID: -7511558181221131132, guid: 631b31237a62d427da9d1c78a198a50a, type: 3}
-      propertyPath: m_Materials.Array.data[2]
-      value: 
-      objectReference: {fileID: -5449962650655108041, guid: 230de896b504cf447b73587c7108e3bb, type: 3}
     - target: {fileID: -188211853093710351, guid: b82bb05e1a414426cb2601df08f72b46, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -31371,6 +31375,18 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 631b31237a62d427da9d1c78a198a50a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: -4770390735465466038, guid: a1a8babdd4e3dae4f9156d070f5edc48, type: 3}
+    - target: {fileID: -7511558181221131132, guid: 631b31237a62d427da9d1c78a198a50a, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: -4973734387028869240, guid: 0e863bf60bc8d244d9f1236e00d4489b, type: 3}
+    - target: {fileID: -7511558181221131132, guid: 631b31237a62d427da9d1c78a198a50a, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: -5449962650655108041, guid: 230de896b504cf447b73587c7108e3bb, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -42452,6 +42468,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 434129759311619006, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1215328470076295739, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1573515169825413247, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
