@@ -34,6 +34,9 @@ public class Gun : MonoBehaviour
     private bool canFire = true;
     float fireRate = .5f;
 
+    public ParticleSystem shotgunMuzzleFlash;
+    public ParticleSystem revolverMuzzleFlash;
+
     public Transform revolver;
     public Transform shotgun;
 
@@ -107,6 +110,13 @@ public class Gun : MonoBehaviour
                 StartCoroutine(FireCooldown());
                 Recoil();
                 soundManager.RevShot();
+
+                if (revolverMuzzleFlash != null)
+                {
+                    Debug.Log("Revolver fired! Playing muzzle flash...");
+                    revolverMuzzleFlash.Play();
+                }
+
                 bullets--;
                 Ray ray = player.cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
                 Hitscan(ray);
@@ -124,6 +134,13 @@ public class Gun : MonoBehaviour
                 StartCoroutine(FireCooldown());
                 Recoil();
                 soundManager.ShotShot();
+
+                if (shotgunMuzzleFlash != null)
+                {
+                    Debug.Log("Shotgun fired! Playing muzzle flash...");
+                    shotgunMuzzleFlash.Play();
+                }
+
                 shells--;
 
                 for (int i = 0; i < pellets; i++)
