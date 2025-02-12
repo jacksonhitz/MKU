@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public int phase;
-
     public int score = 0;
 
     Volume volume;
@@ -29,27 +28,31 @@ public class GameManager : MonoBehaviour
     float currentSpeed;
 
     public bool fadeOut;
-
     public bool isIntro = false;
 
     public GameObject bat;
     public GameObject cia;
     public GameObject black;
 
+    public GameObject healthBar;
+    public GameObject focusBar;
+    public GameObject ammo;
+
     public Dialogue intro;
-
-
 
     void Awake()
     {
         civs = new List<NPCAI>(FindObjectsOfType<NPCAI>()); 
-        enemies = new List<Enemy>(FindObjectsOfType<Enemy>()); 
+        enemies = new List<Enemy>(); 
+        CollectEnemies(); 
+
         soundManager = FindObjectOfType<SoundManager>(); 
         volume = FindObjectOfType<Volume>(); 
         ux = FindObjectOfType<UX>(); 
         tutorial = FindObjectOfType<Tutorial>(); 
         intro = FindObjectOfType<Dialogue>(); 
         player = GameObject.FindGameObjectWithTag("Player");
+        cam = FindAnyObjectByType<CamController>();
 
         camMat.SetFloat("_Lerp", currentLerp);
         camMat.SetFloat("_Frequency", currentFrequency);
@@ -62,25 +65,59 @@ public class GameManager : MonoBehaviour
         intro.CallDialogue();
     }
 
-    public void Tutorial()
+    void CollectEnemies()
     {
-        isIntro = false;
-        StartCoroutine(FlashIn());
+        enemies.Clear(); 
+        enemies.AddRange(FindObjectsOfType<Enemy>()); 
     }
 
-    IEnumerator FlashIn()
+    public void Tutorial()
     {
-        black.SetActive(true);
-        yield return new WaitForSeconds(0.15f);
-        black.SetActive(false);
-        yield return new WaitForSeconds(0.15f);
-        black.SetActive(true);
+        cam.CallBlink();
+    }
+
+    public void Active()
+    {
+        healthBar.SetActive(true);
+        focusBar.SetActive(true);
         cia.SetActive(false);
         bat.SetActive(true);
-        yield return new WaitForSeconds(0.15f);
-        black.SetActive(false);
-        ux.gameObject.SetActive(true);
+
+        isIntro = false;
+
         tutorial.CallDialogue();
+    }
+
+    public void Kill(Enemy enemy)
+    {
+        phase++;
+        enemies.Remove(enemy);
+
+        if (enemies.Count <= 2)
+        {
+            StartCoroutine(CleanUp());
+        }
+        else if (enemies.Count <= 1)
+        {
+            CallDead();
+        }
+    }
+
+    IEnumerator CleanUp()
+    {
+        yield return new WaitForSeconds(10f);
+        CallDead();
+    }
+    public void CallDead()
+    {
+        fadeOut = true;
+        StartCoroutine(Dead());
+    }
+
+    IEnumerator Dead()
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene(0);
     }
 
     public void ScareNPCs()
@@ -90,63 +127,51 @@ public class GameManager : MonoBehaviour
             civ.CallFlee(player.transform.position);
         }
     }
+
     void Update()
-   {
-       if (!fadeOut)
-       {
-           float currentLerp = camMat.GetFloat("_Lerp");
-           float capLerp = 0.0125f * phase;
-           float currentFrequency = camMat.GetFloat("_Frequency");
-           float capFrequency = 1.25f * phase;
-           float currentAmplitude = camMat.GetFloat("_Amplitude");
-           float capAmplitude = 0.025f * phase;
-           float currentSpeed = camMat.GetFloat("_Speed");
-           float capSpeed = 0.025f * phase;
-
-
-           if (currentLerp < capLerp)
-           {
-               currentLerp += 0.00001f;
-               camMat.SetFloat("_Lerp", currentLerp);
-           }
-           if (currentFrequency < capFrequency)
-           {
-               currentFrequency += 0.001f;
-               camMat.SetFloat("_Frequency", currentFrequency);
-           }
-           if (currentAmplitude < capAmplitude)
-           {
-               currentAmplitude += 0.00002f;
-               camMat.SetFloat("_Amplitude", currentAmplitude);
-           }
-           if (currentSpeed < capSpeed)
-           {
-               currentSpeed += 0.00002f;
-               camMat.SetFloat("_Speed", currentSpeed);
-           }
-       }
-       else
-       {
-           float accLerp = camMat.GetFloat("_Lerp");
-           float accFrequency = camMat.GetFloat("_Frequency");
-
-
-           accLerp += 0.0025f;
-           accFrequency += 0.025f;
-
-
-           camMat.SetFloat("_Lerp", accLerp);
-           camMat.SetFloat("_Frequency", accFrequency);
-       }
-   }
-
-    IEnumerator UpPhase()
     {
-        while (true)
+        if (!fadeOut)
         {
-            phase++;
-            Debug.Log("Phase: " + phase);
-            yield return new WaitForSeconds(30f);
+            float currentLerp = camMat.GetFloat("_Lerp");
+            float capLerp = 0.01f * phase;
+            float currentFrequency = camMat.GetFloat("_Frequency");
+            float capFrequency = 1f * phase;
+            float currentAmplitude = camMat.GetFloat("_Amplitude");
+            float capAmplitude = 0.02f * phase;
+            float currentSpeed = camMat.GetFloat("_Speed");
+            float capSpeed = 0.02f * phase;
+
+            if (currentLerp < capLerp)
+            {
+                currentLerp += 0.00001f;
+                camMat.SetFloat("_Lerp", currentLerp);
+            }
+            if (currentFrequency < capFrequency)
+            {
+                currentFrequency += 0.001f;
+                camMat.SetFloat("_Frequency", currentFrequency);
+            }
+            if (currentAmplitude < capAmplitude)
+            {
+                currentAmplitude += 0.00002f;
+                camMat.SetFloat("_Amplitude", currentAmplitude);
+            }
+            if (currentSpeed < capSpeed)
+            {
+                currentSpeed += 0.00002f;
+                camMat.SetFloat("_Speed", currentSpeed);
+            }
+        }
+        else
+        {
+            float accLerp = camMat.GetFloat("_Lerp");
+            float accFrequency = camMat.GetFloat("_Frequency");
+
+            accLerp += 0.0025f;
+            accFrequency += 0.025f;
+
+            camMat.SetFloat("_Lerp", accLerp);
+            camMat.SetFloat("_Frequency", accFrequency);
         }
     }
 
@@ -155,7 +180,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("score");
 
         score += newScore;
-        
+
         ux.Score();
         ux.PopUp(newScore);
     }

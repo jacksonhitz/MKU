@@ -166,7 +166,6 @@ public class Gun : MonoBehaviour
             {
                 Enemy enemy = hit.transform.GetComponent<Enemy>();
                 enemy?.Hit();
-                gameManager.phase++;
             }
 
             TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);

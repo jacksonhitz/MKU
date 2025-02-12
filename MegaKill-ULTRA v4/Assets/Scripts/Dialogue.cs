@@ -13,8 +13,9 @@ public class Dialogue : MonoBehaviour
 
     int index;
     bool started = false;
-    bool waiting = false;
+    bool waiting = true;
     GameManager gameManager;
+    SoundManager soundManager;
 
     public bool intro;
     public bool tutorial;
@@ -23,6 +24,7 @@ public class Dialogue : MonoBehaviour
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        soundManager = FindObjectOfType<SoundManager>();
 
         if (!tutorial)
         {
@@ -51,15 +53,25 @@ public class Dialogue : MonoBehaviour
             StartDialogue();
         }
 
-        if (Input.GetKeyDown(KeyCode.Return) && waiting)
+        if (Input.GetKeyDown(KeyCode.Return))
         {
-            waiting = false;
-            NextLine();
+            index = 100;
+            textComponent.text = "";
+            StopAllCoroutines();
+
+            if (!intro)
+            {
+                SceneManager.LoadScene(1);
+            }
+            else
+            {
+                gameManager.Active();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-            SceneManager.LoadScene(1);
+            index = 100;
         }
 
         if (Input.GetKeyDown(KeyCode.C) && !started)
@@ -76,14 +88,24 @@ public class Dialogue : MonoBehaviour
 
     IEnumerator TypeLine()
     {
+        textComponent.text = string.Empty;
+        yield return new WaitForSeconds(.1f);
+        waiting = true;
+        
+        if (intro)
+        {
+            soundManager.NewLine();
+        }
         foreach (char c in lines[index].ToCharArray())
         {
             textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
         }
-
         yield return new WaitForSeconds(1f);
-        waiting = true;
+        if (intro)
+        {
+            soundManager.StopLine();
+        }
         NextLine();
     }
 
@@ -92,7 +114,6 @@ public class Dialogue : MonoBehaviour
         if (index < lines.Length - 1 && passed)
         {
             index++;
-            textComponent.text = string.Empty;
             StartCoroutine(TypeLine());
 
             if (tutorial)
@@ -117,7 +138,8 @@ public class Dialogue : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene(0);
+            yield return new WaitForSeconds(2f);
+            SceneManager.LoadScene(1);
         }
     }
 }

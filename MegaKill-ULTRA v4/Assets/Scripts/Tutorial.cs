@@ -10,14 +10,13 @@ public class Tutorial : MonoBehaviour
     public string[] lines;
     public float textSpeed;
 
-    int index;
-    bool waiting;
+    public int index;
     GameManager gameManager;
+    SoundManager soundManager;
 
     public enum State
     {
         None,
-        Start,
         WASD,
         Jump,
         Slow,
@@ -28,13 +27,28 @@ public class Tutorial : MonoBehaviour
         Off
     }
 
-    bool passed;
+    public bool passed;
+    public bool waiting;
 
     public State currentState;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        soundManager = FindObjectOfType<SoundManager>();
+
+    }
+
+    void Update()
+    {
+
+
+        if (waiting && passed)
+        {
+            waiting = false;
+            passed = false;
+            NextLine();
+        }
     }
 
     public void States(State newState)
@@ -71,15 +85,6 @@ public class Tutorial : MonoBehaviour
                 break;
         }
     }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Return) && waiting)
-        {
-            waiting = false;
-            NextLine();
-        }
-    }
     public void CallDialogue()
     {
         StartCoroutine(DelayDialogue());
@@ -93,11 +98,37 @@ public class Tutorial : MonoBehaviour
     {
         index = 0;
         text.text = "";
+        States(State.WASD);
         StartCoroutine(TypeLine());
     }
 
+    public void CallOff()
+    {
+        StartCoroutine(Off());
+    }
+
+    IEnumerator Off()
+    {
+        foreach (char c in lines[index].ToCharArray())
+        {
+            yield return new WaitForSeconds(textSpeed);
+        }
+        yield return new WaitForSeconds(1f);
+        text.text = "";
+    }
+    public void NextLine()
+    {
+        text.text = "";
+        if (index < lines.Length - 1)
+        {
+            index++;
+            StartCoroutine(TypeLine());
+        }
+    }
     IEnumerator TypeLine()
     {
+        soundManager.NewLine();
+        
         foreach (char c in lines[index].ToCharArray())
         {
             text.text += c;
@@ -105,20 +136,7 @@ public class Tutorial : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
+        soundManager.StopLine();
         waiting = true;
-        if(index == 0)
-        {
-            NextLine();
-        }
-    }
-
-    void NextLine()
-    {
-        if (index < lines.Length - 1)
-        {
-            index++;
-            text.text = "";
-            StartCoroutine(TypeLine());
-        }
     }
 }

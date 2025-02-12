@@ -3,27 +3,23 @@ using System.Collections;
 
 public class EnemyGun : MonoBehaviour
 {
-    float reloadMag = 40f;
-    float reloadSpd = 2f;
-    float fireRate = 2f;
-    float bulletSpd = 50f;
-    float range = 1000f;
+    public float reloadMag = 40f;
+    public float reloadSpd = 2f;
+    public float fireRate = 2f;
+    public float bulletSpd = 50f;
+    public float range = 1000f;
 
     public GameObject projectilePrefab;
     public Transform firePoint;
     public TrailRenderer tracerPrefab;
 
     private Vector3 rot = Vector3.zero;
-    private Vector3 originalRot;
-    Vector3 originalPos;
-
-    SoundManager soundManager;
-    CamController cam;
-    Enemy enemy;
-    GameObject player;
-    bool isAttacking = false;
-
-    AudioSource sfx;
+    private SoundManager soundManager;
+    private CamController cam;
+    private Enemy enemy;
+    private GameObject player;
+    private bool isAttacking = false;
+    private AudioSource sfx;
     public AudioClip gunshot;
 
     void Start()
@@ -33,7 +29,6 @@ public class EnemyGun : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         cam = FindObjectOfType<CamController>();
         soundManager = FindObjectOfType<SoundManager>();
-        
 
         fireRate = Random.Range(1f, 3f);
     }
@@ -50,10 +45,7 @@ public class EnemyGun : MonoBehaviour
     {
         isAttacking = true;
         yield return new WaitForSeconds(fireRate);
-        if (enemy.enabled)
-        {
-            Attack();
-        }
+        Attack();
         isAttacking = false;
     }
 
@@ -62,23 +54,33 @@ public class EnemyGun : MonoBehaviour
         return Vector3.Distance(transform.position, player.transform.position) <= range;
     }
 
-    void Recoil()
-    {
-        rot += new Vector3(-reloadMag, 0, 0f);
-    }
-
     void Attack()
     {
+        if (enemy.isDead)
+        {}
         soundManager.EnemySFX(sfx, gunshot);
 
-        Vector3 targetDir = (player.transform.position - firePoint.position).normalized;
+        Collider playerCollider = player.GetComponent<Collider>();
+        Vector3 targetPosition = player.transform.position;
 
-        GameObject bullet = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        if (playerCollider != null)
+        {
+            targetPosition.y = playerCollider.bounds.max.y - 0.1f;
+        }
+
+        Vector3 targetDir = (targetPosition - firePoint.position).normalized;
+
+        GameObject bulletObj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
+        Bullet bullet = bulletObj.GetComponent<Bullet>();
+        Rigidbody rb = bulletObj.GetComponent<Rigidbody>();
+
         rb.velocity = targetDir * bulletSpd;
 
+        bullet.vel = bulletSpd;
+        bullet.direction = targetDir;
+
         TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
-        StartCoroutine(HandleTracer(tracer, bullet));
+        StartCoroutine(HandleTracer(tracer, bulletObj));
     }
 
     IEnumerator HandleTracer(TrailRenderer tracer, GameObject bullet)
@@ -90,7 +92,6 @@ public class EnemyGun : MonoBehaviour
         }
 
         yield return new WaitForSeconds(tracer.time);
-
         Destroy(tracer.gameObject);
     }
 }

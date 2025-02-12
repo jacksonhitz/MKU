@@ -6,9 +6,9 @@ public class BulletTime : MonoBehaviour
 {
     public float slowSpd = 0.05f; 
     public float transitionDuration = 0.5f; 
-    private float originalSpd;
-    private bool isSlowed = false;
-    private bool wasSlowed = false;
+    float originalSpd;
+    public bool isSlowed = false;
+    public bool wasSlowed = false;
 
     private SoundManager soundManager;
 

@@ -41,6 +41,7 @@ public class CamController : MonoBehaviour
     private Vector3 originalPosition; 
     public float swayIntensity = 0.1f;
     BulletTime bulletTime;
+    GameManager gameManager;
 
     public void UpPhase(int phase)
     {
@@ -48,12 +49,19 @@ public class CamController : MonoBehaviour
         clrSpd *= 2f;
     }
 
+    void Awake()
+    {
+        bulletTime = FindObjectOfType<BulletTime>();
+        cam = GetComponent<Camera>();
+        gameManager = FindObjectOfType<GameManager>();
+
+    }
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        cam = GetComponent<Camera>();
         originalFOV = cam.fieldOfView;
         originalPosition = transform.localPosition;
 
@@ -71,9 +79,24 @@ public class CamController : MonoBehaviour
             colorGrading.postExposure.value = -10f; 
         }
 
-        bulletTime = FindObjectOfType<BulletTime>();
 
         StartCoroutine(FadeIn(2f)); 
+    }
+
+    public void CallBlink()
+    {
+        StartCoroutine(Blink());
+    }
+    IEnumerator Blink()
+    {
+        StartCoroutine(FadeOut(.5f)); 
+        yield return new WaitForSeconds(.5f);
+        StartCoroutine(FadeIn(.5f)); 
+        yield return new WaitForSeconds(.5f);
+        StartCoroutine(FadeOut(.5f));
+        yield return new WaitForSeconds(.5f);
+        gameManager.Active();
+        StartCoroutine(FadeIn(.5f));
     }
 
     IEnumerator FadeIn(float duration)
@@ -97,6 +120,28 @@ public class CamController : MonoBehaviour
             colorGrading.postExposure.value = targetExposure;
         }
     }
+    IEnumerator FadeOut(float duration)
+    {
+        float elapsed = 0f;
+        float initialExposure = 0f; 
+        float targetExposure = -10f; 
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            if (colorGrading != null)
+            {
+                colorGrading.postExposure.value = Mathf.Lerp(initialExposure, targetExposure, elapsed / duration);
+            }
+            yield return null;
+        }
+
+        if (colorGrading != null)
+        {
+            colorGrading.postExposure.value = targetExposure;
+        }
+    }
+
 
     void SetClr()
     {

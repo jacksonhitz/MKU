@@ -37,6 +37,7 @@ public class UX : MonoBehaviour
         {
             initialCanvasScale = canvas.transform.localScale;
         }
+        UpdateAmmo();
     }
 
     void Update()

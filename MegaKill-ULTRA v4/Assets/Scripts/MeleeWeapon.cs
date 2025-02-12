@@ -54,7 +54,6 @@ public class MeleeWeapon : MonoBehaviour
                     enemy = collider.transform.GetComponent<Enemy>();
                 }
                 enemy?.Hit();
-                gameManager.phase++;
             }
         }
     }

@@ -803,7 +803,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &919221862
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1056,7 +1056,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1285280703
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1374,7 +1374,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -82.6}
+  m_AnchoredPosition: {x: 0, y: -50}
   m_SizeDelta: {x: 400, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2000385612
@@ -1424,8 +1424,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1490,27 +1490,13 @@ MonoBehaviour:
   title: {fileID: 380478041}
   creditsBox: {fileID: 919221864}
   lines:
-  - knock knock...
-  - can you hear me in that dark empty void?
-  - yes, i know you can't move or see or feel, but we'll give your body back soon,
-    not to worry in the slightest
-  - just imagine theres a little man inside your head sitting behind a glass screen,
-    pressing buttons and flipping dials so that you don't have to
-  - you, dear agent, have the lucky privilege to be a part of American History. you're
-    going to do great things today, weather you like it or not
-  - you don't like Bad people do you? i mean, who does??
-  - there are Bad people in this country, Reds, Dealers, Hippies... people that you
-    pass by everyday without a second thought
-  - today you are going to do some Bad things to some very Bad people.
-  - well, its been a nice chat, but you should be regaining the rest of your senses
-    momentarily
-  - oh, and uh, i would move fast if i were you. those "supplements" we gave you
-    will heighten your senses, but they can get pretty hairy if you hang around too
-    long
-  - good luck, and put on a good show for Late Night Channel 4, would you?
-  textSpeed: 0.1
-  playerInput: {fileID: 415892775}
-  credits: 0
+  - 'REMEMBER: CONTROL IS LIFE. GOD IS CONTROL. LIFE IS GOD. YOU ARE CONTROL.  YOU
+    ARE LIFE. YOU ARE GOD. GOD IS LIFE. CONTROL IS GOD. LIFE IS CONTROL. YOU ARE
+    CONTROLLED. YOU ARE DEATH. YOU ARE THE DEVIL IN THE MINDS OF MEN. '
+  textSpeed: 0.06
+  intro: 0
+  tutorial: 0
+  passed: 0
 --- !u!1 &2107874144
 GameObject:
   m_ObjectHideFlags: 0
@@ -1600,7 +1586,15 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1573515169825413247, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
+      propertyPath: rb
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573515169825413247, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2178788002204442514, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
+      propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2978397082138484745, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
@@ -1617,7 +1611,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2978397082138484745, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2978397082138484745, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1625,7 +1619,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2978397082138484745, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.7071068
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2978397082138484745, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
       propertyPath: m_LocalRotation.z
@@ -1637,7 +1631,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2978397082138484745, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2978397082138484745, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -1691,7 +1685,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2178788002204442514, guid: e64f0abceff4945efb05770cc4c80fe4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

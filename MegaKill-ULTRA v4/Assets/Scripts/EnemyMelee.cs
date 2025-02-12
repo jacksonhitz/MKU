@@ -6,8 +6,7 @@ public class Melee : MonoBehaviour
     float fireRate = 1f;
     float range = 2f;
     Enemy enemy;
-    GameObject player;
-    PlayerController playerController;
+    PlayerController player;
 
     public Animator animator;
     bool isAttacking = false;
@@ -15,8 +14,7 @@ public class Melee : MonoBehaviour
     void Start()
     {
         enemy = GetComponent<Enemy>();
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerController = player.GetComponent<PlayerController>();
+        player = FindObjectOfType<PlayerController>(); 
     }
 
     void Update()
@@ -45,6 +43,6 @@ public class Melee : MonoBehaviour
 
     void Attack()
     {
-        playerController.Hit();
+        player.Hit();
     }
 }
