@@ -37,7 +37,6 @@ public class UX : MonoBehaviour
         {
             initialCanvasScale = canvas.transform.localScale;
         }
-        UpdateAmmo();
     }
 
     void Update()
@@ -54,25 +53,6 @@ public class UX : MonoBehaviour
     {
         focusBar.value = focus / maxFocus;
     }
-
-    public void UpdateAmmo()
-    {
-        switch (player.currentWeapon)
-        {
-            case PlayerController.WeaponState.Revolver:
-                ammoIcon.SetActive(true);
-                ammo.text = player.gun.bullets.ToString();
-                break;
-            case PlayerController.WeaponState.Shotgun:
-                ammoIcon.SetActive(true);
-                ammo.text = player.gun.shells.ToString();
-                break;
-            default:
-                ammoIcon.SetActive(false);
-                break;
-        }
-    }
-
     void UpdateCanvasFoVScaling()
     {
         if (cam != null && canvas != null)

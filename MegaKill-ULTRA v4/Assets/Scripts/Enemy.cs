@@ -58,10 +58,7 @@ public class Enemy : MonoBehaviour
     {
         if (!isDead)
         {
-            if (player.hasWeapon)
-            {
-                LOS();
-            }
+            LOS();
             animator.SetFloat("spd", agent.velocity.magnitude);
             
             float distanceToPlayer = Vector3.Distance(transform.position, playerObj.transform.position);
@@ -106,8 +103,13 @@ public class Enemy : MonoBehaviour
 
     void LOS()
     {
-        Vector3 direction = (playerObj.transform.position - transform.position).normalized;
-        Ray ray = new Ray(transform.position, direction);
+        Vector3 targetPos = player.transform.position;
+        playerCollider = player.GetComponent<Collider>();
+
+        targetPos.y = playerCollider.bounds.max.y - 0.1f;
+        
+        Vector3 dir = (targetPos - transform.position).normalized;
+        Ray ray = new Ray(transform.position, dir);
         RaycastHit hit;
 
         LayerMask layerMask = LayerMask.GetMask("Ground", "Player");

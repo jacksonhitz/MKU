@@ -56,25 +56,14 @@ public class Gun : MonoBehaviour
     void Update()
     {
         rot = Vector3.Lerp(rot, Vector3.zero, spd * Time.deltaTime);
-
-        if (player.currentWeapon == PlayerController.WeaponState.Revolver)
-        {
-            revolver.localEulerAngles = originalRot + new Vector3(-90f, 0f, 0f) + rot;
-        }
-        else if (player.currentWeapon == PlayerController.WeaponState.Shotgun)
-        {
-            shotgun.localEulerAngles = originalRot + new Vector3(-90f, 0f, 180f) + rot;
-        }
     }
 
     public void StowWeapon(bool stow)
     {
         isStowing = stow;
         StopAllCoroutines();
-        if (stow)
-            StartCoroutine(SmoothTransition(stowedPos, stowedRot));
-        else
-            StartCoroutine(SmoothTransition(originalPos, originalRot));
+        if (stow) StartCoroutine(SmoothTransition(stowedPos, stowedRot));
+        else StartCoroutine(SmoothTransition(originalPos, originalRot));
     }
 
     private IEnumerator SmoothTransition(Vector3 targetPos, Vector3 targetRot)
@@ -82,7 +71,6 @@ public class Gun : MonoBehaviour
         Vector3 startPos = transform.localPosition;
         Vector3 startRot = transform.localEulerAngles;
         float elapsedTime = 0f;
-
         while (elapsedTime < 1f)
         {
             transform.localPosition = Vector3.Lerp(startPos, targetPos, elapsedTime);
@@ -90,7 +78,6 @@ public class Gun : MonoBehaviour
             elapsedTime += Time.deltaTime * switchSpeed;
             yield return null;
         }
-
         transform.localPosition = targetPos;
         transform.localEulerAngles = targetRot;
     }
@@ -100,49 +87,33 @@ public class Gun : MonoBehaviour
         rot += new Vector3(-mag, 0, 0f);
     }
 
-    public void FireWeapon()
+    public void FireWeapon(PlayerController.WeaponState weapon)
     {
         if (!canFire) return;
-        if (player.currentWeapon == PlayerController.WeaponState.Revolver)
+
+        if (weapon == PlayerController.WeaponState.Revolver)
         {
             if (bullets > 0)
             {
                 StartCoroutine(FireCooldown());
                 Recoil();
                 soundManager.RevShot();
-
-                if (revolverMuzzleFlash != null)
-                {
-                    Debug.Log("Revolver fired! Playing muzzle flash...");
-                    revolverMuzzleFlash.Play();
-                }
-
+                //revolverMuzzleFlash?.Play();
                 bullets--;
                 Ray ray = player.cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
                 Hitscan(ray);
             }
-            else
-            {
-                soundManager.RevEmpty();
-            }
+            else soundManager.RevEmpty();
         }
-        else if (player.currentWeapon == PlayerController.WeaponState.Shotgun)
+        else if (weapon == PlayerController.WeaponState.Shotgun)
         {
-            
             if (shells > 0)
             {
                 StartCoroutine(FireCooldown());
                 Recoil();
                 soundManager.ShotShot();
-
-                if (shotgunMuzzleFlash != null)
-                {
-                    Debug.Log("Shotgun fired! Playing muzzle flash...");
-                    shotgunMuzzleFlash.Play();
-                }
-
+                //shotgunMuzzleFlash?.Play();
                 shells--;
-
                 for (int i = 0; i < pellets; i++)
                 {
                     Vector3 spread = new Vector3(Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0f);
@@ -151,10 +122,7 @@ public class Gun : MonoBehaviour
                     Hitscan(ray);
                 }
             }
-            else
-            {
-                soundManager.ShotEmpty();
-            }
+            else soundManager.ShotEmpty();
         }
     }
 
@@ -162,38 +130,9 @@ public class Gun : MonoBehaviour
     {
         if (Physics.Raycast(ray, out RaycastHit hit, player.range))
         {
-            if (hit.transform.CompareTag("NPC"))
-            {
-                Enemy enemy = hit.transform.GetComponent<Enemy>();
-                enemy?.Hit();
-            }
-
+            if (hit.transform.CompareTag("NPC")) hit.transform.GetComponent<Enemy>()?.Hit();
             TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
             StartCoroutine(HandleTracer(tracer, hit.point));
-        }
-        else
-        {
-            Vector3 fallbackDestination = ray.origin + ray.direction * 100f;
-            TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
-            StartCoroutine(HandleTracer(tracer, fallbackDestination));
-        }
-    }
-
-    public void Reload()
-    {
-        rot += new Vector3(mag, 0, 0f);
-
-        if (player.currentWeapon == PlayerController.WeaponState.Shotgun)
-        {
-            shells = 2f;
-            soundManager.ShotReload();
-            player.ux.UpdateAmmo();
-        }
-        else if (player.currentWeapon == PlayerController.WeaponState.Revolver)
-        {
-            bullets = 6f;
-            soundManager.RevReload();
-            player.ux.UpdateAmmo();
         }
     }
 
@@ -207,7 +146,6 @@ public class Gun : MonoBehaviour
     IEnumerator HandleTracer(TrailRenderer tracer, Vector3 hitPoint)
     {
         tracer.transform.position = firePoint.position;
-
         float elapsedTime = 0f;
         while (elapsedTime < tracerDuration)
         {
@@ -216,7 +154,6 @@ public class Gun : MonoBehaviour
             yield return null;
         }
         yield return new WaitForSeconds(tracer.time);
-
         Destroy(tracer.gameObject);
     }
 }
