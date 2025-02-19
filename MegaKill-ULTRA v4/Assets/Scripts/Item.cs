@@ -15,7 +15,6 @@ public class Item : MonoBehaviour
 
     void Awake()
     {
-
         originalScale = transform.localScale;
     }
 

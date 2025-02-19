@@ -16,9 +16,13 @@ public class PlayerController : MonoBehaviour
     private Vector3 movement;
     public bool isGrounded;
 
-    public enum WeaponState { None, Revolver, Shotgun, Bat }
-    public WeaponState left = WeaponState.None;
-    public WeaponState right = WeaponState.None;
+    public enum ItemState { None, Revolver, Shotgun, Bat }
+    public Transform leftHand;
+    public Transform rightHand;
+    public MonoBehaviour leftItemScript;
+    public MonoBehaviour rightItemScript;
+    public ItemState leftItem = ItemState.None;
+    public ItemState rightItem = ItemState.None;
 
     UX ux;
     SoundManager soundManager;
@@ -29,23 +33,9 @@ public class PlayerController : MonoBehaviour
     float maxFocus = 100;
 
     private float pickupRange = 10f;
-    public GameObject revolverL;
-    public GameObject shotgunL;
-    public GameObject batL;
-    public GameObject revolverR;
-    public GameObject shotgunR;
-    public GameObject batR;
-
-    public Bat batLScript;
-    public Gun gunLScript;
-    public Bat batRScript;
-    public Gun gunRScript;
-
     bool isDead;
-
     Animator animator; 
     public Renderer punch;
-
 
     void Awake()
     {
@@ -81,20 +71,51 @@ public class PlayerController : MonoBehaviour
 
     void HandleInput()
     {
-        if (Input.GetKey(KeyCode.E)) Interact();
+        if (Input.GetKey(KeyCode.E))
+        {
+            Interact();
+        }
 
         if (Input.GetButtonDown("Fire1"))
         {
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftControl))
             {
-                HandleFire(right);
+                CallRight();
             }
             else
             {
-                HandleFire(left);
+                CallLeft();
             }
         }
-        if (Input.GetButtonDown("Fire2")) HandleFire(right);
+        if (Input.GetButtonDown("Fire2"))
+        {
+            CallRight();
+        }
+    }
+
+    void CallLeft()
+    {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            leftItem = ItemState.None;
+            Throw(leftItemScript);
+        }
+        else
+        {
+            HandleUse(leftItemScript); 
+        }
+    }
+    void CallRight()
+    {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            rightItem = ItemState.None;
+            Throw(rightItemScript);
+        }
+        else
+        {
+            HandleUse(rightItemScript); 
+        }
     }
 
     void Move()
@@ -106,37 +127,15 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && isGrounded) rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
     }
 
-    void HandleFire(WeaponState weapon)
+    void HandleUse(MonoBehaviour itemScript)
     {
-        if (weapon == left)
+        if (itemScript != null)
         {
-            if (weapon == WeaponState.Revolver || weapon == WeaponState.Shotgun)
-            {
-                gunLScript.FireWeapon(weapon);  
-            }
-            else if (weapon == WeaponState.Bat)
-            {
-                batLScript.Attack();  
-            }
-            else
-            {
-                Punch();
-            }
+            itemScript.Invoke("Use", 0f);
         }
         else
         {
-            if (weapon == WeaponState.Revolver || weapon == WeaponState.Shotgun)
-            {
-                gunRScript.FireWeapon(weapon);  
-            }
-            else if (weapon == WeaponState.Bat)
-            {
-                batRScript.Attack();  
-            }
-            else
-            {
-                Punch();
-            }
+            Punch();
         }
     }
 
@@ -145,13 +144,12 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Punch!");
         if (animator != null)
         {
-
             StartCoroutine(PunchOn());
             StartCoroutine(PunchOff());
             animator.SetTrigger("Punch"); 
-            Debug.Log("good");
         }
     }
+
     IEnumerator PunchOn()
     {
         yield return new WaitForSeconds(0.2f);
@@ -177,48 +175,54 @@ public class PlayerController : MonoBehaviour
 
     void Pickup(GameObject item)
     {
-        WeaponState newItem = WeaponState.None;
-        GameObject objL = null;
-        GameObject objR = null;
+        if (leftItem == ItemState.None) EquipItem(item, leftHand, ref leftItem, ref leftItemScript);
+        else if (rightItem == ItemState.None) EquipItem(item, rightHand, ref rightItem, ref rightItemScript);
+    }
 
-        if (item.name.Contains("Revolver")) { newItem = WeaponState.Revolver; objL = revolverL; objR = revolverR; }
-        else if (item.name.Contains("Shotgun")) { newItem = WeaponState.Shotgun; objL = shotgunL; objR = shotgunR; }
-        else if (item.name.Contains("Bat")) { newItem = WeaponState.Bat; objL = batL; objR = batR; }
+    void EquipItem(GameObject item, Transform hand, ref ItemState itemSlot, ref MonoBehaviour itemScript)
+    {
+        item.transform.SetParent(hand);
+        item.transform.localRotation = Quaternion.identity; 
 
-        if (newItem != WeaponState.None)
+        if (item.name.Contains("Revolver"))
         {
-            if (left == WeaponState.None)
+            item.transform.localPosition = new Vector3(0f, -0.125f, 0.7f);
+            item.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f); 
+            itemSlot = ItemState.Revolver;
+            itemScript = item.GetComponent<Revolver>();
+            itemScript.Invoke("SetPos", 0f);
+        }
+        else if (item.name.Contains("Shotgun"))
+        {
+            item.transform.localPosition = new Vector3(0f, -0.3f, 0.8f);
+            item.transform.localRotation = Quaternion.Euler(-90f, 0f, 180f); 
+            itemSlot = ItemState.Shotgun;
+            itemScript = item.GetComponent<Shotgun>();
+            itemScript.Invoke("SetPos", 0f);
+        }
+        else if (item.name.Contains("Bat"))
+        {
+            if (hand == leftHand)
             {
-                left = newItem;
-                if (objL) objL.SetActive(true);
-            }
-            else if (right == WeaponState.None)
-            {
-                right = newItem;
-                if (objR) objR.SetActive(true);
+                item.transform.localPosition = new Vector3(-0.7f, 0.195f, 2f);
             }
             else
             {
-                if (left != WeaponState.None)
-                {
-                    DropWeapon(left);
-                    left = newItem;
-                    if (objL) objL.SetActive(true);
-                }
-                else if (right != WeaponState.None)
-                {
-                    DropWeapon(right);
-                    right = newItem;
-                    if (objR) objR.SetActive(true);
-                }
+                item.transform.localPosition = new Vector3(0.7f, 0.195f, 2f);
             }
+            item.transform.localRotation = Quaternion.Euler(-90f, 0f, 125f); 
+            itemSlot = ItemState.Bat;
+            itemScript = item.GetComponent<Bat>();
         }
-        Destroy(item);
+        
     }
 
-    void DropWeapon(WeaponState weapon)
+    void Throw(MonoBehaviour itemScript)
     {
-
+        itemScript.transform.SetParent(null);
+        Rigidbody rb = itemScript.GetComponent<Rigidbody>();
+        rb.isKinematic = false;
+        rb.AddForce(cam.transform.forward * 10f, ForceMode.VelocityChange);
     }
 
     public void Hit()

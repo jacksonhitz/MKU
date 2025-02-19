@@ -1,69 +1,54 @@
 using System.Collections;
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+public abstract class Gun : MonoBehaviour
 {
-    float mag = 75f;
-    float spd = 5f;
-    Vector3 rot = Vector3.zero;
+    protected float mag = 75f;
+    protected float spd = 5f;
+    protected Vector3 rot = Vector3.zero;
 
-    Vector3 originalRot;
-    Vector3 originalPos;
-    Vector3 stowedPos = new Vector3(-0.5f, -0.5f, 0f);
-    Vector3 stowedRot = new Vector3(45f, 0f, 0f);
+    protected Vector3 originalRot;
+    protected Vector3 originalPos;
+    protected Vector3 stowedPos = new Vector3(-0.5f, -0.5f, 0f);
+    protected Vector3 stowedRot = new Vector3(45f, 0f, 0f);
 
-    PlayerController player;
-    SoundManager soundManager;
-    GameManager gameManager;
+    protected PlayerController player;
+    protected SoundManager soundManager;
+    protected GameManager gameManager;
 
-    public float bullets = 6f;
-    public float shells = 2f;
-    public float reloadBackAmount = 0.2f;
-    public float reloadSpeed = 2f;
-    public float tracerDuration = 0.2f;
-    public float scaredRad = 50f;
+    protected bool isStowing = false;
+    protected float switchSpeed = 5f;
+    protected bool canFire = true;
+    protected float fireRate = 0.5f;
 
     public LayerMask npcMask;
     public TrailRenderer tracerPrefab;
-    public Transform firePoint;
-    public int pellets = 12;
-    public float spreadAngle = 5f;
+    public float tracerDuration = 0.2f;
 
-    private bool isStowing = false;
-    private float switchSpeed = 5f;
-    private bool canFire = true;
-    float fireRate = .5f;
-
-    public ParticleSystem shotgunMuzzleFlash;
-    public ParticleSystem revolverMuzzleFlash;
-
-    public Transform revolver;
-    public Transform shotgun;
-
-    void Awake()
+    protected virtual void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
         player = FindObjectOfType<PlayerController>();
     }
 
-    void Start()
+    public virtual void SetPos()
     {
         originalRot = transform.localEulerAngles;
         originalPos = transform.localPosition;
+        Debug.Log(originalPos);
     }
 
-    void Update()
+    protected virtual void Update()
     {
-        rot = Vector3.Lerp(rot, Vector3.zero, spd * Time.deltaTime);
+        ResetRot();
     }
 
     public void StowWeapon(bool stow)
     {
         isStowing = stow;
         StopAllCoroutines();
-        if (stow) StartCoroutine(SmoothTransition(stowedPos, stowedRot));
-        else StartCoroutine(SmoothTransition(originalPos, originalRot));
+        StartCoroutine(SmoothTransition(stow ? stowedPos : originalPos, stow ? stowedRot : originalRot));
     }
 
     private IEnumerator SmoothTransition(Vector3 targetPos, Vector3 targetRot)
@@ -82,68 +67,26 @@ public class Gun : MonoBehaviour
         transform.localEulerAngles = targetRot;
     }
 
-    public void Recoil()
-    {
-        rot += new Vector3(-mag, 0, 0f);
-    }
-
-    public void FireWeapon(PlayerController.WeaponState weapon)
-    {
-        if (!canFire) return;
-
-        if (weapon == PlayerController.WeaponState.Revolver)
-        {
-            if (bullets > 0)
-            {
-                StartCoroutine(FireCooldown());
-                Recoil();
-                soundManager.RevShot();
-                //revolverMuzzleFlash?.Play();
-                bullets--;
-                Ray ray = player.cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-                Hitscan(ray);
-            }
-            else soundManager.RevEmpty();
-        }
-        else if (weapon == PlayerController.WeaponState.Shotgun)
-        {
-            if (shells > 0)
-            {
-                StartCoroutine(FireCooldown());
-                Recoil();
-                soundManager.ShotShot();
-                //shotgunMuzzleFlash?.Play();
-                shells--;
-                for (int i = 0; i < pellets; i++)
-                {
-                    Vector3 spread = new Vector3(Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0f);
-                    Quaternion rotation = Quaternion.Euler(player.cam.transform.eulerAngles + spread);
-                    Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
-                    Hitscan(ray);
-                }
-            }
-            else soundManager.ShotEmpty();
-        }
-    }
-
-    void Hitscan(Ray ray)
-    {
-        if (Physics.Raycast(ray, out RaycastHit hit, player.range))
-        {
-            if (hit.transform.CompareTag("NPC")) hit.transform.GetComponent<Enemy>()?.Hit();
-            TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
-            StartCoroutine(HandleTracer(tracer, hit.point));
-        }
-    }
-
-    IEnumerator FireCooldown()
+    protected IEnumerator FireCooldown()
     {
         canFire = false;
         yield return new WaitForSeconds(fireRate);
         canFire = true;
     }
 
-    IEnumerator HandleTracer(TrailRenderer tracer, Vector3 hitPoint)
+    protected void Hitscan(Ray ray, Transform firePoint)
+    {
+        if (Physics.Raycast(ray, out RaycastHit hit, player.range))
+        {
+            if (hit.transform.CompareTag("NPC"))
+                hit.transform.GetComponent<Enemy>()?.Hit();
+            
+            TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
+            StartCoroutine(HandleTracer(tracer, hit.point, firePoint));
+        }
+    }
+
+    private IEnumerator HandleTracer(TrailRenderer tracer, Vector3 hitPoint, Transform firePoint)
     {
         tracer.transform.position = firePoint.position;
         float elapsedTime = 0f;
@@ -156,4 +99,8 @@ public class Gun : MonoBehaviour
         yield return new WaitForSeconds(tracer.time);
         Destroy(tracer.gameObject);
     }
+
+    public abstract void Use();
+    public abstract void ResetRot();
+    public abstract void Recoil();
 }
