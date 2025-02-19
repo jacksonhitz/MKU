@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
             Interact();
         }
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetMouseButtonDown(0))
         {
             if (Input.GetKey(KeyCode.LeftControl))
             {
@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
                 CallLeft();
             }
         }
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetMouseButtonDown(1))
         {
             CallRight();
         }
@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
 
     void CallLeft()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && leftItem != ItemState.None)
         {
             leftItem = ItemState.None;
             Throw(leftItemScript);
@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviour
     }
     void CallRight()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && rightItem != ItemState.None)
         {
             rightItem = ItemState.None;
             Throw(rightItemScript);
@@ -166,12 +166,20 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit hit;
         Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+
         if (Physics.Raycast(ray, out hit, range, LayerMask.GetMask("Ground", "Item")) && hit.transform.CompareTag("Item"))
         {
-            if (Vector3.Distance(transform.position, hit.transform.position) <= pickupRange)
-                Pickup(hit.transform.gameObject);
+            Item item = hit.transform.GetComponent<Item>(); 
+            if (item != null && item.available) 
+            {
+                if (Vector3.Distance(transform.position, hit.transform.position) <= pickupRange)
+                {
+                    Pickup(hit.transform.gameObject);
+                }
+            }
         }
     }
+
 
     void Pickup(GameObject item)
     {
@@ -184,6 +192,9 @@ public class PlayerController : MonoBehaviour
         item.transform.SetParent(hand);
         item.transform.localRotation = Quaternion.identity; 
 
+        Item script = item.GetComponent<Item>();
+        script.available = false;
+
         if (item.name.Contains("Revolver"))
         {
             item.transform.localPosition = new Vector3(0f, -0.125f, 0.7f);
@@ -191,6 +202,8 @@ public class PlayerController : MonoBehaviour
             itemSlot = ItemState.Revolver;
             itemScript = item.GetComponent<Revolver>();
             itemScript.Invoke("SetPos", 0f);
+            Rigidbody rb = itemScript.GetComponent<Rigidbody>();
+            rb.isKinematic = true;
         }
         else if (item.name.Contains("Shotgun"))
         {
@@ -199,6 +212,8 @@ public class PlayerController : MonoBehaviour
             itemSlot = ItemState.Shotgun;
             itemScript = item.GetComponent<Shotgun>();
             itemScript.Invoke("SetPos", 0f);
+            Rigidbody rb = itemScript.GetComponent<Rigidbody>();
+            rb.isKinematic = true;
         }
         else if (item.name.Contains("Bat"))
         {
@@ -213,6 +228,8 @@ public class PlayerController : MonoBehaviour
             item.transform.localRotation = Quaternion.Euler(-90f, 0f, 125f); 
             itemSlot = ItemState.Bat;
             itemScript = item.GetComponent<Bat>();
+            Rigidbody rb = itemScript.GetComponent<Rigidbody>();
+            rb.isKinematic = true;
         }
         
     }
@@ -220,9 +237,11 @@ public class PlayerController : MonoBehaviour
     void Throw(MonoBehaviour itemScript)
     {
         itemScript.transform.SetParent(null);
+        Item item = itemScript.GetComponent<Item>();
+        item.available = true;
         Rigidbody rb = itemScript.GetComponent<Rigidbody>();
         rb.isKinematic = false;
-        rb.AddForce(cam.transform.forward * 10f, ForceMode.VelocityChange);
+        rb.AddForce(cam.transform.forward * 50f, ForceMode.VelocityChange);
     }
 
     public void Hit()

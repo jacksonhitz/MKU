@@ -16,11 +16,19 @@ public class Item : MonoBehaviour
     void Awake()
     {
         originalScale = transform.localScale;
+        available = true;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Physics.IgnoreCollision(collision.collider, GetComponent<Collider>());
+        }
     }
 
     public void Enable()
     {
-        available = true;
         transform.SetParent(null);
 
         Rigidbody rb = GetComponent<Rigidbody>();
