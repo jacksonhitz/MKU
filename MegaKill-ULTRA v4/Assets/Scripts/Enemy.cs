@@ -104,7 +104,7 @@ public class Enemy : MonoBehaviour
     void LOS()
     {
         Vector3 targetPos = player.transform.position;
-        playerCollider = player.GetComponent<Collider>();
+        Collider playerCollider = player.GetComponentInChildren<Collider>();
 
         targetPos.y = playerCollider.bounds.max.y - 0.1f;
         

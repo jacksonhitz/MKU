@@ -43,12 +43,17 @@ public class PlayerController : MonoBehaviour
 
     bool isDead;
 
+    Animator animator; 
+    public Renderer punch;
+
+
     void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>(); 
         gameManager = FindObjectOfType<GameManager>(); 
         ux = FindObjectOfType<UX>(); 
         rb = GetComponent<Rigidbody>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     void Start()
@@ -96,7 +101,6 @@ public class PlayerController : MonoBehaviour
     {
         float horzInput = Input.GetAxis("Horizontal");
         float vertInput = Input.GetAxis("Vertical");
-        Debug.Log(horzInput);
         movement = transform.right * horzInput + transform.forward * vertInput;
         rb.velocity = new Vector3(movement.x * runSpd, rb.velocity.y, movement.z * runSpd);
         if (Input.GetKey(KeyCode.Space) && isGrounded) rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
@@ -135,53 +139,29 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    void HandleThrow(WeaponState weapon)
-    {
-        GameObject obj = null;
-        if (weapon == left)
-        {
-            if (weapon == WeaponState.Revolver)
-            {
-                obj = revolverL;
-            }
-            else if (weapon == WeaponState.Shotgun)
-            {
-                obj = shotgunL;
-            }
-            else if (weapon == WeaponState.Bat)
-            {
-                obj = batL;
-            }
-            else
-            {
-                return;
-            }
-        }
-        else
-        {
-            if (weapon == WeaponState.Revolver)
-            {
-                obj = revolverL;
-            }
-            else if (weapon == WeaponState.Shotgun)
-            {
-                obj = shotgunL;
-            }
-            else if (weapon == WeaponState.Bat)
-            {
-                obj = batL;
-            }
-            else
-            {
-                return;
-            }
-        }
-    }
-
 
     void Punch()
     {
         Debug.Log("Punch!");
+        if (animator != null)
+        {
+
+            StartCoroutine(PunchOn());
+            StartCoroutine(PunchOff());
+            animator.SetTrigger("Punch"); 
+            Debug.Log("good");
+        }
+    }
+    IEnumerator PunchOn()
+    {
+        yield return new WaitForSeconds(0.2f);
+        punch.enabled = true;
+    }
+
+    IEnumerator PunchOff()
+    {
+        yield return new WaitForSeconds(0.5f);
+        punch.enabled = false;
     }
 
     void Interact()
@@ -196,51 +176,49 @@ public class PlayerController : MonoBehaviour
     }
 
     void Pickup(GameObject item)
-{
-    WeaponState newItem = WeaponState.None;
-    GameObject objL = null;
-    GameObject objR = null;
-
-    if (item.name.Contains("Revolver")) { newItem = WeaponState.Revolver; objL = revolverL; objR = revolverR; }
-    else if (item.name.Contains("Shotgun")) { newItem = WeaponState.Shotgun; objL = shotgunL; objR = shotgunR; }
-    else if (item.name.Contains("Bat")) { newItem = WeaponState.Bat; objL = batL; objR = batR; }
-
-    if (newItem != WeaponState.None)
     {
-        if (left == WeaponState.None)
+        WeaponState newItem = WeaponState.None;
+        GameObject objL = null;
+        GameObject objR = null;
+
+        if (item.name.Contains("Revolver")) { newItem = WeaponState.Revolver; objL = revolverL; objR = revolverR; }
+        else if (item.name.Contains("Shotgun")) { newItem = WeaponState.Shotgun; objL = shotgunL; objR = shotgunR; }
+        else if (item.name.Contains("Bat")) { newItem = WeaponState.Bat; objL = batL; objR = batR; }
+
+        if (newItem != WeaponState.None)
         {
-            left = newItem;
-            if (objL) objL.SetActive(true);
-        }
-        else if (right == WeaponState.None)
-        {
-            right = newItem;
-            if (objR) objR.SetActive(true);
-        }
-        else
-        {
-            if (left != WeaponState.None)
+            if (left == WeaponState.None)
             {
-                DropWeapon(left);
                 left = newItem;
                 if (objL) objL.SetActive(true);
             }
-            else if (right != WeaponState.None)
+            else if (right == WeaponState.None)
             {
-                DropWeapon(right);
                 right = newItem;
                 if (objR) objR.SetActive(true);
             }
+            else
+            {
+                if (left != WeaponState.None)
+                {
+                    DropWeapon(left);
+                    left = newItem;
+                    if (objL) objL.SetActive(true);
+                }
+                else if (right != WeaponState.None)
+                {
+                    DropWeapon(right);
+                    right = newItem;
+                    if (objR) objR.SetActive(true);
+                }
+            }
         }
+        Destroy(item);
     }
-    Destroy(item);
-}
-
 
     void DropWeapon(WeaponState weapon)
     {
-        Debug.Log("Dropped: " + weapon);
-        // Implement actual logic for dropping the weapon
+
     }
 
     public void Hit()
