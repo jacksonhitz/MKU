@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     bool isDead;
     Animator animator; 
     public Renderer punch;
+    public Collider meleeRange;
 
     void Awake()
     {
@@ -141,7 +142,8 @@ public class PlayerController : MonoBehaviour
 
     void Punch()
     {
-        Debug.Log("Punch!");
+        
+        
         if (animator != null)
         {
             StartCoroutine(PunchOn());
@@ -154,6 +156,16 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         punch.enabled = true;
+
+        Collider[] hitColliders = Physics.OverlapBox(meleeRange.bounds.center, meleeRange.bounds.extents, meleeRange.transform.rotation);
+        foreach (Collider hit in hitColliders)
+        {
+            Debug.Log("punch: " + hit.tag);
+            if (hit.CompareTag("NPC")) 
+            {
+                hit.GetComponentInParent<Enemy>()?.Hit();
+            }
+        }
     }
 
     IEnumerator PunchOff()
@@ -237,12 +249,31 @@ public class PlayerController : MonoBehaviour
     void Throw(MonoBehaviour itemScript)
     {
         itemScript.transform.SetParent(null);
+
         Item item = itemScript.GetComponent<Item>();
         item.available = true;
+        item.thrown = true;
+
         Rigidbody rb = itemScript.GetComponent<Rigidbody>();
         rb.isKinematic = false;
-        rb.AddForce(cam.transform.forward * 50f, ForceMode.VelocityChange);
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        Vector3 throwDirection;
+        if (Physics.Raycast(ray, out hit))
+        {
+            throwDirection = (hit.point - itemScript.transform.position).normalized;
+        }
+        else
+        {
+            throwDirection = ray.direction;
+        }
+
+        rb.AddForce(throwDirection * 30f, ForceMode.VelocityChange);
+        rb.AddTorque(Vector3.right * -50f, ForceMode.VelocityChange);
     }
+
 
     public void Hit()
     {

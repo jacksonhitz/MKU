@@ -158,7 +158,7 @@ public class Enemy : MonoBehaviour
             soundManager.EnemySFX(sfx, meleeSquelch);
         }
 
-        if(item != null)
+        if(item == null)
         {
             item.Enable();
             EnemyGun enemyGun = GetComponent<EnemyGun>();

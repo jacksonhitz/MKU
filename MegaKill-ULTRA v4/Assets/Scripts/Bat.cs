@@ -42,7 +42,6 @@ public class Bat : MonoBehaviour
 
     void Hit()
     {
-
         Collider[] colliders = Physics.OverlapSphere(hitbox.bounds.center, hitbox.radius * hitbox.transform.lossyScale.x);
 
         foreach (Collider collider in colliders)

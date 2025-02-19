@@ -60,14 +60,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5568371526223589888, guid: 04df6510b45a54f9c94f96e0409641c4, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 04df6510b45a54f9c94f96e0409641c4, type: 3}
       propertyPath: m_Name
       value: Cola
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 04df6510b45a54f9c94f96e0409641c4, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 04df6510b45a54f9c94f96e0409641c4, type: 3}
+      propertyPath: m_TagString
+      value: Item
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 65702495048144492, guid: 04df6510b45a54f9c94f96e0409641c4, type: 3}
     - {fileID: -8700617353114198275, guid: 04df6510b45a54f9c94f96e0409641c4, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 04df6510b45a54f9c94f96e0409641c4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8788061594956914358}
   m_SourcePrefab: {fileID: 100100000, guid: 04df6510b45a54f9c94f96e0409641c4, type: 3}
+--- !u!1 &6888743105801680851 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 04df6510b45a54f9c94f96e0409641c4, type: 3}
+  m_PrefabInstance: {fileID: 6005781596168768130}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-8788061594956914358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6888743105801680851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db88e1bc7ad6e4676ad52bcce1d96a1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  available: 0
+  def: {fileID: 0}
+  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
+  rend: {fileID: 0}

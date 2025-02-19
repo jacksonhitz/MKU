@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5568371526223589888, guid: b461e999bcb6c40cca95e09e31854dbb, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: -2577548232221058511, guid: b461e999bcb6c40cca95e09e31854dbb, type: 3}
       propertyPath: m_LocalPosition.z
       value: -4.69
@@ -68,10 +72,42 @@ PrefabInstance:
       propertyPath: m_Name
       value: CrushedCan
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b461e999bcb6c40cca95e09e31854dbb, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b461e999bcb6c40cca95e09e31854dbb, type: 3}
+      propertyPath: m_TagString
+      value: Item
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 65702495048144492, guid: b461e999bcb6c40cca95e09e31854dbb, type: 3}
     - {fileID: -8700617353114198275, guid: b461e999bcb6c40cca95e09e31854dbb, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b461e999bcb6c40cca95e09e31854dbb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8568841443900027151}
   m_SourcePrefab: {fileID: 100100000, guid: b461e999bcb6c40cca95e09e31854dbb, type: 3}
+--- !u!1 &3820562472819071201 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b461e999bcb6c40cca95e09e31854dbb, type: 3}
+  m_PrefabInstance: {fileID: 4162509689866462640}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-8568841443900027151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3820562472819071201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db88e1bc7ad6e4676ad52bcce1d96a1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  available: 0
+  def: {fileID: 0}
+  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
+  rend: {fileID: 0}
