@@ -12,18 +12,38 @@ public class Item : MonoBehaviour
     Vector3 originalScale;
     float scaleDuration = 0.5f;
     bool isHovering;
+    public bool thrown;
 
     void Awake()
     {
         originalScale = transform.localScale;
         available = true;
+
+        rend = GetComponentInChildren<Renderer>();
+        def = rend.material;
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        if (thrown)
+        {
+            thrown = false;
+            if (collision.gameObject.CompareTag("NPC"))
+            {
+                collision.gameObject.GetComponent<Enemy>()?.Hit();
+            }
+        }
         if (collision.gameObject.CompareTag("Player"))
         {
-            Physics.IgnoreCollision(collision.collider, GetComponent<Collider>());
+            Collider collider = GetComponent<Collider>();
+            if (collider == null)
+            {
+                collider = GetComponentInParent<Collider>();
+            }
+            if (collider != null)
+            {
+                Physics.IgnoreCollision(collision.collider, collider);
+            }
         }
     }
 
@@ -56,11 +76,15 @@ public class Item : MonoBehaviour
 
     void OnMouseEnter()
     {
-        rend.material = glow;
-        isHovering = true;
-        if (scaleCoroutine == null)
+        Debug.Log("hovering");
+        if (available)
         {
-            scaleCoroutine = StartCoroutine(PulseScale());
+            rend.material = glow;
+            isHovering = true;
+            if (scaleCoroutine == null)
+            {
+                scaleCoroutine = StartCoroutine(PulseScale());
+            }
         }
     }
 

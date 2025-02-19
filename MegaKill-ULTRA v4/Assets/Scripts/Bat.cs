@@ -5,26 +5,27 @@ using System.Collections.Generic;
 public class Bat : MonoBehaviour
 {
     public LayerMask enemyLayer;
-    public Animator animator;
     PlayerController player;
     SphereCollider hitbox;
     SoundManager soundManager;
     GameManager gameManager;
+    Renderer rend;
     bool isSwinging;
 
-    void Start()
+    void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
-        animator = GetComponent<Animator>();
         hitbox = GetComponentInChildren<SphereCollider>();
+        rend = GetComponentInChildren<Renderer>();
+        player = FindObjectOfType<PlayerController>();
     }
 
-    public void Attack()
+    public void Use()
     {
         if (!isSwinging)
         {
-            animator.SetBool("Swing", true);
+            rend.enabled = false;
             StartCoroutine(Swing());
         }
     }
@@ -32,17 +33,16 @@ public class Bat : MonoBehaviour
     IEnumerator Swing()
     {
         isSwinging = true;
+        player.swingAnim.SetTrigger("Swing");
         yield return new WaitForSeconds(0.3f);
         Hit();
         soundManager.BatSwing();
         yield return new WaitForSeconds(0.5f);
-        animator.SetBool("Swing", false);
         isSwinging = false;
     }
 
     void Hit()
     {
-
         Collider[] colliders = Physics.OverlapSphere(hitbox.bounds.center, hitbox.radius * hitbox.transform.lossyScale.x);
 
         foreach (Collider collider in colliders)
