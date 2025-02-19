@@ -18,6 +18,7 @@ public class Bat : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
         hitbox = GetComponentInChildren<SphereCollider>();
         rend = GetComponentInChildren<Renderer>();
+        player = FindObjectOfType<PlayerController>();
     }
 
     public void Use()

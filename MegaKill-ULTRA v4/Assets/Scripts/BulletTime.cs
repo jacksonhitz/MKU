@@ -17,6 +17,10 @@ public class BulletTime : MonoBehaviour
         originalSpd = Time.timeScale;
         soundManager = FindAnyObjectByType<SoundManager>();
     }
+    void Update()
+    {
+        
+    }
 
     public void Slow()
     {

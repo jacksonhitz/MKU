@@ -76,6 +76,7 @@ public class Item : MonoBehaviour
 
     void OnMouseEnter()
     {
+        Debug.Log("hovering");
         if (available)
         {
             rend.material = glow;

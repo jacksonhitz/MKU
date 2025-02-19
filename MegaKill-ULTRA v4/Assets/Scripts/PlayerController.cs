@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 movement;
     public bool isGrounded;
 
-    public enum ItemState { None, Revolver, Shotgun, Bat }
+    public enum ItemState { None, Revolver, Shotgun, Bat, Meth, Env }
     public Transform leftHand;
     public Transform rightHand;
     public MonoBehaviour leftItemScript;
@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     UX ux;
     SoundManager soundManager;
     GameManager gameManager;
+    BulletTime bulletTime;
     float health;
     float maxHealth = 100;
     public float focus;
@@ -34,15 +35,18 @@ public class PlayerController : MonoBehaviour
 
     private float pickupRange = 10f;
     bool isDead;
-    public Animator punchAnim; 
     public Animator swingAnim; 
-    public Renderer punch;
+    public Animator punchRAnim; 
+    public Animator punchLAnim; 
+    public Renderer punchR;
+    public Renderer punchL;
     public Collider meleeRange;
 
     void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>(); 
         gameManager = FindObjectOfType<GameManager>(); 
+        bulletTime = FindObjectOfType<BulletTime>(); 
         ux = FindObjectOfType<UX>(); 
         rb = GetComponent<Rigidbody>();
     }
@@ -81,16 +85,20 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftControl))
             {
-                CallRight();
+                CallLeft();
             }
             else
             {
-                CallLeft();
+                CallRight();
             }
         }
-        if (Input.GetMouseButtonDown(1))
+        else if (Input.GetMouseButtonDown(1))
         {
-            CallRight();
+            CallLeft();
+        }
+        else
+        {
+            bulletTime.Reg();
         }
     }
 
@@ -103,7 +111,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            HandleUse(leftItemScript); 
+            HandleUse(leftItemScript, true); 
         }
     }
     void CallRight()
@@ -115,7 +123,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            HandleUse(rightItemScript); 
+            HandleUse(rightItemScript, false); 
         }
     }
 
@@ -128,7 +136,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && isGrounded) rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
     }
 
-    void HandleUse(MonoBehaviour itemScript)
+    void HandleUse(MonoBehaviour itemScript, bool left)
     {
         if (itemScript != null)
         {
@@ -136,26 +144,31 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Punch();
+            Punch(left);
         }
     }
 
-    void Punch()
+    void Punch(bool left)
     {
-        
-        
-        if (punchAnim != null)
+        if (left)
         {
-            StartCoroutine(PunchOn());
-            StartCoroutine(PunchOff());
-            punchAnim.SetTrigger("Punch"); 
+            StartCoroutine(PunchOn(punchL));
+            StartCoroutine(PunchOff(punchL));
+            punchLAnim.SetTrigger("Punch"); 
+        }
+        else
+        {
+            StartCoroutine(PunchOn(punchR));
+            StartCoroutine(PunchOff(punchR));
+            punchRAnim.SetTrigger("Punch"); 
         }
     }
 
-    IEnumerator PunchOn()
+    IEnumerator PunchOn(Renderer punch)
     {
         yield return new WaitForSeconds(0.2f);
         punch.enabled = true;
+        meleeRange.enabled = true;
 
         Collider[] hitColliders = Physics.OverlapBox(meleeRange.bounds.center, meleeRange.bounds.extents, meleeRange.transform.rotation);
         foreach (Collider hit in hitColliders)
@@ -168,10 +181,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator PunchOff()
+    IEnumerator PunchOff(Renderer punch)
     {
         yield return new WaitForSeconds(0.5f);
         punch.enabled = false;
+        meleeRange.enabled = false;
+
     }
 
     void Interact()
@@ -195,8 +210,8 @@ public class PlayerController : MonoBehaviour
 
     void Pickup(GameObject item)
     {
-        if (leftItem == ItemState.None) EquipItem(item, leftHand, ref leftItem, ref leftItemScript);
-        else if (rightItem == ItemState.None) EquipItem(item, rightHand, ref rightItem, ref rightItemScript);
+        if (rightItem == ItemState.None) EquipItem(item, rightHand, ref rightItem, ref rightItemScript);
+        else if (leftItem == ItemState.None) EquipItem(item, leftHand, ref leftItem, ref leftItemScript);
     }
 
     void EquipItem(GameObject item, Transform hand, ref ItemState itemSlot, ref MonoBehaviour itemScript)
@@ -243,7 +258,15 @@ public class PlayerController : MonoBehaviour
             Rigidbody rb = itemScript.GetComponent<Rigidbody>();
             rb.isKinematic = true;
         }
-        
+        else if (item.name.Contains("Meth"))
+        {
+            item.transform.localPosition = new Vector3(0f, -0.125f, 0.7f);
+            item.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f); 
+            itemSlot = ItemState.Meth;
+            itemScript = item.GetComponent<Meth>();
+            Rigidbody rb = item.GetComponent<Rigidbody>();
+            rb.isKinematic = true;
+        }
     }
 
     void Throw(MonoBehaviour itemScript)
