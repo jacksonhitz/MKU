@@ -34,7 +34,8 @@ public class PlayerController : MonoBehaviour
 
     private float pickupRange = 10f;
     bool isDead;
-    Animator animator; 
+    public Animator punchAnim; 
+    public Animator swingAnim; 
     public Renderer punch;
     public Collider meleeRange;
 
@@ -44,7 +45,6 @@ public class PlayerController : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>(); 
         ux = FindObjectOfType<UX>(); 
         rb = GetComponent<Rigidbody>();
-        animator = GetComponentInChildren<Animator>();
     }
 
     void Start()
@@ -144,11 +144,11 @@ public class PlayerController : MonoBehaviour
     {
         
         
-        if (animator != null)
+        if (punchAnim != null)
         {
             StartCoroutine(PunchOn());
             StartCoroutine(PunchOff());
-            animator.SetTrigger("Punch"); 
+            punchAnim.SetTrigger("Punch"); 
         }
     }
 

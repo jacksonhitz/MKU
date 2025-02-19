@@ -35,7 +35,15 @@ public class Item : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("Player"))
         {
-            Physics.IgnoreCollision(collision.collider, GetComponent<Collider>());
+            Collider collider = GetComponent<Collider>();
+            if (collider == null)
+            {
+                collider = GetComponentInParent<Collider>();
+            }
+            if (collider != null)
+            {
+                Physics.IgnoreCollision(collision.collider, collider);
+            }
         }
     }
 
