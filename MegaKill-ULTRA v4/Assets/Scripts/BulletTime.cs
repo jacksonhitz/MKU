@@ -21,8 +21,15 @@ public class BulletTime : MonoBehaviour
     {
         isSlowed = true;
         StartCoroutine(LerpTime(slowSpd));
+        StartCoroutine(NewReg());
 
         soundManager.SetSpeed(SoundManager.GameSpeed.Slow);
+    }
+
+    IEnumerator NewReg()
+    {
+        yield return new WaitForSecondsRealtime(3f);
+        StartCoroutine(LerpTime(originalSpd));
     }
 
     public void Reg()

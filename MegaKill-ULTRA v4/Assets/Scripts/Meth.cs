@@ -17,10 +17,10 @@ public class Meth : MonoBehaviour
 
     public void Use()
     {
-        //if (charge > 0 && !isSlow)
-        //{
-            //StartCoroutine(SlowRoutine());
-        //}
+        if (charge > 0 && !isSlow)
+        {
+            StartCoroutine(SlowRoutine());
+        }
     }
 
     IEnumerator SlowRoutine()
