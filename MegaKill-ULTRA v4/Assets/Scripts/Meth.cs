@@ -1,26 +1,34 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Meth : MonoBehaviour
 {
     BulletTime bulletTime;
-    public float charge = 100f;
+
+    public float charge = 10f;
+    public float slowDuration = 3f;
+
+    bool isSlow;
 
     void Awake()
     {
         bulletTime = FindAnyObjectByType<BulletTime>();
     }
 
-    void Use()
+    public void Use()
     {
-        if (charge > 0)
+        if (charge > 0 && !isSlow)
         {
-            bulletTime.Slow();
+            StartCoroutine(SlowRoutine());
         }
-        else
-        {
-            bulletTime.Reg();
-        }
+    }
+
+    IEnumerator SlowRoutine()
+    {
+        isSlow = true;
+        bulletTime.Slow();
+        yield return new WaitForSeconds(slowDuration);
+        bulletTime.Reg();
+        isSlow = false;
     }
 }

@@ -12,42 +12,26 @@ public class BulletTime : MonoBehaviour
 
     private SoundManager soundManager;
 
-    float charge;
-
     void Start()
     {
         originalSpd = Time.timeScale;
         soundManager = FindAnyObjectByType<SoundManager>();
     }
-    void Update()
-    {
-        if (isSlowed)
-        {
-            
-        }
-        
-    }
-
     public void Slow()
     {
         isSlowed = true;
         StartCoroutine(LerpTime(slowSpd));
 
-        if (soundManager != null)
-        {
-            soundManager.SetSpeed(SoundManager.GameSpeed.Slow);
-        }
+        soundManager.SetSpeed(SoundManager.GameSpeed.Slow);
     }
 
     public void Reg()
     {
+        Debug.Log("reg");
         isSlowed = false;
         StartCoroutine(LerpTime(originalSpd));
 
-        if (soundManager != null)
-        {
-            soundManager.SetSpeed(SoundManager.GameSpeed.Regular);
-        }
+        soundManager.SetSpeed(SoundManager.GameSpeed.Regular);
     }
 
     private IEnumerator LerpTime(float targetTimeScale)

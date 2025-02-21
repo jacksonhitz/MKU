@@ -40,6 +40,8 @@ public class PlayerController : MonoBehaviour
     public Collider punchRange;
     public Collider batRange;
 
+    
+
     void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>(); 
@@ -100,27 +102,7 @@ public class PlayerController : MonoBehaviour
         {
             CallRight();
         }
-        RegSpeed();
     }
-
-    void RegSpeed()
-    {
-        if (rightScript is Meth)
-        {
-            if (Input.GetMouseButtonUp(1))
-            {
-                bulletTime.Reg();
-            }
-        }
-        if (leftScript is Meth)
-        {
-            if (Input.GetMouseButtonUp(0))
-            {
-                bulletTime.Reg();
-            }
-        }
-    }
-
     void CallLeft()
     {
         if (Input.GetKey(KeyCode.LeftShift))
@@ -146,7 +128,6 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
-        Debug.Log("movig");
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         float horzInput = Input.GetAxis("Horizontal");
