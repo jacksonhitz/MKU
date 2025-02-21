@@ -6,7 +6,7 @@ public class Meth : MonoBehaviour
     BulletTime bulletTime;
 
     public float charge = 10f;
-    public float slowDuration = 3f;
+    public float slowDuration = .3f;
 
     bool isSlow;
 
@@ -17,10 +17,10 @@ public class Meth : MonoBehaviour
 
     public void Use()
     {
-        if (charge > 0 && !isSlow)
-        {
-            StartCoroutine(SlowRoutine());
-        }
+        //if (charge > 0 && !isSlow)
+        //{
+            //StartCoroutine(SlowRoutine());
+        //}
     }
 
     IEnumerator SlowRoutine()

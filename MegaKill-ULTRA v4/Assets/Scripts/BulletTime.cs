@@ -20,8 +20,7 @@ public class BulletTime : MonoBehaviour
     public void Slow()
     {
         isSlowed = true;
-        //StartCoroutine(LerpTime(slowSpd));
-        Time.timeScale = 0.05f;
+        StartCoroutine(LerpTime(slowSpd));
 
         soundManager.SetSpeed(SoundManager.GameSpeed.Slow);
     }
@@ -29,8 +28,7 @@ public class BulletTime : MonoBehaviour
     public void Reg()
     {
         isSlowed = false;
-        //StartCoroutine(LerpTime(originalSpd));
-        Time.timeScale = originalSpd;
+        StartCoroutine(LerpTime(originalSpd));
 
         soundManager.SetSpeed(SoundManager.GameSpeed.Regular);
     }
