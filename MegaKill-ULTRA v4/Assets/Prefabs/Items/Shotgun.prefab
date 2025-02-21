@@ -202,6 +202,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3263512850402811207}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1995724624533423606}
   m_SourcePrefab: {fileID: 100100000, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
 --- !u!4 &5133691127593350884 stripped
 Transform:
@@ -229,6 +232,7 @@ MonoBehaviour:
   def: {fileID: 2100000, guid: 0e209ad317140724dad00467bef9123f, type: 2}
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
   rend: {fileID: 6302123836059504011}
+  thrown: 0
 --- !u!114 &6752212996552917909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,15 +245,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30dbf7e3d6b0b41ec8ce1ee9ba038f0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bullets: 6
+  shells: 2
+  reloadBackAmount: 0.2
+  reloadSpeed: 2
+  tracerDuration: 0.2
+  scaredRad: 50
   npcMask:
     serializedVersion: 2
     m_Bits: 4096
   tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
-  tracerDuration: 0.2
-  shells: 2
+  firePoint: {fileID: 1246947121164660830}
   pellets: 12
   spreadAngle: 5
-  firePoint: {fileID: 1246947121164660830}
 --- !u!54 &-981899418213429439
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -299,6 +307,29 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2224119068850967063, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
+--- !u!136 &1995724624533423606
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5509406807236734046}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.01
+  m_Height: 0.054933637
+  m_Direction: 1
+  m_Center: {x: 0.0000037658215, y: -0.0011231708, z: 0.00032168272}
 --- !u!23 &6302123836059504011 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}

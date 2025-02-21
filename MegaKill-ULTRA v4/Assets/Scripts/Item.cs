@@ -10,6 +10,8 @@ public class Item : MonoBehaviour
     public Renderer rend;
     Coroutine scaleCoroutine;
     Vector3 originalScale;
+    GameManager gameManager;
+    PlayerController player;
     float scaleDuration = 0.5f;
     bool isHovering;
     public bool thrown;
@@ -17,10 +19,14 @@ public class Item : MonoBehaviour
     void Awake()
     {
         originalScale = transform.localScale;
-        available = true;
 
-        rend = GetComponentInChildren<Renderer>();
-        def = rend.material;
+        gameManager = FindAnyObjectByType<GameManager>();
+        player = FindAnyObjectByType<PlayerController>();
+    }
+
+    public void Use()
+    {
+        player.Throw(this);
     }
 
     void OnCollisionEnter(Collision collision)
@@ -51,6 +57,8 @@ public class Item : MonoBehaviour
     {
         transform.SetParent(null);
 
+        available = true;
+
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.isKinematic = false;
 
@@ -76,66 +84,24 @@ public class Item : MonoBehaviour
 
     void OnMouseEnter()
     {
-        Debug.Log("hovering");
         if (available)
         {
-            rend.material = glow;
+            GlowMat();
             isHovering = true;
-            if (scaleCoroutine == null)
-            {
-                scaleCoroutine = StartCoroutine(PulseScale());
-            }
         }
     }
-
     void OnMouseExit()
     {
-        rend.material = def;
+        DefaultMat();
         isHovering = false;
-        if (scaleCoroutine != null)
-        {
-            StopCoroutine(scaleCoroutine);
-            scaleCoroutine = null;
-        }
-        StartCoroutine(ResetScale());
     }
 
-    IEnumerator PulseScale()
+    public void DefaultMat()
     {
-        Vector3 maxScale = originalScale * 1.2f;
-        Vector3 minScale = originalScale * 1f;
-        bool expanding = true;
-
-        while (isHovering)
-        {
-            float elapsedTime = 0f;
-            Vector3 startScale = transform.localScale;
-            Vector3 targetScale = expanding ? maxScale : minScale;
-
-            while (elapsedTime < scaleDuration && isHovering)
-            {
-                transform.localScale = Vector3.Lerp(startScale, targetScale, elapsedTime / scaleDuration);
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-
-            transform.localScale = targetScale;
-            expanding = !expanding;
-        }
+        rend.material = def;
     }
-
-    IEnumerator ResetScale()
+    public void GlowMat()
     {
-        Vector3 startScale = transform.localScale;
-        float elapsedTime = 0f;
-
-        while (elapsedTime < scaleDuration)
-        {
-            transform.localScale = Vector3.Lerp(startScale, originalScale, elapsedTime / scaleDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.localScale = originalScale;
+        rend.material = glow;
     }
 }

@@ -14,6 +14,13 @@ public class Meth : MonoBehaviour
 
     void Use()
     {
-        bulletTime.Slow();
+        if (charge > 0)
+        {
+            bulletTime.Slow();
+        }
+        else
+        {
+            bulletTime.Reg();
+        }
     }
 }

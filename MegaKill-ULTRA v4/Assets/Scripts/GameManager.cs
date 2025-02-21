@@ -15,8 +15,9 @@ public class GameManager : MonoBehaviour
     SoundManager soundManager;
     Tutorial tutorial;
 
-    List<NPCAI> civs;
     List<Enemy> enemies;
+    List<Item> items;
+    public List<GameObject> doors;
 
     public Pointer pointer;
     public CamController cam;
@@ -30,21 +31,18 @@ public class GameManager : MonoBehaviour
     public bool fadeOut;
     public bool isIntro = false;
 
-    public GameObject bat;
+    public GameObject enemyHolder;
+    public GameObject crosshair;
+    public GameObject eye;
     public GameObject cia;
     public GameObject black;
-
-    public GameObject healthBar;
-    public GameObject focusBar;
-    public GameObject ammo;
 
     public Dialogue intro;
 
     void Awake()
     {
-        civs = new List<NPCAI>(FindObjectsOfType<NPCAI>()); 
-        enemies = new List<Enemy>(); 
-        CollectEnemies(); 
+        enemies = new List<Enemy>();  
+        items = new List<Item>();  
 
         soundManager = FindObjectOfType<SoundManager>(); 
         volume = FindObjectOfType<Volume>(); 
@@ -58,6 +56,28 @@ public class GameManager : MonoBehaviour
         camMat.SetFloat("_Frequency", currentFrequency);
         camMat.SetFloat("_Amplitude", currentAmplitude);
         camMat.SetFloat("_Speed", currentSpeed);
+
+        enemyHolder.SetActive(false);
+
+        foreach (GameObject door in doors)
+        {
+            door.SetActive(true);
+        }
+    }
+
+    public void StartLvl()
+    {
+        enemyHolder.SetActive(true);
+        CollectEnemies();
+        OpenDoors();
+    }
+
+    void OpenDoors()
+    {
+        foreach (GameObject door in doors)
+        {
+            door.SetActive(false);
+        }
     }
 
     void Start()
@@ -70,6 +90,11 @@ public class GameManager : MonoBehaviour
         enemies.Clear(); 
         enemies.AddRange(FindObjectsOfType<Enemy>()); 
     }
+    void CollectItems()
+    {
+        items.Clear(); 
+        items.AddRange(FindObjectsOfType<Item>()); 
+    }
 
     public void Tutorial()
     {
@@ -78,10 +103,14 @@ public class GameManager : MonoBehaviour
 
     public void Active()
     {
-        healthBar.SetActive(true);
-        focusBar.SetActive(true);
         cia.SetActive(false);
-        bat.SetActive(true);
+        
+        eye.SetActive(true);
+        crosshair.SetActive(true);
+
+        CollectItems();
+
+        ux.FindEye();
 
         isIntro = false;
 
@@ -118,14 +147,6 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         SceneManager.LoadScene(0);
-    }
-
-    public void ScareNPCs()
-    {
-        foreach (NPCAI civ in civs)
-        {
-            civ.CallFlee(player.transform.position);
-        }
     }
 
     void Update()

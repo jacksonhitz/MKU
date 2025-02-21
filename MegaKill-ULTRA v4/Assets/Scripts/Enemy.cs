@@ -109,12 +109,12 @@ public class Enemy : MonoBehaviour
         targetPos.y = playerCollider.bounds.max.y - 0.1f;
         
         Vector3 dir = (targetPos - transform.position).normalized;
-        Ray ray = new Ray(transform.position, dir);
+        Ray enemyRay = new Ray(transform.position, dir);
         RaycastHit hit;
 
         LayerMask layerMask = LayerMask.GetMask("Ground", "Player");
 
-        if (Physics.Raycast(ray, out hit, detectionRange, layerMask))
+        if (Physics.Raycast(enemyRay, out hit, detectionRange, layerMask))
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
             {
@@ -146,7 +146,6 @@ public class Enemy : MonoBehaviour
     {
         Instantiate(blood, transform.position, Quaternion.identity);
 
-        player.focus += 10;
         gameManager.Kill(this);
 
         if(ranged)
@@ -158,12 +157,11 @@ public class Enemy : MonoBehaviour
             soundManager.EnemySFX(sfx, meleeSquelch);
         }
 
-        if(item == null)
+        if(item != null)
         {
             item.Enable();
             EnemyGun enemyGun = GetComponent<EnemyGun>();
             enemyGun.StopAllCoroutines();
-            enemyGun.enabled = false;
         }
         
         model.SetActive(false);

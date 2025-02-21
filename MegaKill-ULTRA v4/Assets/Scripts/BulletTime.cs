@@ -12,6 +12,8 @@ public class BulletTime : MonoBehaviour
 
     private SoundManager soundManager;
 
+    float charge;
+
     void Start()
     {
         originalSpd = Time.timeScale;
@@ -19,6 +21,10 @@ public class BulletTime : MonoBehaviour
     }
     void Update()
     {
+        if (isSlowed)
+        {
+            
+        }
         
     }
 

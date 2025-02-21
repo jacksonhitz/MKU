@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     public float runSpd = 5f;
     public float jumpForce = 5f;
+    public float throwForce = 50f;
     public float gravity;
     public float range;
     public Camera cam;
@@ -16,13 +17,11 @@ public class PlayerController : MonoBehaviour
     private Vector3 movement;
     public bool isGrounded;
 
-    public enum ItemState { None, Revolver, Shotgun, Bat, Meth, Env }
+    public enum ItemState { None, Item, Env }
     public Transform leftHand;
     public Transform rightHand;
-    public MonoBehaviour leftItemScript;
-    public MonoBehaviour rightItemScript;
-    public ItemState leftItem = ItemState.None;
-    public ItemState rightItem = ItemState.None;
+    public MonoBehaviour leftScript;
+    public MonoBehaviour rightScript;
 
     UX ux;
     SoundManager soundManager;
@@ -30,8 +29,6 @@ public class PlayerController : MonoBehaviour
     BulletTime bulletTime;
     float health;
     float maxHealth = 100;
-    public float focus;
-    float maxFocus = 100;
 
     private float pickupRange = 10f;
     bool isDead;
@@ -40,7 +37,8 @@ public class PlayerController : MonoBehaviour
     public Animator punchLAnim; 
     public Renderer punchR;
     public Renderer punchL;
-    public Collider meleeRange;
+    public Collider punchRange;
+    public Collider batRange;
 
     void Awake()
     {
@@ -55,13 +53,15 @@ public class PlayerController : MonoBehaviour
     {
         rb.freezeRotation = true;
         health = maxHealth;
-        focus = maxFocus;
-        ux.UpdateHealth(health, maxHealth);
-        ux.UpdateFocus(focus, maxFocus);
     }
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.X))
+        {
+            gameManager.StartLvl();
+        }
+        
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         if (isGrounded)
         {
@@ -71,7 +71,11 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity += Vector3.down * gravity * Time.deltaTime;
         }
-        HandleInput();
+
+        if (!gameManager.isIntro)
+        {
+            HandleInput();
+        }
     }
 
     void HandleInput()
@@ -85,66 +89,93 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftControl))
             {
-                CallLeft();
+                CallRight();
             }
             else
             {
-                CallRight();
+                CallLeft();
             }
         }
         else if (Input.GetMouseButtonDown(1))
         {
-            CallLeft();
+            CallRight();
         }
-        else
+        RegSpeed();
+    }
+
+    void RegSpeed()
+    {
+        if (rightScript is Meth)
         {
-            bulletTime.Reg();
+            if (Input.GetMouseButtonUp(1))
+            {
+                bulletTime.Reg();
+            }
+        }
+        if (leftScript is Meth)
+        {
+            if (Input.GetMouseButtonUp(0))
+            {
+                bulletTime.Reg();
+            }
         }
     }
 
     void CallLeft()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && leftItem != ItemState.None)
+        if (Input.GetKey(KeyCode.LeftShift))
         {
-            leftItem = ItemState.None;
-            Throw(leftItemScript);
+            Throw(leftScript);
         }
         else
         {
-            HandleUse(leftItemScript, true); 
+            HandleUse(leftScript, true); 
         }
     }
     void CallRight()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && rightItem != ItemState.None)
+        if (Input.GetKey(KeyCode.LeftShift))
         {
-            rightItem = ItemState.None;
-            Throw(rightItemScript);
+            Throw(rightScript);
         }
         else
         {
-            HandleUse(rightItemScript, false); 
+            HandleUse(rightScript, false); 
         }
     }
 
     void Move()
     {
+        Debug.Log("movig");
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
         float horzInput = Input.GetAxis("Horizontal");
         float vertInput = Input.GetAxis("Vertical");
         movement = transform.right * horzInput + transform.forward * vertInput;
+        
         rb.velocity = new Vector3(movement.x * runSpd, rb.velocity.y, movement.z * runSpd);
-        if (Input.GetKey(KeyCode.Space) && isGrounded) rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+
+        if (!isGrounded)
+        {
+            rb.AddForce(Vector3.up * gravity, ForceMode.Acceleration);
+        }
+
+        if (Input.GetKey(KeyCode.Space) && isGrounded)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+        }
     }
+
 
     void HandleUse(MonoBehaviour itemScript, bool left)
     {
-        if (itemScript != null)
-        {
-            itemScript.Invoke("Use", 0f);
-        }
-        else
+        if ((left && leftScript == null) || !left && rightScript == null)
         {
             Punch(left);
+        }
+        else if (itemScript != null)
+        {
+            itemScript.Invoke("Use", 0f);
         }
     }
 
@@ -164,16 +195,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator PunchOn(Renderer punch)
+    public void Melee(Collider range)
     {
-        yield return new WaitForSeconds(0.2f);
-        punch.enabled = true;
-        meleeRange.enabled = true;
-
-        Collider[] hitColliders = Physics.OverlapBox(meleeRange.bounds.center, meleeRange.bounds.extents, meleeRange.transform.rotation);
+        Collider[] hitColliders = Physics.OverlapBox(range.bounds.center, range.bounds.extents, range.transform.rotation);
         foreach (Collider hit in hitColliders)
         {
-            Debug.Log("punch: " + hit.tag);
             if (hit.CompareTag("NPC")) 
             {
                 hit.GetComponentInParent<Enemy>()?.Hit();
@@ -181,12 +207,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    IEnumerator PunchOn(Renderer punch)
+    {
+        yield return new WaitForSeconds(0.2f);
+        punch.enabled = true;
+        punchRange.enabled = true;
+        Melee(punchRange);
+    }
     IEnumerator PunchOff(Renderer punch)
     {
         yield return new WaitForSeconds(0.5f);
         punch.enabled = false;
-        meleeRange.enabled = false;
-
+        punchRange.enabled = false;
     }
 
     void Interact()
@@ -207,70 +239,87 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     void Pickup(GameObject item)
     {
-        if (rightItem == ItemState.None) EquipItem(item, rightHand, ref rightItem, ref rightItemScript);
-        else if (leftItem == ItemState.None) EquipItem(item, leftHand, ref leftItem, ref leftItemScript);
-    }
-
-    void EquipItem(GameObject item, Transform hand, ref ItemState itemSlot, ref MonoBehaviour itemScript)
-    {
-        item.transform.SetParent(hand);
-        item.transform.localRotation = Quaternion.identity; 
-
-        Item script = item.GetComponent<Item>();
-        script.available = false;
-
-        if (item.name.Contains("Revolver"))
+        if (leftScript == null)
         {
-            item.transform.localPosition = new Vector3(0f, -0.125f, 0.7f);
-            item.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f); 
-            itemSlot = ItemState.Revolver;
-            itemScript = item.GetComponent<Revolver>();
-            itemScript.Invoke("SetPos", 0f);
-            Rigidbody rb = itemScript.GetComponent<Rigidbody>();
-            rb.isKinematic = true;
+            InstantiateItem(item, leftHand);
+            Destroy(item);
         }
-        else if (item.name.Contains("Shotgun"))
+        else if (rightScript == null)
         {
-            item.transform.localPosition = new Vector3(0f, -0.3f, 0.8f);
-            item.transform.localRotation = Quaternion.Euler(-90f, 0f, 180f); 
-            itemSlot = ItemState.Shotgun;
-            itemScript = item.GetComponent<Shotgun>();
-            itemScript.Invoke("SetPos", 0f);
-            Rigidbody rb = itemScript.GetComponent<Rigidbody>();
-            rb.isKinematic = true;
-        }
-        else if (item.name.Contains("Bat"))
-        {
-            if (hand == leftHand)
-            {
-                item.transform.localPosition = new Vector3(-0.7f, 0.195f, 2f);
-            }
-            else
-            {
-                item.transform.localPosition = new Vector3(0.7f, 0.195f, 2f);
-            }
-            item.transform.localRotation = Quaternion.Euler(-90f, 0f, 125f); 
-            itemSlot = ItemState.Bat;
-            itemScript = item.GetComponent<Bat>();
-            Rigidbody rb = itemScript.GetComponent<Rigidbody>();
-            rb.isKinematic = true;
-        }
-        else if (item.name.Contains("Meth"))
-        {
-            item.transform.localPosition = new Vector3(0f, -0.125f, 0.7f);
-            item.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f); 
-            itemSlot = ItemState.Meth;
-            itemScript = item.GetComponent<Meth>();
-            Rigidbody rb = item.GetComponent<Rigidbody>();
-            rb.isKinematic = true;
+            InstantiateItem(item, rightHand);
+            Destroy(item);
         }
     }
 
-    void Throw(MonoBehaviour itemScript)
+    void InstantiateItem(GameObject item, Transform hand)
+{
+    if (item == null) return;
+
+    GameObject newItem = Instantiate(item, hand.position, Quaternion.identity);
+    newItem.transform.SetParent(hand.transform);
+    Rigidbody rb = newItem.GetComponent<Rigidbody>();
+    rb.isKinematic = true;
+    Item env = newItem.GetComponent<Item>();
+    env.available = false;
+    env.DefaultMat();
+
+    if (newItem.TryGetComponent<Revolver>(out var revolver))
     {
+        newItem.transform.localPosition = new Vector3(0f, -0.125f, 0.7f);
+        newItem.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f);
+
+        if (hand == leftHand) leftScript = revolver;
+        else rightScript = revolver;
+    }
+    else if (newItem.TryGetComponent<Shotgun>(out var shotgun))
+    {
+        newItem.transform.localPosition = new Vector3(0f, -0.3f, 0.8f);
+        newItem.transform.localRotation = Quaternion.Euler(-90f, 0f, 180f);
+
+        if (hand == leftHand) leftScript = shotgun;
+        else rightScript = shotgun;
+    }
+    else if (newItem.TryGetComponent<Bat>(out var bat))
+    {
+        newItem.transform.localPosition = hand == leftHand ? new Vector3(-0.7f, 0.195f, 2f) : new Vector3(0.7f, 0.195f, 2f);
+        newItem.transform.localRotation = Quaternion.Euler(-90f, 0f, 125f);
+
+        if (hand == leftHand) leftScript = bat;
+        else rightScript = bat;
+    }
+    else if (newItem.TryGetComponent<Meth>(out var meth))
+    {
+        newItem.transform.localPosition = hand == leftHand ? new Vector3(0.05f, -0.275f, 0.5f) : new Vector3(-0.05f, -0.275f, 0.5f);
+        newItem.transform.localRotation = Quaternion.Euler(-110f, hand == leftHand ? -90f : 90f, 0f);
+
+        if (hand == leftHand) leftScript = meth;
+        else rightScript = meth;
+    }
+    else
+    {
+        newItem.transform.localPosition = hand == leftHand ? new Vector3(0.05f, -0.275f, 0.5f) : new Vector3(-0.05f, -0.275f, 0.5f);
+        newItem.transform.localRotation = Quaternion.Euler(-110f, hand == leftHand ? -90f : 90f, 0f);
+
+        if (hand == leftHand) leftScript = env;
+        else rightScript = env;
+    }
+}
+
+
+    public void Throw(MonoBehaviour itemScript)
+    {
+        if (itemScript == leftScript)
+        {
+            leftScript = null;
+        }
+        else
+        {
+            rightScript = null;
+        }
+        Debug.Log("thrown");
+        
         itemScript.transform.SetParent(null);
 
         Item item = itemScript.GetComponent<Item>();
@@ -293,10 +342,14 @@ public class PlayerController : MonoBehaviour
             throwDirection = ray.direction;
         }
 
-        rb.AddForce(throwDirection * 30f, ForceMode.VelocityChange);
-        rb.AddTorque(Vector3.right * -50f, ForceMode.VelocityChange);
+        rb.AddForce(throwDirection * throwForce, ForceMode.VelocityChange);
+        rb.AddTorque(Vector3.right * -75f, ForceMode.VelocityChange);
     }
 
+    public void SwingBat()
+    {
+        swingAnim.SetTrigger("Swing");
+    }
 
     public void Hit()
     {

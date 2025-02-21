@@ -100,10 +100,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db88e1bc7ad6e4676ad52bcce1d96a1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  available: 0
-  def: {fileID: 0}
-  glow: {fileID: 0}
-  rend: {fileID: 0}
+  available: 1
+  def: {fileID: 2100000, guid: 01a7c465e988d489aa88ce8b42119b3d, type: 2}
+  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
+  rend: {fileID: 637005088604375901}
   thrown: 0
 --- !u!64 &3825381051940751318
 MeshCollider:
@@ -176,7 +176,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &-3326599580837955891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -189,3 +189,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b8c282c3abfa43c080c55608c8bfb15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  charge: 100

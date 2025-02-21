@@ -27,15 +27,16 @@ public class Bat : MonoBehaviour
         {
             rend.enabled = false;
             StartCoroutine(Swing());
+            rend.enabled = true;
         }
     }
 
     IEnumerator Swing()
     {
         isSwinging = true;
-        player.swingAnim.SetTrigger("Swing");
+        player.SwingBat();
         yield return new WaitForSeconds(0.3f);
-        Hit();
+        player.Melee(player.batRange);
         soundManager.BatSwing();
         yield return new WaitForSeconds(0.5f);
         isSwinging = false;

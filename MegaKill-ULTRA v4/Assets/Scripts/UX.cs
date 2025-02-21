@@ -7,96 +7,57 @@ public class UX : MonoBehaviour
 {
     private Camera cam;
     public Vector3 offset;
-    public Canvas canvas; 
-    public TextMeshProUGUI score;
-    public TextMeshProUGUI popup;
-    public TextMeshProUGUI ammo;
-
-    public Slider healthBar;
-    public Slider focusBar;
-
+    public Canvas screenSpace; 
+    public Canvas worldSpace; 
     private GameManager gameManager;
     private PlayerController player;
     private float initialFoV;
     private Vector3 initialCanvasScale;
 
-    public GameObject ammoIcon;
+    //public GameObject ammoIcon;
+    //public TextMeshProUGUI score;
+    public TextMeshProUGUI popup;
 
-    [SerializeField] private Image healthStateImage;
-    [SerializeField] private Sprite health100;
-    [SerializeField] private Sprite health75;
-    [SerializeField] private Sprite health50;
-    [SerializeField] private Sprite health25;
-    [SerializeField] private Sprite damagedState;
-    
-    private float damageDisplayDuration = 0.2f;
-    private float damageTimer = 0f;
-    private Sprite lastHealthState;
-    private float previousHealth;
+    [SerializeField] RawImage currentEye;
+    [SerializeField] Texture eye100Texture;
+    [SerializeField] Texture eye75Texture;
+    [SerializeField] Texture eye50Texture;
+    [SerializeField] Texture eye25Texture;
+    [SerializeField] Texture damagedEyeTexture;
 
-    //private PlayerController playerController;
-    [SerializeField] private PlayerController playerController;
+    float damagedDuration = 0.2f;
+    float damageTimer = 0f;
+    float healthPercentage;
 
-    void Start()
+    void Awake()
     {
         cam = FindObjectOfType<Camera>();
         gameManager = FindObjectOfType<GameManager>();
         player = FindAnyObjectByType<PlayerController>();
-
-        if (cam != null)
-        {
-            initialFoV = cam.fieldOfView;
-        }
         
-        if (canvas != null)
-        {
-            initialCanvasScale = canvas.transform.localScale;
-        }
+    }
 
-        {
-        healthStateImage.sprite = health100;
-        lastHealthState = health100;
-        previousHealth = 100f;  // Assume starting at full health
-        }
+    public void FindEye()
+    {
+        GameObject eyeObj = GameObject.Find("Eye");
+        currentEye = eyeObj.GetComponent<RawImage>();
+    }
 
+    void Start()
+    {
+        initialFoV = cam.fieldOfView;
+        initialCanvasScale = worldSpace.transform.localScale;
     }
 
     void Update()
     {
-        UpdateCanvasFoVScaling();
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            if (playerController != null)
-            {
-                playerController.Hit();
-            }
-            else
-            {
-                Debug.LogError("Cannot test damage - PlayerController is missing");
-            }
-        }
-
+        // UpdateCanvasFoVScaling();
     }
-
-
-    //public void UpdateHealth(float health, float maxHealth)
-    //{
-        //healthBar.value = health / maxHealth;
-    //}
-
-    public void UpdateFocus(float focus, float maxFocus)
+    void ScaleWorldSpace()
     {
-        focusBar.value = focus / maxFocus;
-    }
-    void UpdateCanvasFoVScaling()
-    {
-        if (cam != null && canvas != null)
-        {
-            float currentFoV = cam.fieldOfView;
-            float scaleFactor = currentFoV / initialFoV;
-            canvas.transform.localScale = initialCanvasScale * scaleFactor;
-        }
+        float currentFoV = cam.fieldOfView;
+        float scaleFactor = currentFoV / initialFoV;
+        worldSpace.transform.localScale = initialCanvasScale * scaleFactor;
     }
 
     public void PopUp(int newScore)
@@ -136,35 +97,25 @@ public class UX : MonoBehaviour
         // score.text = "SCORE: " + gameManager.score;
     }
 
-    
     public void UpdateHealth(float currentHealth, float maxHealth)
     {
-        float healthPercentage = (currentHealth / maxHealth) * 100;
-        
-        // Only proceed if health has decreased
-        if (currentHealth < previousHealth)
-        {
-            Sprite newHealthState = GetHealthStateSprite(healthPercentage);
-            lastHealthState = newHealthState;  // Store the new health state
-            healthStateImage.sprite = damagedState;  // Show damage sprite
-            StartCoroutine(ReturnToHealthState());   // Start timer to show new health state
-        }
-        
-        previousHealth = currentHealth;  // Update previous health
+        healthPercentage = (currentHealth / maxHealth) * 100;
+        StartCoroutine(HitEye());
+        Debug.Log("updating");
     }
     
-    private Sprite GetHealthStateSprite(float healthPercentage)
+    Texture GetEye()
     {
-        if (healthPercentage > 75) return health100;
-        if (healthPercentage > 50) return health75;
-        if (healthPercentage > 25) return health50;
-        return health25;
+        if (healthPercentage > 75) return eye100Texture;
+        if (healthPercentage > 50) return eye75Texture;
+        if (healthPercentage > 25) return eye50Texture;
+        return eye25Texture;
     }
     
-    private IEnumerator ReturnToHealthState()
+    IEnumerator HitEye()
     {
-        yield return new WaitForSeconds(damageDisplayDuration);
-        healthStateImage.sprite = lastHealthState;
+        currentEye.texture = damagedEyeTexture; 
+        yield return new WaitForSeconds(damagedDuration);
+        currentEye.texture = GetEye(); 
     }
-    
 }

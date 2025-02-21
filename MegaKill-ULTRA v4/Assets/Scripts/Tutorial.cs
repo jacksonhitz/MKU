@@ -13,6 +13,12 @@ public class Tutorial : MonoBehaviour
     public int index;
     GameManager gameManager;
     SoundManager soundManager;
+    public bool hasMoved;
+    public bool hasJumped;
+    public bool hasClicked;
+    public bool hasGrabbed;
+    public bool hasThrown;
+    public bool hasSlowed;
 
     public enum State
     {
@@ -21,9 +27,8 @@ public class Tutorial : MonoBehaviour
         Jump,
         Slow,
         Grab,
-        Swap,
         Kill,
-        Reload,
+        Throw,
         Off
     }
 
@@ -41,12 +46,9 @@ public class Tutorial : MonoBehaviour
 
     void Update()
     {
-
-
-        if (waiting && passed)
+        if (waiting)
         {
             waiting = false;
-            passed = false;
             NextLine();
         }
     }
@@ -63,20 +65,17 @@ public class Tutorial : MonoBehaviour
             case State.Jump:
                 Debug.Log("Tutorial: Jump");
                 break;
-            case State.Grab:
-                Debug.Log("Tutorial: Grab");
-                break;
-            case State.Slow:
-                Debug.Log("Tutorial: Slow");
-                break;
-            case State.Swap:
-                Debug.Log("Tutorial: Swap");
-                break;
             case State.Kill:
                 Debug.Log("Tutorial: Kill");
                 break;
-            case State.Reload:
-                Debug.Log("Tutorial: Reload");
+            case State.Grab:
+                Debug.Log("Tutorial: Grab");
+                break;
+            case State.Throw:
+                Debug.Log("Tutorial: Throw");
+                break;
+            case State.Slow:
+                Debug.Log("Tutorial: Slow");
                 break;
             case State.Off:
                 Debug.Log("Tutorial: Off");
@@ -124,6 +123,10 @@ public class Tutorial : MonoBehaviour
             index++;
             StartCoroutine(TypeLine());
         }
+        else
+        {
+            gameManager.StartLvl();
+        }
     }
     IEnumerator TypeLine()
     {
@@ -135,7 +138,7 @@ public class Tutorial : MonoBehaviour
             yield return new WaitForSeconds(textSpeed);
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(4f);
         soundManager.StopLine();
         waiting = true;
     }
