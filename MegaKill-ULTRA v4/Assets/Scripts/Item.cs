@@ -13,7 +13,7 @@ public class Item : MonoBehaviour
     GameManager gameManager;
     PlayerController player;
     float scaleDuration = 0.5f;
-    bool isHovering;
+    public bool isHovering;
     public bool thrown;
 
     void Awake()
@@ -86,22 +86,26 @@ public class Item : MonoBehaviour
     {
         if (available)
         {
-            GlowMat();
             isHovering = true;
         }
     }
     void OnMouseExit()
     {
-        DefaultMat();
         isHovering = false;
     }
 
     public void DefaultMat()
     {
-        rend.material = def;
+        if (rend != null)
+        {
+            rend.material = def;
+        }
     }
     public void GlowMat()
     {
-        rend.material = glow;
+        if (rend != null)
+        {
+            rend.material = glow;
+        }
     }
 }

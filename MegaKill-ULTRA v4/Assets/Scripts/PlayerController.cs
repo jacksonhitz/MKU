@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     public Collider punchRange;
     public Collider batRange;
 
-    
+
 
     void Awake()
     {
@@ -77,6 +77,15 @@ public class PlayerController : MonoBehaviour
         if (!gameManager.isIntro)
         {
             HandleInput();
+        }
+
+        if (Input.GetKey(KeyCode.Tab))
+        {
+            gameManager.HighlightItems();
+        }
+        else
+        {
+            gameManager.HighlightOff();
         }
     }
 

@@ -63,6 +63,8 @@ public class GameManager : MonoBehaviour
         {
             door.SetActive(true);
         }
+
+        
     }
 
     public void StartLvl()
@@ -83,6 +85,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         intro.CallDialogue();
+        CollectItems();
     }
 
     void CollectEnemies()
@@ -94,6 +97,31 @@ public class GameManager : MonoBehaviour
     {
         items.Clear(); 
         items.AddRange(FindObjectsOfType<Item>()); 
+    }
+
+    public void HighlightItems()
+    {
+        if (!isIntro)
+        {
+            foreach (Item item in items)
+            {
+                item.GlowMat();
+            }
+        }
+    }
+    public void HighlightOff()
+    {
+        foreach (Item item in items)
+        {
+            if (!item.isHovering)
+            {
+                item.DefaultMat();
+            }
+            else
+            {
+                item.GlowMat();
+            }
+        }
     }
 
     public void Tutorial()
