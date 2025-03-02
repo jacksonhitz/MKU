@@ -22,6 +22,8 @@ public class EnemyGun : MonoBehaviour
     private AudioSource sfx;
     public AudioClip gunshot;
 
+    public Animator animator;
+
     void Start()
     {
         enemy = GetComponent<Enemy>();
@@ -58,6 +60,12 @@ public class EnemyGun : MonoBehaviour
     {
         if (enemy.isDead)
         {}
+       
+        if (enemy.animator != null)
+        {
+            enemy.animator.SetTrigger("Shoot");
+        }
+
         soundManager.EnemySFX(sfx, gunshot);
 
         Collider playerCollider = player.GetComponent<Collider>();
