@@ -10,12 +10,10 @@ public class Enemy : MonoBehaviour
     GameManager gameManager;
     SoundManager soundManager;
 
-
     float detectionRange = 30f;
     float pathfindingRange = 30f;
     float attackRange;
     
-
     bool detectedPlayer = false;
     public bool los = false;
     bool isFiring = false;
@@ -24,6 +22,7 @@ public class Enemy : MonoBehaviour
     public GameObject weaponPrefab; 
     public AudioClip rangedSquelch;
     public AudioClip meleeSquelch;
+    public AudioClip stunSound;
 
     AudioSource sfx;
     public Animator animator;
@@ -33,7 +32,14 @@ public class Enemy : MonoBehaviour
 
     public Item item;
 
-    public bool isDead  = false;
+    public bool isDead = false;
+    
+    public bool isStunned = false;
+    public float stunDuration = 2f; 
+    private float stunTimer = 0f;
+    
+    // Reference to EnemyGun component
+    private EnemyGun enemyGun;
 
     void Start()
     {
@@ -43,6 +49,7 @@ public class Enemy : MonoBehaviour
         sfx = GetComponent<AudioSource>();
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
+        enemyGun = GetComponent<EnemyGun>();
         
         if (ranged)
         {
@@ -56,6 +63,22 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        // Handle stun timer
+        if (isStunned)
+        {
+            stunTimer -= Time.deltaTime;
+            if (stunTimer <= 0)
+            {
+                RecoverFromStun();
+            }
+            
+            // When stunned, ensure shooting is completely disabled
+            los = false;
+            
+            // Skip the rest of the update logic while stunned
+            return;
+        }
+
         if (!isDead)
         {
             LOS();
@@ -101,6 +124,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public bool CanShoot
+    {
+        get { return !isStunned && !isDead && los; }
+    }
+
     void LOS()
     {
         Vector3 targetPos = player.transform.position;
@@ -144,6 +172,63 @@ public class Enemy : MonoBehaviour
 
     public void Hit()
     {
+        if (isStunned)
+        {
+            KillEnemy();
+        }
+        else
+        {
+            StunEnemy();
+        }
+    }
+
+    private void StunEnemy()
+    {
+        isStunned = true;
+        stunTimer = stunDuration;
+        
+        if (stunSound != null)
+        {
+            soundManager.EnemySFX(sfx, stunSound);
+        }
+
+        if (animator != null)
+        {
+            animator.SetBool("Stunned", true);
+        }
+        
+        // Stop the enemy from moving
+        agent.ResetPath();
+        agent.isStopped = true;
+        
+        // We'll just pause the shooting behavior by setting los to false
+        // but keep the component enabled
+        los = false;
+        
+        Debug.Log("Enemy stunned for " + stunDuration + " seconds");
+    }
+    
+    private void RecoverFromStun()
+    {
+        isStunned = false;
+        
+        // Return to normal state
+        if (animator != null)
+        {
+            animator.SetBool("Stunned", false);
+        }
+        
+        // Allow movement again
+        agent.isStopped = false;
+        
+        // LOS will be rechecked in the next Update() call
+        // allowing the enemy to shoot again if they can see the player
+        
+        Debug.Log("Enemy recovered from stun");
+    }
+    
+    private void KillEnemy()
+    {
         Instantiate(blood, transform.position, Quaternion.identity);
 
         gameManager.Kill(this);
@@ -160,13 +245,14 @@ public class Enemy : MonoBehaviour
         if(item != null)
         {
             item.Enable();
-            EnemyGun enemyGun = GetComponent<EnemyGun>();
-            enemyGun.StopAllCoroutines();
+            if (enemyGun != null)
+            {
+                enemyGun.StopAllCoroutines();
+            }
         }
         
         model.SetActive(false);
         
-
         gameManager.Score(100);
         isDead = true;
 
@@ -178,5 +264,4 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }
-
 }

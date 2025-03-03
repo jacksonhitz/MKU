@@ -22,6 +22,8 @@ public class EnemyGun : MonoBehaviour
     private AudioSource sfx;
     public AudioClip gunshot;
 
+    private Enemy enemyComponent;
+
     public Animator animator;
 
     void Start()
@@ -33,11 +35,12 @@ public class EnemyGun : MonoBehaviour
         soundManager = FindObjectOfType<SoundManager>();
 
         fireRate = Random.Range(1f, 3f);
+        enemyComponent = GetComponent<Enemy>();
     }
 
     void Update()
     {
-        if (enemy.los && InRange() && !isAttacking)
+        if (enemy.los && InRange() && !isAttacking && CanShootNow())
         {
             StartCoroutine(CallAttack());
         }
@@ -47,7 +50,12 @@ public class EnemyGun : MonoBehaviour
     {
         isAttacking = true;
         yield return new WaitForSeconds(fireRate);
-        Attack();
+        
+        if (CanShootNow())
+        {
+            Attack();
+        }
+        
         isAttacking = false;
     }
 
@@ -58,8 +66,10 @@ public class EnemyGun : MonoBehaviour
 
     void Attack()
     {
-        if (enemy.isDead)
-        {}
+        if (enemy.isDead || !CanShootNow())
+        {
+            return;
+        }
        
         if (enemy.animator != null)
         {
@@ -93,7 +103,10 @@ public class EnemyGun : MonoBehaviour
 
     IEnumerator HandleTracer(TrailRenderer tracer, GameObject bullet)
     {
-        while (bullet != null)
+        float startTime = Time.time;
+        float maxDuration = 5f; // Maximum time to track the bullet
+        
+        while (bullet != null && Time.time - startTime < maxDuration)
         {
             tracer.transform.position = bullet.transform.position;
             yield return null;
@@ -101,5 +114,14 @@ public class EnemyGun : MonoBehaviour
 
         yield return new WaitForSeconds(tracer.time);
         Destroy(tracer.gameObject);
+    }
+
+    bool CanShootNow()
+    {
+        if (enemyComponent != null && !enemyComponent.CanShoot)
+        {
+            return false;
+        }
+        return true;
     }
 }
