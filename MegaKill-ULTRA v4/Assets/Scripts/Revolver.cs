@@ -42,7 +42,8 @@ public class Revolver : MonoBehaviour
 
 
    //public ParticleSystem shotgunMuzzleFlash;
-   //public ParticleSystem revolverMuzzleFlash;
+   public ParticleSystem revolverMuzzleFlash;
+   public Light gunPointLight;
 
 
    void Awake()
@@ -55,8 +56,15 @@ public class Revolver : MonoBehaviour
 
    void Start()
    {
-       originalRot = transform.localEulerAngles;
-       originalPos = transform.localPosition;
+        originalRot = transform.localEulerAngles;
+        originalPos = transform.localPosition;
+        
+        if (gunPointLight == null)
+        {
+            gunPointLight = transform.Find("FirePoint/Particle System/Point Light").GetComponent<Light>();
+        }
+        
+        if (gunPointLight) gunPointLight.enabled = false;
    }
 
 
@@ -106,7 +114,11 @@ public class Revolver : MonoBehaviour
                StartCoroutine(FireCooldown());
                Recoil();
                soundManager.RevShot();
-               //revolverMuzzleFlash?.Play();
+               revolverMuzzleFlash.Play();
+
+               if (gunPointLight) gunPointLight.enabled = true;
+               StartCoroutine(TurnOffLight(0.1f));
+
                bullets--;
                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                Hitscan(ray);
@@ -115,15 +127,34 @@ public class Revolver : MonoBehaviour
    }
 
 
-   void Hitscan(Ray ray)
-   {
-       if (Physics.Raycast(ray, out RaycastHit hit, player.range))
-       {
-           if (hit.transform.CompareTag("NPC")) hit.transform.GetComponent<Enemy>()?.Hit();
-           TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
-           StartCoroutine(HandleTracer(tracer, hit.point));
-       }
-   }
+    void Hitscan(Ray ray)
+    {
+
+        Debug.DrawRay(ray.origin, ray.direction * player.range, Color.red, 2f);
+        
+        if (Physics.Raycast(ray, out RaycastHit hit, player.range))
+        {
+            Debug.Log("Hit something: " + hit.transform.name + " with tag: " + hit.transform.tag);
+            
+            if (hit.transform.CompareTag("NPC")) 
+            {
+                Debug.Log("Attempting to call Hit() on " + hit.transform.name);
+                Enemy enemy = hit.transform.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    // Pass "gun" to indicate this is a revolver shot
+                    enemy.Hit("gun");
+                    Debug.Log("Successfully called Hit()");
+                }
+            }
+            TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
+            StartCoroutine(HandleTracer(tracer, hit.point));
+        }
+        else
+        {
+            Debug.Log("Raycast didn't hit anything");
+        }
+    }
 
    IEnumerator FireCooldown()
    {
@@ -146,6 +177,12 @@ public class Revolver : MonoBehaviour
        yield return new WaitForSeconds(tracer.time);
        Destroy(tracer.gameObject);
    }
+
+   IEnumerator TurnOffLight(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (gunPointLight) gunPointLight.enabled = false;
+    }
 }
 
 

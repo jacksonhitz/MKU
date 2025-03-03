@@ -170,9 +170,13 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void Hit()
+    public void Hit(string weaponType = "melee")
     {
-        if (isStunned)
+        if (weaponType == "gun")
+        {
+            KillEnemy();
+        }
+        else if (isStunned)
         {
             KillEnemy();
         }
