@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     UX ux;
     GameObject player;
     SoundManager soundManager;
-    Tutorial tutorial;
+    BulletTime bulletTime;
 
     List<Enemy> enemies;
     List<Item> items;
@@ -28,16 +28,17 @@ public class GameManager : MonoBehaviour
     float currentAmplitude;
     float currentSpeed;
 
-    public bool fadeOut;
-    public bool isIntro = false;
-
     public GameObject enemyHolder;
-    public GameObject crosshair;
     public GameObject eye;
     public GameObject cia;
     public GameObject black;
 
     public Dialogue intro;
+
+    public bool fadeOut;
+    public bool isIntro;
+    public bool isPaused;
+    public bool isTutorialScene;
 
     void Awake()
     {
@@ -47,8 +48,7 @@ public class GameManager : MonoBehaviour
         soundManager = FindObjectOfType<SoundManager>(); 
         volume = FindObjectOfType<Volume>(); 
         ux = FindObjectOfType<UX>(); 
-        tutorial = FindObjectOfType<Tutorial>(); 
-        intro = FindObjectOfType<Dialogue>(); 
+        bulletTime = FindObjectOfType<BulletTime>();
         player = GameObject.FindGameObjectWithTag("Player");
         cam = FindAnyObjectByType<CamController>();
 
@@ -63,29 +63,110 @@ public class GameManager : MonoBehaviour
         {
             door.SetActive(true);
         }
-
-        
     }
 
+    void Start()
+    {
+        CollectItems();
+        if (isIntro)
+        {
+            StartIntro();
+        }
+        else
+        {
+            StartLvl();
+        }
+    }
+    void Update()
+    {
+        //UpdateShader();
+
+        if (Input.GetKeyDown(KeyCode.Return) && isIntro)
+        {
+            StartLvl();
+        }
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            //Restart();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!isPaused)
+            {
+                Pause();
+            }
+            else
+            {
+                Unpause();
+            }
+        }
+    }
+    public void StartIntro()
+    {
+        ux.IntroOn();
+    }
+    public void EndIntro()
+    {
+        PlayerActive();
+        cam.CallBlink();
+    }
+    public void StartTutorial()
+    {
+        ux.TutorialOn();
+        ux.UIOn();
+    }
+
+    public void PlayerActive()
+    {
+        if (cia != null)
+        {
+            cia.SetActive(false);
+        }
+        CollectItems();
+        isIntro = false;
+    }
     public void StartLvl()
     {
+        PlayerActive();
+        
+        ux.UIOn();
         enemyHolder.SetActive(true);
         CollectEnemies();
         OpenDoors();
     }
 
+    public void Pause()
+    {
+        Time.timeScale = 0.0000000001f;
+        ux.Paused();
+        isPaused = true;
+    }
+
+    public void Unpause()
+    {
+        Time.timeScale = 1f;
+        ux.UnPaused();
+        isPaused = false;
+    }
+
+    public void Exit()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(0);
+    }
+    public void Restart()
+    {
+        Time.timeScale = 1f;
+        //SceneManager.LoadScene(2);
+    }
+
+   
     void OpenDoors()
     {
         foreach (GameObject door in doors)
         {
             door.SetActive(false);
         }
-    }
-
-    void Start()
-    {
-        intro.CallDialogue();
-        CollectItems();
     }
 
     void CollectEnemies()
@@ -123,27 +204,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-    public void Tutorial()
-    {
-        cam.CallBlink();
-    }
-
-    public void Active()
-    {
-        cia.SetActive(false);
-        
-        eye.SetActive(true);
-        crosshair.SetActive(true);
-
-        CollectItems();
-
-        ux.FindEye();
-
-        isIntro = false;
-
-        tutorial.CallDialogue();
-    }
+    
 
     public void Kill(Enemy enemy)
     {
@@ -168,56 +229,24 @@ public class GameManager : MonoBehaviour
     public void CallDead()
     {
         fadeOut = true;
-        StartCoroutine(Dead());
+        //StartCoroutine(Dead());
     }
 
     IEnumerator Dead()
     {
         yield return new WaitForSeconds(3f);
-        SceneManager.LoadScene(0);
+        Restart();
     }
 
-    void Update()
+    void UpdateShader()
     {
-        if (!fadeOut)
-        {
-            float currentLerp = camMat.GetFloat("_Lerp");
-            float capLerp = 0.01f * phase;
-            float currentFrequency = camMat.GetFloat("_Frequency");
-            float capFrequency = 1f * phase;
-            float currentAmplitude = camMat.GetFloat("_Amplitude");
-            float capAmplitude = 0.02f * phase;
-            float currentSpeed = camMat.GetFloat("_Speed");
-            float capSpeed = 0.02f * phase;
-
-            if (currentLerp < capLerp)
-            {
-                currentLerp += 0.00001f;
-                camMat.SetFloat("_Lerp", currentLerp);
-            }
-            if (currentFrequency < capFrequency)
-            {
-                currentFrequency += 0.001f;
-                camMat.SetFloat("_Frequency", currentFrequency);
-            }
-            if (currentAmplitude < capAmplitude)
-            {
-                currentAmplitude += 0.00002f;
-                camMat.SetFloat("_Amplitude", currentAmplitude);
-            }
-            if (currentSpeed < capSpeed)
-            {
-                currentSpeed += 0.00002f;
-                camMat.SetFloat("_Speed", currentSpeed);
-            }
-        }
-        else
+        if (fadeOut)
         {
             float accLerp = camMat.GetFloat("_Lerp");
             float accFrequency = camMat.GetFloat("_Frequency");
 
-            accLerp += 0.0025f;
-            accFrequency += 0.025f;
+            accLerp += 0.025f;
+            accFrequency += 0.25f;
 
             camMat.SetFloat("_Lerp", accLerp);
             camMat.SetFloat("_Frequency", accFrequency);
@@ -230,7 +259,6 @@ public class GameManager : MonoBehaviour
 
         score += newScore;
 
-        ux.Score();
         ux.PopUp(newScore);
     }
 }

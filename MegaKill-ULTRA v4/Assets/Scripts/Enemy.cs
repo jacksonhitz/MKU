@@ -172,11 +172,7 @@ public class Enemy : MonoBehaviour
 
     public void Hit(string weaponType = "melee")
     {
-        if (weaponType == "gun")
-        {
-            KillEnemy();
-        }
-        else if (isStunned)
+        if (weaponType == "gun" || isStunned)
         {
             KillEnemy();
         }
@@ -248,7 +244,7 @@ public class Enemy : MonoBehaviour
 
         if(item != null)
         {
-            item.Enable();
+            item.Dropped();
             if (enemyGun != null)
             {
                 enemyGun.StopAllCoroutines();

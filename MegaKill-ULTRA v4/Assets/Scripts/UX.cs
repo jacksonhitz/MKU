@@ -5,18 +5,23 @@ using UnityEngine.UI;
 
 public class UX : MonoBehaviour
 {
-    private Camera cam;
-    public Vector3 offset;
-    public Canvas screenSpace; 
-    public Canvas worldSpace; 
-    private GameManager gameManager;
-    private PlayerController player;
-    private float initialFoV;
-    private Vector3 initialCanvasScale;
+    Camera cam;
+    GameManager gameManager;
+    PlayerController player;
 
-    //public GameObject ammoIcon;
-    //public TextMeshProUGUI score;
-    public TextMeshProUGUI popup;
+    [SerializeField] Canvas screenSpace; 
+    [SerializeField] Canvas worldSpace; 
+    [SerializeField] Canvas menu;
+
+    [SerializeField] Dialogue tutorial;
+    [SerializeField] Dialogue intro;
+    
+    [SerializeField] GameObject crosshair;
+
+    float initialFoV;
+    Vector3 initialCanvasScale;
+
+    [SerializeField] TextMeshProUGUI popup;
 
     [SerializeField] RawImage currentEye;
     [SerializeField] Texture eye100Texture;
@@ -24,40 +29,49 @@ public class UX : MonoBehaviour
     [SerializeField] Texture eye50Texture;
     [SerializeField] Texture eye25Texture;
     [SerializeField] Texture damagedEyeTexture;
-
     float damagedDuration = 0.2f;
-    float damageTimer = 0f;
-    float healthPercentage;
+    float health;
 
     void Awake()
     {
         cam = FindObjectOfType<Camera>();
         gameManager = FindObjectOfType<GameManager>();
         player = FindAnyObjectByType<PlayerController>();
-        
     }
-
-    public void FindEye()
-    {
-        GameObject eyeObj = GameObject.Find("Eye");
-        currentEye = eyeObj.GetComponent<RawImage>();
-    }
-
     void Start()
     {
         initialFoV = cam.fieldOfView;
         initialCanvasScale = worldSpace.transform.localScale;
+        UIOff();
     }
 
-    void Update()
+    public void TutorialOn()
     {
-        // UpdateCanvasFoVScaling();
+        tutorial.CallDialogue();
     }
-    void ScaleWorldSpace()
+    public void IntroOn()
     {
-        float currentFoV = cam.fieldOfView;
-        float scaleFactor = currentFoV / initialFoV;
-        worldSpace.transform.localScale = initialCanvasScale * scaleFactor;
+        intro.CallDialogue();
+    }
+
+    public void UIOn()
+    {
+        currentEye.gameObject.SetActive(true);
+        crosshair.gameObject.SetActive(true);
+    }
+    public void UIOff()
+    {
+        currentEye.gameObject.SetActive(false);
+        crosshair.gameObject.SetActive(false);
+    }
+    public void Paused()
+    {
+        menu.gameObject.SetActive(true);
+
+    }
+    public void UnPaused()
+    {
+        menu.gameObject.SetActive(false);
     }
 
     public void PopUp(int newScore)
@@ -92,30 +106,24 @@ public class UX : MonoBehaviour
         popup.gameObject.SetActive(false);
     }
 
-    public void Score()
-    {
-        // score.text = "SCORE: " + gameManager.score;
-    }
-
     public void UpdateHealth(float currentHealth, float maxHealth)
     {
-        healthPercentage = (currentHealth / maxHealth) * 100;
+        health = (currentHealth / maxHealth) * 100;
         StartCoroutine(HitEye());
-        Debug.Log("updating");
     }
-    
-    Texture GetEye()
-    {
-        if (healthPercentage > 75) return eye100Texture;
-        if (healthPercentage > 50) return eye75Texture;
-        if (healthPercentage > 25) return eye50Texture;
-        return eye25Texture;
-    }
-    
     IEnumerator HitEye()
     {
         currentEye.texture = damagedEyeTexture; 
         yield return new WaitForSeconds(damagedDuration);
         currentEye.texture = GetEye(); 
     }
+    
+    Texture GetEye()
+    {
+        if (health> 75) return eye100Texture;
+        if (health > 50) return eye75Texture;
+        if (health > 25) return eye50Texture;
+        return eye25Texture;
+    }
+    
 }

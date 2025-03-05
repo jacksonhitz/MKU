@@ -180,9 +180,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   available: 1
+  enemyHas: 1
   def: {fileID: 2100000, guid: 9a1100b901fef4380b0c56bc3fe250ef, type: 2}
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
   rend: {fileID: 4597030342402426574}
+  isHovering: 0
   thrown: 0
 --- !u!114 &-5341596377408927065
 MonoBehaviour:
@@ -209,6 +211,8 @@ MonoBehaviour:
   firePoint: {fileID: 4897478291607519889}
   pellets: 12
   spreadAngle: 5
+  revolverMuzzleFlash: {fileID: 0}
+  gunPointLight: {fileID: 0}
 --- !u!54 &1465381587001370341
 Rigidbody:
   m_ObjectHideFlags: 0

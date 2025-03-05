@@ -10,12 +10,14 @@ public class BulletTime : MonoBehaviour
     public bool isSlowed = false;
     public bool wasSlowed = false;
 
-    private SoundManager soundManager;
+    SoundManager soundManager;
+    GameManager gameManager;
 
     void Start()
     {
         originalSpd = Time.timeScale;
         soundManager = FindAnyObjectByType<SoundManager>();
+        gameManager = FindAnyObjectByType<GameManager>();
     }
     public void Slow()
     {
@@ -40,7 +42,7 @@ public class BulletTime : MonoBehaviour
         soundManager.SetSpeed(SoundManager.GameSpeed.Regular);
     }
 
-    private IEnumerator LerpTime(float targetTimeScale)
+    IEnumerator LerpTime(float targetTimeScale)
     {
         float startScale = Time.timeScale;
         float t = 0f;

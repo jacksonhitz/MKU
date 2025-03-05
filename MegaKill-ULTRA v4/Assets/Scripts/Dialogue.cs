@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 public class Dialogue : MonoBehaviour
 {
     public TextMeshProUGUI textComponent;
-    public TextMeshProUGUI title;
-    public TextMeshProUGUI creditsBox;
+    public TextMeshProUGUI titleText;
+    public TextMeshProUGUI subheadText;
     public string[] lines;
     public float textSpeed;
 
@@ -17,6 +17,7 @@ public class Dialogue : MonoBehaviour
     GameManager gameManager;
     SoundManager soundManager;
 
+    public bool title;
     public bool intro;
     public bool tutorial;
     public bool passed;
@@ -26,10 +27,7 @@ public class Dialogue : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
 
-        if (!tutorial)
-        {
-            passed = true;
-        }
+        passed = true;
     }
 
     public void CallDialogue()
@@ -48,35 +46,26 @@ public class Dialogue : MonoBehaviour
         {
             started = true;
             textComponent.text = string.Empty;
-            creditsBox.text = string.Empty;
-            title.text = string.Empty;
+            titleText.text = string.Empty;
+            subheadText.text = string.Empty;
             StartDialogue();
         }
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            index = 100;
             textComponent.text = "";
             StopAllCoroutines();
 
-            if (!intro)
+            if (title)
             {
                 SceneManager.LoadScene(1);
             }
             else
             {
-                gameManager.Active();
+                gameManager.StartLvl();
             }
-        }
 
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            index = 100;
-        }
-
-        if (Input.GetKeyDown(KeyCode.C) && !started)
-        {
-            //SceneManager.LoadScene(2);
+            
         }
     }
 
@@ -115,26 +104,26 @@ public class Dialogue : MonoBehaviour
         {
             index++;
             StartCoroutine(TypeLine());
-
-            if (tutorial)
-            {
-                passed = false;
-            }
         }
         else
         {
-            StartCoroutine(LoadNext());
+            StartCoroutine(Done());
         }
     }
 
-    IEnumerator LoadNext()
+    IEnumerator Done()
     {
         yield return new WaitForSeconds(1f);
 
         if (intro)
         {
             textComponent.text = string.Empty;
-            gameManager.Tutorial();
+            gameManager.EndIntro();
+        }
+        else if (tutorial)
+        {
+            textComponent.text = string.Empty;
+            gameManager.StartLvl();
         }
         else
         {

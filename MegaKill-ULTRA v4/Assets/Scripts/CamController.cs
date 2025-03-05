@@ -54,14 +54,10 @@ public class CamController : MonoBehaviour
         bulletTime = FindObjectOfType<BulletTime>();
         cam = GetComponent<Camera>();
         gameManager = FindObjectOfType<GameManager>();
-
     }
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         originalFOV = cam.fieldOfView;
         originalPosition = transform.localPosition;
 
@@ -95,7 +91,7 @@ public class CamController : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         StartCoroutine(FadeOut(.5f));
         yield return new WaitForSeconds(.5f);
-        gameManager.Active();
+        gameManager.StartTutorial();
         StartCoroutine(FadeIn(.5f));
     }
 
@@ -162,6 +158,31 @@ public class CamController : MonoBehaviour
 
     void Update()
     {
+        if (gameManager != null)
+        {
+            if (!gameManager.isPaused)
+            {
+                MoveCam();
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            
+        }
+        Trip();
+    }
+
+    void MoveCam()
+    {
         float mouseX = (Input.GetAxis("Mouse X") * Time.deltaTime * sensX) / Time.timeScale;
         float mouseY = (Input.GetAxis("Mouse Y") * Time.deltaTime * sensY) / Time.timeScale;
 
@@ -172,8 +193,6 @@ public class CamController : MonoBehaviour
 
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         player.rotation = Quaternion.Euler(0f, yRotation, 0f);
-
-        Trip();
     }
 
     void Trip()

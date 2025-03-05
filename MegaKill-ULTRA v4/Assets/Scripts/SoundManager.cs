@@ -123,11 +123,13 @@ public class SoundManager : MonoBehaviour
     }
     public void NewTrack()
     {
-        trackIndex = (trackIndex + 1) % tracks.Count;
-        music.clip = tracks[trackIndex];
-        music.Play();
-
-        music.volume = (music.clip == dj || music.clip == four) ? 0.5f : 0.1f;
+        if (tracks.Count > 1)
+        {
+            trackIndex = (trackIndex + 1) % tracks.Count;
+            music.clip = tracks[trackIndex];
+            music.Play();
+            music.volume = (music.clip == dj || music.clip == four) ? 0.5f : 0.1f;
+        }
     }
 
     public void RevShot() => PlaySfx(revShot);
