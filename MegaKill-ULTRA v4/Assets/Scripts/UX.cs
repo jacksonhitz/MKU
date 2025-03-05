@@ -7,7 +7,6 @@ public class UX : MonoBehaviour
 {
     Camera cam;
     GameManager gameManager;
-    Settings settings;
 
     [SerializeField] Canvas screenSpace;
     [SerializeField] Canvas worldSpace;
@@ -44,9 +43,9 @@ public class UX : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
     }
 
-
     void Start()
     {
+        menu.gameObject.SetActive(false);
         if (worldSpace != null)
         {
             initialFoV = cam.fieldOfView;
@@ -79,13 +78,13 @@ public class UX : MonoBehaviour
 
     public void Paused()
     {
-        settings.ToggleMenuOn();
+        menu.gameObject.SetActive(true);
         UIOff();
     }
 
     public void UnPaused()
     {
-        settings.ToggleMenuOff();
+        menu.gameObject.SetActive(false);
         UIOn();
     }
 

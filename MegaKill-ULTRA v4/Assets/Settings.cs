@@ -22,7 +22,6 @@ public class Settings : MonoBehaviour
 
     public bool isTutorial;
 
-    Canvas menu;
     
     void Awake()
     {
@@ -36,13 +35,10 @@ public class Settings : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             isTutorial = true;
         }
-        GameObject menuObj = GameObject.Find("Menu");
-        menu = menuObj.GetComponent<Canvas>();
     }
 
     void Update()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
 
         if (cam == null)
         {
@@ -58,19 +54,6 @@ public class Settings : MonoBehaviour
         }
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        ToggleMenuOff();
-    }
-
-    public void ToggleMenuOn()
-    {
-        menu.enabled = true;
-    }
-    public void ToggleMenuOff()
-    {
-        menu.enabled = false;
-    }
 
     
     void Start()
@@ -87,31 +70,6 @@ public class Settings : MonoBehaviour
 
         volumeInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
         sensInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
-    }
-
-    public void Exit()
-    {
-        if (gameManager != null)
-        {
-            
-            gameManager.Exit();
-        }
-
-    }
-    public void Resume()
-    {
-        if (gameManager != null)
-        {
-            gameManager.Unpause();
-        }
-
-    }
-    public void Restart()
-    {
-        if (gameManager != null)
-        {
-            gameManager.Restart();
-        }
     }
 
 
