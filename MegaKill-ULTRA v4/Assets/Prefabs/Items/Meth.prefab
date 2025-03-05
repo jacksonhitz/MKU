@@ -101,9 +101,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   available: 1
+  enemyHas: 0
   def: {fileID: 2100000, guid: 01a7c465e988d489aa88ce8b42119b3d, type: 2}
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
   rend: {fileID: 637005088604375901}
+  isHovering: 0
   thrown: 0
 --- !u!64 &3825381051940751318
 MeshCollider:
@@ -118,7 +120,7 @@ MeshCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -190,3 +192,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   charge: 100
+  slowDuration: 0.3

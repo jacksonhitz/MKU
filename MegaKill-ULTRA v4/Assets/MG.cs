@@ -3,29 +3,27 @@ using UnityEngine;
 
 public class MG : MonoBehaviour
 {
-    float mag = 75f;
-    float spd = 5f;
-    Vector3 rot = Vector3.zero;
-
-    Vector3 originalRot;
-    Vector3 originalPos;
-
     PlayerController player;
     SoundManager soundManager;
     GameManager gameManager;
 
     public float bullets = 20f;
     public float tracerDuration = 0.2f;
+    [SerializeField] TrailRenderer tracerPrefab;
 
-    public LayerMask npcMask;
-    public TrailRenderer tracerPrefab;
-    public Transform firePoint;
+    [SerializeField] Transform firePoint;
+
     public int bulletsPerShot = 1;
-    public float spreadAngle = 1f; 
+    public float spreadAngle = 2f;
 
-    private float switchSpeed = 5f;
     private bool canFire = true;
-    float fireRate = 0.1f; 
+    float fireRate = 0.15f;
+    float mag = 5f;  
+    float spd = 5f;   
+    Vector3 rot = Vector3.zero;
+
+    Vector3 originalRot;
+    Vector3 originalPos;
 
     void Awake()
     {
@@ -43,27 +41,7 @@ public class MG : MonoBehaviour
     void Update()
     {
         rot = Vector3.Lerp(rot, Vector3.zero, spd * Time.deltaTime);
-    }
-
-    private IEnumerator SmoothTransition(Vector3 targetPos, Vector3 targetRot)
-    {
-        Vector3 startPos = transform.localPosition;
-        Vector3 startRot = transform.localEulerAngles;
-        float elapsedTime = 0f;
-        while (elapsedTime < 1f)
-        {
-            transform.localPosition = Vector3.Lerp(startPos, targetPos, elapsedTime);
-            transform.localEulerAngles = Vector3.Lerp(startRot, targetRot, elapsedTime);
-            elapsedTime += Time.deltaTime * switchSpeed;
-            yield return null;
-        }
-        transform.localPosition = targetPos;
-        transform.localEulerAngles = targetRot;
-    }
-
-    public void Recoil()
-    {
-        rot += new Vector3(-mag, 0, 0f);
+        transform.localEulerAngles = originalRot + rot;
     }
 
     public void Use()
@@ -72,7 +50,7 @@ public class MG : MonoBehaviour
         if (bullets > 0)
         {
             StartCoroutine(FireCooldown());
-            Recoil();
+            Recoil();  
             soundManager.ShotShot();
             bullets--; 
 
@@ -87,11 +65,16 @@ public class MG : MonoBehaviour
         else soundManager.ShotEmpty();
     }
 
+    public void Recoil()
+    {
+        rot += new Vector3(-mag, 0, 0f);
+    }
+
     void Hitscan(Ray ray)
     {
         if (Physics.Raycast(ray, out RaycastHit hit, player.range))
         {
-            if (hit.transform.CompareTag("NPC")) hit.transform.GetComponent<Enemy>()?.Hit();
+            if (hit.transform.CompareTag("NPC")) hit.transform.GetComponent<Enemy>()?.KillEnemy();
             TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
             StartCoroutine(HandleTracer(tracer, hit.point));
         }

@@ -13,19 +13,21 @@ public class Item : MonoBehaviour
     Vector3 originalScale;
     GameManager gameManager;
     PlayerController player;
+    Rigidbody rb;
     float scaleDuration = 0.5f;
     public bool isHovering;
     public bool thrown;
 
     void Awake()
     {
-        originalScale = transform.localScale;
-
         gameManager = FindAnyObjectByType<GameManager>();
         player = FindAnyObjectByType<PlayerController>();
+        rb = GetComponent<Rigidbody>();
     }
     void Start()
     {
+        originalScale = transform.localScale;
+        
         if (enemyHas)
         {
             CollidersOff();
@@ -39,16 +41,10 @@ public class Item : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (thrown)
-        {
-            thrown = false;
-            if (collision.gameObject.CompareTag("NPC"))
-            {
-                collision.gameObject.GetComponent<Enemy>()?.Hit();
-            }
-        }
+        Debug.Log("collision");
         if (collision.gameObject.CompareTag("Player"))
         {
+            Debug.Log("player collision");
             Collider collider = GetComponent<Collider>();
             if (collider == null)
             {
@@ -57,6 +53,16 @@ public class Item : MonoBehaviour
             if (collider != null)
             {
                 Physics.IgnoreCollision(collision.collider, collider);
+                Debug.Log("worked");
+            }
+        }
+        else if(thrown)
+        {
+            thrown = false;
+            available = true;
+            if (collision.gameObject.CompareTag("NPC"))
+            {
+                collision.gameObject.GetComponent<Enemy>()?.Hit();
             }
         }
     }
@@ -90,20 +96,30 @@ public class Item : MonoBehaviour
     {
         Debug.Log("colliders on");
         
-        available = true;
+        if(!thrown)
+        {
+            available = true;
+        }
+
+        rb.useGravity = true;
+        rb.isKinematic = false;
 
         MeshCollider meshCollider = GetComponent<MeshCollider>();
         meshCollider.enabled = true;
 
-        SphereCollider sphereCollider = GetComponent<SphereCollider>();
-        if (sphereCollider != null)
+        CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
+        if (capsuleCollider != null)
         {
-            sphereCollider.enabled = true;
+            capsuleCollider.enabled = true;
         }
     }
     public void CollidersOff()
     {
         Debug.Log("colliders off");
+        
+        available = false;
+        rb.useGravity = false;
+        rb.isKinematic = true;
         
         MeshCollider meshCollider = GetComponent<MeshCollider>();
         meshCollider.enabled = false;

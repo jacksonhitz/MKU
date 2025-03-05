@@ -100,7 +100,7 @@ MeshCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -122,9 +122,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   available: 1
+  enemyHas: 0
   def: {fileID: -876546973899608171, guid: 04df6510b45a54f9c94f96e0409641c4, type: 3}
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
   rend: {fileID: 1133426727167687175}
+  isHovering: 0
   thrown: 0
 --- !u!136 &-3833812811769112153
 CapsuleCollider:

@@ -18,6 +18,7 @@ public class Revolver : MonoBehaviour
    PlayerController player;
    SoundManager soundManager;
    GameManager gameManager;
+   Rigidbody rb;
 
 
    public float bullets = 6f;
@@ -40,8 +41,6 @@ public class Revolver : MonoBehaviour
    private bool canFire = true;
    float fireRate = .5f;
 
-
-   //public ParticleSystem shotgunMuzzleFlash;
    public ParticleSystem revolverMuzzleFlash;
    public Light gunPointLight;
 
@@ -51,13 +50,13 @@ public class Revolver : MonoBehaviour
        soundManager = FindObjectOfType<SoundManager>();
        gameManager = FindObjectOfType<GameManager>();
        player = FindObjectOfType<PlayerController>();
+       rb = GetComponent<Rigidbody>();
    }
 
 
    void Start()
    {
         originalRot = transform.localEulerAngles;
-        originalPos = transform.localPosition;
         
         if (gunPointLight == null)
         {
@@ -69,61 +68,37 @@ public class Revolver : MonoBehaviour
 
 
    void Update()
-   {
-       rot = Vector3.Lerp(rot, Vector3.zero, spd * Time.deltaTime);
-   }
-
-
-   public void StowWeapon(bool stow)
-   {
-       isStowing = stow;
-       StopAllCoroutines();
-       if (stow) StartCoroutine(SmoothTransition(stowedPos, stowedRot));
-       else StartCoroutine(SmoothTransition(originalPos, originalRot));
-   }
-
-
-   private IEnumerator SmoothTransition(Vector3 targetPos, Vector3 targetRot)
-   {
-       Vector3 startPos = transform.localPosition;
-       Vector3 startRot = transform.localEulerAngles;
-       float elapsedTime = 0f;
-       while (elapsedTime < 1f)
-       {
-           transform.localPosition = Vector3.Lerp(startPos, targetPos, elapsedTime);
-           transform.localEulerAngles = Vector3.Lerp(startRot, targetRot, elapsedTime);
-           elapsedTime += Time.deltaTime * switchSpeed;
-           yield return null;
-       }
-       transform.localPosition = targetPos;
-       transform.localEulerAngles = targetRot;
-   }
-
+    {
+        if (rb.isKinematic)
+        {
+            rot = Vector3.Lerp(rot, Vector3.zero, spd * Time.deltaTime);
+            transform.localEulerAngles = originalRot + rot;
+        }
+    }
 
    public void Recoil()
    {
        rot += new Vector3(-mag, 0, 0f);
    }
 
-
    public void Use()
    {
-       if (!canFire) return;
-       if (bullets > 0)
-           {
-               StartCoroutine(FireCooldown());
-               Recoil();
-               soundManager.RevShot();
-               revolverMuzzleFlash.Play();
+        if (!canFire) return;
+        if (bullets > 0)
+        {
+            StartCoroutine(FireCooldown());
+            Recoil();
+            soundManager.RevShot();
+            revolverMuzzleFlash.Play();
 
-               if (gunPointLight) gunPointLight.enabled = true;
-               StartCoroutine(TurnOffLight(0.1f));
+            if (gunPointLight) gunPointLight.enabled = true;
+            StartCoroutine(TurnOffLight(0.1f));
 
-               bullets--;
-               Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-               Hitscan(ray);
-           }
-           else soundManager.RevEmpty();
+            bullets--;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Hitscan(ray);
+        }
+        else soundManager.RevEmpty();
    }
 
 
@@ -138,21 +113,14 @@ public class Revolver : MonoBehaviour
             
             if (hit.transform.CompareTag("NPC")) 
             {
-                Debug.Log("Attempting to call Hit() on " + hit.transform.name);
                 Enemy enemy = hit.transform.GetComponent<Enemy>();
                 if (enemy != null)
                 {
-                    // Pass "gun" to indicate this is a revolver shot
-                    enemy.Hit("gun");
-                    Debug.Log("Successfully called Hit()");
+                    enemy.KillEnemy();
                 }
             }
             TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
             StartCoroutine(HandleTracer(tracer, hit.point));
-        }
-        else
-        {
-            Debug.Log("Raycast didn't hit anything");
         }
     }
 

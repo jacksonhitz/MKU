@@ -14,14 +14,7 @@ public class SceneLoader : MonoBehaviour
 
     void Update()
     {
-        if (!started)
-        {
-            started = true;
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                
-            }
-        }
+        
     }
 
     

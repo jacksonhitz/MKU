@@ -42,7 +42,7 @@ public class Dialogue : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !started && !intro)
+        if (Input.GetKeyDown(KeyCode.Space) && !started && title)
         {
             started = true;
             textComponent.text = string.Empty;
@@ -64,8 +64,6 @@ public class Dialogue : MonoBehaviour
             {
                 gameManager.StartLvl();
             }
-
-            
         }
     }
 

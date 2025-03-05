@@ -593,7 +593,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &445201260023503114
 MonoBehaviour:
@@ -2182,8 +2182,6 @@ Transform:
   - {fileID: 7844511859598051878}
   - {fileID: 341120549540020525}
   - {fileID: 1530803686712523655}
-  - {fileID: 5494341048367501201}
-  - {fileID: 5616502373615687844}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &927653897121514339
@@ -2201,7 +2199,7 @@ MonoBehaviour:
   runSpd: 10
   jumpForce: 10
   throwForce: 50
-  gravity: 30
+  gravity: 1000
   range: 1000
   cam: {fileID: 8782670090641956094}
   rb: {fileID: 11032616342236730}
@@ -2209,7 +2207,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  groundDistance: 0.1
+  groundDistance: 0.3
   isGrounded: 0
   leftHand: {fileID: 8417562922996485348}
   rightHand: {fileID: 9034856082317185079}
@@ -2222,6 +2220,7 @@ MonoBehaviour:
   punchL: {fileID: 1945257217751316643}
   punchRange: {fileID: 6568953379596193081}
   batRange: {fileID: 1178587613460502624}
+  rooted: 0
 --- !u!54 &11032616342236730
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2244,7 +2243,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -4335,12 +4334,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3635302600505415660}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.5}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.13, y: -2, z: 1.3991394}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 9160712685470944289}
+  m_Father: {fileID: 7844511859598051878}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1178587613460502624
 BoxCollider:
@@ -4939,10 +4938,10 @@ MonoBehaviour:
   - F TO PICKUP ITEMS
   - Q TO THROW LEFT ITEM
   - E TO THROW RIGHT ITEM
-  textSpeed: 0
+  textSpeed: 0.8
   title: 0
   intro: 0
-  tutorial: 0
+  tutorial: 1
   passed: 0
 --- !u!1 &4255572072043999295
 GameObject:
@@ -6093,12 +6092,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5139814720679628369}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.5}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.13, y: -2, z: 1.3991394}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 9160712685470944289}
+  m_Father: {fileID: 7844511859598051878}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6568953379596193081
 BoxCollider:
@@ -8092,6 +8091,8 @@ Transform:
   - {fileID: 1875202361359087266}
   - {fileID: 465019821036364427}
   - {fileID: 7613359732471090053}
+  - {fileID: 5494341048367501201}
+  - {fileID: 5616502373615687844}
   m_Father: {fileID: 9160712685470944289}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &8782670090641956094

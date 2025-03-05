@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     PlayerController player;
     GameManager gameManager;
     SoundManager soundManager;
+    EnemyManager enemyManager;
 
     float detectionRange = 30f;
     float pathfindingRange = 30f;
@@ -30,6 +31,8 @@ public class Enemy : MonoBehaviour
 
     public bool ranged;
 
+    public bool hands;
+
     public Item item;
 
     public bool isDead = false;
@@ -37,8 +40,6 @@ public class Enemy : MonoBehaviour
     public bool isStunned = false;
     public float stunDuration = 2f; 
     private float stunTimer = 0f;
-    
-    // Reference to EnemyGun component
     private EnemyGun enemyGun;
 
     void Start()
@@ -49,6 +50,7 @@ public class Enemy : MonoBehaviour
         sfx = GetComponent<AudioSource>();
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
+        enemyManager = FindObjectOfType<EnemyManager>();
         enemyGun = GetComponent<EnemyGun>();
         
         if (ranged)
@@ -63,65 +65,66 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        // Handle stun timer
-        if (isStunned)
+        if (!isDead && !hands)
         {
-            stunTimer -= Time.deltaTime;
-            if (stunTimer <= 0)
+            Move();
+            if (isStunned)
             {
-                RecoverFromStun();
-            }
-            
-            // When stunned, ensure shooting is completely disabled
-            los = false;
-            
-            // Skip the rest of the update logic while stunned
-            return;
-        }
-
-        if (!isDead)
-        {
-            LOS();
-            animator.SetFloat("spd", agent.velocity.magnitude);
-            
-            float distanceToPlayer = Vector3.Distance(transform.position, playerObj.transform.position);
-
-            if (distanceToPlayer < attackRange && los)
-            {
-                agent.ResetPath();
-                Vector3 targetPosition = playerObj.transform.position;
-                Vector3 directionToPlayer = targetPosition - transform.position;
-
-                Vector3 lookDirection = new Vector3(directionToPlayer.x, 0, directionToPlayer.z);
-                if (lookDirection != Vector3.zero)
+                stunTimer -= Time.deltaTime;
+                if (stunTimer <= 0)
                 {
-                    Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+                    RecoverFromStun();
                 }
-            }
-            else if (distanceToPlayer <= pathfindingRange && detectedPlayer)
-            {
-                Vector3 targetPosition = playerObj.transform.position;
-                Vector3 directionToPlayer = targetPosition - transform.position;
-
-                Vector3 lookDirection = new Vector3(directionToPlayer.x, 0, directionToPlayer.z);
-                if (lookDirection != Vector3.zero)
-                {
-                    Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
-                }
-
-                float clampedX = Mathf.Clamp(transform.position.x + directionToPlayer.x, targetPosition.x, targetPosition.x);
-                float clampedZ = Mathf.Clamp(transform.position.z + directionToPlayer.z, targetPosition.z, targetPosition.z);
-
-                Vector3 destination = new Vector3(clampedX, transform.position.y, clampedZ);
-                agent.SetDestination(destination);
-            }
-            else
-            {
-                agent.ResetPath();
+                
+                los = false;
+                return;
             }
         }
+    }
+
+    void Move()
+    {
+        LOS();
+        animator.SetFloat("spd", agent.velocity.magnitude);
+        
+        float distanceToPlayer = Vector3.Distance(transform.position, playerObj.transform.position);
+
+        if (distanceToPlayer < attackRange && los)
+        {
+            agent.ResetPath();
+            Vector3 targetPosition = playerObj.transform.position;
+            Vector3 directionToPlayer = targetPosition - transform.position;
+
+            Vector3 lookDirection = new Vector3(directionToPlayer.x, 0, directionToPlayer.z);
+            if (lookDirection != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+            }
+        }
+        else if (distanceToPlayer <= pathfindingRange && detectedPlayer)
+        {
+            Vector3 targetPosition = playerObj.transform.position;
+            Vector3 directionToPlayer = targetPosition - transform.position;
+
+            Vector3 lookDirection = new Vector3(directionToPlayer.x, 0, directionToPlayer.z);
+            if (lookDirection != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+            }
+
+            float clampedX = Mathf.Clamp(transform.position.x + directionToPlayer.x, targetPosition.x, targetPosition.x);
+            float clampedZ = Mathf.Clamp(transform.position.z + directionToPlayer.z, targetPosition.z, targetPosition.z);
+
+            Vector3 destination = new Vector3(clampedX, transform.position.y, clampedZ);
+            agent.SetDestination(destination);
+        }
+        else
+        {
+            agent.ResetPath();
+        }
+
     }
 
     public bool CanShoot
@@ -170,9 +173,9 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void Hit(string weaponType = "melee")
+    public void Hit()
     {
-        if (weaponType == "gun" || isStunned)
+        if (isStunned || hands)
         {
             KillEnemy();
         }
@@ -218,16 +221,12 @@ public class Enemy : MonoBehaviour
             animator.SetBool("Stunned", false);
         }
         
-        // Allow movement again
         agent.isStopped = false;
-        
-        // LOS will be rechecked in the next Update() call
-        // allowing the enemy to shoot again if they can see the player
         
         Debug.Log("Enemy recovered from stun");
     }
     
-    private void KillEnemy()
+    public void KillEnemy()
     {
         Instantiate(blood, transform.position, Quaternion.identity);
 
@@ -242,6 +241,12 @@ public class Enemy : MonoBehaviour
             soundManager.EnemySFX(sfx, meleeSquelch);
         }
 
+        if (hands)
+        {
+            player.rooted = false;
+            Debug.Log("free");
+        }
+
         if(item != null)
         {
             item.Dropped();
@@ -250,8 +255,19 @@ public class Enemy : MonoBehaviour
                 enemyGun.StopAllCoroutines();
             }
         }
-        
-        model.SetActive(false);
+
+       if (model != null)
+        {
+            model.SetActive(false);
+        }
+        else
+        {
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(false);
+            }
+        }
+
         
         gameManager.Score(100);
         isDead = true;
@@ -263,5 +279,6 @@ public class Enemy : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
+        enemyManager.CollectEnemies();
     }
 }

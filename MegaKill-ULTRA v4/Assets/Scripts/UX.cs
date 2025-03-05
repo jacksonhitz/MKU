@@ -56,22 +56,31 @@ public class UX : MonoBehaviour
 
     public void UIOn()
     {
-        currentEye.gameObject.SetActive(true);
-        crosshair.gameObject.SetActive(true);
+        worldSpace.gameObject.SetActive(true);
+        if(!gameManager.isIntro)
+        {
+            screenSpace.gameObject.SetActive(true);
+            crosshair.gameObject.SetActive(true);
+        }
     }
     public void UIOff()
     {
-        currentEye.gameObject.SetActive(false);
+        if (gameManager.isPaused)
+        {
+            worldSpace.gameObject.SetActive(false);
+        }
+        screenSpace.gameObject.SetActive(false);
         crosshair.gameObject.SetActive(false);
     }
     public void Paused()
     {
         menu.gameObject.SetActive(true);
-
+        UIOff();
     }
     public void UnPaused()
     {
         menu.gameObject.SetActive(false);
+        UIOn();
     }
 
     public void PopUp(int newScore)

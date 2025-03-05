@@ -45,6 +45,12 @@ public class SoundManager : MonoBehaviour
     public AudioClip shotShot;
     public AudioClip shotReload;
     public AudioClip shotEmpty;
+
+    public AudioClip punch;
+    public AudioClip toss;
+    public AudioClip playerHit;
+    public AudioClip enemyHit;
+    public AudioClip enemyDeath;
     
     public AudioClip batSwing;
 
@@ -57,7 +63,6 @@ public class SoundManager : MonoBehaviour
     public AudioClip squelch;
 
     GameManager gameManager;
-    Dialogue intro;
     public bool controller;
 
     List<AudioClip> tracks;
@@ -73,8 +78,6 @@ public class SoundManager : MonoBehaviour
     void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
-        intro = FindObjectOfType<Dialogue>();
-
 
         tracks = new List<AudioClip> { title, acid, witch, could, dj, all, hott, threes, life, real, four };
         lines = new List<AudioClip> { line1, line2, line3, line4, line5, line6, line7, };
@@ -103,6 +106,21 @@ public class SoundManager : MonoBehaviour
         source.clip = sound;
         source.pitch = currentSpeed == GameSpeed.Slow ? 0.75f : 1f;
         source.Play();  
+    }
+
+    public void Paused()
+    {
+        music.Stop();
+        sfx.Stop();
+        enemySfx.Stop();
+        dialogue.Stop();
+    }
+    public void UnPaused()
+    {
+        music.Play();
+        sfx.Play();
+        enemySfx.Play();
+        dialogue.Play();
     }
 
     public void StopMusic()

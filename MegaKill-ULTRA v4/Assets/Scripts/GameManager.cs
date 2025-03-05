@@ -13,9 +13,9 @@ public class GameManager : MonoBehaviour
     UX ux;
     GameObject player;
     SoundManager soundManager;
+    EnemyManager enemyManager;
     BulletTime bulletTime;
 
-    List<Enemy> enemies;
     List<Item> items;
     public List<GameObject> doors;
 
@@ -42,10 +42,10 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        enemies = new List<Enemy>();  
         items = new List<Item>();  
 
         soundManager = FindObjectOfType<SoundManager>(); 
+        enemyManager = FindObjectOfType<EnemyManager>();
         volume = FindObjectOfType<Volume>(); 
         ux = FindObjectOfType<UX>(); 
         bulletTime = FindObjectOfType<BulletTime>();
@@ -93,12 +93,21 @@ public class GameManager : MonoBehaviour
         {
             if (!isPaused)
             {
-                Pause();
+                //Pause();
             }
             else
             {
-                Unpause();
+                //Unpause();
             }
+        }
+
+        if (Input.GetKey(KeyCode.Tab))
+        {
+            HighlightAll();
+        }
+        else
+        {
+            HighlightItem();
         }
     }
     public void StartIntro()
@@ -128,24 +137,25 @@ public class GameManager : MonoBehaviour
     public void StartLvl()
     {
         PlayerActive();
-        
+
         ux.UIOn();
-        enemyHolder.SetActive(true);
-        CollectEnemies();
+        enemyManager.Active();
         OpenDoors();
     }
 
     public void Pause()
     {
+        isPaused = true;
         Time.timeScale = 0.0000000001f;
         ux.Paused();
-        isPaused = true;
+        soundManager.Paused();
     }
 
     public void Unpause()
     {
         Time.timeScale = 1f;
         ux.UnPaused();
+        soundManager.UnPaused();
         isPaused = false;
     }
 
@@ -169,18 +179,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void CollectEnemies()
-    {
-        enemies.Clear(); 
-        enemies.AddRange(FindObjectsOfType<Enemy>()); 
-    }
-    void CollectItems()
+    public void CollectItems()
     {
         items.Clear(); 
         items.AddRange(FindObjectsOfType<Item>()); 
     }
 
-    public void HighlightItems()
+    public void HighlightAll()
     {
         if (!isIntro)
         {
@@ -190,11 +195,11 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    public void HighlightOff()
+    public void HighlightItem()
     {
         foreach (Item item in items)
         {
-            if (!item.isHovering)
+            if (!item.isHovering || !item.available)
             {
                 item.DefaultMat();
             }
@@ -209,27 +214,11 @@ public class GameManager : MonoBehaviour
     public void Kill(Enemy enemy)
     {
         phase++;
-        enemies.Remove(enemy);
-
-        if (enemies.Count <= 2)
-        {
-            StartCoroutine(CleanUp());
-        }
-        else if (enemies.Count <= 1)
-        {
-            CallDead();
-        }
     }
 
-    IEnumerator CleanUp()
-    {
-        yield return new WaitForSeconds(10f);
-        CallDead();
-    }
     public void CallDead()
     {
         fadeOut = true;
-        //StartCoroutine(Dead());
     }
 
     IEnumerator Dead()

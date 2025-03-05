@@ -58,43 +58,16 @@ public class Shotgun : MonoBehaviour
        originalRot = transform.localEulerAngles;
        originalPos = transform.localPosition;
    }
-
-
    void Update()
    {
        rot = Vector3.Lerp(rot, Vector3.zero, spd * Time.deltaTime);
-   }
-
-
-   public void StowWeapon(bool stow)
-   {
-       isStowing = stow;
-       StopAllCoroutines();
-       if (stow) StartCoroutine(SmoothTransition(stowedPos, stowedRot));
-       else StartCoroutine(SmoothTransition(originalPos, originalRot));
-   }
-
-
-   private IEnumerator SmoothTransition(Vector3 targetPos, Vector3 targetRot)
-   {
-       Vector3 startPos = transform.localPosition;
-       Vector3 startRot = transform.localEulerAngles;
-       float elapsedTime = 0f;
-       while (elapsedTime < 1f)
-       {
-           transform.localPosition = Vector3.Lerp(startPos, targetPos, elapsedTime);
-           transform.localEulerAngles = Vector3.Lerp(startRot, targetRot, elapsedTime);
-           elapsedTime += Time.deltaTime * switchSpeed;
-           yield return null;
-       }
-       transform.localPosition = targetPos;
-       transform.localEulerAngles = targetRot;
+       transform.localEulerAngles = originalRot + rot;
    }
 
 
    public void Recoil()
    {
-       rot += new Vector3(-mag, 0, 0f);
+       rot += new Vector3(mag, 0, 0f);
    }
 
 
@@ -124,7 +97,7 @@ public class Shotgun : MonoBehaviour
    {
        if (Physics.Raycast(ray, out RaycastHit hit, player.range))
        {
-           if (hit.transform.CompareTag("NPC")) hit.transform.GetComponent<Enemy>()?.Hit();
+           if (hit.transform.CompareTag("NPC")) hit.transform.GetComponent<Enemy>()?.KillEnemy();
            TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
            StartCoroutine(HandleTracer(tracer, hit.point));
        }

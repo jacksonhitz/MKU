@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     float health;
     float maxHealth = 100;
 
-    private float pickupRange = 10f;
+    float pickupRange = 10f;
     bool isDead;
     public Animator swingAnim; 
     public Animator punchRAnim; 
@@ -40,7 +40,9 @@ public class PlayerController : MonoBehaviour
     public Collider punchRange;
     public Collider batRange;
 
-
+    public bool rooted;
+    private bool canPunch = true;
+    private float punchCooldown = 0.5f;
 
     void Awake()
     {
@@ -59,9 +61,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if (isGrounded)
+        if (isGrounded && !rooted)
         {
             Move();
         }
@@ -74,15 +75,6 @@ public class PlayerController : MonoBehaviour
         {
             HandleInput();
         }
-
-        if (Input.GetKey(KeyCode.Tab))
-        {
-            gameManager.HighlightItems();
-        }
-        else
-        {
-            gameManager.HighlightOff();
-        }
     }
 
     void HandleInput()
@@ -92,7 +84,7 @@ public class PlayerController : MonoBehaviour
             Interact();
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             if (Input.GetKey(KeyCode.LeftControl))
             {
@@ -103,7 +95,7 @@ public class PlayerController : MonoBehaviour
                 HandleUse(leftScript, true); 
             }
         }
-        else if (Input.GetMouseButtonDown(1))
+        else if (Input.GetMouseButton(1))
         {
             HandleUse(rightScript, false); 
         }
@@ -136,30 +128,19 @@ public class PlayerController : MonoBehaviour
     }
     void Move()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
         float horzInput = Input.GetAxis("Horizontal");
         float vertInput = Input.GetAxis("Vertical");
         movement = transform.right * horzInput + transform.forward * vertInput;
         
         rb.velocity = new Vector3(movement.x * runSpd, rb.velocity.y, movement.z * runSpd);
-
-        if (!isGrounded)
-        {
-            rb.AddForce(Vector3.up * gravity, ForceMode.Acceleration);
-        }
-
-        if (Input.GetKey(KeyCode.Space) && isGrounded)
-        {
-            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
-        }
     }
-
-
-
 
     void Punch(bool left)
     {
+        if (!canPunch) return;
+        canPunch = false;
+        StartCoroutine(PunchCooldown());
+
         if (left)
         {
             StartCoroutine(PunchOn(punchL));
@@ -172,6 +153,12 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(PunchOff(punchR));
             punchRAnim.SetTrigger("Punch"); 
         }
+    }
+
+    IEnumerator PunchCooldown()
+    {
+        yield return new WaitForSeconds(punchCooldown);
+        canPunch = true;
     }
 
     public void Melee(Collider range)
@@ -199,6 +186,7 @@ public class PlayerController : MonoBehaviour
         punch.enabled = false;
         punchRange.enabled = false;
     }
+
 
     void Interact()
     {
@@ -238,9 +226,17 @@ public class PlayerController : MonoBehaviour
 
         GameObject newItem = Instantiate(item, hand.position, Quaternion.identity);
         newItem.transform.SetParent(hand.transform);
-        Rigidbody rb = newItem.GetComponent<Rigidbody>();
-        rb.isKinematic = true;
+
+        Transform firePoint = newItem.transform.Find("FirePoint");
+        if(firePoint != null)
+        {
+            firePoint.SetParent(hand);
+            firePoint.localPosition = new Vector3(0f, -0.15f, 2f);
+            firePoint.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+        }
+
         Item env = newItem.GetComponent<Item>();
+        gameManager.CollectItems();
         env.CollidersOff();
         env.DefaultMat();
 
@@ -310,11 +306,6 @@ public class PlayerController : MonoBehaviour
         itemScript.transform.SetParent(null);
 
         Item item = itemScript.GetComponent<Item>();
-        item.thrown = true;
-        item.CollidersOn();
-
-        Rigidbody rb = itemScript.GetComponent<Rigidbody>();
-        rb.isKinematic = false;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -329,8 +320,13 @@ public class PlayerController : MonoBehaviour
             throwDirection = ray.direction;
         }
 
-        rb.AddForce(throwDirection * throwForce, ForceMode.VelocityChange);
-        rb.AddTorque(Vector3.right * -75f, ForceMode.VelocityChange);
+        item.thrown = true;
+        item.CollidersOn();
+
+        Rigidbody itemRb = itemScript.GetComponent<Rigidbody>();
+        itemRb.AddForce(throwDirection * throwForce, ForceMode.VelocityChange);
+        itemRb.AddTorque(Vector3.right * -75f, ForceMode.VelocityChange);
+
     }
 
     public void SwingBat()
