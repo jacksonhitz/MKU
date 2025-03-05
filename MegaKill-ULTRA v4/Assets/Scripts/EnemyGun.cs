@@ -37,8 +37,6 @@
 
             fireRate = Random.Range(1f, 3f);
             enemyComponent = GetComponent<Enemy>();
-
-            Debug.Log("Enemy " + gameObject.name + " muzzle flash status: " + (muzzleFlash != null ? "FOUND" : "NULL"));
         }
 
         void Update()
@@ -83,16 +81,11 @@
 
             if (muzzleFlash != null)
             {
-                Debug.Log("Attempting to play enemy muzzle flash");
                 muzzleFlash.Play();
-                Debug.Log("Particle count after Play(): " + muzzleFlash.particleCount);
-                // Force the particle system to emit right now
                 muzzleFlash.Emit(10);
-                Debug.Log("Particle count after Emit(): " + muzzleFlash.particleCount);
             }
             else
             {
-                Debug.Log("Enemy muzzle flash reference is null!");
             }
 
             Collider playerCollider = player.GetComponent<Collider>();

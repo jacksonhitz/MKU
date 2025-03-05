@@ -1,21 +1,20 @@
-using UnityEngine;
 using TMPro;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine;
 
 public class UX : MonoBehaviour
 {
     Camera cam;
     GameManager gameManager;
-    PlayerController player;
 
-    [SerializeField] Canvas screenSpace; 
-    [SerializeField] Canvas worldSpace; 
+    [SerializeField] Canvas screenSpace;
+    [SerializeField] Canvas worldSpace;
     [SerializeField] Canvas menu;
 
     [SerializeField] Dialogue tutorial;
     [SerializeField] Dialogue intro;
-    
+
     [SerializeField] GameObject crosshair;
 
     float initialFoV;
@@ -25,19 +24,26 @@ public class UX : MonoBehaviour
 
     [SerializeField] RawImage currentEye;
     [SerializeField] Texture eye100Texture;
-    [SerializeField] Texture eye75Texture;
-    [SerializeField] Texture eye50Texture;
-    [SerializeField] Texture eye25Texture;
-    [SerializeField] Texture damagedEyeTexture;
+    [SerializeField] Texture eye80Texture;
+    [SerializeField] Texture eye60Texture;
+    [SerializeField] Texture eye40Texture;
+    [SerializeField] Texture eye20Texture;
+    [SerializeField] Texture eye10Texture;
+    [SerializeField] Texture eyeFlashTexture;
+    [SerializeField] Texture eyeHurtTexture;
     float damagedDuration = 0.2f;
     float health;
+    bool isFlashing = false;
+
+    // Reference to the currently running coroutine
+    Coroutine currentCoroutine;
 
     void Awake()
     {
         cam = FindObjectOfType<Camera>();
         gameManager = FindObjectOfType<GameManager>();
-        player = FindAnyObjectByType<PlayerController>();
     }
+
     void Start()
     {
         initialFoV = cam.fieldOfView;
@@ -57,12 +63,13 @@ public class UX : MonoBehaviour
     public void UIOn()
     {
         worldSpace.gameObject.SetActive(true);
-        if(!gameManager.isIntro)
+        if (!gameManager.isIntro)
         {
             screenSpace.gameObject.SetActive(true);
             crosshair.gameObject.SetActive(true);
         }
     }
+
     public void UIOff()
     {
         if (gameManager.isPaused)
@@ -72,6 +79,7 @@ public class UX : MonoBehaviour
         screenSpace.gameObject.SetActive(false);
         crosshair.gameObject.SetActive(false);
     }
+
     public void Paused()
     {
         menu.gameObject.SetActive(true);
@@ -118,21 +126,46 @@ public class UX : MonoBehaviour
     public void UpdateHealth(float currentHealth, float maxHealth)
     {
         health = (currentHealth / maxHealth) * 100;
-        StartCoroutine(HitEye());
+
+        StopAllCoroutines();
+        StartCoroutine(HurtEye());
     }
-    IEnumerator HitEye()
+
+    IEnumerator HurtEye()
     {
-        currentEye.texture = damagedEyeTexture; 
-        yield return new WaitForSeconds(damagedDuration);
-        currentEye.texture = GetEye(); 
+        Debug.Log("EYE CALLED");
+        
+        Texture previousEye = currentEye.texture;
+        currentEye.texture = eyeHurtTexture;
+        yield return new WaitForSeconds(0.2f);
+        currentEye.texture = previousEye;
+
+        if (health > 10)
+        {
+            currentEye.texture = GetEye();
+        }
+        else
+        {
+            StartCoroutine(FlashEye());
+        }
     }
-    
+
+    IEnumerator FlashEye()
+    {
+        currentEye.texture = eyeFlashTexture;
+        yield return new WaitForSeconds(0.2f);
+        currentEye.texture = eye10Texture;
+        yield return new WaitForSeconds(0.2f);
+        StartCoroutine(HurtEye());
+    }
+
     Texture GetEye()
     {
-        if (health> 75) return eye100Texture;
-        if (health > 50) return eye75Texture;
-        if (health > 25) return eye50Texture;
-        return eye25Texture;
+        if (health > 80) return eye100Texture;
+        if (health > 60) return eye80Texture;
+        if (health > 40) return eye60Texture;
+        if (health > 20) return eye40Texture;
+        if (health > 10) return eye20Texture;
+        return eye10Texture;
     }
-    
 }

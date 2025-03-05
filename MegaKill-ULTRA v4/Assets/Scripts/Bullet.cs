@@ -3,9 +3,7 @@ using System.Collections;
 
 public class Bullet : MonoBehaviour
 {
-    public float damage = 10f;
     public float lifeTime = 5f;
-    public LayerMask hitMask;
 
     public Vector3 direction;
     public float vel;
@@ -33,15 +31,15 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("hit called");
+        Debug.Log("bullet hit: " + collider);
 
         if (collider.CompareTag("Player"))
         {
-            Debug.Log("player hit");
             PlayerController playerController = collider.GetComponentInParent<PlayerController>();
             if (playerController != null)
             {
                 playerController.Hit();
+                Debug.Log("player collider hit");
             }
         }
     }

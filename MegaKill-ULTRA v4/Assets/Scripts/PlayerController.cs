@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
 
     public bool rooted;
     private bool canPunch = true;
-    private float punchCooldown = 0.5f;
+    private float punchCooldown = .75f;
 
     void Awake()
     {
@@ -231,7 +231,7 @@ public class PlayerController : MonoBehaviour
         if(firePoint != null)
         {
             firePoint.SetParent(hand);
-            firePoint.localPosition = new Vector3(0f, -0.15f, 2f);
+            firePoint.localPosition = new Vector3(0f, -0.15f, 1.5f);
             firePoint.localRotation = new Quaternion(0f, 0f, 0f, 0f);
         }
 
@@ -336,6 +336,8 @@ public class PlayerController : MonoBehaviour
 
     public void Hit()
     {
+        Debug.Log("PLAYER HIT");
+        
         health -= 4;
         ux.UpdateHealth(health, maxHealth);
 

@@ -18,7 +18,7 @@ public class MG : MonoBehaviour
 
     private bool canFire = true;
     float fireRate = 0.15f;
-    float mag = 5f;  
+    float mag = 20f;  
     float spd = 5f;   
     Vector3 rot = Vector3.zero;
 

@@ -151,14 +151,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullets: 20
   tracerDuration: 0.2
-  npcMask:
-    serializedVersion: 2
-    m_Bits: 4096
   tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
+  firePoint: {fileID: 3090975949641924395}
   bulletsPerShot: 1
   spreadAngle: 10
-  mag: 75
-  spd: 5
 --- !u!114 &7556151795871662331
 MonoBehaviour:
   m_ObjectHideFlags: 0
