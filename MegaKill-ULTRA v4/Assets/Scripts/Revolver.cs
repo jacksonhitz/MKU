@@ -19,6 +19,8 @@ public class Revolver : MonoBehaviour
    SoundManager soundManager;
    GameManager gameManager;
    Rigidbody rb;
+   UX ux;
+    
 
 
    public float bullets = 6f;
@@ -50,6 +52,7 @@ public class Revolver : MonoBehaviour
        soundManager = FindObjectOfType<SoundManager>();
        gameManager = FindObjectOfType<GameManager>();
        player = FindObjectOfType<PlayerController>();
+       ux = FindObjectOfType<UX>();
        rb = GetComponent<Rigidbody>();
    }
 
@@ -98,7 +101,11 @@ public class Revolver : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Hitscan(ray);
         }
-        else soundManager.RevEmpty();
+        else
+        {
+            soundManager.RevEmpty();
+            ux.PopUp("EMPTY");
+        } 
    }
 
 

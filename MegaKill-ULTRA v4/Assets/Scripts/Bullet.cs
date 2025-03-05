@@ -1,25 +1,24 @@
 using UnityEngine;
-using System.Collections;
 
 public class Bullet : MonoBehaviour
 {
     public float lifeTime = 5f;
-
     public Vector3 direction;
     public float vel;
-    BulletTime bulletTime;
-    Rigidbody rb;
+    private BulletTime bulletTime;
+    private Rigidbody rb;
 
     void Start()
     {
         Destroy(gameObject, lifeTime);
         bulletTime = FindAnyObjectByType<BulletTime>();
         rb = GetComponent<Rigidbody>();
+        Debug.Log("bulletSpawned");
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        if (bulletTime.isSlowed)
+        if (bulletTime != null && bulletTime.isSlowed)
         {
             rb.velocity = direction * (vel * 0.25f);
         }
@@ -29,18 +28,20 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider collider)
+    void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("bullet hit: " + collider);
-
-        if (collider.CompareTag("Player"))
+        Debug.Log("bullet hit: " + collision.gameObject.name);
+        
+        if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerController playerController = collider.GetComponentInParent<PlayerController>();
+            PlayerController playerController = collision.gameObject.GetComponentInParent<PlayerController>();
             if (playerController != null)
             {
                 playerController.Hit();
                 Debug.Log("player collider hit");
             }
         }
+        
+        Destroy(gameObject); 
     }
 }

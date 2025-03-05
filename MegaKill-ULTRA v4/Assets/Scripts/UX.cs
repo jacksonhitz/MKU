@@ -1,12 +1,13 @@
-using TMPro;
 using System.Collections;
-using UnityEngine.UI;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class UX : MonoBehaviour
 {
     Camera cam;
     GameManager gameManager;
+    Settings settings;
 
     [SerializeField] Canvas screenSpace;
     [SerializeField] Canvas worldSpace;
@@ -35,7 +36,6 @@ public class UX : MonoBehaviour
     float health;
     bool isFlashing = false;
 
-    // Reference to the currently running coroutine
     Coroutine currentCoroutine;
 
     void Awake()
@@ -44,21 +44,18 @@ public class UX : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
     }
 
+
     void Start()
     {
-        initialFoV = cam.fieldOfView;
-        initialCanvasScale = worldSpace.transform.localScale;
-        UIOff();
+        if (worldSpace != null)
+        {
+            initialFoV = cam.fieldOfView;
+            initialCanvasScale = worldSpace.transform.localScale;
+        }
     }
 
-    public void TutorialOn()
-    {
-        tutorial.CallDialogue();
-    }
-    public void IntroOn()
-    {
-        intro.CallDialogue();
-    }
+    public void TutorialOn() => tutorial.CallDialogue();
+    public void IntroOn() => intro.CallDialogue();
 
     public void UIOn()
     {
@@ -82,45 +79,59 @@ public class UX : MonoBehaviour
 
     public void Paused()
     {
-        menu.gameObject.SetActive(true);
+        settings.ToggleMenuOn();
         UIOff();
     }
+
     public void UnPaused()
     {
-        menu.gameObject.SetActive(false);
+        settings.ToggleMenuOff();
         UIOn();
     }
 
-    public void PopUp(int newScore)
+    public void PopUp(string text)
     {
-        popup.gameObject.SetActive(true);
+        if (currentCoroutine != null)
+        {
+            if (popup.text == text)
+            {
+                return;
+            }
+            else
+            {
+                StopCoroutine(currentCoroutine);
+                popup.text = "";
+                currentCoroutine = null;
+            }
+        }
 
-        popup.text = "+" + newScore;
+        popup.text = text;
+        RectTransform popupTransform = popup.GetComponent<RectTransform>();
 
-        float randomX = Random.Range(-1000f, 1000f);
-        float randomY = Random.Range(-350f, 350f);
+        float randomX = Random.Range(-0.3f, 0.5f);
+        float randomY = Random.Range(-0.1f, 0.2f);
 
-        popup.rectTransform.anchoredPosition = new Vector2(randomX, randomY);
-
-        StartCoroutine(ShowPopup());
+        popupTransform.anchoredPosition = new Vector2(randomX, randomY);
+        currentCoroutine = StartCoroutine(PopupEffect(popupTransform));
     }
 
-    IEnumerator ShowPopup()
+    IEnumerator PopupEffect(RectTransform popupTransform)
     {
-        float duration = 0.5f;
+        float duration = 1f;
         float elapsedTime = 0f;
-
-        Vector3 startPosition = popup.rectTransform.anchoredPosition;
-        Vector3 targetPosition = startPosition + new Vector3(0, 50, 0);
+        Vector2 startPos = popupTransform.anchoredPosition;
+        Vector2 endPos = startPos + new Vector2(0, .1f);
 
         while (elapsedTime < duration)
         {
             float t = elapsedTime / duration;
-            popup.rectTransform.anchoredPosition = Vector3.Lerp(startPosition, targetPosition, t);
+            popupTransform.anchoredPosition = Vector2.Lerp(startPos, endPos, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        popup.gameObject.SetActive(false);
+
+        popup.text = "";
+        currentCoroutine = null;
     }
 
     public void UpdateHealth(float currentHealth, float maxHealth)

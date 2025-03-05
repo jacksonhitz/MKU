@@ -6,8 +6,7 @@ using UnityEngine.Rendering.Universal;
 
 public class CamController : MonoBehaviour
 {
-    public float sensX = 100f;
-    public float sensY = 100f;
+    public float sens;
     public Transform player;
 
     private float xRotation;
@@ -42,6 +41,7 @@ public class CamController : MonoBehaviour
     public float swayIntensity = 0.1f;
     BulletTime bulletTime;
     GameManager gameManager;
+    Settings settings;
 
     public void UpPhase(int phase)
     {
@@ -54,10 +54,13 @@ public class CamController : MonoBehaviour
         bulletTime = FindObjectOfType<BulletTime>();
         cam = GetComponent<Camera>();
         gameManager = FindObjectOfType<GameManager>();
+        settings = FindObjectOfType<Settings>();
     }
 
     void Start()
     {
+        sens = settings.sens;
+        
         originalFOV = cam.fieldOfView;
         originalPosition = transform.localPosition;
 
@@ -183,8 +186,8 @@ public class CamController : MonoBehaviour
 
     void MoveCam()
     {
-        float mouseX = (Input.GetAxis("Mouse X") * Time.deltaTime * sensX) / Time.timeScale;
-        float mouseY = (Input.GetAxis("Mouse Y") * Time.deltaTime * sensY) / Time.timeScale;
+        float mouseX = (Input.GetAxis("Mouse X") * Time.deltaTime * sens) / Time.timeScale;
+        float mouseY = (Input.GetAxis("Mouse Y") * Time.deltaTime * sens) / Time.timeScale;
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -89.9f, 89.9f);

@@ -36,7 +36,7 @@ public class Item : MonoBehaviour
 
     public void Use()
     {
-        player.Throw(this);
+        
     }
 
     void OnCollisionEnter(Collision collision)

@@ -140,7 +140,6 @@ public class PlayerController : MonoBehaviour
         if (!canPunch) return;
         canPunch = false;
         StartCoroutine(PunchCooldown());
-
         if (left)
         {
             StartCoroutine(PunchOn(punchL));
@@ -176,6 +175,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator PunchOn(Renderer punch)
     {
         yield return new WaitForSeconds(0.2f);
+        soundManager.Punch();
         punch.enabled = true;
         punchRange.enabled = true;
         Melee(punchRange);
@@ -280,6 +280,14 @@ public class PlayerController : MonoBehaviour
             if (hand == leftHand) leftScript = meth;
             else rightScript = meth;
         }
+        else if (newItem.TryGetComponent<Beer>(out var beer))
+        {
+            newItem.transform.localPosition = hand == leftHand ? new Vector3(0.05f, -0.275f, 0.5f) : new Vector3(-0.05f, -0.275f, 0.5f);
+            newItem.transform.localRotation = Quaternion.Euler(-110f, hand == leftHand ? -90f : 90f, 0f);
+
+            if (hand == leftHand) leftScript = beer;
+            else rightScript = beer;
+        }
         else
         {
             newItem.transform.localPosition = hand == leftHand ? new Vector3(0.05f, -0.275f, 0.5f) : new Vector3(-0.05f, -0.275f, 0.5f);
@@ -293,6 +301,8 @@ public class PlayerController : MonoBehaviour
 
     public void Throw(MonoBehaviour itemScript)
     {
+        soundManager.Toss();
+        
         if (itemScript == leftScript)
         {
             leftScript = null;
@@ -334,6 +344,17 @@ public class PlayerController : MonoBehaviour
         swingAnim.SetTrigger("Swing");
     }
 
+    public void Heal()
+    {
+        soundManager.Gulp();
+        health += 4;
+        if (health > 100)
+        {
+            health = 100;
+        }
+        ux.UpdateHealth(health, maxHealth);
+    }
+
     public void Hit()
     {
         Debug.Log("PLAYER HIT");
@@ -345,11 +366,11 @@ public class PlayerController : MonoBehaviour
         {
             isDead = true;
             gameManager.CallDead();
-            soundManager.Flatline();
+            soundManager.PlayerDeath();
         }
         else if (health > 0)
         {
-            soundManager.Heartbeat();
+            soundManager.PlayerHit();
         }
     }
 }

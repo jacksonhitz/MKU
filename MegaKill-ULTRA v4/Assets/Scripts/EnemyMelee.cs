@@ -3,10 +3,13 @@ using UnityEngine;
 
 public class Melee : MonoBehaviour
 {
-    float fireRate = 1f;
+    float fireRate = 2f;
     float range = 2f;
     Enemy enemy;
     PlayerController player;
+    SoundManager soundManager;
+
+    public AudioClip dogBite;
 
     public Animator animator;
     bool isAttacking = false;
@@ -15,6 +18,7 @@ public class Melee : MonoBehaviour
     {
         enemy = GetComponent<Enemy>();
         player = FindObjectOfType<PlayerController>(); 
+        soundManager = FindAnyObjectByType<SoundManager>();
     }
 
     void Update()
@@ -38,11 +42,14 @@ public class Melee : MonoBehaviour
         Attack();
         yield return new WaitForSeconds(0.2f);
         animator.SetBool("isAttacking", false);
+        yield return new WaitForSeconds(fireRate);
         isAttacking = false;
     }
 
     void Attack()
     {
         player.Hit();
+        //soundManager.dogBite();
+
     }
 }

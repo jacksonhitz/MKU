@@ -1,21 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Settings : MonoBehaviour
 {
     CamController cam;
     SoundManager soundManager;
+    GameManager gameManager;
 
     [SerializeField] Slider volumeSlider;
     [SerializeField] Slider sensSlider;
     [SerializeField] TMP_InputField volumeInput;
     [SerializeField] TMP_InputField sensInput;
     
-    float volume = 50;
-    float sens = 50;
+    public float volume = 50;
+    public float sens = 500;
+
+    public bool isTutorial;
+
+    Canvas menu;
     
     void Awake()
     {
@@ -27,12 +34,45 @@ public class Settings : MonoBehaviour
         else
         {
             DontDestroyOnLoad(gameObject);
+            isTutorial = true;
         }
-
-        soundManager = FindAnyObjectByType<SoundManager>();
-        cam = FindAnyObjectByType<CamController>();
+        GameObject menuObj = GameObject.Find("Menu");
+        menu = menuObj.GetComponent<Canvas>();
     }
 
+    void Update()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+        if (cam == null)
+        {
+            cam = FindAnyObjectByType<CamController>();
+        }
+        if (soundManager == null)
+        {
+            soundManager = FindAnyObjectByType<SoundManager>();
+        }
+        if (gameManager == null)
+        {
+            gameManager = FindAnyObjectByType<GameManager>();
+        }
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        ToggleMenuOff();
+    }
+
+    public void ToggleMenuOn()
+    {
+        menu.enabled = true;
+    }
+    public void ToggleMenuOff()
+    {
+        menu.enabled = false;
+    }
+
+    
     void Start()
     {
         volumeSlider.value = volume;
@@ -40,37 +80,66 @@ public class Settings : MonoBehaviour
         volumeInput.text = volume.ToString("F0");
         sensInput.text = sens.ToString("F0");
 
-        volumeSlider.onValueChanged.AddListener(UpdateVolumeText);
-        sensSlider.onValueChanged.AddListener(UpdateSenText);
-        volumeInput.onEndEdit.AddListener(UpdateVolumeSlider);
-        sensInput.onEndEdit.AddListener(UpdateSensSlider);
+        volumeSlider.onValueChanged.AddListener(VolumeText);
+        sensSlider.onValueChanged.AddListener(SensText);
+        volumeInput.onEndEdit.AddListener(VolumeSlider);
+        sensInput.onEndEdit.AddListener(SensSlider);
 
         volumeInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
         sensInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
     }
 
-    void UpdateVolumeText(float newValue)
+    public void Exit()
+    {
+        if (gameManager != null)
+        {
+            
+            gameManager.Exit();
+        }
+
+    }
+    public void Resume()
+    {
+        if (gameManager != null)
+        {
+            gameManager.Unpause();
+        }
+
+    }
+    public void Restart()
+    {
+        if (gameManager != null)
+        {
+            gameManager.Restart();
+        }
+    }
+
+
+
+    void VolumeText(float newValue)
     {
         volume = newValue;
         volumeInput.text = volume.ToString("F0");
-        //soundManager.SetVolume(volume / 100f);
+        soundManager.volume = volume;
+        soundManager.UpdateVolume();
     }
 
-    void UpdateSenText(float newValue)
+    void SensText(float newValue)
     {
         sens = newValue;
         sensInput.text = sens.ToString("F0");
-        //cam.SetSensitivity(sens / 100f);
+        cam.sens = sens;
     }
 
-    void UpdateVolumeSlider(string newValue)
+    void VolumeSlider(string newValue)
     {
         if (float.TryParse(newValue, out float parsedValue))
         {
             volume = Mathf.Clamp(parsedValue, 0, 100);
             volumeInput.text = volume.ToString("F0");
             volumeSlider.value = volume;
-            //soundManager.SetVolume(volume / 100f);
+            soundManager.volume = volume;
+            soundManager.UpdateVolume();
         }
         else
         {
@@ -78,14 +147,14 @@ public class Settings : MonoBehaviour
         }
     }
 
-    void UpdateSensSlider(string newValue)
+    void SensSlider(string newValue)
     {
         if (float.TryParse(newValue, out float parsedValue))
         {
-            sens = Mathf.Clamp(parsedValue, 0, 100);
+            sens = Mathf.Clamp(parsedValue, 0, 1000);
             sensInput.text = sens.ToString("F0");
             sensSlider.value = sens;
-            //cam.SetSensitivity(sens / 100f);
+            cam.sens = sens;
         }
         else
         {

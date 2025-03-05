@@ -21,9 +21,9 @@ public class Enemy : MonoBehaviour
 
     public GameObject blood;
     public GameObject weaponPrefab; 
-    public AudioClip rangedSquelch;
-    public AudioClip meleeSquelch;
-    public AudioClip stunSound;
+    public AudioClip enemyDeath;
+    public AudioClip enemyHit;
+    public AudioClip enemyStun;
 
     AudioSource sfx;
     public Animator animator;
@@ -175,6 +175,7 @@ public class Enemy : MonoBehaviour
 
     public void Hit()
     {
+        soundManager.EnemySFX(sfx, enemyHit);
         if (isStunned || hands)
         {
             KillEnemy();
@@ -189,11 +190,6 @@ public class Enemy : MonoBehaviour
     {
         isStunned = true;
         stunTimer = stunDuration;
-        
-        if (stunSound != null)
-        {
-            soundManager.EnemySFX(sfx, stunSound);
-        }
 
         if (animator != null)
         {
@@ -232,14 +228,7 @@ public class Enemy : MonoBehaviour
 
         gameManager.Kill(this);
 
-        if(ranged)
-        {
-            soundManager.EnemySFX(sfx, rangedSquelch);
-        }
-        else
-        {
-            soundManager.EnemySFX(sfx, meleeSquelch);
-        }
+        soundManager.EnemySFX(sfx, enemyDeath);
 
         if (hands)
         {

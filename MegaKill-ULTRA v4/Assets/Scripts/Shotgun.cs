@@ -18,6 +18,7 @@ public class Shotgun : MonoBehaviour
    PlayerController player;
    SoundManager soundManager;
    GameManager gameManager;
+   UX ux;
 
 
    public float bullets = 6f;
@@ -41,14 +42,14 @@ public class Shotgun : MonoBehaviour
    float fireRate = .5f;
 
 
-   //public ParticleSystem shotgunMuzzleFlash;
-   //public ParticleSystem revolverMuzzleFlash;
+   public ParticleSystem muzzleFlash;
 
 
    void Awake()
    {
        soundManager = FindObjectOfType<SoundManager>();
        gameManager = FindObjectOfType<GameManager>();
+       ux = FindObjectOfType<UX>();
        player = FindObjectOfType<PlayerController>();
    }
 
@@ -73,23 +74,30 @@ public class Shotgun : MonoBehaviour
 
    public void Use()
     {
-        if (!canFire) return;
-        if (shells > 0)
+        if (canFire)
         {
+            Debug.Log("fired");
             StartCoroutine(FireCooldown());
-            Recoil();
-            soundManager.ShotShot();
-            //shotgunMuzzleFlash?.Play();
-            shells--;
-            for (int i = 0; i < pellets; i++)
+            if (shells > 0)
             {
-                Vector3 spread = new Vector3(Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0f);
-                Quaternion rotation = Quaternion.Euler(player.cam.transform.eulerAngles + spread);
-                Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
-                Hitscan(ray);
+                Recoil();
+                soundManager.ShotShot();
+                muzzleFlash?.Play();
+                shells--;
+                for (int i = 0; i < pellets; i++)
+                {
+                    Vector3 spread = new Vector3(Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0f);
+                    Quaternion rotation = Quaternion.Euler(player.cam.transform.eulerAngles + spread);
+                    Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
+                    Hitscan(ray);
+                }
             }
+            else
+            {
+                soundManager.ShotEmpty();
+                ux.PopUp("EMPTY");
+            } 
         }
-        else soundManager.ShotEmpty();
     }
 
 

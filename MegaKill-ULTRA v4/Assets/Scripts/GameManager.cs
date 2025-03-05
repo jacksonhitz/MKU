@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     SoundManager soundManager;
     EnemyManager enemyManager;
     BulletTime bulletTime;
+    Settings settings;
 
     List<Item> items;
     public List<GameObject> doors;
@@ -38,10 +39,21 @@ public class GameManager : MonoBehaviour
     public bool fadeOut;
     public bool isIntro;
     public bool isPaused;
-    public bool isTutorialScene;
 
     void Awake()
     {
+        Time.timeScale = 1f;
+        
+        settings = FindObjectOfType<Settings>();
+        if (settings.isTutorial)
+        {
+            isIntro = true;
+        }
+        else
+        {
+            isIntro = false;
+        }
+        
         items = new List<Item>();  
 
         soundManager = FindObjectOfType<SoundManager>(); 
@@ -57,19 +69,17 @@ public class GameManager : MonoBehaviour
         camMat.SetFloat("_Amplitude", currentAmplitude);
         camMat.SetFloat("_Speed", currentSpeed);
 
-        enemyHolder.SetActive(false);
-
         foreach (GameObject door in doors)
         {
             door.SetActive(true);
         }
     }
-
     void Start()
     {
         CollectItems();
         if (isIntro)
         {
+            settings.isTutorial = false;
             StartIntro();
         }
         else
@@ -79,7 +89,7 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        //UpdateShader();
+        UpdateShader();
 
         if (Input.GetKeyDown(KeyCode.Return) && isIntro)
         {
@@ -87,17 +97,21 @@ public class GameManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Delete))
         {
-            //Restart();
+            Restart();
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (!isPaused)
+            if (!isIntro)
             {
-                //Pause();
-            }
-            else
-            {
-                //Unpause();
+                if (!isPaused)
+                {
+                    Pause();
+                }
+                else
+                {
+                    Unpause();
+                    ux.UIOn();
+                }
             }
         }
 
@@ -113,6 +127,7 @@ public class GameManager : MonoBehaviour
     public void StartIntro()
     {
         ux.IntroOn();
+        ux.UIOff();
     }
     public void EndIntro()
     {
@@ -124,7 +139,14 @@ public class GameManager : MonoBehaviour
         ux.TutorialOn();
         ux.UIOn();
     }
+    public void StartLvl()
+    {
+        PlayerActive();
 
+        ux.UIOn();
+        enemyManager.Active();
+        OpenDoors();
+    }
     public void PlayerActive()
     {
         if (cia != null)
@@ -134,43 +156,31 @@ public class GameManager : MonoBehaviour
         CollectItems();
         isIntro = false;
     }
-    public void StartLvl()
-    {
-        PlayerActive();
-
-        ux.UIOn();
-        enemyManager.Active();
-        OpenDoors();
-    }
 
     public void Pause()
     {
         isPaused = true;
         Time.timeScale = 0.0000000001f;
         ux.Paused();
-        soundManager.Paused();
+        //soundManager.Paused();
     }
 
     public void Unpause()
     {
+        isPaused = false;
         Time.timeScale = 1f;
         ux.UnPaused();
-        soundManager.UnPaused();
-        isPaused = false;
+        //soundManager.UnPaused();
     }
 
     public void Exit()
     {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(0);
+        StartCoroutine(ExitCoroutine());
     }
     public void Restart()
     {
-        Time.timeScale = 1f;
-        //SceneManager.LoadScene(2);
+        SceneManager.LoadScene(1);
     }
-
-   
     void OpenDoors()
     {
         foreach (GameObject door in doors)
@@ -218,13 +228,25 @@ public class GameManager : MonoBehaviour
 
     public void CallDead()
     {
-        fadeOut = true;
+        StartCoroutine(Dead());
     }
 
     IEnumerator Dead()
     {
+        fadeOut = true;
+        Time.timeScale = 1f;
+        
         yield return new WaitForSeconds(3f);
         Restart();
+    }
+
+    IEnumerator ExitCoroutine()
+    {
+        fadeOut = true;
+        Time.timeScale = 1f;
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene(0);
+        Debug.Log("Called");
     }
 
     void UpdateShader()
@@ -244,10 +266,7 @@ public class GameManager : MonoBehaviour
 
     public void Score(int newScore)
     {
-        Debug.Log("score");
-
-        score += newScore;
-
-        ux.PopUp(newScore);
+        string newString = newScore.ToString();
+        ux.PopUp(newString);
     }
 }

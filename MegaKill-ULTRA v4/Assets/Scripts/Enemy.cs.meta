@@ -3,7 +3,15 @@ guid: 8ea6259db5eb24c9c84cb3271802866b
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - blood: {instanceID: 0}
+  - weaponPrefab: {instanceID: 0}
+  - enemyDeath: {fileID: 8300000, guid: 27a6d1a0dd0744fc9be638b16fb64ac9, type: 3}
+  - enemyHit: {fileID: 8300000, guid: 6eebeb8eeda394f1a8fc4ae03a14057c, type: 3}
+  - enemyStun: {fileID: 8300000, guid: 54ea3b7e3374a4f328b391e38b75934b, type: 3}
+  - animator: {instanceID: 0}
+  - model: {instanceID: 0}
+  - item: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

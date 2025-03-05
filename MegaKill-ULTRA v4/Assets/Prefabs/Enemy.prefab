@@ -101,12 +101,13 @@ MonoBehaviour:
   los: 0
   blood: {fileID: 8853266473761700966, guid: b1da43f1588a840748c686b0733ad393, type: 3}
   weaponPrefab: {fileID: 0}
-  rangedSquelch: {fileID: 8300000, guid: 935bc7711ab62e2448c499aea11e0142, type: 3}
-  meleeSquelch: {fileID: 8300000, guid: 02fadc0adf0ba064da39feacdca9c9f2, type: 3}
-  stunSound: {fileID: 0}
+  enemyDeath: {fileID: 8300000, guid: 27a6d1a0dd0744fc9be638b16fb64ac9, type: 3}
+  enemyHit: {fileID: 8300000, guid: 6eebeb8eeda394f1a8fc4ae03a14057c, type: 3}
+  enemyStun: {fileID: 8300000, guid: 54ea3b7e3374a4f328b391e38b75934b, type: 3}
   animator: {fileID: 59742549101180192}
   model: {fileID: 4419219268666159708}
   ranged: 1
+  hands: 0
   item: {fileID: 7789723628074336581}
   isDead: 0
   isStunned: 0

@@ -6,6 +6,7 @@ public class MG : MonoBehaviour
     PlayerController player;
     SoundManager soundManager;
     GameManager gameManager;
+    UX ux;
 
     public float bullets = 20f;
     public float tracerDuration = 0.2f;
@@ -14,7 +15,7 @@ public class MG : MonoBehaviour
     [SerializeField] Transform firePoint;
 
     public int bulletsPerShot = 1;
-    public float spreadAngle = 2f;
+    public float spreadAngle = 1f;
 
     private bool canFire = true;
     float fireRate = 0.15f;
@@ -25,11 +26,14 @@ public class MG : MonoBehaviour
     Vector3 originalRot;
     Vector3 originalPos;
 
+    public ParticleSystem muzzleFlash;
+
     void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
         player = FindObjectOfType<PlayerController>();
+        ux = FindObjectOfType<UX>();
     }
 
     void Start()
@@ -46,23 +50,30 @@ public class MG : MonoBehaviour
 
     public void Use()
     {
-        if (!canFire) return;
-        if (bullets > 0)
+        if (canFire)
         {
-            StartCoroutine(FireCooldown());
-            Recoil();  
-            soundManager.ShotShot();
-            bullets--; 
-
-            for (int i = 0; i < bulletsPerShot; i++)
+            if (bullets > 0)
             {
-                Vector3 spread = new Vector3(Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0f);
-                Quaternion rotation = Quaternion.Euler(player.cam.transform.eulerAngles + spread);
-                Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
-                Hitscan(ray);
+                StartCoroutine(FireCooldown());
+                Recoil();  
+                soundManager.MGShot();
+                muzzleFlash?.Play();
+                bullets--; 
+
+                for (int i = 0; i < bulletsPerShot; i++)
+                {
+                    Vector3 spread = new Vector3(Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0f);
+                    Quaternion rotation = Quaternion.Euler(player.cam.transform.eulerAngles + spread);
+                    Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
+                    Hitscan(ray);
+                }
             }
+            else
+            {
+                soundManager.MGEmpty();
+                ux.PopUp("EMPTY");
+            } 
         }
-        else soundManager.ShotEmpty();
     }
 
     public void Recoil()

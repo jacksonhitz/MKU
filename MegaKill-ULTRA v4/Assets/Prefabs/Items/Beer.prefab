@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 506580047061419032}
   - component: {fileID: 4616430144967476298}
   - component: {fileID: 3698185343826165967}
+  - component: {fileID: 1734565127521603682}
   m_Layer: 6
   m_Name: Beer
   m_TagString: Item
@@ -178,3 +179,15 @@ CapsuleCollider:
   m_Height: 0.06045347
   m_Direction: 1
   m_Center: {x: 0, y: 0.00000023841858, z: 0.020226613}
+--- !u!114 &1734565127521603682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5934096883743438160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 201eb6da54e98405ca25ac2c7ab6f5f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
