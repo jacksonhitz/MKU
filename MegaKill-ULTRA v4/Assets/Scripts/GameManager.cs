@@ -262,6 +262,13 @@ public class GameManager : MonoBehaviour
             camMat.SetFloat("_Lerp", accLerp);
             camMat.SetFloat("_Frequency", accFrequency);
         }
+        else
+        {
+            camMat.SetFloat("_Lerp", currentLerp);
+            camMat.SetFloat("_Frequency", currentFrequency);
+            camMat.SetFloat("_Amplitude", currentAmplitude);
+            camMat.SetFloat("_Speed", currentSpeed);
+        }
     }
 
     public void Score(int newScore)

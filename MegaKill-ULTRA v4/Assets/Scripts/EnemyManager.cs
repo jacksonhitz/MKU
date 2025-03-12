@@ -23,9 +23,9 @@ public class EnemyManager : MonoBehaviour
 
     public void Active()
     {
-        enemyHolder.SetActive(true);
-        CollectEnemies();
-        CallHands();
+        //enemyHolder.SetActive(true);
+        //CollectEnemies();
+        //CallHands();
     }
     public void CollectEnemies()
     {
