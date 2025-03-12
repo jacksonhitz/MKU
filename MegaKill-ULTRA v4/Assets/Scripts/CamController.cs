@@ -36,22 +36,26 @@ public class CamController : MonoBehaviour
     Camera cam;
     float originalFOV;
 
-    public Material mat;
-    private Vector3 originalPosition; 
+    private Vector3 originalPosition;
     public float swayIntensity = 0.1f;
-    BulletTime bulletTime;
     GameManager gameManager;
     Settings settings;
 
-    public void UpPhase(int phase)
-    {
-        swayIntensity += 0.1f;
-        clrSpd *= 2f;
-    }
+    // Shader variables
+    public Material camMat;
+    float currentLerp = 0.2f;
+    float currentFrequency = 0;
+    float currentAmplitude = 0;
+
+    public int phase;
+
+    // Lerp target values for SpeedX and SpeedY
+    private float targetSpeedX;
+    private float targetSpeedY;
+    private float lerpSpeed = 1f;
 
     void Awake()
     {
-        bulletTime = FindObjectOfType<BulletTime>();
         cam = GetComponent<Camera>();
         gameManager = FindObjectOfType<GameManager>();
         settings = FindObjectOfType<Settings>();
@@ -59,8 +63,18 @@ public class CamController : MonoBehaviour
 
     void Start()
     {
-        sens = settings.sens;
         
+        if (camMat != null)
+        {
+            camMat.SetFloat("_Lerp", currentLerp);
+            camMat.SetFloat("_Frequency", currentFrequency);
+            camMat.SetFloat("_Amplitude", currentAmplitude);
+
+            RandomizeSpeed();
+        }
+
+        sens = settings.sens;
+
         originalFOV = cam.fieldOfView;
         originalPosition = transform.localPosition;
 
@@ -75,88 +89,10 @@ public class CamController : MonoBehaviour
 
         if (colorGrading != null)
         {
-            colorGrading.postExposure.value = -10f; 
+            colorGrading.postExposure.value = -10f;
         }
 
-
-        StartCoroutine(FadeIn(2f)); 
-    }
-
-    public void CallBlink()
-    {
-        StartCoroutine(Blink());
-    }
-    IEnumerator Blink()
-    {
-        StartCoroutine(FadeOut(.5f)); 
-        yield return new WaitForSeconds(.5f);
-        StartCoroutine(FadeIn(.5f)); 
-        yield return new WaitForSeconds(.5f);
-        StartCoroutine(FadeOut(.5f));
-        yield return new WaitForSeconds(.5f);
-        gameManager.StartTutorial();
-        StartCoroutine(FadeIn(.5f));
-    }
-
-    IEnumerator FadeIn(float duration)
-    {
-        float elapsed = 0f;
-        float initialExposure = -10f; 
-        float targetExposure = 0f; 
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            if (colorGrading != null)
-            {
-                colorGrading.postExposure.value = Mathf.Lerp(initialExposure, targetExposure, elapsed / duration);
-            }
-            yield return null;
-        }
-
-        if (colorGrading != null)
-        {
-            colorGrading.postExposure.value = targetExposure;
-        }
-    }
-    IEnumerator FadeOut(float duration)
-    {
-        float elapsed = 0f;
-        float initialExposure = 0f; 
-        float targetExposure = -10f; 
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            if (colorGrading != null)
-            {
-                colorGrading.postExposure.value = Mathf.Lerp(initialExposure, targetExposure, elapsed / duration);
-            }
-            yield return null;
-        }
-
-        if (colorGrading != null)
-        {
-            colorGrading.postExposure.value = targetExposure;
-        }
-    }
-
-
-    void SetClr()
-    {
-        redRandom = Random.Range(.75f, 1.25f);
-        greenRandom = Random.Range(.75f, 1.25f);
-        blueRandom = Random.Range(.75f, 1.25f);
-
-        redStart = Random.Range(-200f, -150f);
-        greenStart = Random.Range(-200f, -150f);
-        blueStart = Random.Range(-200f, -150f);
-
-        colorGrading.hueShift.value = redStart;
-
-        channelMixer.redOutRedIn.value = redStart;
-        channelMixer.greenOutGreenIn.value = greenStart;
-        channelMixer.blueOutBlueIn.value = blueStart;
+        StartCoroutine(FadeIn(2f));
     }
 
     void Update()
@@ -174,14 +110,154 @@ public class CamController : MonoBehaviour
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
+
+            if (!gameManager.isIntro)
+            {
+                UpdateShader();
+            }
+
+            if (gameManager.fadeOut)
+            {
+                FadeOut();
+            }
         }
         else
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            
         }
-        Trip();
+
+        UpdatePost();
+    }
+
+    public void UpPhase()
+    {
+        phase++;
+        //RandomizeSpeed();
+    }
+
+    void FadeOut()
+    {
+        Debug.Log("fade call");
+
+        currentLerp += 0.025f;
+        currentFrequency += 0.25f;
+
+        camMat.SetFloat("_Lerp", currentLerp);
+        camMat.SetFloat("_Frequency", currentFrequency);
+    }
+
+    void UpdateShader()
+    {
+        // Cap the amplitude and frequency to a value based on the phase
+        float cap = 2f * phase;
+        Debug.Log(cap);
+
+        if (currentAmplitude < cap)
+        {
+            currentAmplitude += 0.001f;
+        }
+        if (currentFrequency < cap)
+        {
+            currentFrequency += 0.001f;
+        }
+
+        // Update shader values
+        camMat.SetFloat("_Lerp", currentLerp);
+        camMat.SetFloat("_Frequency", currentFrequency);
+        camMat.SetFloat("_Amplitude", currentAmplitude);
+
+
+        float speedX = Mathf.Lerp(camMat.GetFloat("_SpeedX"), targetSpeedX, lerpSpeed);
+        float speedY = Mathf.Lerp(camMat.GetFloat("_SpeedY"), targetSpeedY, lerpSpeed);
+
+        // Apply the lerped values to the shader
+        camMat.SetFloat("_SpeedX", speedX);
+        camMat.SetFloat("_SpeedY", speedY);
+    }
+
+    void RandomizeSpeed()
+    {
+        targetSpeedX = Random.Range(-0.01f, 0.01f);
+        targetSpeedY = Random.Range(-0.01f, 0.01f);
+    }
+
+    public void CallBlink()
+    {
+        StartCoroutine(Blink());
+    }
+
+    IEnumerator Blink()
+    {
+        StartCoroutine(FadeOut(0.5f));
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(FadeIn(0.5f));
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(FadeOut(0.5f));
+        yield return new WaitForSeconds(0.5f);
+        gameManager.StartTutorial();
+        StartCoroutine(FadeIn(0.5f));
+    }
+
+    IEnumerator FadeIn(float duration)
+    {
+        float elapsed = 0f;
+        float initialExposure = -10f;
+        float targetExposure = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            if (colorGrading != null)
+            {
+                colorGrading.postExposure.value = Mathf.Lerp(initialExposure, targetExposure, elapsed / duration);
+            }
+            yield return null;
+        }
+
+        if (colorGrading != null)
+        {
+            colorGrading.postExposure.value = targetExposure;
+        }
+    }
+
+    IEnumerator FadeOut(float duration)
+    {
+        float elapsed = 0f;
+        float initialExposure = 0f;
+        float targetExposure = -10f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            if (colorGrading != null)
+            {
+                colorGrading.postExposure.value = Mathf.Lerp(initialExposure, targetExposure, elapsed / duration);
+            }
+            yield return null;
+        }
+
+        if (colorGrading != null)
+        {
+            colorGrading.postExposure.value = targetExposure;
+        }
+    }
+
+    void SetClr()
+    {
+        redRandom = Random.Range(0.75f, 1.25f);
+        greenRandom = Random.Range(0.75f, 1.25f);
+        blueRandom = Random.Range(0.75f, 1.25f);
+
+        redStart = Random.Range(-200f, -150f);
+        greenStart = Random.Range(-200f, -150f);
+        blueStart = Random.Range(-200f, -150f);
+
+        colorGrading.hueShift.value = redStart;
+
+        channelMixer.redOutRedIn.value = redStart;
+        channelMixer.greenOutGreenIn.value = greenStart;
+        channelMixer.blueOutBlueIn.value = blueStart;
     }
 
     void MoveCam()
@@ -198,7 +274,7 @@ public class CamController : MonoBehaviour
         player.rotation = Quaternion.Euler(0f, yRotation, 0f);
     }
 
-    void Trip()
+    void UpdatePost()
     {
         // Chromatic Aberration
         if (chromaticAberration != null)
@@ -217,18 +293,18 @@ public class CamController : MonoBehaviour
         // Lens Distortion
         if (lensDistortion != null)
         {
-            float distortionValue = Mathf.PingPong(Time.time * lensSpd, 1.5f) - 0.75f; 
+            float distortionValue = Mathf.PingPong(Time.time * lensSpd, 1.5f) - 0.75f;
             lensDistortion.intensity.value = distortionValue;
         }
 
-        // Camera Sway 
+        // Camera Sway
         float swayAmountX = Mathf.Sin(Time.time * 2f) * swayIntensity * volume.weight;
         float swayAmountY = Mathf.Cos(Time.time * 2f) * swayIntensity * volume.weight;
         transform.localPosition = originalPosition + new Vector3(swayAmountX, swayAmountY, 0);
 
         // Camera Rot Sway
-        float rotationSwayX = Mathf.Sin(Time.time * 1.5f) * swayIntensity * 0.5f * volume.weight; // Slight pitch tilt
-        float rotationSwayY = Mathf.Cos(Time.time * 1.5f) * swayIntensity * 0.5f * volume.weight; // Slight yaw tilt
+        float rotationSwayX = Mathf.Sin(Time.time * 1.5f) * swayIntensity * 0.5f * volume.weight;
+        float rotationSwayY = Mathf.Cos(Time.time * 1.5f) * swayIntensity * 0.5f * volume.weight;
         transform.localRotation = Quaternion.Euler(rotationSwayX, rotationSwayY, 0) * Quaternion.Euler(xRotation, 0f, 0f);
 
         ClrAdjuster();
@@ -242,19 +318,19 @@ public class CamController : MonoBehaviour
         Vector3 damageDirection = -(damagePos - cam.transform.position).normalized;
 
         Vector3 cameraForward = cam.transform.forward;
-        
-        float angle = Vector3.SignedAngle(cameraForward, damageDirection, Vector3.up);
-        
-        float xOffset = Mathf.Clamp(Mathf.Sin(angle * Mathf.Deg2Rad), -1f, 1f);  
-        float yOffset = Mathf.Clamp(Mathf.Cos(angle * Mathf.Deg2Rad), -1f, 1f); 
 
-        float xCenter = Mathf.Clamp01(0.5f + xOffset * 0.5f);  
-        float yCenter = Mathf.Clamp01(0.5f + yOffset * 0.5f);  
+        float angle = Vector3.SignedAngle(cameraForward, damageDirection, Vector3.up);
+
+        float xOffset = Mathf.Clamp(Mathf.Sin(angle * Mathf.Deg2Rad), -1f, 1f);
+        float yOffset = Mathf.Clamp(Mathf.Cos(angle * Mathf.Deg2Rad), -1f, 1f);
+
+        float xCenter = Mathf.Clamp01(0.5f + xOffset * 0.5f);
+        float yCenter = Mathf.Clamp01(0.5f + yOffset * 0.5f);
 
         vignette.center.value = new Vector2(xCenter, yCenter);
-        vignette.intensity.value = .75f;  
+        vignette.intensity.value = .75f;
 
-        StartCoroutine(FadeOutVig(2f));  
+        StartCoroutine(FadeOutVig(2f));
     }
 
     private IEnumerator FadeOutVig(float duration)
@@ -269,7 +345,7 @@ public class CamController : MonoBehaviour
             yield return null;
         }
 
-        vignette.intensity.value = 0f; 
+        vignette.intensity.value = 0f;
     }
 
     void ClrAdjuster()

@@ -7,10 +7,12 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] GameObject hands; 
     [SerializeField] GameObject enemyHolder;
     public List<Enemy> enemies;
-    float spawnInterval = 5f; 
+    float spawnInterval = 30f; 
     PlayerController player;
     UX ux;
     GameManager gameManager;
+
+    public bool on;
 
 
     void Awake()
@@ -23,15 +25,22 @@ public class EnemyManager : MonoBehaviour
 
     public void Active()
     {
-        enemyHolder.SetActive(true);
-        CollectEnemies();
-        CallHands();
+        if (on)
+        {
+            enemyHolder.SetActive(true);
+            CallHands();
+            CollectEnemies();
+        }
     }
     public void CollectEnemies()
     {
         enemies.Clear(); 
         enemies.AddRange(FindObjectsOfType<Enemy>()); 
+    }
 
+    public void EnemyDead(Enemy enemy)
+    {
+        enemies.Remove(enemy);
         if (enemies.Count == 0)
         {
             gameManager.Exit();

@@ -107,8 +107,8 @@ public class UX : MonoBehaviour
         popup.text = text;
         RectTransform popupTransform = popup.GetComponent<RectTransform>();
 
-        float randomX = Random.Range(-0.3f, 0.5f);
-        float randomY = Random.Range(-0.1f, 0.2f);
+        float randomX = Random.Range(-0.2f, 0.3f);
+        float randomY = Random.Range(-0.3f, 0.1f);
 
         popupTransform.anchoredPosition = new Vector2(randomX, randomY);
         currentCoroutine = StartCoroutine(PopupEffect(popupTransform));

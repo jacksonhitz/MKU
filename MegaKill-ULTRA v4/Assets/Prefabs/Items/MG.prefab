@@ -155,7 +155,6 @@ MonoBehaviour:
   tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
   firePoint: {fileID: 3090975949641924395}
   bulletsPerShot: 1
-  spreadAngle: 10
   muzzleFlash: {fileID: 1387694499487188958}
 --- !u!114 &7556151795871662331
 MonoBehaviour:
@@ -217,7 +216,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.23202768
+  m_Radius: 0.5
   m_Height: 1.3514231
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}

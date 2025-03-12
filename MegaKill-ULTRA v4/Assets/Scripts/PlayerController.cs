@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
             Move();
         }
 
-        if (!gameManager.isIntro)
+        if (!gameManager.isIntro && !gameManager.isPaused)
         {
             HandleInput();
         }
@@ -281,15 +281,23 @@ public class PlayerController : MonoBehaviour
         }
         else if (newItem.TryGetComponent<Meth>(out var meth))
         {
-            newItem.transform.localPosition = hand == leftHand ? new Vector3(0f, -0.3f, 0.4f) : new Vector3(-0.05f, -0.275f, 0.5f);
+            newItem.transform.localPosition = hand == leftHand ? new Vector3(0f, -0.3f, 0.4f) : new Vector3(0, -0.3f, 0.4f);
             newItem.transform.localRotation = Quaternion.Euler(-110f, hand == leftHand ? -90f : 90f, 0f);
 
-            if (hand == leftHand) leftScript = meth;
-            else rightScript = meth;
+            if (hand == leftHand)
+            {
+                leftScript = meth;
+                meth.left = true;
+            } 
+            else
+            {
+                rightScript = meth;
+                meth.left = false;
+            } 
         }
         else if (newItem.TryGetComponent<Beer>(out var beer))
         {
-            newItem.transform.localPosition = hand == leftHand ? new Vector3(0f, -0.3f, 0.4f) : new Vector3(-0.05f, -0.275f, 0.5f);
+            newItem.transform.localPosition = hand == leftHand ? new Vector3(0f, -0.3f, 0.4f) : new Vector3(0f, -0.3f, 0.4f);
             newItem.transform.localRotation = Quaternion.Euler(-110f, hand == leftHand ? -90f : 90f, 0f);
 
             if (hand == leftHand) leftScript = beer;
@@ -297,7 +305,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            newItem.transform.localPosition = hand == leftHand ? new Vector3(0f, -0.3f, 0.4f) : new Vector3(-0.05f, -0.275f, 0.5f);
+            newItem.transform.localPosition = hand == leftHand ? new Vector3(0f, -0.3f, 0.4f) : new Vector3(0f, -0.4f, 0.4f);
             newItem.transform.localRotation = Quaternion.Euler(-110f, hand == leftHand ? -90f : 90f, 0f);
 
             if (hand == leftHand) leftScript = env;
@@ -306,43 +314,49 @@ public class PlayerController : MonoBehaviour
     }
 
     public void Throw(MonoBehaviour itemScript)
+{
+    soundManager.Toss();
+
+    if (itemScript == leftScript)
     {
-        soundManager.Toss();
-
-        if (itemScript == leftScript)
-        {
-            leftScript = null;
-        }
-        else
-        {
-            rightScript = null;
-        }
-        Debug.Log("thrown");
-
-        itemScript.transform.SetParent(null);
-
-        Item item = itemScript.GetComponent<Item>();
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        Vector3 throwDirection;
-        if (Physics.Raycast(ray, out hit))
-        {
-            throwDirection = (hit.point - itemScript.transform.position).normalized;
-        }
-        else
-        {
-            throwDirection = ray.direction;
-        }
-
-        item.thrown = true;
-        item.CollidersOn();
-
-        Rigidbody itemRb = itemScript.GetComponent<Rigidbody>();
-        itemRb.AddForce(throwDirection * throwForce, ForceMode.VelocityChange);
-        itemRb.AddTorque(Vector3.right * -75f, ForceMode.VelocityChange);
+        leftScript = null;
     }
+    else
+    {
+        rightScript = null;
+    }
+    Debug.Log("thrown");
+
+    itemScript.transform.SetParent(null);
+
+    Item item = itemScript.GetComponent<Item>();
+
+    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    RaycastHit hit;
+
+    Vector3 throwDirection;
+    if (Physics.Raycast(ray, out hit))
+    {
+        throwDirection = (hit.point - itemScript.transform.position).normalized;
+    }
+    else
+    {
+        throwDirection = ray.direction;
+    }
+
+    item.thrown = true;
+    item.CollidersOn();
+
+    Rigidbody itemRb = itemScript.GetComponent<Rigidbody>();
+    Quaternion initialRotation = itemScript.transform.rotation;
+
+    itemRb.velocity = throwDirection * throwForce;
+
+    itemRb.angularVelocity = Vector3.right * -10f; 
+
+    itemScript.transform.rotation = initialRotation;
+}
+
 
     public void SwingBat()
     {
@@ -352,7 +366,7 @@ public class PlayerController : MonoBehaviour
     public void Heal()
     {
         soundManager.Gulp();
-        health += 4;
+        health += 10;
         if (health > 100)
         {
             health = 100;
@@ -364,7 +378,7 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("PLAYER HIT");
 
-        health -= 4;
+        health -= 10;
         ux.UpdateHealth(health, maxHealth);
 
         if (health <= 0 && !isDead)

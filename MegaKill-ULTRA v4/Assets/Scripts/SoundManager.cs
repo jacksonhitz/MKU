@@ -75,7 +75,7 @@ public class SoundManager : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
         settings = FindObjectOfType<Settings>();
-        tracks = new List<AudioClip> { title, acid, witch, could, dj, all, hott, threes, life, real, four };
+        tracks = new List<AudioClip> { acid, witch, could, dj, all, hott, threes, life, real, four };
         lines = new List<AudioClip> { line1, line2, line3, line4, line5, line6, line7 };
     }
 
@@ -94,17 +94,26 @@ public class SoundManager : MonoBehaviour
 
     void Update()
     {
-        if (!music.isPlaying && !gameManager.isIntro)
+        if (gameManager == null)
         {
-            NewTrack();
-            Debug.Log("playing");
+            if (!music.isPlaying)
+            {
+                NewTrack();
+            }
+        }
+        else
+        {
+            if (!music.isPlaying && !gameManager.isIntro)
+            {
+                NewTrack();
+            }
         }
     }
 
     public void UpdateVolume()
     {
         float normalizedVolume = volume / 100f;
-        music.volume = normalizedVolume / 2;
+        music.volume = normalizedVolume / 3;
         sfx.volume = normalizedVolume;
         enemySfx.volume = normalizedVolume;
         dialogue.volume = normalizedVolume;

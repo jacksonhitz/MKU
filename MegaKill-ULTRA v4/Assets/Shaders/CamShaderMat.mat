@@ -41,13 +41,15 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 1
-    - _Amplitude: 0
-    - _Frequency: 0
-    - _Lerp: 0
-    - _Magnify: 0.1
+    - _Alpha: 0.3
+    - _Amplitude: 0.4609976
+    - _Frequency: 0.4609976
+    - _Lerp: 0.2
+    - _Magnify: 0
     - _Size: 1
-    - _Speed: 0
+    - _Speed: 0.01
+    - _SpeedX: -0.003702575
+    - _SpeedY: 0.0031361436
     m_Colors:
     - _FocalPoint: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

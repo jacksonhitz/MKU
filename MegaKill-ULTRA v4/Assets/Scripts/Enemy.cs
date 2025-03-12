@@ -266,6 +266,5 @@ public class Enemy : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
-        enemyManager.CollectEnemies();
     }
 }

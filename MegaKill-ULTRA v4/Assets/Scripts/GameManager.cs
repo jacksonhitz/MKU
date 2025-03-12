@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public int phase;
+
     public int score = 0;
 
     Volume volume;
@@ -17,17 +17,11 @@ public class GameManager : MonoBehaviour
     BulletTime bulletTime;
     Settings settings;
 
+    CamController cam;
+
     List<Item> items;
     public List<GameObject> doors;
 
-    public Pointer pointer;
-    public CamController cam;
-    public Material camMat;
-
-    float currentLerp;
-    float currentFrequency;
-    float currentAmplitude;
-    float currentSpeed;
 
     public GameObject enemyHolder;
     public GameObject eye;
@@ -62,12 +56,7 @@ public class GameManager : MonoBehaviour
         ux = FindObjectOfType<UX>(); 
         bulletTime = FindObjectOfType<BulletTime>();
         player = GameObject.FindGameObjectWithTag("Player");
-        cam = FindAnyObjectByType<CamController>();
-
-        camMat.SetFloat("_Lerp", currentLerp);
-        camMat.SetFloat("_Frequency", currentFrequency);
-        camMat.SetFloat("_Amplitude", currentAmplitude);
-        camMat.SetFloat("_Speed", currentSpeed);
+        cam = FindObjectOfType<CamController>();
 
         foreach (GameObject door in doors)
         {
@@ -89,8 +78,6 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        UpdateShader();
-
         if (Input.GetKeyDown(KeyCode.Return) && isIntro)
         {
             StartLvl();
@@ -175,10 +162,12 @@ public class GameManager : MonoBehaviour
 
     public void Exit()
     {
+        fadeOut = true;
         StartCoroutine(ExitCoroutine());
     }
     public void Restart()
     {
+        fadeOut = true;
         SceneManager.LoadScene(1);
     }
     void OpenDoors()
@@ -223,52 +212,29 @@ public class GameManager : MonoBehaviour
 
     public void Kill(Enemy enemy)
     {
-        phase++;
+        enemyManager.EnemyDead(enemy);
+        cam.UpPhase();
     }
 
     public void CallDead()
     {
+        fadeOut = true;
         StartCoroutine(Dead());
     }
 
     IEnumerator Dead()
     {
-        fadeOut = true;
         Time.timeScale = 1f;
-        
         yield return new WaitForSeconds(3f);
         Restart();
     }
 
     IEnumerator ExitCoroutine()
     {
-        fadeOut = true;
         Time.timeScale = 1f;
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene(0);
         Debug.Log("Called");
-    }
-
-    void UpdateShader()
-    {
-        if (fadeOut)
-        {
-            float accLerp = camMat.GetFloat("_Lerp");
-            float accFrequency = camMat.GetFloat("_Frequency");
-
-            accLerp += 0.025f;
-            accFrequency += 0.25f;
-
-            camMat.SetFloat("_Lerp", accLerp);
-            camMat.SetFloat("_Frequency", accFrequency);
-        }
-        else
-        {
-            camMat.SetFloat("_Lerp", currentLerp);
-            camMat.SetFloat("_Frequency", currentFrequency);
-            camMat.SetFloat("_Amplitude", currentAmplitude);
-            camMat.SetFloat("_Speed", currentSpeed);
-        }
     }
 
     public void Score(int newScore)

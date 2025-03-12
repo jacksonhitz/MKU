@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class BulletTime : MonoBehaviour
 {
-    public float slowSpd = 0.05f; 
-    public float transitionDuration = 0.5f; 
+    float slowSpd = 0.05f; 
+    float transitionDuration = 0.5f; 
     float originalSpd;
-    public bool isSlowed = false;
-    public bool wasSlowed = false;
+    public bool isSlow;
 
     SoundManager soundManager;
     GameManager gameManager;
@@ -21,25 +20,16 @@ public class BulletTime : MonoBehaviour
     }
     public void Slow()
     {
-        isSlowed = true;
-        StartCoroutine(LerpTime(slowSpd));
-        StartCoroutine(NewReg());
-
+        isSlow = true;
         soundManager.SetSpeed(SoundManager.GameSpeed.Slow);
-    }
-
-    IEnumerator NewReg()
-    {
-        yield return new WaitForSecondsRealtime(3f);
-        StartCoroutine(LerpTime(originalSpd));
+        StartCoroutine(LerpTime(slowSpd));
     }
 
     public void Reg()
     {
-        isSlowed = false;
-        StartCoroutine(LerpTime(originalSpd));
-
+        isSlow = true;
         soundManager.SetSpeed(SoundManager.GameSpeed.Regular);
+        StartCoroutine(LerpTime(originalSpd));
     }
 
     IEnumerator LerpTime(float targetTimeScale)
@@ -54,7 +44,6 @@ public class BulletTime : MonoBehaviour
             Time.fixedDeltaTime = 0.02f * Time.timeScale; 
             yield return null;
         }
-
         Time.timeScale = targetTimeScale;
     }
 }

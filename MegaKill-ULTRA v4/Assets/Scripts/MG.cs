@@ -7,6 +7,7 @@ public class MG : MonoBehaviour
     SoundManager soundManager;
     GameManager gameManager;
     UX ux;
+    Rigidbody rb;
 
     public float bullets = 12f;
     public float tracerDuration = 0.2f;
@@ -25,10 +26,12 @@ public class MG : MonoBehaviour
 
     Vector3 originalRot;
     Vector3 originalPos;
+    
 
     public ParticleSystem muzzleFlash;
 
-    private float lastActionTime = -0.5f; // Shared timer for both MGEmpty and PopUp
+    private float lastActionTime = -0.15f; 
+
 
     void Awake()
     {
@@ -36,6 +39,7 @@ public class MG : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
         player = FindObjectOfType<PlayerController>();
         ux = FindObjectOfType<UX>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void Start()
@@ -46,8 +50,11 @@ public class MG : MonoBehaviour
 
     void Update()
     {
-        rot = Vector3.Lerp(rot, Vector3.zero, spd * Time.deltaTime);
-        transform.localEulerAngles = originalRot + rot;
+        if (rb.isKinematic)
+        {
+            rot = Vector3.Lerp(rot, Vector3.zero, spd * Time.deltaTime);
+            transform.localEulerAngles = originalRot + rot;
+        }
     }
 
     public void Use()

@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Meth : MonoBehaviour
@@ -7,10 +8,10 @@ public class Meth : MonoBehaviour
     SoundManager soundManager;
     UX ux;
 
-    public float charge = 10f;
-    public float slowDuration = 1f;
+    public float charge = 100f;
+    float cooldown = -0.5f;
 
-    bool isSlow;
+    public bool left;
 
     void Awake()
     {
@@ -19,26 +20,36 @@ public class Meth : MonoBehaviour
         ux = FindObjectOfType<UX>();
     }
 
-    public void Use()
+    void Update()
     {
-        if (charge > 0 && !isSlow)
+        if (left && Input.GetKeyUp(KeyCode.Mouse0) || !left && Input.GetKeyUp(KeyCode.Mouse1) || charge <= 0)
         {
-            soundManager.Gulp();
-            //ux.PopUp("TIME SLOWED");
-            StartCoroutine(SlowRoutine());
-        }
-        if (charge == 0)
-        {
-            soundManager.PillEmpty();
+            bulletTime.Reg();
         }
     }
 
-    IEnumerator SlowRoutine()
+    public void Use()
     {
-        isSlow = true;
-        bulletTime.Slow();
-        yield return new WaitForSeconds(slowDuration);
-        bulletTime.Reg();
-        isSlow = false;
+        if (charge > 0)
+        {
+            if (Time.time - cooldown >= 0.5f)
+            {
+                ux.PopUp("TIME SLOWED");
+                soundManager.Gulp();
+                cooldown = Time.time; 
+            }
+
+            charge -= 0.1f;
+            bulletTime.Slow();
+        }
+        else
+        {
+            if (Time.time - cooldown >= 0.5f)
+            {
+                ux.PopUp("EMPTY");
+                soundManager.PillEmpty();
+                cooldown = Time.time; 
+            }
+        }
     }
 }

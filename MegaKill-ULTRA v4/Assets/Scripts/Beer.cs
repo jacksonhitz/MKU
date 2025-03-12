@@ -6,8 +6,8 @@ public class Beer : MonoBehaviour
     PlayerController player;
     SoundManager soundManager;
     UX ux;
-    float charge = 0f;
-    float heal = 4f;
+    float charge = 5f;
+    float cooldown = -0.5f;
 
     void Awake()
     {
@@ -18,16 +18,21 @@ public class Beer : MonoBehaviour
 
     public void Use()
     {
-        if (charge > 0)
+        if (Time.time - cooldown >= 0.5f)
         {
-            charge--;
-            soundManager.Gulp();
-            player.Heal();
-            ux.PopUp("HEALTH UP");
-        }
-        else
-        {
-            //soundManager.PillEmpty();
+            if (charge > 0)
+            {
+                charge--;
+                soundManager.Gulp();
+                player.Heal();
+                ux.PopUp("HEALTH UP");
+                cooldown = Time.time; 
+            }
+            else
+            {
+                soundManager.PillEmpty();
+                ux.PopUp("EMPTY");
+            }
         }
     }
 }

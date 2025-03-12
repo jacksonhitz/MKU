@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (bulletTime != null && bulletTime.isSlowed)
+        if (bulletTime != null && bulletTime.isSlow)
         {
             rb.velocity = direction * (vel * 0.25f);
         }

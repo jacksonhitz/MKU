@@ -11,14 +11,13 @@ public class Shotgun : MonoBehaviour
 
    Vector3 originalRot;
    Vector3 originalPos;
-   Vector3 stowedPos = new Vector3(-0.5f, -0.5f, 0f);
-   Vector3 stowedRot = new Vector3(45f, 0f, 0f);
 
 
    PlayerController player;
    SoundManager soundManager;
    GameManager gameManager;
    UX ux;
+    Rigidbody rb;
 
 
    public float bullets = 6f;
@@ -35,9 +34,6 @@ public class Shotgun : MonoBehaviour
    public int pellets = 12;
    public float spreadAngle = 5f;
 
-
-   private bool isStowing = false;
-   private float switchSpeed = 5f;
    private bool canFire = true;
    float fireRate = .5f;
 
@@ -51,6 +47,7 @@ public class Shotgun : MonoBehaviour
        gameManager = FindObjectOfType<GameManager>();
        ux = FindObjectOfType<UX>();
        player = FindObjectOfType<PlayerController>();
+       rb = GetComponent<Rigidbody>();
    }
 
 
@@ -61,8 +58,11 @@ public class Shotgun : MonoBehaviour
    }
    void Update()
    {
-       rot = Vector3.Lerp(rot, Vector3.zero, spd * Time.deltaTime);
-       transform.localEulerAngles = originalRot + rot;
+       if (rb.isKinematic)
+       {
+            rot = Vector3.Lerp(rot, Vector3.zero, spd * Time.deltaTime);
+            transform.localEulerAngles = originalRot + rot;
+       }
    }
 
 
