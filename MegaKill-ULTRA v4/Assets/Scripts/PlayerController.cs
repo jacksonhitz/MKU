@@ -64,20 +64,15 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if (isGrounded && !rooted)
+        if (!rooted)
         {
-           
-        }
-        else
-        {
-           
+            Move();
         }
 
         if (!gameManager.isIntro)
         {
             HandleInput();
         }
-        Move();
         characterController.Move(velocity * Time.deltaTime);
     }
 
@@ -254,7 +249,7 @@ public class PlayerController : MonoBehaviour
 
         if (newItem.TryGetComponent<Revolver>(out var revolver))
         {
-            newItem.transform.localPosition = new Vector3(0f, -0.125f, 0.7f);
+            newItem.transform.localPosition = new Vector3(0f, -0.15f, 0.35f);
             newItem.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f);
 
             if (hand == leftHand) leftScript = revolver;
@@ -262,7 +257,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (newItem.TryGetComponent<Shotgun>(out var shotgun))
         {
-            newItem.transform.localPosition = new Vector3(0f, -0.3f, 0.8f);
+            newItem.transform.localPosition = new Vector3(0f, -0.3f, 0.7f);
             newItem.transform.localRotation = Quaternion.Euler(-90f, 0f, 180f);
 
             if (hand == leftHand) leftScript = shotgun;
@@ -270,7 +265,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (newItem.TryGetComponent<MG>(out var mg))
         {
-            newItem.transform.localPosition = new Vector3(0f, -0.3f, 0.8f);
+            newItem.transform.localPosition = new Vector3(0f, -0.3f, 0.7f);
             newItem.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f);
 
             if (hand == leftHand) leftScript = mg;
@@ -278,7 +273,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (newItem.TryGetComponent<Bat>(out var bat))
         {
-            newItem.transform.localPosition = hand == leftHand ? new Vector3(-0.7f, 0.195f, 2f) : new Vector3(0.7f, 0.195f, 2f);
+            newItem.transform.localPosition = hand == leftHand ? new Vector3(-0.7f, 0.3f, 2f) : new Vector3(0.7f, 0.195f, 2f);
             newItem.transform.localRotation = Quaternion.Euler(-90f, 0f, 125f);
 
             if (hand == leftHand) leftScript = bat;
@@ -286,7 +281,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (newItem.TryGetComponent<Meth>(out var meth))
         {
-            newItem.transform.localPosition = hand == leftHand ? new Vector3(0.05f, -0.275f, 0.5f) : new Vector3(-0.05f, -0.275f, 0.5f);
+            newItem.transform.localPosition = hand == leftHand ? new Vector3(0f, -0.3f, 0.4f) : new Vector3(-0.05f, -0.275f, 0.5f);
             newItem.transform.localRotation = Quaternion.Euler(-110f, hand == leftHand ? -90f : 90f, 0f);
 
             if (hand == leftHand) leftScript = meth;
@@ -294,7 +289,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (newItem.TryGetComponent<Beer>(out var beer))
         {
-            newItem.transform.localPosition = hand == leftHand ? new Vector3(0.05f, -0.275f, 0.5f) : new Vector3(-0.05f, -0.275f, 0.5f);
+            newItem.transform.localPosition = hand == leftHand ? new Vector3(0f, -0.3f, 0.4f) : new Vector3(-0.05f, -0.275f, 0.5f);
             newItem.transform.localRotation = Quaternion.Euler(-110f, hand == leftHand ? -90f : 90f, 0f);
 
             if (hand == leftHand) leftScript = beer;
@@ -302,7 +297,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            newItem.transform.localPosition = hand == leftHand ? new Vector3(0.05f, -0.275f, 0.5f) : new Vector3(-0.05f, -0.275f, 0.5f);
+            newItem.transform.localPosition = hand == leftHand ? new Vector3(0f, -0.3f, 0.4f) : new Vector3(-0.05f, -0.275f, 0.5f);
             newItem.transform.localRotation = Quaternion.Euler(-110f, hand == leftHand ? -90f : 90f, 0f);
 
             if (hand == leftHand) leftScript = env;

@@ -7,7 +7,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] GameObject hands; 
     [SerializeField] GameObject enemyHolder;
     public List<Enemy> enemies;
-    float spawnInterval = 25f; 
+    float spawnInterval = 5f; 
     PlayerController player;
     UX ux;
     GameManager gameManager;
@@ -23,9 +23,9 @@ public class EnemyManager : MonoBehaviour
 
     public void Active()
     {
-        //enemyHolder.SetActive(true);
-        //CollectEnemies();
-        //CallHands();
+        enemyHolder.SetActive(true);
+        CollectEnemies();
+        CallHands();
     }
     public void CollectEnemies()
     {
@@ -54,8 +54,9 @@ public class EnemyManager : MonoBehaviour
                 ux.PopUp("LOOK DOWN");
                 
                 player.rooted = true;
-                Vector3 spawnPosition = player.transform.position + new Vector3(0.7f, -0.5f, 0.2f);
-                Instantiate(hands, spawnPosition, Quaternion.identity);
+                Vector3 spawnPos = player.transform.position;
+                spawnPos.y -= 1f;
+                Instantiate(hands, spawnPos, Quaternion.identity);
             }
         }
     }

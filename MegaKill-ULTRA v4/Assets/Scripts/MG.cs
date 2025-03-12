@@ -8,14 +8,14 @@ public class MG : MonoBehaviour
     GameManager gameManager;
     UX ux;
 
-    public float bullets = 20f;
+    public float bullets = 12f;
     public float tracerDuration = 0.2f;
     [SerializeField] TrailRenderer tracerPrefab;
 
     [SerializeField] Transform firePoint;
 
     public int bulletsPerShot = 1;
-    public float spreadAngle = 1f;
+    float spreadAngle = 1.5f;
 
     private bool canFire = true;
     float fireRate = 0.15f;
@@ -27,6 +27,8 @@ public class MG : MonoBehaviour
     Vector3 originalPos;
 
     public ParticleSystem muzzleFlash;
+
+    private float lastActionTime = -0.5f; // Shared timer for both MGEmpty and PopUp
 
     void Awake()
     {
@@ -70,8 +72,13 @@ public class MG : MonoBehaviour
             }
             else
             {
-                soundManager.MGEmpty();
-                ux.PopUp("EMPTY");
+                // Ensure MGEmpty and PopUp only trigger once every 0.5 seconds
+                if (Time.time - lastActionTime >= 0.5f)
+                {
+                    soundManager.MGEmpty();
+                    ux.PopUp("EMPTY");
+                    lastActionTime = Time.time; // Reset the timer after both actions
+                }
             } 
         }
     }

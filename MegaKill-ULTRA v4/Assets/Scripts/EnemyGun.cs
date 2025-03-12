@@ -27,6 +27,8 @@ public class EnemyGun : MonoBehaviour
     public Animator animator;
     public ParticleSystem muzzleFlash;
 
+    [SerializeField] float targetAdjust;
+
     void Start()
     {
         enemy = GetComponent<Enemy>();
@@ -67,14 +69,9 @@ public class EnemyGun : MonoBehaviour
 
     void Attack()
     {
-        if (enemy.isDead || !CanShootNow())
+        if (enemy.isDead || !CanShootNow() || !enemy.los)
         {
             return;
-        }
-    
-        if (enemy.animator != null)
-        {
-            enemy.animator.SetTrigger("Shoot");
         }
 
         soundManager.EnemySFX(sfx, gunshot);
@@ -85,15 +82,10 @@ public class EnemyGun : MonoBehaviour
             muzzleFlash.Emit(10);
         }
 
-        Collider playerCollider = player.GetComponent<Collider>();
-        Vector3 targetPosition = player.transform.position;
+        Vector3 targetPos = player.transform.position;
+        targetPos.y = player.transform.position.y + targetAdjust;
 
-        if (playerCollider != null)
-        {
-            targetPosition.y = playerCollider.bounds.max.y - 0.1f;
-        }
-
-        Vector3 targetDir = (targetPosition - firePoint.position).normalized;
+        Vector3 targetDir = (targetPos - firePoint.position).normalized;
 
         GameObject bulletObj = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         Bullet bullet = bulletObj.GetComponent<Bullet>();
@@ -103,6 +95,8 @@ public class EnemyGun : MonoBehaviour
 
         bullet.vel = bulletSpd;
         bullet.direction = targetDir;
+
+        enemy.animator.SetTrigger("Shoot");
 
         TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
         StartCoroutine(HandleTracer(tracer, targetDir));
