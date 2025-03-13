@@ -30,13 +30,27 @@ public class UX : MonoBehaviour
     [SerializeField] Texture eye20Texture;
     [SerializeField] Texture eye10Texture;
     [SerializeField] Texture eyeFlashTexture;
+
+    [SerializeField] Texture eye100Texture2;
+    [SerializeField] Texture eye80Texture2;
+    [SerializeField] Texture eye60Texture2;
+    [SerializeField] Texture eye40Texture2;
+    [SerializeField] Texture eye20Texture2;
+    [SerializeField] Texture eye10Texture2;
+    [SerializeField] Texture eyeFlashTexture2;
+    
     [SerializeField] Texture eyeHurtTexture;
     [SerializeField] Texture eyeHealTexture;
+
     float damagedDuration = 0.2f;
     float health;
     bool isFlashing = false;
 
     Coroutine currentCoroutine;
+
+    private float eyeIdleAnimationDuration = 1.5f;
+    private Coroutine eyeIdleCoroutine;
+    private bool useAlternateTexture = false;
 
     void Awake()
     {
@@ -46,13 +60,19 @@ public class UX : MonoBehaviour
 
     void Start()
     {
+        health = 100f;
+        
         menu.gameObject.SetActive(false);
         if (worldSpace != null)
         {
             initialFoV = cam.fieldOfView;
             initialCanvasScale = worldSpace.transform.localScale;
         }
+        
+        // Start the idle eye animation
+        eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
     }
+    
 
     public void TutorialOn() => tutorial.CallDialogue();
     public void IntroOn() => intro.CallDialogue();
@@ -136,8 +156,15 @@ public class UX : MonoBehaviour
 
     public void UpdateHealth(float newHealth)
     {
+        // Store the current health for comparison
+        float oldHealth = health;
+        
+        health = newHealth;
+        
         StopAllCoroutines();
-        if (newHealth >= health)
+
+
+        if (newHealth >= oldHealth)
         {
             StartCoroutine(HealEye());
         }
@@ -147,6 +174,7 @@ public class UX : MonoBehaviour
         }
         
     }
+
     IEnumerator HurtEye()
     {
         Texture previousEye = currentEye.texture;
@@ -157,9 +185,11 @@ public class UX : MonoBehaviour
         if (health > 10)
         {
             currentEye.texture = GetEye();
+            eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
         }
         else
         {
+            // Start the flashing sequence when health is low
             StartCoroutine(FlashEye());
         }
     }
@@ -171,24 +201,83 @@ public class UX : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         currentEye.texture = previousEye;
         currentEye.texture = GetEye();
+
+        //Restart the idle animation
+        eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
     }
 
     IEnumerator FlashEye()
     {
-        currentEye.texture = eyeFlashTexture;
-        yield return new WaitForSeconds(0.2f);
-        currentEye.texture = eye10Texture;
-        yield return new WaitForSeconds(0.2f);
-        StartCoroutine(HurtEye());
+        Texture[] flashSequence = new Texture[] 
+        { 
+            eye10Texture, 
+            eye10Texture2, 
+            eyeFlashTexture, 
+            eyeFlashTexture2 
+        };
+        
+        int currentIndex = 0;
+        
+        while (health <= 10)
+        {
+            // Set the current texture from the sequence
+            currentEye.texture = flashSequence[currentIndex];
+            
+            // Move to the next texture in the sequence
+            currentIndex = (currentIndex + 1) % flashSequence.Length;
+            
+            // Wait before switching to the next texture
+            yield return new WaitForSeconds(0.2f);
+        }
+        
+        // If health went above 10, return to normal eye
+        currentEye.texture = GetEye();
+        
+        // Restart the idle animation
+        eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
+    }
+
+    IEnumerator IdleEyeAnimation()
+    {
+        while (true)
+        {
+            // Toggle between primary and alternate texture
+            useAlternateTexture = !useAlternateTexture;
+            
+            // Apply the appropriate texture
+            currentEye.texture = GetEye();
+            
+            // Wait before switching to the other texture
+            yield return new WaitForSeconds(eyeIdleAnimationDuration);
+        }
     }
 
     Texture GetEye()
     {
-        if (health > 80) return eye100Texture;
-        if (health > 60) return eye80Texture;
-        if (health > 40) return eye60Texture;
-        if (health > 20) return eye40Texture;
-        if (health > 10) return eye20Texture;
-        return eye10Texture;
+        // Return the appropriate texture based on health and whether to use the alternate texture
+        if (!useAlternateTexture)
+        {
+            if (health > 80) return eye100Texture;
+            if (health > 60) return eye80Texture;
+            if (health > 40) return eye60Texture;
+            if (health > 20) return eye40Texture;
+            if (health > 10) return eye20Texture;
+            return eye10Texture;
+        }
+        else
+        {
+            if (health > 80) return eye100Texture2;
+            if (health > 60) return eye80Texture2;
+            if (health > 40) return eye60Texture2;
+            if (health > 20) return eye40Texture2;
+            if (health > 10) return eye20Texture2;
+            return eye10Texture2;
+        }
+    }
+
+    Texture GetEyeFlash()
+    {
+        // Return the appropriate flash texture based on whether to use the alternate texture
+        return useAlternateTexture ? eyeFlashTexture2 : eyeFlashTexture;
     }
 }
