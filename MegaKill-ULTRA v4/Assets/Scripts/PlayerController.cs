@@ -371,7 +371,7 @@ public class PlayerController : MonoBehaviour
         {
             health = 100;
         }
-        ux.UpdateHealth(health, maxHealth);
+        ux.UpdateHealth(health);
     }
 
     public void Hit()
@@ -379,7 +379,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("PLAYER HIT");
 
         health -= 10;
-        ux.UpdateHealth(health, maxHealth);
+        ux.UpdateHealth(health);
 
         if (health <= 0 && !isDead)
         {

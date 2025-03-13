@@ -31,6 +31,7 @@ public class UX : MonoBehaviour
     [SerializeField] Texture eye10Texture;
     [SerializeField] Texture eyeFlashTexture;
     [SerializeField] Texture eyeHurtTexture;
+    [SerializeField] Texture eyeHealTexture;
     float damagedDuration = 0.2f;
     float health;
     bool isFlashing = false;
@@ -133,18 +134,21 @@ public class UX : MonoBehaviour
         currentCoroutine = null;
     }
 
-    public void UpdateHealth(float currentHealth, float maxHealth)
+    public void UpdateHealth(float newHealth)
     {
-        health = (currentHealth / maxHealth) * 100;
-
         StopAllCoroutines();
-        StartCoroutine(HurtEye());
+        if (newHealth >= health)
+        {
+            StartCoroutine(HealEye());
+        }
+        else
+        {
+            StartCoroutine(HurtEye());
+        }
+        
     }
-
     IEnumerator HurtEye()
     {
-        Debug.Log("EYE CALLED");
-        
         Texture previousEye = currentEye.texture;
         currentEye.texture = eyeHurtTexture;
         yield return new WaitForSeconds(0.2f);
@@ -158,6 +162,15 @@ public class UX : MonoBehaviour
         {
             StartCoroutine(FlashEye());
         }
+    }
+
+    IEnumerator HealEye()
+    {
+        Texture previousEye = currentEye.texture;
+        currentEye.texture = eyeHealTexture;
+        yield return new WaitForSeconds(0.2f);
+        currentEye.texture = previousEye;
+        currentEye.texture = GetEye();
     }
 
     IEnumerator FlashEye()
