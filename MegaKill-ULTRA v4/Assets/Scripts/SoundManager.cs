@@ -38,13 +38,10 @@ public class SoundManager : MonoBehaviour
     public AudioClip line7;
 
     public AudioClip revShot;
-    public AudioClip revReload;
     public AudioClip revEmpty;
     public AudioClip shotShot;
-    public AudioClip shotReload;
     public AudioClip shotEmpty;
     public AudioClip mgShot;
-    public AudioClip mgReload;
     public AudioClip mgEmpty;
     public AudioClip punch;
     public AudioClip toss;
@@ -147,13 +144,10 @@ public class SoundManager : MonoBehaviour
     }
 
     public void RevShot() => PlaySfx(revShot);
-    public void RevReload() => PlaySfx(revReload);
     public void RevEmpty() => PlaySfx(revEmpty);
     public void ShotShot() => PlaySfx(shotShot);
-    public void ShotReload() => PlaySfx(shotReload);
     public void ShotEmpty() => PlaySfx(shotEmpty);
     public void MGShot() => PlaySfx(mgShot);
-    public void MGReload() => PlaySfx(mgReload);
     public void MGEmpty() => PlaySfx(mgEmpty);
     public void BatSwing() => PlaySfx(batSwing);
     public void Punch() => PlaySfx(punch);

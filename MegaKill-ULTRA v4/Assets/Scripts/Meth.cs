@@ -39,7 +39,7 @@ public class Meth : MonoBehaviour
                 cooldown = Time.time; 
             }
 
-            charge -= 0.1f;
+            charge -= 0.01f;
             bulletTime.Slow();
         }
         else

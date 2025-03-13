@@ -43,7 +43,7 @@ public class CamController : MonoBehaviour
 
     // Shader variables
     public Material camMat;
-    float currentLerp = 0.2f;
+    float currentLerp = 0.15f;
     float currentFrequency = 0;
     float currentAmplitude = 0;
 
@@ -150,7 +150,7 @@ public class CamController : MonoBehaviour
     void UpdateShader()
     {
         // Cap the amplitude and frequency to a value based on the phase
-        float cap = 2f * phase;
+        float cap = 3f * phase;
         Debug.Log(cap);
 
         if (currentAmplitude < cap)
