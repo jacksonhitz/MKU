@@ -23,6 +23,6 @@ public class NPC : MonoBehaviour
         //gameManager.RemoveEnemy(this);
 
         this.gameObject.SetActive(false);
-        gameManager.Score(100);
+        //gameManager.Score(100);
     }
 }

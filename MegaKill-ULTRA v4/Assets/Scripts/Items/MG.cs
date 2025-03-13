@@ -79,12 +79,11 @@ public class MG : MonoBehaviour
             }
             else
             {
-                // Ensure MGEmpty and PopUp only trigger once every 0.5 seconds
                 if (Time.time - lastActionTime >= 0.5f)
                 {
                     soundManager.MGEmpty();
                     ux.PopUp("EMPTY");
-                    lastActionTime = Time.time; // Reset the timer after both actions
+                    lastActionTime = Time.time;
                 }
             } 
         }
@@ -99,7 +98,7 @@ public class MG : MonoBehaviour
     {
         if (Physics.Raycast(ray, out RaycastHit hit, player.range))
         {
-            if (hit.transform.CompareTag("NPC")) hit.transform.GetComponent<Enemy>()?.KillEnemy();
+            if (hit.transform.CompareTag("Enemy")) hit.transform.GetComponent<Enemy>()?.HitCheck(true);
             TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
             StartCoroutine(HandleTracer(tracer, hit.point));
         }

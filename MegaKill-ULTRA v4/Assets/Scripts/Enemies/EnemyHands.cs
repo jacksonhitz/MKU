@@ -2,17 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hands : MonoBehaviour
+public class Hands : Enemy
 {
     Vector3 movementRange = new Vector3(0.2f, 0.2f, 0.2f);
-    float movementSpeed = 1f; 
+    float spd = 1f; 
     float minDelay = 0f;
     float maxDelay = 0.5f;
 
-    private Transform[] children;
-    private Dictionary<Transform, (Vector3 range, float speed)> movementData;
+    Transform[] children;
+    Dictionary<Transform, (Vector3 range, float speed)> movementData;
 
-    void Start()
+    protected override void Pathfind(){}
+    protected override void DropItem(){}
+    protected override IEnumerator Attack()
+    {
+        yield break;
+    }
+    protected override void Start()
     {
         int childCount = transform.childCount;
         children = new Transform[childCount];
@@ -29,20 +35,22 @@ public class Hands : MonoBehaviour
                 Random.Range(0.1f, movementRange.y),
                 0
             );
-            float randomSpeed = Random.Range(0.5f, movementSpeed * 1.5f);
+            float randomSpd = Random.Range(0.5f, spd * 1.5f);
 
-            movementData[child] = (randomRange, randomSpeed);
+            movementData[child] = (randomRange, randomSpd);
         }
+    }
+    protected override void Hit(bool lethal)
+    {
+        soundManager.EnemySFX(sfx, deadClip);
+        StartCoroutine(Dead());
     }
 
     IEnumerator PlayAnim(Transform child)
     {
         Animator animator = child.GetComponent<Animator>();
-        if (animator != null)
-        {
-            float delay = Random.Range(minDelay, maxDelay);
-            yield return new WaitForSeconds(delay);
-            animator.Play("grab");
-        }
+        float delay = Random.Range(minDelay, maxDelay);
+        yield return new WaitForSeconds(delay);
+        animator.Play("grab");
     }
 }

@@ -60,9 +60,9 @@ public class Item : MonoBehaviour
         {
             thrown = false;
             available = true;
-            if (collision.gameObject.CompareTag("NPC"))
+            if (collision.gameObject.CompareTag("Enemy"))
             {
-                collision.gameObject.GetComponent<Enemy>()?.Hit();
+                collision.gameObject.GetComponent<Enemy>()?.HitCheck(false);
             }
         }
     }

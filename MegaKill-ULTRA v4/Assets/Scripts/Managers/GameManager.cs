@@ -214,6 +214,7 @@ public class GameManager : MonoBehaviour
     {
         enemyManager.EnemyDead(enemy);
         cam.UpPhase();
+        Score(100);
     }
 
     public void CallDead()
@@ -237,7 +238,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("Called");
     }
 
-    public void Score(int newScore)
+    void Score(int newScore)
     {
         string newString = newScore.ToString();
         ux.PopUp(newString);

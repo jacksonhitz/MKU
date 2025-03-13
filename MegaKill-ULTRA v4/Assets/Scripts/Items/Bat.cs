@@ -48,14 +48,14 @@ public class Bat : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            if (collider.CompareTag("NPC"))
+            if (collider.CompareTag("Enemy"))
             {
                 Enemy enemy = collider.transform.parent?.parent?.GetComponent<Enemy>();
                 if (enemy == null)
                 {
                     enemy = collider.transform.GetComponent<Enemy>();
                 }
-                enemy?.Hit();
+                enemy?.HitCheck(true);
             }
         }
     }

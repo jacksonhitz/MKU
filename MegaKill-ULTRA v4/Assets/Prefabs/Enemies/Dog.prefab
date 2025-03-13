@@ -10,14 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 3088072805445469891}
   - component: {fileID: 8080463840081033434}
-  - component: {fileID: 1876991504282312008}
-  - component: {fileID: 9221990856153062687}
   - component: {fileID: 4025320722680971888}
   - component: {fileID: 551924867008723487}
   - component: {fileID: 3123545253267771213}
+  - component: {fileID: 7462595604546991206}
   m_Layer: 12
   m_Name: Dog
-  m_TagString: NPC
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60,39 +59,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &1876991504282312008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6812792687230274983}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ea6259db5eb24c9c84cb3271802866b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  los: 0
-  blood: {fileID: 8853266473761700966, guid: b1da43f1588a840748c686b0733ad393, type: 3}
-  weaponPrefab: {fileID: 0}
-  rangedSquelch: {fileID: 0}
-  meleeSquelch: {fileID: 8300000, guid: 02fadc0adf0ba064da39feacdca9c9f2, type: 3}
-  animator: {fileID: 5966705359488437535}
-  model: {fileID: 7708446972887021684}
-  ranged: 0
---- !u!114 &9221990856153062687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6812792687230274983}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 594aa498658e54d78a834210c9d9b245, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 5966705359488437535}
 --- !u!82 &4025320722680971888
 AudioSource:
   m_ObjectHideFlags: 0
@@ -103,7 +69,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7e4455803fc6549d6a1a346440652aab, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.1
   m_Pitch: 1
@@ -237,6 +203,30 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1.4339668, z: 2.4871087}
   m_Center: {x: 0, y: 0.5816495, z: -0.74355406}
+--- !u!114 &7462595604546991206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6812792687230274983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 168956494834a4144bdd149a02b45202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sfx: {fileID: 0}
+  attackClip: {fileID: 0}
+  deadClip: {fileID: 0}
+  hitClip: {fileID: 0}
+  stunClip: {fileID: 0}
+  deathEffect: {fileID: 0}
+  agent: {fileID: 0}
+  player: {fileID: 0}
+  gameManager: {fileID: 0}
+  soundManager: {fileID: 0}
+  enemyManager: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!1001 &7365793869374457125
 PrefabInstance:
   m_ObjectHideFlags: 0

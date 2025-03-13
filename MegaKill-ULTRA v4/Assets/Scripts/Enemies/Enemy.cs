@@ -1,0 +1,181 @@
+using UnityEngine;
+using UnityEngine.AI;
+using System.Collections;
+
+public abstract class Enemy : MonoBehaviour
+{
+    [Header("SFX")]
+    public AudioClip attackClip;
+    public AudioClip deadClip;
+    public AudioClip hitClip;
+    public AudioClip stunClip;
+
+
+    [Header("VFX")]
+    public GameObject deathEffect;
+
+
+    //REFRENCES
+    [HideInInspector] public NavMeshAgent agent;
+    [HideInInspector] public PlayerController player;
+    [HideInInspector] public GameManager gameManager;
+    [HideInInspector] public SoundManager soundManager;
+    [HideInInspector] public EnemyManager enemyManager;
+    [HideInInspector] public Animator animator;
+    [HideInInspector] public AudioSource sfx;
+
+
+    //PUBLIC VAR
+    protected float attackCooldown = 5f;
+    protected float attackRange = 15f;
+    protected float detectionRange = 30f;
+
+    protected bool detectedPlayer;
+
+    
+    //VAR
+    float stunDuration = 2f;
+
+    bool los;
+    bool isAttacking;
+    bool isDead;
+    bool isStunned;
+
+
+    
+    void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        sfx = GetComponent<AudioSource>();
+
+        animator = GetComponentInChildren<Animator>();
+
+        player = FindObjectOfType<PlayerController>();
+        gameManager = FindObjectOfType<GameManager>();
+        soundManager = FindObjectOfType<SoundManager>();
+        enemyManager = FindObjectOfType<EnemyManager>();
+    }
+
+    void Update()
+    {
+        if (!isDead)
+        {
+            LOS();
+            Pathfind();
+        }
+    }
+    
+    void LOS()
+    {
+        Vector3 direction = (player.transform.position - transform.position).normalized;
+        RaycastHit hit;
+        LayerMask layerMask = LayerMask.GetMask("Ground", "Player");
+
+        if (Physics.Raycast(transform.position, direction, out hit, detectionRange, layerMask))
+        {
+            los = hit.collider.CompareTag("Player");
+            detectedPlayer |= los;
+            Debug.Log("player spotted");
+        }
+        else
+        {
+            los = false;
+        }
+    }
+
+    protected virtual void Pathfind()
+    {
+        if (los && Vector3.Distance(transform.position, player.transform.position) < attackRange)
+        {
+            agent.ResetPath();
+            LookTowards(player.transform.position);
+            StartCoroutine(AttackCheck());
+        }
+        else if (detectedPlayer && Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
+        {
+            agent.SetDestination(player.transform.position);
+            LookTowards(player.transform.position);
+        }
+        else
+        {
+            agent.ResetPath();
+        }
+    }
+    IEnumerator AttackCheck()
+    {
+        if (!isAttacking)
+        {
+            isAttacking = true;
+            animator.SetTrigger("Attack");
+            soundManager.EnemySFX(sfx, attackClip);
+            StartCoroutine(Attack());
+            yield return new WaitForSeconds(attackCooldown);
+            isAttacking = false;
+        }
+        else yield break;
+    }
+
+
+    void LookTowards(Vector3 targetPosition)
+    {
+        Vector3 direction = (targetPosition - transform.position).normalized;
+        direction.y = 0;
+        if (direction != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+        }
+    }
+
+    public void HitCheck(bool lethal)
+    {
+        soundManager.EnemySFX(sfx, hitClip);
+        Hit(lethal);
+    }
+    protected virtual void Hit(bool lethal)
+    {
+        if (lethal || isStunned)
+        {
+            soundManager.EnemySFX(sfx, deadClip);
+            StartCoroutine(Dead());
+        }
+        else
+        {
+            soundManager.EnemySFX(sfx, stunClip);
+            StartCoroutine(Stun());
+        }
+    }
+    IEnumerator Stun()
+    {
+        isStunned = true;
+        animator?.SetBool("Stunned", true);
+        agent.ResetPath();
+        los = false;
+
+        yield return new WaitForSeconds(stunDuration);
+
+        isStunned = false;
+        animator?.SetBool("Stunned", false);
+        agent.isStopped = false;
+    }
+    public IEnumerator Dead()
+    {
+        isDead = true;
+        StopAllCoroutines();
+        gameManager.Kill(this);
+        DropItem();
+        Instantiate(deathEffect, transform.position, Quaternion.identity);
+
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
+
+        yield return new WaitForSeconds(1f);
+        Destroy(gameObject);
+    }
+    
+    protected abstract IEnumerator Attack();
+    protected abstract void Start();
+    protected abstract void DropItem();
+}

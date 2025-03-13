@@ -175,7 +175,7 @@ public class PlayerController : MonoBehaviour
         {
             if (hit.CompareTag("NPC"))
             {
-                hit.GetComponentInParent<Enemy>()?.Hit();
+                hit.GetComponentInParent<Enemy>()?.HitCheck(false);
             }
         }
     }

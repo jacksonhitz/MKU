@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 
-public class Shotgun : MonoBehaviour
+public class Revolver : MonoBehaviour
 {
    float mag = 75f;
    float spd = 5f;
@@ -11,13 +11,16 @@ public class Shotgun : MonoBehaviour
 
    Vector3 originalRot;
    Vector3 originalPos;
+   Vector3 stowedPos = new Vector3(-0.5f, -0.5f, 0f);
+   Vector3 stowedRot = new Vector3(45f, 0f, 0f);
 
 
    PlayerController player;
    SoundManager soundManager;
    GameManager gameManager;
+   Rigidbody rb;
    UX ux;
-    Rigidbody rb;
+    
 
 
    public float bullets = 6f;
@@ -34,83 +37,87 @@ public class Shotgun : MonoBehaviour
    public int pellets = 12;
    public float spreadAngle = 5f;
 
+
+   private bool isStowing = false;
+   private float switchSpeed = 5f;
    private bool canFire = true;
    float fireRate = .5f;
 
-
-   public ParticleSystem muzzleFlash;
+   public ParticleSystem revolverMuzzleFlash;
+   public Light gunPointLight;
 
 
    void Awake()
    {
        soundManager = FindObjectOfType<SoundManager>();
        gameManager = FindObjectOfType<GameManager>();
-       ux = FindObjectOfType<UX>();
        player = FindObjectOfType<PlayerController>();
+       ux = FindObjectOfType<UX>();
        rb = GetComponent<Rigidbody>();
    }
 
 
    void Start()
    {
-       originalRot = transform.localEulerAngles;
-       originalPos = transform.localPosition;
+        originalRot = transform.localEulerAngles;
+        
+        if (gunPointLight == null)
+        {
+            gunPointLight = transform.Find("FirePoint/Particle System/Point Light").GetComponent<Light>();
+        }
+        
+        if (gunPointLight) gunPointLight.enabled = false;
    }
+
+
    void Update()
-   {
-       if (rb.isKinematic)
-       {
+    {
+        if (rb.isKinematic)
+        {
             rot = Vector3.Lerp(rot, Vector3.zero, spd * Time.deltaTime);
             transform.localEulerAngles = originalRot + rot;
-       }
-   }
-
-
-   public void Recoil()
-   {
-       rot += new Vector3(mag, 0, 0f);
-   }
-
-
-   public void Use()
-    {
-        if (canFire)
-        {
-            Debug.Log("fired");
-            StartCoroutine(FireCooldown());
-            if (shells > 0)
-            {
-                Recoil();
-                soundManager.ShotShot();
-                muzzleFlash?.Play();
-                shells--;
-                for (int i = 0; i < pellets; i++)
-                {
-                    Vector3 spread = new Vector3(Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0f);
-                    Quaternion rotation = Quaternion.Euler(player.cam.transform.eulerAngles + spread);
-                    Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
-                    Hitscan(ray);
-                }
-            }
-            else
-            {
-                soundManager.ShotEmpty();
-                ux.PopUp("EMPTY");
-            } 
         }
     }
 
-
-   void Hitscan(Ray ray)
+   public void Recoil()
    {
-       if (Physics.Raycast(ray, out RaycastHit hit, player.range))
-       {
-           if (hit.transform.CompareTag("NPC")) hit.transform.GetComponent<Enemy>()?.KillEnemy();
-           TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
-           StartCoroutine(HandleTracer(tracer, hit.point));
-       }
+       rot += new Vector3(-mag, 0, 0f);
    }
 
+   public void Use()
+   {
+        if (!canFire) return;
+        if (bullets > 0)
+        {
+            StartCoroutine(FireCooldown());
+            Recoil();
+            soundManager.RevShot();
+            revolverMuzzleFlash.Play();
+
+            if (gunPointLight) gunPointLight.enabled = true;
+            StartCoroutine(TurnOffLight(0.1f));
+
+            bullets--;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Hitscan(ray);
+        }
+        else
+        {
+            soundManager.RevEmpty();
+            ux.PopUp("EMPTY");
+        } 
+   }
+
+
+    void Hitscan(Ray ray)
+    {
+        if (Physics.Raycast(ray, out RaycastHit hit, player.range))
+        {
+            if (hit.transform.CompareTag("Enemy")) hit.transform.GetComponent<Enemy>()?.HitCheck(true);
+            TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
+            StartCoroutine(HandleTracer(tracer, hit.point));
+        }
+    }
 
    IEnumerator FireCooldown()
    {
@@ -133,6 +140,12 @@ public class Shotgun : MonoBehaviour
        yield return new WaitForSeconds(tracer.time);
        Destroy(tracer.gameObject);
    }
+
+   IEnumerator TurnOffLight(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (gunPointLight) gunPointLight.enabled = false;
+    }
 }
 
 
