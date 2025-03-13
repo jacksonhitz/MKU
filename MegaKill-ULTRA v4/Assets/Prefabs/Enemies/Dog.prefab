@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6812792687230274983}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -4.97, z: 7.44}
   m_LocalScale: {x: 1.33, y: 1.33, z: 1.33}
   m_ConstrainProportionsScale: 0
@@ -47,7 +47,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1
-  m_Speed: 12
+  m_Speed: 10
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -215,18 +215,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 168956494834a4144bdd149a02b45202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sfx: {fileID: 0}
-  attackClip: {fileID: 0}
-  deadClip: {fileID: 0}
-  hitClip: {fileID: 0}
-  stunClip: {fileID: 0}
-  deathEffect: {fileID: 0}
+  attackClip: {fileID: 8300000, guid: c17e43284191f244cad1f59127cfa8d0, type: 3}
+  deadClip: {fileID: 8300000, guid: 935bc7711ab62e2448c499aea11e0142, type: 3}
+  hitClip: {fileID: 8300000, guid: d76e15cf2d007ce4eb1945e4e673ef2e, type: 3}
+  stunClip: {fileID: 8300000, guid: fdfbdb32cff849d498eb0d57abce11c7, type: 3}
+  deathEffect: {fileID: 8853266473761700966, guid: b1da43f1588a840748c686b0733ad393, type: 3}
   agent: {fileID: 0}
   player: {fileID: 0}
   gameManager: {fileID: 0}
   soundManager: {fileID: 0}
   enemyManager: {fileID: 0}
   animator: {fileID: 0}
+  sfx: {fileID: 0}
 --- !u!1001 &7365793869374457125
 PrefabInstance:
   m_ObjectHideFlags: 0

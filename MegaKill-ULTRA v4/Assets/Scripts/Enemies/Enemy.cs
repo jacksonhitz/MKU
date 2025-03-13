@@ -38,7 +38,7 @@ public abstract class Enemy : MonoBehaviour
     //VAR
     float stunDuration = 2f;
 
-    bool los;
+    [HideInInspector] public bool los;
     bool isDead;
     bool isStunned;
 
@@ -95,7 +95,7 @@ public abstract class Enemy : MonoBehaviour
             LookTowards(player.transform.position);
             StartCoroutine(AttackCheck());
         }
-        else if (detectedPlayer && Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
+        else if (detectedPlayer && !isStunned && Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
         {
             agent.SetDestination(player.transform.position);
             LookTowards(player.transform.position);
@@ -114,7 +114,7 @@ public abstract class Enemy : MonoBehaviour
             animator.SetBool("Run", false);
         }
     }
-    IEnumerator AttackCheck()
+    public IEnumerator AttackCheck()
     {
         if (!isAttacking)
         {
@@ -127,7 +127,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
 
-    void LookTowards(Vector3 targetPosition)
+    public void LookTowards(Vector3 targetPosition)
     {
         Vector3 direction = (targetPosition - transform.position).normalized;
         direction.y = 0;
@@ -160,14 +160,14 @@ public abstract class Enemy : MonoBehaviour
     IEnumerator Stun()
     {
         isStunned = true;
-        animator?.SetBool("Stun", true);
+        animator.SetBool("Stun", true);
         agent.ResetPath();
         los = false;
 
         yield return new WaitForSeconds(stunDuration);
 
         isStunned = false;
-        animator?.SetBool("Stun", false);
+        animator.SetBool("Stun", false);
         agent.isStopped = false;
 
         yield return new WaitForSeconds(attackRate);

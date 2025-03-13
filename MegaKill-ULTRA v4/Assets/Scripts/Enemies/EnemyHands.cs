@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hands : Enemy
+public class EnemyHands : Enemy
 {
     Vector3 movementRange = new Vector3(0.2f, 0.2f, 0.2f);
     float spd = 1f; 
@@ -40,6 +40,7 @@ public class Hands : Enemy
     protected override void Hit(bool lethal)
     {
         soundManager.EnemySFX(sfx, deadClip);
+        player.rooted = false;
         StartCoroutine(Dead());
     }
 

@@ -32,6 +32,8 @@ public class EnemyRevolver : Enemy
 
     IEnumerator Attack()
     {
+        animator.SetTrigger("Atk");
+        
         muzzleFlash.Play();
         muzzleFlash.Emit(10);
 

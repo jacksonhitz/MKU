@@ -20,7 +20,6 @@ public class EnemyDog : Enemy
         yield return new WaitForSeconds(0.2f);
 
         player.Hit(dmg);
-        animator.SetTrigger("Attack");
         soundManager.EnemySFX(sfx, attackClip);
 
         yield return new WaitForSeconds(0.2f);

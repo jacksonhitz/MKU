@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 4067735771225139943}
   m_Layer: 12
   m_Name: body
-  m_TagString: NPC
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5943,7 +5943,7 @@ GameObject:
   - component: {fileID: 59742549101180192}
   m_Layer: 12
   m_Name: mku_shotgun_recoil
-  m_TagString: NPC
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6823,7 +6823,6 @@ MonoBehaviour:
   enemyHas: 1
   def: {fileID: 2100000, guid: 0e209ad317140724dad00467bef9123f, type: 2}
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  rend: {fileID: 8083454808067268716}
   isHovering: 0
   thrown: 0
 --- !u!114 &4780324843060218362

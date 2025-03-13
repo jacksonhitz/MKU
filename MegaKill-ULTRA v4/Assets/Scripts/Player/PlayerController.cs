@@ -128,19 +128,17 @@ public class PlayerController : MonoBehaviour
     }
 
     void Move()
-{
+    {
     float horzInput = Input.GetAxis("Horizontal");
     float vertInput = Input.GetAxis("Vertical");
     movement = transform.right * horzInput + transform.forward * vertInput;
 
-    // Apply movement input
     characterController.Move(movement * runSpd * Time.deltaTime);
     gravity = -9.81f * 10; 
 
-    // Apply gravity manually to the position (directly alter the Y position)
     Vector3 gravityEffect = new Vector3(0f, gravity, 0f);
     characterController.Move(gravityEffect * Time.deltaTime);
-}
+    }
 
 
     void Punch(bool left)
@@ -173,7 +171,7 @@ public class PlayerController : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapBox(range.bounds.center, range.bounds.extents, range.transform.rotation);
         foreach (Collider hit in hitColliders)
         {
-            if (hit.CompareTag("NPC"))
+            if (hit.CompareTag("Enemy"))
             {
                 hit.GetComponentInParent<Enemy>()?.HitCheck(false);
             }
@@ -249,7 +247,7 @@ public class PlayerController : MonoBehaviour
 
         if (newItem.TryGetComponent<Revolver>(out var revolver))
         {
-            newItem.transform.localPosition = new Vector3(0f, -0.15f, 0.35f);
+            newItem.transform.localPosition = new Vector3(0f, -0.15f, 0.5f);
             newItem.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f);
 
             if (hand == leftHand) leftScript = revolver;
@@ -257,7 +255,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (newItem.TryGetComponent<Shotgun>(out var shotgun))
         {
-            newItem.transform.localPosition = new Vector3(0f, -0.3f, 0.7f);
+            newItem.transform.localPosition = new Vector3(0f, -0.35f, 0.5f);
             newItem.transform.localRotation = Quaternion.Euler(-90f, 0f, 180f);
 
             if (hand == leftHand) leftScript = shotgun;
@@ -265,7 +263,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (newItem.TryGetComponent<MG>(out var mg))
         {
-            newItem.transform.localPosition = new Vector3(0f, -0.3f, 0.7f);
+            newItem.transform.localPosition = new Vector3(0f, -0.3f, 0.5f);
             newItem.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f);
 
             if (hand == leftHand) leftScript = mg;
