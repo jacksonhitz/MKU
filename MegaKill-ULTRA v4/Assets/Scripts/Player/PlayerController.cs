@@ -363,10 +363,9 @@ public class PlayerController : MonoBehaviour
         swingAnim.SetTrigger("Swing");
     }
 
-    public void Heal()
+    public void Heal(float heal)
     {
-        soundManager.Gulp();
-        health += 10;
+        health += heal;
         if (health > 100)
         {
             health = 100;
@@ -374,12 +373,10 @@ public class PlayerController : MonoBehaviour
         ux.UpdateHealth(health);
     }
 
-    public void Hit()
+    public void Hit(float dmg)
     {
-        Debug.Log("PLAYER HIT");
-
-        health -= 10;
-        ux.UpdateHealth(health);
+        health -= dmg;
+        soundManager.PlayerHit();
 
         if (health <= 0 && !isDead)
         {
@@ -387,9 +384,6 @@ public class PlayerController : MonoBehaviour
             gameManager.CallDead();
             soundManager.PlayerDeath();
         }
-        else if (health > 0)
-        {
-            soundManager.PlayerHit();
-        }
+        ux.UpdateHealth(health);
     }
 }

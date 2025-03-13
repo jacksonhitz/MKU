@@ -113,7 +113,6 @@ MonoBehaviour:
   firePoint: {fileID: 4530525775220589631}
   tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
   muzzleFlash: {fileID: 2464190654140609137}
-  targetAdjust: 0.5
 --- !u!82 &5884394538128816031
 AudioSource:
   m_ObjectHideFlags: 0
@@ -221,6 +220,10 @@ PrefabInstance:
     - target: {fileID: 2651233480305370907, guid: 802cefe5936ce4703a57437d09d7bfaa, type: 3}
       propertyPath: m_Name
       value: Revolver
+      objectReference: {fileID: 0}
+    - target: {fileID: 2651233480305370907, guid: 802cefe5936ce4703a57437d09d7bfaa, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3217093725888141871, guid: 802cefe5936ce4703a57437d09d7bfaa, type: 3}
       propertyPath: m_UseGravity
@@ -960,7 +963,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2c25b0c6cde864284a44d510910a494b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 59742549101180192}
+      addedObject: {fileID: 8446238322510630439}
     - targetCorrespondingSourceObject: {fileID: -4819223349682164798, guid: 2c25b0c6cde864284a44d510910a494b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4067735771225139943}
@@ -1003,7 +1006,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2c25b0c6cde864284a44d510910a494b, type: 3}
   m_PrefabInstance: {fileID: 3572851296872779533}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &59742549101180192
+--- !u!95 &8446238322510630439
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -1013,7 +1016,7 @@ Animator:
   m_GameObject: {fileID: 4419219268666159708}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ec6f01bd22be2994f9dceb265685f0cc, type: 2}
+  m_Controller: {fileID: 9100000, guid: d9c63dc2c3a804fd785509759b3d5745, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -8,7 +8,7 @@ public class Item : MonoBehaviour
     public Material def;
     public Material glow;
 
-    public Renderer rend;
+    Renderer rend;
     Coroutine scaleCoroutine;
     Vector3 originalScale;
     GameManager gameManager;
@@ -23,6 +23,7 @@ public class Item : MonoBehaviour
         gameManager = FindAnyObjectByType<GameManager>();
         player = FindAnyObjectByType<PlayerController>();
         rb = GetComponent<Rigidbody>();
+        rend = GetComponent<Renderer>();
     }
     void Start()
     {
@@ -69,6 +70,8 @@ public class Item : MonoBehaviour
 
     public void Dropped()
     {
+        enemyHas = false;
+        
         CollidersOn();
 
         transform.SetParent(null);

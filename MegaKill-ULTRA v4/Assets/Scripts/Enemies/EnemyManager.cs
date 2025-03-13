@@ -40,7 +40,7 @@ public class EnemyManager : MonoBehaviour
         enemies.Remove(enemy);
         if (enemies.Count == 0)
         {
-            gameManager.Exit();
+            //gameManager.Exit();
         }
     }
 

@@ -2,29 +2,38 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float lifeTime = 5f;
-    public Vector3 direction;
-    public float vel;
-    private BulletTime bulletTime;
-    private Rigidbody rb;
+    float lifeTime = 5f;
+    [HideInInspector] public Vector3 dir;
+    [HideInInspector] public float vel;
+    [HideInInspector] public float dmg;
+    BulletTime bulletTime;
+    Rigidbody rb;
+    int nullLayer;
+
+    void Awake()
+    {
+        bulletTime = FindAnyObjectByType<BulletTime>();
+        rb = GetComponent<Rigidbody>();
+        nullLayer = LayerMask.NameToLayer("Null");
+    }
 
     void Start()
     {
         Destroy(gameObject, lifeTime);
-        bulletTime = FindAnyObjectByType<BulletTime>();
-        rb = GetComponent<Rigidbody>();
         Debug.Log("bulletSpawned");
+
+        Physics.IgnoreLayerCollision(gameObject.layer, nullLayer, true);
     }
 
     void FixedUpdate()
     {
         if (bulletTime != null && bulletTime.isSlow)
         {
-            rb.velocity = direction * (vel * 0.25f);
+            rb.velocity = dir * (vel * 0.25f);
         }
         else
         {
-            rb.velocity = direction * vel;
+            rb.velocity = dir * vel;
         }
     }
 
@@ -37,11 +46,9 @@ public class Bullet : MonoBehaviour
             PlayerController playerController = collision.gameObject.GetComponentInParent<PlayerController>();
             if (playerController != null)
             {
-                playerController.Hit();
-                Debug.Log("player collider hit");
+                playerController.Hit(dmg);
             }
         }
-        
-        Destroy(gameObject); 
+        Destroy(gameObject);
     }
 }

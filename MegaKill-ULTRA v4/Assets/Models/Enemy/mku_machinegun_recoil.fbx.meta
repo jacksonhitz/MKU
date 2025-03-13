@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: af14cd8ac2bc8f14d9f30060cbbbfbd3
+guid: b1ecf98e0687042f59256b5b65fbe09d
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BodyMat
+    second: {fileID: 6719245597448002910, guid: 1856a80665d584fb5b5ba1ac5deb8a89, type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: texturing
+    second: {fileID: 2100000, guid: 0ca4ac07e799e460c9f2b45714316bb3, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

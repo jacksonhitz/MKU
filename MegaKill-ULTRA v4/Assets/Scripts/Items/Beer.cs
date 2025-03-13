@@ -24,7 +24,7 @@ public class Beer : MonoBehaviour
             {
                 charge--;
                 soundManager.Gulp();
-                player.Heal();
+                player.Heal(10);
                 ux.PopUp("HEALTH UP");
                 cooldown = Time.time; 
             }

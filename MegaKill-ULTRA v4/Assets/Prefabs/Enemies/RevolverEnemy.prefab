@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5884394538128816031}
   m_Layer: 12
   m_Name: RevolverEnemy
-  m_TagString: NPC
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,7 +113,6 @@ MonoBehaviour:
   firePoint: {fileID: 4530525775220589631}
   tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
   muzzleFlash: {fileID: 2464190654140609137}
-  targetAdjust: 0.5
 --- !u!82 &5884394538128816031
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1013,7 +1012,7 @@ Animator:
   m_GameObject: {fileID: 4419219268666159708}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ec6f01bd22be2994f9dceb265685f0cc, type: 2}
+  m_Controller: {fileID: 9100000, guid: d9c63dc2c3a804fd785509759b3d5745, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -14,10 +14,7 @@ public class Hands : Enemy
 
     protected override void Pathfind(){}
     protected override void DropItem(){}
-    protected override IEnumerator Attack()
-    {
-        yield break;
-    }
+    protected override void CallAttack(){}
     protected override void Start()
     {
         int childCount = transform.childCount;

@@ -26,9 +26,11 @@ public abstract class Enemy : MonoBehaviour
 
 
     //PUBLIC VAR
-    protected float attackCooldown = 5f;
-    protected float attackRange = 15f;
+    protected float dmg;
+    protected float attackRate;
+    protected float attackRange;
     protected float detectionRange = 30f;
+    protected bool isAttacking;
 
     protected bool detectedPlayer;
 
@@ -37,7 +39,6 @@ public abstract class Enemy : MonoBehaviour
     float stunDuration = 2f;
 
     bool los;
-    bool isAttacking;
     bool isDead;
     bool isStunned;
 
@@ -63,6 +64,10 @@ public abstract class Enemy : MonoBehaviour
             LOS();
             Pathfind();
         }
+
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        Debug.Log("Current animation: " + stateInfo.shortNameHash);
     }
     
     void LOS()
@@ -75,7 +80,6 @@ public abstract class Enemy : MonoBehaviour
         {
             los = hit.collider.CompareTag("Player");
             detectedPlayer |= los;
-            Debug.Log("player spotted");
         }
         else
         {
@@ -100,16 +104,23 @@ public abstract class Enemy : MonoBehaviour
         {
             agent.ResetPath();
         }
+
+        if (agent.velocity.magnitude > 0.1)
+        {
+            animator.SetBool("Run", true);
+        }
+        else
+        {
+            animator.SetBool("Run", false);
+        }
     }
     IEnumerator AttackCheck()
     {
         if (!isAttacking)
         {
             isAttacking = true;
-            animator.SetTrigger("Attack");
-            soundManager.EnemySFX(sfx, attackClip);
-            StartCoroutine(Attack());
-            yield return new WaitForSeconds(attackCooldown);
+            CallAttack();
+            yield return new WaitForSeconds(attackRate);
             isAttacking = false;
         }
         else yield break;
@@ -142,21 +153,27 @@ public abstract class Enemy : MonoBehaviour
         else
         {
             soundManager.EnemySFX(sfx, stunClip);
+            StopAllCoroutines();
             StartCoroutine(Stun());
         }
     }
     IEnumerator Stun()
     {
         isStunned = true;
-        animator?.SetBool("Stunned", true);
+        animator?.SetBool("Stun", true);
         agent.ResetPath();
         los = false;
 
         yield return new WaitForSeconds(stunDuration);
 
         isStunned = false;
-        animator?.SetBool("Stunned", false);
+        animator?.SetBool("Stun", false);
         agent.isStopped = false;
+
+        yield return new WaitForSeconds(attackRate);
+
+        isAttacking = false;
+
     }
     public IEnumerator Dead()
     {
@@ -175,7 +192,7 @@ public abstract class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
     
-    protected abstract IEnumerator Attack();
+    protected abstract void CallAttack();
     protected abstract void Start();
     protected abstract void DropItem();
 }

@@ -9,13 +9,13 @@ public class MG : MonoBehaviour
     UX ux;
     Rigidbody rb;
 
-    public float bullets = 12f;
-    public float tracerDuration = 0.2f;
+    float bullets = 12f;
+    float tracerDuration = 0.2f;
     [SerializeField] TrailRenderer tracerPrefab;
 
     [SerializeField] Transform firePoint;
 
-    public int bulletsPerShot = 1;
+    int bulletsPerShot = 1;
     float spreadAngle = 1.5f;
 
     private bool canFire = true;

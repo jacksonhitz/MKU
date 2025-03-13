@@ -20,15 +20,11 @@ public class Shotgun : MonoBehaviour
     Rigidbody rb;
 
 
-   public float bullets = 6f;
    public float shells = 2f;
    public float reloadBackAmount = 0.2f;
    public float reloadSpeed = 2f;
    public float tracerDuration = 0.2f;
-   public float scaredRad = 50f;
 
-
-   public LayerMask npcMask;
    public TrailRenderer tracerPrefab;
    public Transform firePoint;
    public int pellets = 12;

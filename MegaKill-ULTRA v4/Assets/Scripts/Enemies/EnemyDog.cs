@@ -3,19 +3,23 @@ using UnityEngine;
 
 public class EnemyDog : Enemy
 {
-    bool isAttacking;
-
     protected override void DropItem(){}
     protected override void Start()
     {
         attackRange = 2f;
+        attackRate = 3f;
+        dmg = 10f;
     }
-    protected override IEnumerator Attack()
+    protected override void CallAttack()
+    {
+        StartCoroutine(Attack());
+    }
+    IEnumerator Attack()
     {
         isAttacking = true;
         yield return new WaitForSeconds(0.2f);
 
-        player.Hit();
+        player.Hit(dmg);
         animator.SetTrigger("Attack");
         soundManager.EnemySFX(sfx, attackClip);
 
