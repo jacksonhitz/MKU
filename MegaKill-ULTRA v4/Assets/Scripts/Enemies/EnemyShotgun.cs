@@ -30,7 +30,8 @@ public class EnemyShotgun : Enemy
     IEnumerator Attack()
     {
         animator.SetTrigger("Atk");
-        
+        soundManager.EnemySFX(sfx, attackClip);
+
         muzzleFlash.Play();
         muzzleFlash.Emit(10);
 

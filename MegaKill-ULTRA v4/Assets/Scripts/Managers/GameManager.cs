@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     CamController cam;
 
     List<Item> items;
-    public List<GameObject> doors;
+    List<GameObject> doors = new List<GameObject>(); 
     public GameObject cia;
 
     [HideInInspector] public bool fadeOut;
@@ -36,11 +36,14 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         cam = FindObjectOfType<CamController>();
 
+        doors.AddRange(GameObject.FindGameObjectsWithTag("Door"));
+
         foreach (GameObject door in doors)
         {
             door.SetActive(true);
         }
     }
+
     void Start()
     {
         CollectItems();
@@ -88,8 +91,6 @@ public class GameManager : MonoBehaviour
         cia.SetActive(false);
     }
 
-
-
     public void StartIntro()
     {
         soundManager.music.Stop();
@@ -118,6 +119,7 @@ public class GameManager : MonoBehaviour
 
         ux.TutorialOff();
         ux.IntroOff();
+        ux.UIOn();
         
         enemyManager.Active();
     }
@@ -133,7 +135,6 @@ public class GameManager : MonoBehaviour
         StartTutorial();
         cam.CallFadeIn();
     }
-
 
     public void Exit()
     {

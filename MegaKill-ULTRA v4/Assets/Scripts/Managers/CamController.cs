@@ -6,7 +6,7 @@ using UnityEngine.Rendering.Universal;
 
 public class CamController : MonoBehaviour
 {
-    public float sens = 500f;
+    [HideInInspector] public float sens = 500f;
     public Transform player;
 
     private float xRotation;
@@ -48,7 +48,7 @@ public class CamController : MonoBehaviour
 
     private float targetSpeedX;
     private float targetSpeedY;
-    private float lerpSpeed = 1f;
+    private float lerpSpeed = 0.001f;
 
     void Awake()
     {
@@ -59,6 +59,11 @@ public class CamController : MonoBehaviour
 
     void Start()
     {
+        currentLerp = 0f;
+        currentFrequency = 0;
+        currentAmplitude = 0;
+        
+        
         if (camMat != null)
         {
             camMat.SetFloat("_Lerp", currentLerp);
@@ -87,39 +92,14 @@ public class CamController : MonoBehaviour
 
     void Update()
     {
-        UpdatePost();
-
-        if (StateManager.state == StateManager.GameState.Title || StateManager.state == StateManager.GameState.Lvl)
-        {
-            if (dynamicVolume.weight < 5)
-            {
-                dynamicVolume.weight += 0.0001f;
-            }
-            fovSpd = 0.1f * dynamicVolume.weight;
-            clrSpd = 10f * dynamicVolume.weight;
-        }
-
-        if (settings != null)
-        {
-            if (settings.isPaused || StateManager.state == StateManager.GameState.Title)
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-            else
-            {
-                MoveCam();
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-        }
-        else
+        sens = settings.sens;
+        
+        if (!settings.isPaused && StateManager.state != StateManager.GameState.Title)
         {
             MoveCam();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
-        MoveCam();
 
         if (sceneLoader != null)
         {
@@ -130,8 +110,31 @@ public class CamController : MonoBehaviour
             }
             else
             {
-                UpdateShader();
+                
             }
+        }
+
+        UpdatePost();
+
+        if (StateManager.state != StateManager.GameState.Intro)
+        {
+            currentLerp = 0.1f;
+            UpdateShader();
+            
+            Debug.Log("shaders called");
+
+            if (dynamicVolume.weight < 5)
+            {
+                dynamicVolume.weight += 0.0001f;
+            }
+            fovSpd = 0.1f * dynamicVolume.weight;
+            clrSpd = 10f * dynamicVolume.weight;
+
+            colorGrading.saturation.value += Time.deltaTime * satSpd;
+        }
+        else
+        {
+            colorGrading.saturation.value = 0f;
         }
     }
 
@@ -180,11 +183,11 @@ public class CamController : MonoBehaviour
 
         if (currentAmplitude < cap)
         {
-            currentAmplitude += 0.001f;
+            currentAmplitude += 0.0005f;
         }
         if (currentFrequency < cap)
         {
-            currentFrequency += 0.001f;
+            currentFrequency += 0.0005f;
         }
 
         camMat.SetFloat("_Lerp", currentLerp);
@@ -275,8 +278,8 @@ public class CamController : MonoBehaviour
 
     void MoveCam()
     {
-        float mouseX = (Input.GetAxis("Mouse X") * Time.deltaTime * sens) / Time.timeScale;
-        float mouseY = (Input.GetAxis("Mouse Y") * Time.deltaTime * sens) / Time.timeScale;
+        float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * sens / Time.timeScale;
+        float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * sens / Time.timeScale;
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -89.9f, 89.9f);
@@ -285,6 +288,8 @@ public class CamController : MonoBehaviour
 
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         player.rotation = Quaternion.Euler(0f, yRotation, 0f);
+
+        Debug.Log("sens: " + sens);
     }
 
     void UpdatePost()
@@ -293,8 +298,6 @@ public class CamController : MonoBehaviour
 
         float fovChange = Mathf.Sin(Time.time * fovSpd) * dynamicVolume.weight;
         cam.fieldOfView = originalFOV + fovChange;
-
-        colorGrading.saturation.value += Time.deltaTime * satSpd;
 
         float swayAmountX = Mathf.Sin(Time.time * 2f) * swayIntensity * dynamicVolume.weight;
         float swayAmountY = Mathf.Cos(Time.time * 2f) * swayIntensity * dynamicVolume.weight;

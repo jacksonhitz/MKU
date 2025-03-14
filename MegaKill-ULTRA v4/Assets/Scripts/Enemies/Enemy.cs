@@ -29,7 +29,7 @@ public abstract class Enemy : MonoBehaviour
     protected float dmg;
     protected float attackRate;
     protected float attackRange;
-    protected float detectionRange = 30f;
+    protected float detectionRange = 15f;
     protected bool isAttacking;
 
     protected bool detectedPlayer;
