@@ -7,7 +7,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] GameObject hands; 
     [SerializeField] GameObject enemyHolder;
     public List<Enemy> enemies;
-    float spawnInterval = 30f; 
+    float spawnInterval = 1f; 
     PlayerController player;
     UX ux;
     GameManager gameManager;
@@ -26,7 +26,7 @@ public class EnemyManager : MonoBehaviour
     public void Active()
     {
         enemyHolder.SetActive(true);
-        CallHands();
+        //CallHands();
         CollectEnemies();
     }
     public void CollectEnemies()

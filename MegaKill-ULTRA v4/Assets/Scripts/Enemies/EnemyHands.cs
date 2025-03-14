@@ -39,9 +39,8 @@ public class EnemyHands : Enemy
     }
     protected override void Hit(bool lethal)
     {
-        soundManager.EnemySFX(sfx, deadClip);
         player.rooted = false;
-        StartCoroutine(Dead());
+        Dead();
     }
 
     IEnumerator PlayAnim(Transform child)

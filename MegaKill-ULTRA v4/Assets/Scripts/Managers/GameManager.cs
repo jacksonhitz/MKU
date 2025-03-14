@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour
     public void StartTutorial()
     {
         StateManager.state = StateManager.GameState.Tutorial;
-
+        
         PrepLvl();
         ux.TutorialOn();
     }

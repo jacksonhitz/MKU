@@ -68,14 +68,13 @@ public class PlayerController : MonoBehaviour
             HandleInput();
         }
     }
+    public void SpeedUp()
+    {
+        runSpd += 0.5f;
+    }
 
     void HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Interact();
-        }
-
         if (Input.GetMouseButton(0))
         {
             if (Input.GetKey(KeyCode.LeftControl))
@@ -92,16 +91,24 @@ public class PlayerController : MonoBehaviour
             HandleUse(rightScript, false);
         }
 
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (leftScript != null)
+            if (leftScript == null)
+            {
+                Interact(true);
+            }
+            else
             {
                 Throw(leftScript);
             }
         }
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            if (rightScript != null)
+            if (rightScript == null)
+            {
+                Interact(false);
+            }
+            else
             {
                 Throw(rightScript);
             }
@@ -192,7 +199,7 @@ public class PlayerController : MonoBehaviour
         punchRange.enabled = false;
     }
 
-    void Interact()
+    void Interact(bool left)
     {
         RaycastHit hit;
         Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
@@ -204,23 +211,24 @@ public class PlayerController : MonoBehaviour
             {
                 if (Vector3.Distance(transform.position, hit.transform.position) <= pickupRange)
                 {
-                    Pickup(hit.transform.gameObject);
+                    Pickup(hit.transform.gameObject, left);
                 }
             }
         }
     }
 
-    void Pickup(GameObject item)
+    void Pickup(GameObject item, bool left)
     {
-        if (leftScript == null)
+        if (left)
         {
             InstantiateItem(item, leftHand);
             Destroy(item);
         }
-        else if (rightScript == null)
+        else
         {
             InstantiateItem(item, rightHand);
             Destroy(item);
+
         }
     }
 

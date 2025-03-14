@@ -6211,9 +6211,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1147528160660653244}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 100
+  m_MaxValue: 1000
   m_WholeNumbers: 0
-  m_Value: 50
+  m_Value: 500
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -7502,8 +7502,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sens: 0
   player: {fileID: 9160712683961529242}
-  volume: {fileID: 4036535360072296423}
-  vig: {fileID: 48451983645151841}
+  dynamicVolume: {fileID: 4036535360072296423}
+  staticVolume: {fileID: 48451983645151841}
   chromSpd: 1
   fovSpd: 0.75
   satSpd: 10
@@ -9756,6 +9756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e53c9bd118041b99cee568f97a38d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menu: {fileID: 0}
   sfxSlider: {fileID: 9207044352100671681}
   musicSlider: {fileID: 2007580102470868356}
   sensSlider: {fileID: 3722868662987332057}
@@ -11222,7 +11223,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "50\u200B"
+  m_text: "500\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3a46fc1b8f9654b9abd83ce45f2b8789, type: 2}
   m_sharedMaterial: {fileID: -2044733195535088278, guid: 3a46fc1b8f9654b9abd83ce45f2b8789, type: 2}
@@ -11628,7 +11629,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 50
+  m_Text: 500
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0

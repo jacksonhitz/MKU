@@ -59,11 +59,8 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (!isDead)
-        {
-            LOS();
-            Pathfind();
-        }
+        LOS();
+        Pathfind();
     }
     
     public void LOS()
@@ -145,8 +142,7 @@ public abstract class Enemy : MonoBehaviour
     {
         if (lethal || isStunned)
         {
-            soundManager.EnemySFX(sfx, deadClip);
-            StartCoroutine(Dead());
+            Dead();
         }
         else
         {
@@ -173,20 +169,12 @@ public abstract class Enemy : MonoBehaviour
         isAttacking = false;
 
     }
-    public IEnumerator Dead()
+    public void Dead()
     {
-        isDead = true;
         StopAllCoroutines();
         gameManager.Kill(this);
         DropItem();
         Instantiate(deathEffect, transform.position, Quaternion.identity);
-
-        foreach (Transform child in transform)
-        {
-            child.gameObject.SetActive(false);
-        }
-
-        yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }
     

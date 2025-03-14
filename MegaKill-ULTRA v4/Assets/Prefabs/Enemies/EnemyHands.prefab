@@ -66,6 +66,8 @@ MonoBehaviour:
   enemyManager: {fileID: 0}
   animator: {fileID: 0}
   sfx: {fileID: 0}
+  los: 0
+  isDead: 0
 --- !u!136 &8767783621623279780
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -103,7 +105,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

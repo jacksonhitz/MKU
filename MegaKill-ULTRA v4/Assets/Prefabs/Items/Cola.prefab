@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1065326915745455539}
   - component: {fileID: -3833812811769112153}
   - component: {fileID: -555543439781097671}
+  - component: {fileID: 5747804514943844488}
   m_Layer: 6
   m_Name: Cola
   m_TagString: Item
@@ -125,7 +126,6 @@ MonoBehaviour:
   enemyHas: 0
   def: {fileID: -876546973899608171, guid: 04df6510b45a54f9c94f96e0409641c4, type: 3}
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  rend: {fileID: 1133426727167687175}
   isHovering: 0
   thrown: 0
 --- !u!136 &-3833812811769112153
@@ -178,3 +178,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &5747804514943844488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3711722749855122338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efa49c0c90f074a7781e72d60db76077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

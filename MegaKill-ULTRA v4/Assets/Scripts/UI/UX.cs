@@ -69,6 +69,8 @@ public class UX : MonoBehaviour
         }
         
         eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
+
+        UIOff();
     }
 
     public void IntroOn()
@@ -103,7 +105,6 @@ public class UX : MonoBehaviour
 
     public void UIOff()
     {
-        worldSpace.gameObject.SetActive(false);
         screenSpace.gameObject.SetActive(false);
         crosshair.gameObject.SetActive(false);
     }

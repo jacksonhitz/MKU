@@ -30,8 +30,7 @@ public class EnemyFlyingEye : Enemy
 
     protected override void Hit(bool lethal)
     {
-        soundManager.EnemySFX(sfx, deadClip);
-        StartCoroutine(Dead());
+        Dead();
     }
 
     protected override void CallAttack()
