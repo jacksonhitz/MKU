@@ -82,6 +82,15 @@ public class UX : MonoBehaviour
         tutorial.CallDialogue();
     }
 
+    public void TutorialOff()
+    {
+        tutorial.Off();
+    }
+    public void IntroOff()
+    {
+        intro.Off();
+    }
+
     public void UIOn()
     {
         if (StateManager.state != StateManager.GameState.Intro)

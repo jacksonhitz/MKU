@@ -40,6 +40,7 @@ public class CamController : MonoBehaviour
     public float swayIntensity = 0.1f;
     GameManager gameManager;
     Settings settings;
+    SceneLoader sceneLoader;
 
     // Shader variables
     public Material camMat;
@@ -53,10 +54,12 @@ public class CamController : MonoBehaviour
     private float targetSpeedY;
     private float lerpSpeed = 1f;
 
+
     void Awake()
     {
         cam = GetComponent<Camera>();
         settings = FindObjectOfType<Settings>();
+        sceneLoader = FindObjectOfType<SceneLoader>();
     }
 
     void Start()
@@ -118,7 +121,16 @@ public class CamController : MonoBehaviour
         }
 
         UpdatePost();
-        UpdateShader();
+
+        if (sceneLoader.transition)
+        {
+            TransitionOn();
+            Invoke("TransitionOff", 1.0f);
+        }
+        else
+        {
+            UpdateShader();
+        }
     }
 
     public void UpPhase()
@@ -127,15 +139,29 @@ public class CamController : MonoBehaviour
         RandomizeSpeed();
     }
 
-    void FadeOut()
+    void TransitionOn()
     {
-        Debug.Log("fade call");
-
         currentLerp += 0.025f;
         currentFrequency += 0.25f;
 
         camMat.SetFloat("_Lerp", currentLerp);
         camMat.SetFloat("_Frequency", currentFrequency);
+    }
+    void TransitionOff()
+    {
+        sceneLoader.transition = false;
+        ResetShader();
+    }
+
+    void ResetShader()
+    {
+        currentLerp = 0f;
+        currentFrequency = 0.15f;
+        currentAmplitude = 0f;
+        
+        camMat.SetFloat("_Lerp", currentLerp);
+        camMat.SetFloat("_Frequency", currentFrequency);
+        camMat.SetFloat("_Amplitude", currentAmplitude);
     }
 
     void UpdateShader()
@@ -200,8 +226,6 @@ public class CamController : MonoBehaviour
             colorGrading.postExposure.value = targetExposure;
         }
     }
-
-    
 
     IEnumerator FadeOut(float duration)
     {

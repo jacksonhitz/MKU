@@ -106,8 +106,10 @@ public class SoundManager : MonoBehaviour
     public void Play()
     {
         music.Play();
-        sfx.Play();
-        dialogue.Play();
+        if (StateManager.state == StateManager.GameState.Intro)
+        {
+            dialogue.Play();
+        }
     }
 
     public void UpdateVolume()
@@ -185,20 +187,15 @@ public class SoundManager : MonoBehaviour
         music.pitch = pitchValue;
         sfx.pitch = pitchValue;
     }
-
-    // Fade-In Function
     public void FadeIn(AudioSource source, float duration)
     {
         StartCoroutine(FadeInCoroutine(source, duration));
     }
 
-    // Fade-Out Function
     public void FadeOut(AudioSource source, float duration)
     {
         StartCoroutine(FadeOutCoroutine(source, duration));
     }
-
-    // Coroutine for Fade-In
     private IEnumerator FadeInCoroutine(AudioSource source, float duration)
     {
         source.volume = 0f;
@@ -210,10 +207,8 @@ public class SoundManager : MonoBehaviour
             timeElapsed += Time.deltaTime;
             yield return null;
         }
-        source.volume = 1f;  // Ensure it reaches full volume at the end
+        source.volume = 1f;  
     }
-
-    // Coroutine for Fade-Out
     private IEnumerator FadeOutCoroutine(AudioSource source, float duration)
     {
         float startVolume = source.volume;
@@ -225,7 +220,7 @@ public class SoundManager : MonoBehaviour
             timeElapsed += Time.deltaTime;
             yield return null;
         }
-        source.volume = 0f;  // Ensure it reaches zero volume at the end
+        source.volume = 0f;  
         source.Stop();
     }
 }

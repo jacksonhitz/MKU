@@ -21,15 +21,12 @@ public class Dialogue : MonoBehaviour
     public bool title;
     public bool intro;
     public bool tutorial;
-    public bool passed;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
         sceneLoader = FindObjectOfType<SceneLoader>();
-
-        passed = true;
     }
 
     public void CallDialogue()
@@ -85,7 +82,7 @@ public class Dialogue : MonoBehaviour
 
     void NextLine()
     {
-        if (index < lines.Length - 1 && passed)
+        if (index < lines.Length - 1)
         {
             index++;
             StartCoroutine(TypeLine());
@@ -94,6 +91,12 @@ public class Dialogue : MonoBehaviour
         {
             StartCoroutine(Done());
         }
+    }
+
+    public void Off()
+    {
+        StopAllCoroutines();
+        textComponent.text = string.Empty;
     }
 
     IEnumerator Done()

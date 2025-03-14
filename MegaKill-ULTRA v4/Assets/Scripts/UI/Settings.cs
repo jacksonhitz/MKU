@@ -12,7 +12,7 @@ public class Settings : MonoBehaviour
 
     SoundManager soundManager;
     SceneLoader sceneLoader;
-    Canvas menu;
+    [HideInInspector] public Canvas menu;
     
 
     [SerializeField] Slider sfxSlider;
@@ -72,36 +72,36 @@ public class Settings : MonoBehaviour
 
     public void Pause()
     {
-        isPaused = true;
         Time.timeScale = 0f;
+        isPaused = true;
         soundManager.Pause();
         menu.enabled = true;
     }
     public void Resume()
     {
-        isPaused = false;
         Time.timeScale = 1f;
-        soundManager.Play();
+        isPaused = false;
         menu.enabled = false;
+        if (StateManager.state != StateManager.GameState.Intro)
+        {
+            soundManager.Play();
+        }
+        else
+        {
+            soundManager.dialogue.Play();
+        }
     }
-
     public void Exit()
     {
-        isPaused = false;
         Time.timeScale = 1f;
-        soundManager.Play();
-        menu.enabled = false;
-
+        isPaused = false;
         sceneLoader.Title();
     }
 
     public void Restart()
     {
-        isPaused = false;
         Time.timeScale = 1f;
-        soundManager.Play();
-        menu.enabled = false;
-
+        isPaused = false;
         sceneLoader.Restart();
     }
 

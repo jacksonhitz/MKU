@@ -2508,7 +2508,6 @@ MonoBehaviour:
   title: 0
   intro: 0
   tutorial: 1
-  passed: 0
 --- !u!1 &1054630142484037872
 GameObject:
   m_ObjectHideFlags: 0
@@ -7572,7 +7571,6 @@ MonoBehaviour:
   title: 0
   intro: 1
   tutorial: 0
-  passed: 0
 --- !u!1 &4636744076090687971
 GameObject:
   m_ObjectHideFlags: 0
@@ -11032,6 +11030,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11527835960c7409ea77d1b32f24fc3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transition: 0
 --- !u!224 &7857401012931874094
 RectTransform:
   m_ObjectHideFlags: 0

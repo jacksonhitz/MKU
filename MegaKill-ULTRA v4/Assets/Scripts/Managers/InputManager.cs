@@ -32,6 +32,7 @@ public class InputManager : MonoBehaviour
                 sceneLoader.Lvl();
             }
         }
+        
         if (StateManager.state == StateManager.GameState.Lvl)
         {
             if (Input.GetKeyDown(KeyCode.Return))
@@ -44,10 +45,8 @@ public class InputManager : MonoBehaviour
             if (!settings.isPaused)
             {
                 settings.Pause();
-            }
-            else
-            {
-                settings.Resume();
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
         }
     }

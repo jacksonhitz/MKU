@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                StartLvl();
+                SkipIntro();
             }
         } 
 
@@ -75,6 +75,21 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    void SkipIntro()
+    {
+        PrepLvl();
+        StartLvl();
+    }
+    void PrepLvl()
+    {
+        soundManager.NewTrack();
+        CollectItems();
+        cia.SetActive(false);
+    }
+
+
+
     public void StartIntro()
     {
         soundManager.music.Stop();
@@ -82,14 +97,13 @@ public class GameManager : MonoBehaviour
     }
     public void EndIntro()
     {
-        Active();
         StartCoroutine(Blink());
     }
     public void StartTutorial()
     {
         StateManager.state = StateManager.GameState.Tutorial;
 
-        soundManager.NewTrack();
+        PrepLvl();
         ux.TutorialOn();
     }
     public void EndTutorial()
@@ -98,26 +112,23 @@ public class GameManager : MonoBehaviour
     }
     public void StartLvl()
     {
-        enemyManager.Active();
-        ux.UIOn();
+        StateManager.state = StateManager.GameState.Lvl;
+        
         OpenDoors();
 
-        StateManager.state = StateManager.GameState.Lvl;
+        ux.TutorialOff();
+        ux.IntroOff();
+        
+        enemyManager.Active();
     }
-    public void Active()
-    {
-        soundManager.Play();
-        cia.SetActive(false);
-        CollectItems();
-    }
-
-     IEnumerator Blink()
+    IEnumerator Blink()
     {
         cam.CallFadeOut();
         yield return new WaitForSeconds(0.5f);
         cam.CallFadeIn();
         yield return new WaitForSeconds(0.5f);
         cam.CallFadeOut();
+        cia.SetActive(false);
         yield return new WaitForSeconds(0.5f);
         StartTutorial();
         cam.CallFadeIn();

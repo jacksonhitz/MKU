@@ -114,10 +114,12 @@ public abstract class Enemy : MonoBehaviour
     {
         if (!isAttacking)
         {
+            animator.SetBool("isAttacking", true);
             isAttacking = true;
             CallAttack();
             yield return new WaitForSeconds(attackRate);
             isAttacking = false;
+            animator.SetBool("isAttacking", false);
         }
         else yield break;
     }

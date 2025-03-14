@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     UX ux;
     SoundManager soundManager;
     GameManager gameManager;
+    Settings settings;
     float health;
     float maxHealth = 100;
 
@@ -43,15 +44,14 @@ public class PlayerController : MonoBehaviour
     float punchCooldown = .75f;
 
     CharacterController characterController;
-    Vector3 velocity;
-
-    bool active;
 
     void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
         ux = FindObjectOfType<UX>();
+        settings = FindObjectOfType<Settings>();
+
         characterController = GetComponent<CharacterController>(); 
     }
 
@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Move();
-        if (StateManager.state == StateManager.GameState.Lvl)
+        if (!settings.isPaused && StateManager.state == StateManager.GameState.Lvl || StateManager.state == StateManager.GameState.Tutorial)
         {
             HandleInput();
         }
@@ -179,6 +179,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator PunchOn(Renderer punch)
     {
         yield return new WaitForSeconds(0.2f);
+        Debug.Log("punch called");
         soundManager.Punch();
         punch.enabled = true;
         punchRange.enabled = true;
