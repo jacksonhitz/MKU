@@ -31,7 +31,6 @@ public class GameManager : MonoBehaviour
         soundManager = FindObjectOfType<SoundManager>(); 
         enemyManager = FindObjectOfType<EnemyManager>();
         inputManager = FindObjectOfType<InputManager>();
-        inputManager.gameManager = this;
 
         ux = FindObjectOfType<UX>(); 
         player = GameObject.FindGameObjectWithTag("Player");

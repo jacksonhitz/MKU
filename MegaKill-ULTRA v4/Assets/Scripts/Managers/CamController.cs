@@ -56,7 +56,6 @@ public class CamController : MonoBehaviour
     void Awake()
     {
         cam = GetComponent<Camera>();
-        gameManager = FindObjectOfType<GameManager>();
         settings = FindObjectOfType<Settings>();
     }
 
@@ -72,8 +71,8 @@ public class CamController : MonoBehaviour
             RandomizeSpeed();
         }
 
+        if (settings != null) sens = settings.sens;
 
-        if (gameManager != null) sens = settings.sens;
 
         originalFOV = cam.fieldOfView;
         originalPosition = transform.localPosition;
@@ -97,24 +96,23 @@ public class CamController : MonoBehaviour
 
     void Update()
     {
-        if (gameManager != null)
+        if (settings != null)
         {
-            if (gameManager.fadeOut)
+            if (!settings.isPaused)
             {
-                FadeOut();
+                MoveCam();
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
-        }   
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
 
-        if (!settings.isPaused)
+        }
+        else
         {
             MoveCam();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
         }
 
         UpdatePost();
