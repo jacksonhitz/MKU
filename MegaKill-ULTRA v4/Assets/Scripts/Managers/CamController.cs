@@ -98,15 +98,17 @@ public class CamController : MonoBehaviour
     {
         if (settings != null)
         {
-            if (!settings.isPaused)
+            if (settings.isPaused || StateManager.state == StateManager.GameState.Title)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
+            else
             {
                 MoveCam();
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
             }
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-
         }
         else
         {
@@ -168,24 +170,7 @@ public class CamController : MonoBehaviour
         targetSpeedY = Random.Range(-0.01f, 0.01f);
     }
 
-    public void CallBlink()
-    {
-        StartCoroutine(Blink());
-    }
-
-    IEnumerator Blink()
-    {
-        StartCoroutine(FadeOut(0.5f));
-        yield return new WaitForSeconds(0.5f);
-        StartCoroutine(FadeIn(0.5f));
-        yield return new WaitForSeconds(0.5f);
-        StartCoroutine(FadeOut(0.5f));
-        yield return new WaitForSeconds(0.5f);
-        gameManager.StartTutorial();
-        StartCoroutine(FadeIn(0.5f));
-    }
-
-    IEnumerator FadeIn(float duration)
+    public IEnumerator FadeIn(float duration)
     {
         float elapsed = 0f;
         float initialExposure = -10f;
@@ -207,7 +192,7 @@ public class CamController : MonoBehaviour
         }
     }
 
-    IEnumerator FadeOut(float duration)
+    public IEnumerator FadeOut(float duration)
     {
         float elapsed = 0f;
         float initialExposure = 0f;

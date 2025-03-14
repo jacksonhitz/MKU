@@ -111,6 +111,19 @@ public class GameManager : MonoBehaviour
         CollectItems();
     }
 
+     IEnumerator Blink()
+    {
+        cam.StartCoroutine(FadeOut(0.5f));
+        yield return new WaitForSeconds(0.5f);
+        cam.StartCoroutine(FadeIn(0.5f));
+        yield return new WaitForSeconds(0.5f);
+        cam.StartCoroutine(FadeOut(0.5f));
+        yield return new WaitForSeconds(0.5f);
+        StartTutorial();
+        cam.StartCoroutine(FadeIn(0.5f));
+    }
+
+
     public void Exit()
     {
         fadeOut = true;
