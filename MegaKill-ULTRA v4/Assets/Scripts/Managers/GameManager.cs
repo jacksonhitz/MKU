@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     SoundManager soundManager;
     EnemyManager enemyManager;
     InputManager inputManager;
-
+    SceneLoader sceneLoader;
     CamController cam;
 
     List<Item> items;
@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
         soundManager = FindObjectOfType<SoundManager>(); 
         enemyManager = FindObjectOfType<EnemyManager>();
         inputManager = FindObjectOfType<InputManager>();
+        sceneLoader = FindObjectOfType<SceneLoader>();
 
         ux = FindObjectOfType<UX>(); 
         player = GameObject.FindGameObjectWithTag("Player");
@@ -120,8 +121,12 @@ public class GameManager : MonoBehaviour
         ux.TutorialOff();
         ux.IntroOff();
         ux.UIOn();
+
+        cia.SetActive(false);
         
         enemyManager.Active();
+
+        Debug.Log("LVL STARTED");
     }
     IEnumerator Blink()
     {
@@ -140,11 +145,6 @@ public class GameManager : MonoBehaviour
     {
         fadeOut = true;
         StartCoroutine(ExitCoroutine());
-    }
-    public void Restart()
-    {
-        fadeOut = true;
-        SceneManager.LoadScene(1);
     }
     void OpenDoors()
     {
@@ -199,7 +199,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         yield return new WaitForSeconds(3f);
-        Restart();
+        sceneLoader.Restart();
     }
 
     IEnumerator ExitCoroutine()

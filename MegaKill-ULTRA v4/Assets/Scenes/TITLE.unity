@@ -2367,6 +2367,7 @@ MonoBehaviour:
   rightHand: {fileID: 9034856080807767948}
   leftScript: {fileID: 0}
   rightScript: {fileID: 0}
+  isDead: 0
   swingAnim: {fileID: 3118720878065872550}
   punchRAnim: {fileID: 7078710081835463657}
   punchLAnim: {fileID: 548336502752742260}
@@ -13347,7 +13348,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!1 &9187728695737797774
 GameObject:
   m_ObjectHideFlags: 0

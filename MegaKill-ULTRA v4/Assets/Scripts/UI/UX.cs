@@ -95,11 +95,8 @@ public class UX : MonoBehaviour
 
     public void UIOn()
     {
-        if (StateManager.state != StateManager.GameState.Intro)
-        {
-            screenSpace.gameObject.SetActive(true);
-            crosshair.gameObject.SetActive(true);
-        }
+        screenSpace.gameObject.SetActive(true);
+        crosshair.gameObject.SetActive(true);
         worldSpace.gameObject.SetActive(true);
     }
 

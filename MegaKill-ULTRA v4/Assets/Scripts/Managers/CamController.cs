@@ -50,11 +50,15 @@ public class CamController : MonoBehaviour
     private float targetSpeedY;
     private float lerpSpeed = 0.001f;
 
+    PlayerController playerController;
+
     void Awake()
     {
         cam = GetComponent<Camera>();
         settings = FindObjectOfType<Settings>();
         sceneLoader = FindObjectOfType<SceneLoader>();
+
+        playerController = FindObjectOfType<PlayerController>();
     }
 
     void Start()
@@ -101,24 +105,29 @@ public class CamController : MonoBehaviour
             Cursor.visible = false;
         }
 
-        if (sceneLoader != null)
+        if (playerController.isDead)
         {
-            if (sceneLoader.transition)
-            {
-                TransitionOn();
-                Invoke("TransitionOff", 1.0f);
-            }
-            else
-            {
-                
-            }
+            TransitionOn();
         }
+
+        
 
         UpdatePost();
 
         if (StateManager.state != StateManager.GameState.Intro)
         {
-            currentLerp = 0.1f;
+            if(!playerController.isDead)
+            {
+                currentLerp = 0.1f;
+            }
+            else
+            {
+                
+            }
+            
+            
+            
+            
             UpdateShader();
             
             Debug.Log("shaders called");
@@ -134,7 +143,7 @@ public class CamController : MonoBehaviour
         }
         else
         {
-            colorGrading.saturation.value = 0f;
+            colorGrading.saturation.value = -180f;
         }
     }
 
@@ -146,11 +155,13 @@ public class CamController : MonoBehaviour
 
     void TransitionOn()
     {
-        currentLerp += 0.025f;
-        currentFrequency += 0.25f;
+        currentAmplitude += 0.1f;
+        currentFrequency += 0.1f;
+        currentLerp += 0.1f;
 
-        camMat.SetFloat("_Lerp", currentLerp);
+        camMat.SetFloat("_Lerp", currentAmplitude);
         camMat.SetFloat("_Frequency", currentFrequency);
+        camMat.SetFloat("_Amplitude", currentFrequency);
     }
 
     void TransitionOff()

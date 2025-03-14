@@ -7,6 +7,8 @@ public class SceneLoader : MonoBehaviour
     SoundManager soundManager;
     Settings settings;
 
+    public bool isTutorial;
+
     [HideInInspector] public bool transition;
 
     void Awake()
@@ -33,6 +35,7 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         soundManager.Play();
         settings.menu.enabled = false;
+        isTutorial = false;
     }
     
 

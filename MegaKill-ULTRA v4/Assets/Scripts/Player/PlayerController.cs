@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     float maxHealth = 100;
 
     float pickupRange = 10f;
-    bool isDead;
+    public bool isDead;
     public Animator swingAnim;
     public Animator punchRAnim;
     public Animator punchLAnim;
@@ -388,6 +388,7 @@ public class PlayerController : MonoBehaviour
             isDead = true;
             gameManager.CallDead();
             soundManager.PlayerDeath();
+            Debug.Log("death called");
         }
         ux.UpdateHealth(health);
     }
