@@ -70,7 +70,14 @@ public class UX : MonoBehaviour
         
         eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
 
-        UIOff();
+        if (StateManager.state == StateManager.GameState.Intro || StateManager.state == StateManager.GameState.Title)
+        {
+            UIOff();
+        }
+        else
+        {
+            UIOn();
+        }
     }
 
     public void IntroOn()

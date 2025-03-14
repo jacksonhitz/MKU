@@ -108,12 +108,12 @@ public class Dialogue : MonoBehaviour
             textComponent.text = string.Empty;
             gameManager.EndIntro();
         }
-        else if (StateManager.state == StateManager.GameState.Tutorial)
+        else if (StateManager.state == StateManager.GameState.Lvl)
         {
             textComponent.text = string.Empty;
             gameManager.EndTutorial();
         }
-        else
+        else if (StateManager.state == StateManager.GameState.Title)
         {
             yield return new WaitForSeconds(2f);
             StateManager.state = StateManager.GameState.Intro;

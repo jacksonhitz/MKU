@@ -33,7 +33,6 @@ public class SceneLoader : MonoBehaviour
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        soundManager.Play();
         settings.menu.enabled = false;
         isTutorial = false;
     }

@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Move();
-        if (!settings.isPaused && StateManager.state == StateManager.GameState.Lvl || StateManager.state == StateManager.GameState.Tutorial)
+        if (!settings.isPaused && StateManager.state != StateManager.GameState.Intro)
         {
             HandleInput();
         }
