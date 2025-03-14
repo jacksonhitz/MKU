@@ -23,7 +23,7 @@ public class EnemyMG : Enemy
     protected override void Start()
     {
         item = GetComponentInChildren<Item>();
-        attackRange = 15f;
+        attackRange = 20f;
         attackRate = 0.15f;
         dmg = 3f; 
     }
