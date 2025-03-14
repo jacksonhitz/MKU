@@ -19,7 +19,7 @@ public class CamController : MonoBehaviour
     private ChannelMixer channelMixer;
 
     float chromSpd = 0.5f;
-    float satSpd = 3f;
+    float satSpd = 5f;
     float clrSpd;
     float fovSpd;
 
@@ -118,7 +118,7 @@ public class CamController : MonoBehaviour
         {
             if(!playerController.isDead)
             {
-                currentLerp = 0.1f;
+                currentLerp = 0.15f;
             }
             
             UpdateShader();
