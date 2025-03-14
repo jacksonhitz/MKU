@@ -14,6 +14,7 @@ public class SoundManager : MonoBehaviour
     
     public AudioSource music;
     public AudioSource sfx;
+    public AudioSource playerSfx;
     public AudioSource dialogue;
 
     public AudioClip title;
@@ -170,7 +171,7 @@ public class SoundManager : MonoBehaviour
     public void TossHit() => PlaySfx(tossHit);
     public void Heartbeat() => PlaySfx(heartbeat);
     public void PlayerHit() => PlaySfx(playerHit);
-    public void PlayerDeath() => PlaySfx(playerDeath);
+    public void PlayerDeath() => PlayerSfx(playerDeath);
     public void Gulp() => PlaySfx(gulp);
     public void PillEmpty() => PlaySfx(pillEmpty);
 
@@ -178,6 +179,12 @@ public class SoundManager : MonoBehaviour
     {
         sfx.clip = clip;
         sfx.Play();
+    }
+
+    void PlayerSfx(AudioClip clip)
+    {
+        playerSfx.clip = clip;
+        playerSfx.Play();
     }
 
     public void SetSpeed(GameSpeed speed)

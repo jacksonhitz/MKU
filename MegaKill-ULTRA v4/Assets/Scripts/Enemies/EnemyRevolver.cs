@@ -20,7 +20,7 @@ public class EnemyRevolver : Enemy
     protected override void Start()
     {
         item = GetComponentInChildren<Item>();
-        attackRange = 15f;
+        attackRange = 20f;
         attackRate = 2f;
         dmg = 10f;
     }

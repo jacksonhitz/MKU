@@ -22,7 +22,7 @@ public class Meth : MonoBehaviour
 
     void Update()
     {
-        if (left && Input.GetKeyUp(KeyCode.Mouse0) || !left && Input.GetKeyUp(KeyCode.Mouse1) || charge <= 0)
+        if (Input.GetKeyUp(KeyCode.Mouse0) && left || (Input.GetKeyUp(KeyCode.Mouse0) && left))
         {
             bulletTime.Reg();
         }
@@ -32,18 +32,25 @@ public class Meth : MonoBehaviour
     {
         if (charge > 0)
         {
+            if (Input.GetKey(KeyCode.Mouse0) && left)
+            {
+                charge -= 0.01f;
+                bulletTime.Slow();
+            }
+            else
+            {
+                bulletTime.Reg();
+            }
             if (Time.time - cooldown >= 0.5f)
             {
                 ux.PopUp("TIME SLOWED");
                 soundManager.Gulp();
                 cooldown = Time.time; 
             }
-
-            charge -= 0.01f;
-            bulletTime.Slow();
         }
         else
         {
+            bulletTime.Reg();
             if (Time.time - cooldown >= 0.5f)
             {
                 ux.PopUp("EMPTY");

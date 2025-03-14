@@ -143,14 +143,13 @@ public class CamController : MonoBehaviour
     public void UpPhase()
     {
         phase++;
-        RandomizeSpeed();
     }
 
     void TransitionOn()
     {
         currentAmplitude += 0.1f;
         currentFrequency += 0.1f;
-        currentLerp += 0.1f;
+        currentLerp += 0.01f;
 
         camMat.SetFloat("_Lerp", currentAmplitude);
         camMat.SetFloat("_Frequency", currentFrequency);
@@ -176,8 +175,9 @@ public class CamController : MonoBehaviour
 
     public void Focus()
     {
-        currentAmplitude -= 3f;
-        currentFrequency -= 3f;
+        currentAmplitude -= 4f;
+        currentFrequency -= 4f;
+        phase--;
     }
 
     void UpdateShader()

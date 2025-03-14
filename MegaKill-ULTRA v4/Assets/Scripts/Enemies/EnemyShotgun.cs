@@ -18,7 +18,7 @@ public class EnemyShotgun : Enemy
     protected override void Start()
     {
         item = GetComponentInChildren<Item>();
-        attackRange = 15f;
+        attackRange = 20f;
         attackRate = 3f;
         dmg = 5f;
     }

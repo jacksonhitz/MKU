@@ -5,7 +5,7 @@ using UnityEngine;
 public class BulletTime : MonoBehaviour
 {
     float slowSpd = 0.05f; 
-    float transitionDuration = 0.5f; 
+    float transitionDuration = 0.1f; 
     float originalSpd;
     public bool isSlow;
 

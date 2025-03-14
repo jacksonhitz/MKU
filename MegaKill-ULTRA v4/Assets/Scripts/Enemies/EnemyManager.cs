@@ -7,10 +7,11 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] GameObject hands; 
     [SerializeField] GameObject enemyHolder;
     public List<Enemy> enemies;
-    float spawnInterval = 30f; 
+    float spawnInterval = 20f; 
     PlayerController player;
     UX ux;
     GameManager gameManager;
+    SceneLoader sceneLoader;
 
     public bool on;
 
@@ -20,7 +21,15 @@ public class EnemyManager : MonoBehaviour
         player = FindAnyObjectByType<PlayerController>();
         ux = FindObjectOfType<UX>();
         gameManager = FindAnyObjectByType<GameManager>();
+        sceneLoader = FindObjectOfType<SceneLoader>();
         enemies = new List<Enemy>(); 
+    }
+    void Update()
+    {
+        if (enemyHolder.transform.childCount == 0)
+        {
+            sceneLoader.Win();
+        }
     }
 
     public void Active()
@@ -38,10 +47,7 @@ public class EnemyManager : MonoBehaviour
     public void EnemyDead(Enemy enemy)
     {
         enemies.Remove(enemy);
-        if (enemies.Count == 0)
-        {
-            //gameManager.Exit();
-        }
+        
     }
 
     public void CallHands()

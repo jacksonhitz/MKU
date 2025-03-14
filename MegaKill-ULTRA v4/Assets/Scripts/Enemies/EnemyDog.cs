@@ -8,7 +8,7 @@ public class EnemyDog : Enemy
     protected override void Start()
     {
         attackRange = 2f;
-        attackRate = 3f;
+        attackRate = 2f;
         dmg = 10f;
     }
     protected override void CallAttack()
@@ -18,9 +18,10 @@ public class EnemyDog : Enemy
     IEnumerator Attack()
     {
         animator.SetTrigger("Atk");
+        soundManager.EnemySFX(sfx, attackClip);
         player.Hit(dmg);
         soundManager.EnemySFX(sfx, attackClip);
-        
+
         yield break;
     }
 }

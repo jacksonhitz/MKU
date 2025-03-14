@@ -82,11 +82,8 @@ public class Settings : MonoBehaviour
         Time.timeScale = 1f;
         isPaused = false;
         menu.enabled = false;
-        if (StateManager.state != StateManager.GameState.Intro)
-        {
-            soundManager.Play();
-        }
-        else
+        soundManager.music.Play();
+        if (StateManager.state == StateManager.GameState.Intro)
         {
             soundManager.dialogue.Play();
         }

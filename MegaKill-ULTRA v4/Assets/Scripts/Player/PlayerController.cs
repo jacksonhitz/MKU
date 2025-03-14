@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
     }
     public void SpeedUp()
     {
-        runSpd += 0.5f;
+        runSpd += 0.3f;
     }
 
     void HandleInput()
@@ -308,6 +308,22 @@ public class PlayerController : MonoBehaviour
             if (hand == leftHand) leftScript = beer;
             else rightScript = beer;
         }
+        else if (newItem.TryGetComponent<Coffee>(out var coffee))
+        {
+            newItem.transform.localPosition = hand == leftHand ? new Vector3(0f, -0.3f, 0.4f) : new Vector3(0f, -0.3f, 0.4f);
+            newItem.transform.localRotation = Quaternion.Euler(-110f, hand == leftHand ? -90f : 90f, 0f);
+
+            if (hand == leftHand) leftScript = coffee;
+            else rightScript = coffee;
+        }
+        else if (newItem.TryGetComponent<Cola>(out var cola))
+        {
+            newItem.transform.localPosition = hand == leftHand ? new Vector3(0f, -0.3f, 0.4f) : new Vector3(0f, -0.3f, 0.4f);
+            newItem.transform.localRotation = Quaternion.Euler(-110f, hand == leftHand ? -90f : 90f, 0f);
+
+            if (hand == leftHand) leftScript = cola;
+            else rightScript = cola;
+        }
         else
         {
             newItem.transform.localPosition = hand == leftHand ? new Vector3(0f, -0.3f, 0.4f) : new Vector3(0f, -0.4f, 0.4f);
@@ -381,14 +397,16 @@ public class PlayerController : MonoBehaviour
     public void Hit(float dmg)
     {
         health -= dmg;
-        soundManager.PlayerHit();
-
+        
         if (health <= 0 && !isDead)
         {
             isDead = true;
             gameManager.CallDead();
             soundManager.PlayerDeath();
-            Debug.Log("death called");
+        }
+        else
+        {
+            soundManager.PlayerHit();
         }
         ux.UpdateHealth(health);
     }

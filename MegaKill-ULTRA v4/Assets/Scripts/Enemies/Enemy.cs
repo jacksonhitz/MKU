@@ -10,12 +10,10 @@ public abstract class Enemy : MonoBehaviour
     public AudioClip hitClip;
     public AudioClip stunClip;
 
-
     [Header("VFX")]
     public GameObject deathEffect;
 
-
-    //REFRENCES
+    // REFERENCES
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public PlayerController player;
     [HideInInspector] public GameManager gameManager;
@@ -24,33 +22,26 @@ public abstract class Enemy : MonoBehaviour
     [HideInInspector] public Animator animator;
     [HideInInspector] public AudioSource sfx;
 
-
-    //PUBLIC VAR
+    // PUBLIC VAR
     protected float dmg;
     protected float attackRate;
     protected float attackRange;
     protected float detectionRange = 15f;
     protected bool isAttacking;
-
     protected bool detectedPlayer;
 
-    
-    //VAR
+    // VAR
     float stunDuration = 2f;
-
     [HideInInspector] public bool los;
     [HideInInspector] public bool isDead;
     bool isStunned;
+    bool hasSpawnedDeathEffect = false; // Prevent multiple death effects
 
-
-    
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         sfx = GetComponent<AudioSource>();
-
         animator = GetComponentInChildren<Animator>();
-
         player = FindObjectOfType<PlayerController>();
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
@@ -62,7 +53,7 @@ public abstract class Enemy : MonoBehaviour
         LOS();
         Pathfind();
     }
-    
+
     public void LOS()
     {
         Vector3 direction = (player.transform.position - transform.position).normalized;
@@ -98,15 +89,9 @@ public abstract class Enemy : MonoBehaviour
             agent.ResetPath();
         }
 
-        if (agent.velocity.magnitude > 0.1)
-        {
-            animator.SetBool("Run", true);
-        }
-        else
-        {
-            animator.SetBool("Run", false);
-        }
+        animator.SetBool("Run", agent.velocity.magnitude > 0.1f);
     }
+
     public IEnumerator AttackCheck()
     {
         if (!isAttacking)
@@ -120,7 +105,6 @@ public abstract class Enemy : MonoBehaviour
         }
         else yield break;
     }
-
 
     public void LookTowards(Vector3 targetPosition)
     {
@@ -138,6 +122,7 @@ public abstract class Enemy : MonoBehaviour
         soundManager.EnemySFX(sfx, hitClip);
         Hit(lethal);
     }
+
     protected virtual void Hit(bool lethal)
     {
         if (lethal || isStunned)
@@ -151,6 +136,7 @@ public abstract class Enemy : MonoBehaviour
             StartCoroutine(Stun());
         }
     }
+
     IEnumerator Stun()
     {
         isStunned = true;
@@ -167,17 +153,26 @@ public abstract class Enemy : MonoBehaviour
         yield return new WaitForSeconds(attackRate);
 
         isAttacking = false;
-
     }
+
     public void Dead()
     {
+        if (isDead) return; // Ensure dead logic only executes once
+
+        isDead = true;
         StopAllCoroutines();
         gameManager.Kill(this);
         DropItem();
-        Instantiate(deathEffect, transform.position, Quaternion.identity);
+
+        if (!hasSpawnedDeathEffect && deathEffect != null)
+        {
+            Instantiate(deathEffect, transform.position, Quaternion.identity);
+            hasSpawnedDeathEffect = true; // Mark effect as spawned
+        }
+
         Destroy(gameObject);
     }
-    
+
     protected abstract void CallAttack();
     protected abstract void Start();
     protected abstract void DropItem();

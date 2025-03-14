@@ -36,6 +36,18 @@ public class SceneLoader : MonoBehaviour
         settings.menu.enabled = false;
         isTutorial = false;
     }
+
+    public void Win()
+    {
+        SceneManager.LoadScene(0);
+        StateManager.state = StateManager.GameState.Title;
+        soundManager.ResetMusic();
+        soundManager.PlayerDeath();
+
+        PlayerController player = FindObjectOfType<PlayerController>();
+        player.isDead = true;
+        settings.menu.enabled = false;
+    }
     
 
     public void Title()
@@ -44,7 +56,6 @@ public class SceneLoader : MonoBehaviour
         StateManager.state = StateManager.GameState.Title;
         soundManager.ResetMusic();
         settings.menu.enabled = false;
-
     }
 
     public void Lvl()

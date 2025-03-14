@@ -23,7 +23,7 @@ public class EnemyFlyingEye : Enemy
     protected override void Start()
     {
         rb = GetComponent<Rigidbody>();
-        attackRange = 15f;
+        attackRange = 25f;
         attackRate = 5f;
         dmg = 20f;
     }
@@ -61,6 +61,7 @@ public class EnemyFlyingEye : Enemy
     IEnumerator Attack()
     {
         animator.SetTrigger("Atk");
+        soundManager.EnemySFX(sfx, attackClip);
 
         Vector3 targetPos = player.transform.position;
         targetPos.y += targetAdjust;
