@@ -433,10 +433,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd6e504ec073d44638d2a25fce2bc771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volume: 50
   music: {fileID: 8339826160230438239}
   sfx: {fileID: 4694733214259568557}
-  enemySfx: {fileID: 1961742885200669835}
   dialogue: {fileID: 6896994495622243501}
   title: {fileID: 8300000, guid: 8b008a78f1bbc4dbf8981ae2d93144b6, type: 3}
   acid: {fileID: 8300000, guid: bd668044136f0483698904fb03493760, type: 3}
@@ -461,21 +459,20 @@ MonoBehaviour:
   revEmpty: {fileID: 8300000, guid: 79e0496b8085cae4aa969e0c534470b5, type: 3}
   shotShot: {fileID: 8300000, guid: 70529ed9b0dcb6445820e497f133702e, type: 3}
   shotEmpty: {fileID: 8300000, guid: 98e998ff53773eb44a7b47b338c49e6b, type: 3}
-  mgShot: {fileID: 8300000, guid: a18080c4434b846b1ada52b5381d8f9c, type: 3}
+  mgShot: {fileID: 8300000, guid: 5fccb0b95020ebf409a6b39b517cb6c1, type: 3}
   mgEmpty: {fileID: 8300000, guid: f7d41eb82d11a429f999285386053b4b, type: 3}
-  punch: {fileID: 8300000, guid: bf624617bb7d0470184f0ae7ae8313b2, type: 3}
+  punch: {fileID: 8300000, guid: be7db7e832524fc4fb5eaa820391079b, type: 3}
   toss: {fileID: 8300000, guid: 8b8c615ffe24b6448a9939cc532052f7, type: 3}
   tossHit: {fileID: 8300000, guid: d76e15cf2d007ce4eb1945e4e673ef2e, type: 3}
-  playerHit: {fileID: 8300000, guid: ba82b945572ae4a90b936ae5e9056050, type: 3}
-  heartbeat: {fileID: 8300000, guid: ba82b945572ae4a90b936ae5e9056050, type: 3}
-  playerDeath: {fileID: 8300000, guid: b8ff77c23e79442229d7251863d1f352, type: 3}
-  enemyDeath: {fileID: 8300000, guid: 27a6d1a0dd0744fc9be638b16fb64ac9, type: 3}
-  enemyHit: {fileID: 8300000, guid: 6eebeb8eeda394f1a8fc4ae03a14057c, type: 3}
-  enemyStun: {fileID: 0}
-  gulp: {fileID: 8300000, guid: 8028a3d54ec16417cb9df604a39ab836, type: 3}
-  pillEmpty: {fileID: 8300000, guid: 12b045f93b6d34821972f9bcce353a6c, type: 3}
-  batSwing: {fileID: 8300000, guid: aa06d59834d23ee42b32deba5b7ace23, type: 3}
-  controller: 0
+  playerHit: {fileID: 8300000, guid: 96bab09674a9cc243a606df65edb51d7, type: 3}
+  heartbeat: {fileID: 8300000, guid: a3d289b465276de46ae7a43a79631027, type: 3}
+  playerDeath: {fileID: 8300000, guid: ae08eeeb05b525d4fae647cca160825c, type: 3}
+  enemyDeath: {fileID: 8300000, guid: f0cc4e588be2cf3429eb7c42af516337, type: 3}
+  enemyHit: {fileID: 8300000, guid: 42c85c1be404c074189a61de2f6f22e5, type: 3}
+  enemyStun: {fileID: 8300000, guid: fdfbdb32cff849d498eb0d57abce11c7, type: 3}
+  gulp: {fileID: 8300000, guid: c4089dec7ed619643ba97bc407ba5279, type: 3}
+  pillEmpty: {fileID: 8300000, guid: 4b37143e069144e4ea6aef339226b458, type: 3}
+  batSwing: {fileID: 8300000, guid: a90de70b387614d4280d75d738b8e4a6, type: 3}
   currentSpeed: 0
 --- !u!1 &4049863611097302040
 GameObject:
