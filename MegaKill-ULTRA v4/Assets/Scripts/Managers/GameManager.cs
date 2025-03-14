@@ -105,6 +105,7 @@ public class GameManager : MonoBehaviour
     {
         StateManager.state = StateManager.GameState.Tutorial;
         
+        CollectItems();
         PrepLvl();
         ux.TutorialOn();
     }

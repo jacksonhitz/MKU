@@ -120,13 +120,6 @@ public class CamController : MonoBehaviour
             {
                 currentLerp = 0.1f;
             }
-            else
-            {
-                
-            }
-            
-            
-            
             
             UpdateShader();
             
