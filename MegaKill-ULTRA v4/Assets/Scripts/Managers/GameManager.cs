@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
     public void EndIntro()
     {
         Active();
-        cam.CallBlink();
+        StartCoroutine(Blink());
     }
     public void StartTutorial()
     {
@@ -113,14 +113,14 @@ public class GameManager : MonoBehaviour
 
      IEnumerator Blink()
     {
-        cam.StartCoroutine(FadeOut(0.5f));
+        cam.CallFadeOut();
         yield return new WaitForSeconds(0.5f);
-        cam.StartCoroutine(FadeIn(0.5f));
+        cam.CallFadeIn();
         yield return new WaitForSeconds(0.5f);
-        cam.StartCoroutine(FadeOut(0.5f));
+        cam.CallFadeOut();
         yield return new WaitForSeconds(0.5f);
         StartTutorial();
-        cam.StartCoroutine(FadeIn(0.5f));
+        cam.CallFadeIn();
     }
 
 

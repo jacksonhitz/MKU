@@ -170,7 +170,16 @@ public class CamController : MonoBehaviour
         targetSpeedY = Random.Range(-0.01f, 0.01f);
     }
 
-    public IEnumerator FadeIn(float duration)
+    public void CallFadeIn()
+    {
+        StartCoroutine(FadeIn(0.5f));
+    } 
+    public void CallFadeOut()
+    {
+        StartCoroutine(FadeOut(0.5f));
+    } 
+
+    IEnumerator FadeIn(float duration)
     {
         float elapsed = 0f;
         float initialExposure = -10f;
@@ -192,7 +201,9 @@ public class CamController : MonoBehaviour
         }
     }
 
-    public IEnumerator FadeOut(float duration)
+    
+
+    IEnumerator FadeOut(float duration)
     {
         float elapsed = 0f;
         float initialExposure = 0f;
