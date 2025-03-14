@@ -25,8 +25,6 @@ public class PlayerController : MonoBehaviour
     UX ux;
     SoundManager soundManager;
     GameManager gameManager;
-    BulletTime bulletTime;
-    Settings settings;
     float health;
     float maxHealth = 100;
 
@@ -53,8 +51,6 @@ public class PlayerController : MonoBehaviour
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
-        bulletTime = FindObjectOfType<BulletTime>();
-        settings = FindObjectOfType<Settings>();
         ux = FindObjectOfType<UX>();
         characterController = GetComponent<CharacterController>(); 
     }
@@ -140,8 +136,6 @@ public class PlayerController : MonoBehaviour
 
         Vector3 gravityEffect = new Vector3(0f, gravity, 0f);
         characterController.Move(gravityEffect * Time.deltaTime);
-
-        
     }
 
 

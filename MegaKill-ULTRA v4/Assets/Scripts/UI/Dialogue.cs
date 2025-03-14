@@ -42,18 +42,6 @@ public class Dialogue : MonoBehaviour
         StartDialogue();
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space) && !started && title)
-        {
-            started = true;
-            textComponent.text = string.Empty;
-            titleText.text = string.Empty;
-            subheadText.text = string.Empty;
-            StartDialogue();
-        }
-    }
-
     void StartDialogue()
     {
         index = 0;

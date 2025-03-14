@@ -19,6 +19,7 @@ public class EnemyMG : Enemy
 
     bool reloading;
 
+
     protected override void Start()
     {
         item = GetComponentInChildren<Item>();
@@ -29,15 +30,18 @@ public class EnemyMG : Enemy
 
     protected override void CallAttack()
     {
-        if (bullets > 0)
+        if (bullets > 0 && !reloading)
         {
             bullets--;
             StartCoroutine(Attack());
         }
-        else if (!reloading)
+        else
         {
-            reloading = true;
-            StartCoroutine(Reload());
+            if (!reloading)
+            {
+                reloading = true;
+                StartCoroutine(Reload());
+            }
         }
     }
 
@@ -71,7 +75,7 @@ public class EnemyMG : Enemy
 
     IEnumerator Reload()
     {
-        yield return new WaitForSeconds(reloadRate);
+        yield return new WaitForSeconds(reloadRate); 
         Debug.Log("reloaded");
         bullets = 12f;
         reloading = false;

@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 
 public class EnemyFlyingEye : Enemy
 {
-    [Header("Refrences")]
+    [Header("References")]
     public GameObject bulletPrefab;
     public Transform firePoint;
 
@@ -13,10 +13,12 @@ public class EnemyFlyingEye : Enemy
 
     Vector3 rot = Vector3.zero;
     float moveSpeed = 5f;
-
+    float hoverHeight = 2f;
+    float hoverSmoothness = 8f;
     float bulletSpd = 10f;
     float targetAdjust = 0.25f;
-    protected override void DropItem(){}
+    
+    protected override void DropItem() {}
 
     protected override void Start()
     {
@@ -26,7 +28,7 @@ public class EnemyFlyingEye : Enemy
         dmg = 20f;
     }
 
-     protected override void Hit(bool lethal)
+    protected override void Hit(bool lethal)
     {
         soundManager.EnemySFX(sfx, deadClip);
         StartCoroutine(Dead());
@@ -46,8 +48,9 @@ public class EnemyFlyingEye : Enemy
         }
         else if (detectedPlayer && Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
         {
-            Vector3 direction = (player.transform.position - transform.position).normalized;
-            rb.velocity = direction * moveSpeed;
+            Vector3 targetPosition = player.transform.position + Vector3.up * hoverHeight;
+            Vector3 direction = (targetPosition - transform.position).normalized;
+            rb.velocity = new Vector3(direction.x * moveSpeed, Mathf.Lerp(rb.velocity.y, direction.y * moveSpeed, Time.deltaTime * hoverSmoothness), direction.z * moveSpeed);
             LookTowards(player.transform.position);
         }
         else
@@ -58,10 +61,10 @@ public class EnemyFlyingEye : Enemy
 
     IEnumerator Attack()
     {
-        //animator.SetTrigger("Atk");
+        animator.SetTrigger("Atk");
 
         Vector3 targetPos = player.transform.position;
-        targetPos.y = player.transform.position.y + targetAdjust;
+        targetPos.y += targetAdjust;
 
         Vector3 targetDir = (targetPos - firePoint.position).normalized;
 

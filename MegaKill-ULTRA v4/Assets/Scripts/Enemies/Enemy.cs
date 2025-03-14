@@ -39,7 +39,7 @@ public abstract class Enemy : MonoBehaviour
     float stunDuration = 2f;
 
     [HideInInspector] public bool los;
-    bool isDead;
+    [HideInInspector] public bool isDead;
     bool isStunned;
 
 
@@ -57,20 +57,16 @@ public abstract class Enemy : MonoBehaviour
         enemyManager = FindObjectOfType<EnemyManager>();
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if (!isDead)
         {
             LOS();
             Pathfind();
         }
-
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-        Debug.Log("Current animation: " + stateInfo.shortNameHash);
     }
     
-    void LOS()
+    public void LOS()
     {
         Vector3 direction = (player.transform.position - transform.position).normalized;
         RaycastHit hit;
