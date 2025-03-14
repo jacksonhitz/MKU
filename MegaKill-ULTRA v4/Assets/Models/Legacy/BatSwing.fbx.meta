@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: BodyMat
+    second: {fileID: 6719245597448002910, guid: 1856a80665d584fb5b5ba1ac5deb8a89, type: 3}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: bat_material
     second: {fileID: 2100000, guid: 8b9dae05775bf44c09e1db36ca919b57, type: 2}
   materials:
@@ -49,7 +54,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

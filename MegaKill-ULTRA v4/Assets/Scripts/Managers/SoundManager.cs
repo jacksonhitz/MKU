@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
+    public static SoundManager Instance { get; private set; }
+    
     public enum GameSpeed
     {
         Regular,
         Slow
     }
-    public float volume = 50f;
     
     public AudioSource music;
     public AudioSource sfx;
-    public AudioSource enemySfx;
     public AudioSource dialogue;
 
     public AudioClip title;
@@ -56,68 +56,74 @@ public class SoundManager : MonoBehaviour
     public AudioClip pillEmpty;
     public AudioClip batSwing;
 
-    GameManager gameManager;
     Settings settings;
-    public bool controller;
 
     List<AudioClip> tracks;
     List<AudioClip> lines;
     
-    int trackIndex = 0;
+    int trackIndex = -1;
     int lineIndex = 0;
     
     public GameSpeed currentSpeed = GameSpeed.Regular;
 
     void Awake()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         settings = FindObjectOfType<Settings>();
-        tracks = new List<AudioClip> { acid, witch, could, dj, all, hott, threes, life, real, four };
+        tracks = new List<AudioClip> { title, witch, acid, could, dj, all, hott, threes, life, real, four };
         lines = new List<AudioClip> { line1, line2, line3, line4, line5, line6, line7 };
     }
 
     void Start()
     {
-        volume = settings.volume;
-        UpdateVolume();
-
-        
-        if (controller)
-        {
-            music.clip = title;
-            music.Play();
-        }
+        NewTrack(); 
     }
 
     void Update()
     {
-        if (gameManager == null)
-        {
-            if (!music.isPlaying)
-            {
-                NewTrack();
-            }
-        }
-        else
-        {
-            if (!music.isPlaying && !gameManager.isIntro)
-            {
-                NewTrack();
-            }
-        }
+        UpdateVolume();
+    }
+    public void ResetMusic()
+    {
+        trackIndex = -1;
+        NewTrack();
+    }
+
+    public void Pause()
+    {
+        music.Pause();
+        sfx.Pause();
+        dialogue.Pause();
+    }
+
+    public void Play()
+    {
+        music.Play();
+        sfx.Play();
+        dialogue.Play();
     }
 
     public void UpdateVolume()
     {
-        float normalizedVolume = volume / 100f;
-        music.volume = normalizedVolume / 3;
-        sfx.volume = normalizedVolume;
-        enemySfx.volume = normalizedVolume;
-        dialogue.volume = normalizedVolume;
+        float normalizedMusic = settings.musicVolume / 100f;
+        float normalizedSfx = settings.sfxVolume / 100f;
+        music.volume = normalizedMusic / 3;
+        sfx.volume = normalizedSfx;
+        dialogue.volume = normalizedSfx;
     }
 
     public void EnemySFX(AudioSource source, AudioClip sound)
     {
+        float normalizedSfx = settings.sfxVolume / 100f;
+        source.volume = normalizedSfx;
+        
         source.clip = sound;
         source.pitch = currentSpeed == GameSpeed.Slow ? 0.75f : 1f;
         source.Play();  
@@ -140,7 +146,14 @@ public class SoundManager : MonoBehaviour
             trackIndex = (trackIndex + 1) % tracks.Count;
             music.clip = tracks[trackIndex];
             music.Play();
+            InvokeNewTrack(); 
         }
+    }
+
+    void InvokeNewTrack()
+    {
+        float trackLength = music.clip.length;
+        Invoke(nameof(NewTrack), trackLength);
     }
 
     public void RevShot() => PlaySfx(revShot);
@@ -171,6 +184,48 @@ public class SoundManager : MonoBehaviour
         float pitchValue = speed == GameSpeed.Slow ? 0.75f : 1f;
         music.pitch = pitchValue;
         sfx.pitch = pitchValue;
-        enemySfx.pitch = pitchValue;
+    }
+
+    // Fade-In Function
+    public void FadeIn(AudioSource source, float duration)
+    {
+        StartCoroutine(FadeInCoroutine(source, duration));
+    }
+
+    // Fade-Out Function
+    public void FadeOut(AudioSource source, float duration)
+    {
+        StartCoroutine(FadeOutCoroutine(source, duration));
+    }
+
+    // Coroutine for Fade-In
+    private IEnumerator FadeInCoroutine(AudioSource source, float duration)
+    {
+        source.volume = 0f;
+        float timeElapsed = 0f;
+
+        while (timeElapsed < duration)
+        {
+            source.volume = Mathf.Lerp(0f, 1f, timeElapsed / duration);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        source.volume = 1f;  // Ensure it reaches full volume at the end
+    }
+
+    // Coroutine for Fade-Out
+    private IEnumerator FadeOutCoroutine(AudioSource source, float duration)
+    {
+        float startVolume = source.volume;
+        float timeElapsed = 0f;
+
+        while (timeElapsed < duration)
+        {
+            source.volume = Mathf.Lerp(startVolume, 0f, timeElapsed / duration);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+        source.volume = 0f;  // Ensure it reaches zero volume at the end
+        source.Stop();
     }
 }

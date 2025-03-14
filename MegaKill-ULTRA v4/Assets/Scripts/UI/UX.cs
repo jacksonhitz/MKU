@@ -7,10 +7,10 @@ public class UX : MonoBehaviour
 {
     Camera cam;
     GameManager gameManager;
+    Settings settings;
 
     [SerializeField] Canvas screenSpace;
     [SerializeField] Canvas worldSpace;
-    [SerializeField] Canvas menu;
 
     [SerializeField] Dialogue tutorial;
     [SerializeField] Dialogue intro;
@@ -62,51 +62,41 @@ public class UX : MonoBehaviour
     {
         health = 100f;
         
-        menu.gameObject.SetActive(false);
         if (worldSpace != null)
         {
             initialFoV = cam.fieldOfView;
             initialCanvasScale = worldSpace.transform.localScale;
         }
         
-        // Start the idle eye animation
         eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
     }
-    
 
-    public void TutorialOn() => tutorial.CallDialogue();
-    public void IntroOn() => intro.CallDialogue();
+    public void IntroOn()
+    {
+        UIOn();
+        intro.CallDialogue();
+    }
+    public void TutorialOn()
+    {
+        UIOn();
+        tutorial.CallDialogue();
+    }
 
     public void UIOn()
     {
-        worldSpace.gameObject.SetActive(true);
-        if (!gameManager.isIntro)
+        if (StateManager.state != StateManager.GameState.Intro)
         {
             screenSpace.gameObject.SetActive(true);
             crosshair.gameObject.SetActive(true);
         }
+        worldSpace.gameObject.SetActive(true);
     }
 
     public void UIOff()
     {
-        if (gameManager.isPaused)
-        {
-            worldSpace.gameObject.SetActive(false);
-        }
+        worldSpace.gameObject.SetActive(false);
         screenSpace.gameObject.SetActive(false);
         crosshair.gameObject.SetActive(false);
-    }
-
-    public void Paused()
-    {
-        menu.gameObject.SetActive(true);
-        UIOff();
-    }
-
-    public void UnPaused()
-    {
-        menu.gameObject.SetActive(false);
-        UIOn();
     }
 
     public void PopUp(string text)

@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     SoundManager soundManager;
     GameManager gameManager;
     BulletTime bulletTime;
+    Settings settings;
     float health;
     float maxHealth = 100;
 
@@ -46,14 +47,16 @@ public class PlayerController : MonoBehaviour
     CharacterController characterController;
     Vector3 velocity;
 
+    bool active;
+
     void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
         bulletTime = FindObjectOfType<BulletTime>();
+        settings = FindObjectOfType<Settings>();
         ux = FindObjectOfType<UX>();
         characterController = GetComponent<CharacterController>(); 
-
     }
 
     void Start()
@@ -63,17 +66,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if (!rooted)
-        {
-            Move();
-        }
-
-        if (!gameManager.isIntro && !gameManager.isPaused)
+        Move();
+        if (StateManager.state == StateManager.GameState.Lvl)
         {
             HandleInput();
         }
-        characterController.Move(velocity * Time.deltaTime);
     }
 
     void HandleInput()
@@ -126,18 +123,25 @@ public class PlayerController : MonoBehaviour
             itemScript.Invoke("Use", 0f);
         }
     }
-
     void Move()
     {
-    float horzInput = Input.GetAxis("Horizontal");
-    float vertInput = Input.GetAxis("Vertical");
-    movement = transform.right * horzInput + transform.forward * vertInput;
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        
+        float horzInput = Input.GetAxis("Horizontal");
+        float vertInput = Input.GetAxis("Vertical");
+        movement = transform.right * horzInput + transform.forward * vertInput;
 
-    characterController.Move(movement * runSpd * Time.deltaTime);
-    gravity = -9.81f * 10; 
+        if (!rooted)
+        {
+            characterController.Move(movement * runSpd * Time.deltaTime);
+        }
 
-    Vector3 gravityEffect = new Vector3(0f, gravity, 0f);
-    characterController.Move(gravityEffect * Time.deltaTime);
+        gravity = -9.81f * 10; 
+
+        Vector3 gravityEffect = new Vector3(0f, gravity, 0f);
+        characterController.Move(gravityEffect * Time.deltaTime);
+
+        
     }
 
 

@@ -1,108 +1,146 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Settings : MonoBehaviour
 {
-    CamController cam;
-    SoundManager soundManager;
-    GameManager gameManager;
+    public static Settings Instance { get; private set; }
 
-    [SerializeField] Slider volumeSlider;
+
+    SoundManager soundManager;
+    SceneLoader sceneLoader;
+    Canvas menu;
+    
+
+    [SerializeField] Slider sfxSlider;
+    [SerializeField] Slider musicSlider;
     [SerializeField] Slider sensSlider;
-    [SerializeField] TMP_InputField volumeInput;
+    [SerializeField] TMP_InputField sfxInput;
+    [SerializeField] TMP_InputField musicInput;
     [SerializeField] TMP_InputField sensInput;
     
-    public float volume = 50;
-    public float sens = 500;
 
-    public bool isTutorial;
+    [HideInInspector] public float musicVolume = 50;
+    [HideInInspector] public float sfxVolume = 50;
+    [HideInInspector] public float sens = 500;
 
-    
+
+    public bool isPaused;
+
     void Awake()
     {
-        if (FindObjectsOfType<Settings>().Length > 1)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        else
-        {
-            DontDestroyOnLoad(gameObject);
-            isTutorial = true;
-        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        
+        soundManager = FindObjectOfType<SoundManager>();
+        sceneLoader = FindObjectOfType<SceneLoader>();
+        menu = GetComponentInChildren<Canvas>();
+
     }
 
-    void Update()
-    {
-
-        if (cam == null)
-        {
-            cam = FindAnyObjectByType<CamController>();
-        }
-        if (soundManager == null)
-        {
-            soundManager = FindAnyObjectByType<SoundManager>();
-        }
-        if (gameManager == null)
-        {
-            gameManager = FindAnyObjectByType<GameManager>();
-        }
-    }
-
-
-    
     void Start()
     {
-        volumeSlider.value = volume;
+        menu.enabled = false;
+        
+        sfxSlider.value = sfxVolume;
+        musicSlider.value = musicVolume;
         sensSlider.value = sens;
-        volumeInput.text = volume.ToString("F0");
+        sfxInput.text = sfxVolume.ToString("F0");
+        musicInput.text = musicVolume.ToString("F0");
         sensInput.text = sens.ToString("F0");
 
-        volumeSlider.onValueChanged.AddListener(VolumeText);
+        sfxSlider.onValueChanged.AddListener(SFXText);
+        musicSlider.onValueChanged.AddListener(MusicText);
         sensSlider.onValueChanged.AddListener(SensText);
-        volumeInput.onEndEdit.AddListener(VolumeSlider);
+
+        sfxInput.onEndEdit.AddListener(SFXSlider);
+        musicInput.onEndEdit.AddListener(MusicSlider);
         sensInput.onEndEdit.AddListener(SensSlider);
 
-        volumeInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
+        sfxInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
+        musicInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
         sensInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
     }
 
-
-
-    void VolumeText(float newValue)
+    public void Pause()
     {
-        volume = newValue;
-        volumeInput.text = volume.ToString("F0");
-        soundManager.volume = volume;
-        soundManager.UpdateVolume();
+        isPaused = true;
+        Time.timeScale = 0f;
+        soundManager.Pause();
+        menu.enabled = true;
+    }
+    public void Resume()
+    {
+        isPaused = false;
+        Time.timeScale = 1f;
+        soundManager.Play();
+        menu.enabled = false;
+    }
+
+    public void Exit()
+    {
+        isPaused = false;
+        Time.timeScale = 1f;
+        soundManager.Play();
+        menu.enabled = false;
+
+        sceneLoader.Title();
+    }
+
+    public void Restart()
+    {
+        isPaused = false;
+        Time.timeScale = 1f;
+        soundManager.Play();
+        menu.enabled = false;
+
+        sceneLoader.Restart();
+    }
+
+    void SFXText(float newValue)
+    {
+        sfxVolume = newValue;
+        sfxInput.text = sfxVolume.ToString("F0");
+    }
+
+    void MusicText(float newValue)
+    {
+        musicVolume = newValue;
+        musicInput.text = musicVolume.ToString("F0");
     }
 
     void SensText(float newValue)
     {
         sens = newValue;
         sensInput.text = sens.ToString("F0");
-        cam.sens = sens;
     }
 
-    void VolumeSlider(string newValue)
+    void SFXSlider(string newValue)
     {
         if (float.TryParse(newValue, out float parsedValue))
         {
-            volume = Mathf.Clamp(parsedValue, 0, 100);
-            volumeInput.text = volume.ToString("F0");
-            volumeSlider.value = volume;
-            soundManager.volume = volume;
-            soundManager.UpdateVolume();
+            sfxVolume = Mathf.Clamp(parsedValue, 0, 100);
+            sfxSlider.value = sfxVolume;
         }
-        else
+        sfxInput.text = sfxVolume.ToString("F0");
+    }
+
+    void MusicSlider(string newValue)
+    {
+        if (float.TryParse(newValue, out float parsedValue))
         {
-            volumeInput.text = volume.ToString("F0");
+            musicVolume = Mathf.Clamp(parsedValue, 0, 100);
+            musicSlider.value = musicVolume;
         }
+        musicInput.text = musicVolume.ToString("F0");
     }
 
     void SensSlider(string newValue)
@@ -110,13 +148,8 @@ public class Settings : MonoBehaviour
         if (float.TryParse(newValue, out float parsedValue))
         {
             sens = Mathf.Clamp(parsedValue, 0, 1000);
-            sensInput.text = sens.ToString("F0");
             sensSlider.value = sens;
-            cam.sens = sens;
         }
-        else
-        {
-            sensInput.text = sens.ToString("F0");
-        }
+        sensInput.text = sens.ToString("F0");
     }
 }

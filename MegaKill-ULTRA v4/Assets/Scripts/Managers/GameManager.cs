@@ -6,55 +6,34 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-
     public int score = 0;
 
-    Volume volume;
     UX ux;
     GameObject player;
     SoundManager soundManager;
     EnemyManager enemyManager;
-    BulletTime bulletTime;
-    Settings settings;
+    InputManager inputManager;
 
     CamController cam;
 
     List<Item> items;
     public List<GameObject> doors;
-
-
-    public GameObject enemyHolder;
-    public GameObject eye;
     public GameObject cia;
-    public GameObject black;
 
-    public Dialogue intro;
-
-    public bool fadeOut;
-    public bool isIntro;
-    public bool isPaused;
+    [HideInInspector] public bool fadeOut;
 
     void Awake()
     {
         Time.timeScale = 1f;
         
-        settings = FindObjectOfType<Settings>();
-        if (settings.isTutorial)
-        {
-            isIntro = true;
-        }
-        else
-        {
-            isIntro = false;
-        }
-        
         items = new List<Item>();  
 
         soundManager = FindObjectOfType<SoundManager>(); 
         enemyManager = FindObjectOfType<EnemyManager>();
-        volume = FindObjectOfType<Volume>(); 
+        inputManager = FindObjectOfType<InputManager>();
+        inputManager.gameManager = this;
+
         ux = FindObjectOfType<UX>(); 
-        bulletTime = FindObjectOfType<BulletTime>();
         player = GameObject.FindGameObjectWithTag("Player");
         cam = FindObjectOfType<CamController>();
 
@@ -66,9 +45,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         CollectItems();
-        if (isIntro)
+        if (StateManager.state == StateManager.GameState.Intro)
         {
-            settings.isTutorial = false;
             StartIntro();
         }
         else
@@ -78,86 +56,60 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return) && isIntro)
+        if (StateManager.state == StateManager.GameState.Intro || StateManager.state == StateManager.GameState.Tutorial)
         {
-            StartLvl();
-        }
-        if (Input.GetKeyDown(KeyCode.Delete))
-        {
-            Restart();
-        }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (!isIntro)
+            if (Input.GetKeyDown(KeyCode.Return))
             {
-                if (!isPaused)
-                {
-                    Pause();
-                }
-                else
-                {
-                    Unpause();
-                    ux.UIOn();
-                }
+                StartLvl();
             }
-        }
+        } 
 
-        if (Input.GetKey(KeyCode.Tab))
+        if (StateManager.state == StateManager.GameState.Lvl)
         {
-            HighlightAll();
-        }
-        else
-        {
-            HighlightItem();
+            if (Input.GetKey(KeyCode.Tab))
+            {
+                HighlightAll();
+            }
+            else
+            {
+                HighlightItem();
+            }
         }
     }
     public void StartIntro()
     {
+        soundManager.music.Stop();
         ux.IntroOn();
-        ux.UIOff();
     }
     public void EndIntro()
     {
-        PlayerActive();
+        Active();
         cam.CallBlink();
     }
     public void StartTutorial()
     {
+        StateManager.state = StateManager.GameState.Tutorial;
+
+        soundManager.NewTrack();
         ux.TutorialOn();
-        ux.UIOn();
+    }
+    public void EndTutorial()
+    {
+        StartLvl();
     }
     public void StartLvl()
     {
-        PlayerActive();
-
-        ux.UIOn();
         enemyManager.Active();
+        ux.UIOn();
         OpenDoors();
+
+        StateManager.state = StateManager.GameState.Lvl;
     }
-    public void PlayerActive()
+    public void Active()
     {
-        if (cia != null)
-        {
-            cia.SetActive(false);
-        }
+        soundManager.Play();
+        cia.SetActive(false);
         CollectItems();
-        isIntro = false;
-    }
-
-    public void Pause()
-    {
-        isPaused = true;
-        Time.timeScale = 0.0000000001f;
-        ux.Paused();
-        //soundManager.Paused();
-    }
-
-    public void Unpause()
-    {
-        isPaused = false;
-        Time.timeScale = 1f;
-        ux.UnPaused();
-        //soundManager.UnPaused();
     }
 
     public void Exit()
@@ -186,12 +138,9 @@ public class GameManager : MonoBehaviour
 
     public void HighlightAll()
     {
-        if (!isIntro)
+        foreach (Item item in items)
         {
-            foreach (Item item in items)
-            {
-                item.GlowMat();
-            }
+            item.GlowMat();
         }
     }
     public void HighlightItem()
@@ -209,7 +158,6 @@ public class GameManager : MonoBehaviour
         }
     }
     
-
     public void Kill(Enemy enemy)
     {
         enemyManager.EnemyDead(enemy);
@@ -234,7 +182,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene(0);
+        
         Debug.Log("Called");
     }
 

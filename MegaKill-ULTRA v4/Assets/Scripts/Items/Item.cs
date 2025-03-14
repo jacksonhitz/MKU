@@ -35,10 +35,7 @@ public class Item : MonoBehaviour
         }
     }
 
-    public void Use()
-    {
-        
-    }
+    public void Use(){}
 
     void OnCollisionEnter(Collision collision)
     {
@@ -136,7 +133,7 @@ public class Item : MonoBehaviour
 
     void OnMouseEnter()
     {
-        if (available && !gameManager.isIntro)
+        if (available)
         {
             isHovering = true;
         }

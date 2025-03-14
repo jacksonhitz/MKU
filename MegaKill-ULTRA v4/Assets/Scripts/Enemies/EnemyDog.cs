@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class EnemyDog : Enemy
 {
+    
     protected override void DropItem(){}
     protected override void Start()
     {
@@ -16,13 +17,10 @@ public class EnemyDog : Enemy
     }
     IEnumerator Attack()
     {
-        isAttacking = true;
-        yield return new WaitForSeconds(0.2f);
-
+        animator.SetTrigger("Atk");
         player.Hit(dmg);
         soundManager.EnemySFX(sfx, attackClip);
-
-        yield return new WaitForSeconds(0.2f);
-        isAttacking = false;
+        
+        yield break;
     }
 }

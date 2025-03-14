@@ -16,6 +16,7 @@ public class Dialogue : MonoBehaviour
     bool waiting = true;
     GameManager gameManager;
     SoundManager soundManager;
+    SceneLoader sceneLoader;
 
     public bool title;
     public bool intro;
@@ -26,6 +27,7 @@ public class Dialogue : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
+        sceneLoader = FindObjectOfType<SceneLoader>();
 
         passed = true;
     }
@@ -49,21 +51,6 @@ public class Dialogue : MonoBehaviour
             titleText.text = string.Empty;
             subheadText.text = string.Empty;
             StartDialogue();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            textComponent.text = "";
-            StopAllCoroutines();
-
-            if (title)
-            {
-                SceneManager.LoadScene(1);
-            }
-            else
-            {
-                gameManager.StartLvl();
-            }
         }
     }
 
@@ -113,20 +100,21 @@ public class Dialogue : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        if (intro)
+        if (StateManager.state == StateManager.GameState.Intro)
         {
             textComponent.text = string.Empty;
             gameManager.EndIntro();
         }
-        else if (tutorial)
+        else if (StateManager.state == StateManager.GameState.Tutorial)
         {
             textComponent.text = string.Empty;
-            gameManager.StartLvl();
+            gameManager.EndTutorial();
         }
         else
         {
             yield return new WaitForSeconds(2f);
-            SceneManager.LoadScene(1);
+            StateManager.state = StateManager.GameState.Intro;
+            sceneLoader.Lvl();
         }
     }
 }

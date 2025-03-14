@@ -49,7 +49,6 @@ public class CamController : MonoBehaviour
 
     public int phase;
 
-    // Lerp target values for SpeedX and SpeedY
     private float targetSpeedX;
     private float targetSpeedY;
     private float lerpSpeed = 1f;
@@ -73,7 +72,8 @@ public class CamController : MonoBehaviour
             RandomizeSpeed();
         }
 
-        sens = settings.sens;
+
+        if (gameManager != null) sens = settings.sens;
 
         originalFOV = cam.fieldOfView;
         originalPosition = transform.localPosition;
@@ -99,27 +99,17 @@ public class CamController : MonoBehaviour
     {
         if (gameManager != null)
         {
-            if (!gameManager.isPaused)
-            {
-                MoveCam();
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-            }
-
-            if (!gameManager.isIntro)
-            {
-                UpdateShader();
-            }
-
             if (gameManager.fadeOut)
             {
                 FadeOut();
             }
+        }   
+
+        if (!settings.isPaused)
+        {
+            MoveCam();
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
         else
         {
@@ -128,12 +118,13 @@ public class CamController : MonoBehaviour
         }
 
         UpdatePost();
+        UpdateShader();
     }
 
     public void UpPhase()
     {
         phase++;
-        //RandomizeSpeed();
+        RandomizeSpeed();
     }
 
     void FadeOut()
@@ -149,7 +140,6 @@ public class CamController : MonoBehaviour
 
     void UpdateShader()
     {
-        // Cap the amplitude and frequency to a value based on the phase
         float cap = 3f * phase;
         Debug.Log(cap);
 
@@ -162,7 +152,6 @@ public class CamController : MonoBehaviour
             currentFrequency += 0.001f;
         }
 
-        // Update shader values
         camMat.SetFloat("_Lerp", currentLerp);
         camMat.SetFloat("_Frequency", currentFrequency);
         camMat.SetFloat("_Amplitude", currentAmplitude);
@@ -171,7 +160,6 @@ public class CamController : MonoBehaviour
         float speedX = Mathf.Lerp(camMat.GetFloat("_SpeedX"), targetSpeedX, lerpSpeed);
         float speedY = Mathf.Lerp(camMat.GetFloat("_SpeedY"), targetSpeedY, lerpSpeed);
 
-        // Apply the lerped values to the shader
         camMat.SetFloat("_SpeedX", speedX);
         camMat.SetFloat("_SpeedY", speedY);
     }
