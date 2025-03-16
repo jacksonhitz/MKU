@@ -118,7 +118,7 @@ public class CamController : MonoBehaviour
         {
             if(!playerController.isDead)
             {
-                currentLerp = 0.5f;
+                currentLerp = 0.15f;
             }
             
             UpdateShader();
@@ -182,14 +182,14 @@ public class CamController : MonoBehaviour
 
     void UpdateShader()
     {
-        float cap = 12f * phase;
+        float cap = 4f * phase;
         Debug.Log(cap);
 
         if (currentAmplitude < cap)
         {
             currentAmplitude += 0.001f;
         }
-        if (currentFrequency < cap)
+        if (currentFrequency < cap * 2)
         {
             currentFrequency += 0.001f;
         }

@@ -14057,63 +14057,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -1856344252225202068, guid: 853e0034b10085c42bf87bb2c41583a8, type: 3}
---- !u!1001 &1437076067
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2017281201252817829, guid: d11e16fc204524981bf474ea80d09a3e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 20.29
-      objectReference: {fileID: 0}
-    - target: {fileID: 2017281201252817829, guid: d11e16fc204524981bf474ea80d09a3e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -4.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 2017281201252817829, guid: d11e16fc204524981bf474ea80d09a3e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2017281201252817829, guid: d11e16fc204524981bf474ea80d09a3e, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2017281201252817829, guid: d11e16fc204524981bf474ea80d09a3e, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2017281201252817829, guid: d11e16fc204524981bf474ea80d09a3e, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2017281201252817829, guid: d11e16fc204524981bf474ea80d09a3e, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2017281201252817829, guid: d11e16fc204524981bf474ea80d09a3e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2017281201252817829, guid: d11e16fc204524981bf474ea80d09a3e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2017281201252817829, guid: d11e16fc204524981bf474ea80d09a3e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: d11e16fc204524981bf474ea80d09a3e, type: 3}
-      propertyPath: m_Name
-      value: BatEnemy (1)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d11e16fc204524981bf474ea80d09a3e, type: 3}
 --- !u!1001 &1438238234
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21795,4 +21738,3 @@ SceneRoots:
   - {fileID: 460170024}
   - {fileID: 1268467556}
   - {fileID: 1739409210}
-  - {fileID: 1437076067}
