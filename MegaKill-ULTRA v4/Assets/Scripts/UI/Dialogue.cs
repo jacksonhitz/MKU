@@ -75,7 +75,7 @@ public class Dialogue : MonoBehaviour
         yield return new WaitForSeconds(1f);
         if (intro)
         {
-            soundManager.StopLine();
+            //soundManager.StopLine();
         }
         NextLine();
     }
@@ -103,21 +103,20 @@ public class Dialogue : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        if (StateManager.state == StateManager.GameState.Intro)
+        if (StateManager.State == StateManager.GameState.Intro)
         {
             textComponent.text = string.Empty;
-            gameManager.EndIntro();
+            gameManager.Tutorial();
         }
-        else if (StateManager.state == StateManager.GameState.Lvl)
+        else if (StateManager.State == StateManager.GameState.Tutorial)
         {
             textComponent.text = string.Empty;
-            gameManager.EndTutorial();
+            gameManager.Lvl();
         }
-        else if (StateManager.state == StateManager.GameState.Title)
+        else if (StateManager.State == StateManager.GameState.Title)
         {
             yield return new WaitForSeconds(2f);
-            StateManager.state = StateManager.GameState.Intro;
-            sceneLoader.Lvl();
+            sceneLoader.Subway();
         }
     }
 }

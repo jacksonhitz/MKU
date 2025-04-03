@@ -85,11 +85,6 @@ public class GameManager : MonoBehaviour
     public void Lvl()
     {
         StateManager.State = StateManager.GameState.Lvl;
-        
-        if (enemyManager != null)
-        {
-            enemyManager.Active();
-        }
     }
     IEnumerator Blink()
     {
