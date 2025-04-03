@@ -6,7 +6,7 @@ public class MG : MonoBehaviour
     PlayerController player;
     SoundManager soundManager;
     GameManager gameManager;
-    UX ux;
+    UIManager ui;
     Rigidbody rb;
 
     float bullets = 12f;
@@ -38,7 +38,7 @@ public class MG : MonoBehaviour
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
         player = FindObjectOfType<PlayerController>();
-        ux = FindObjectOfType<UX>();
+        ui = FindObjectOfType<UIManager>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -82,7 +82,7 @@ public class MG : MonoBehaviour
                 if (Time.time - lastActionTime >= 0.5f)
                 {
                     soundManager.MGEmpty();
-                    ux.PopUp("EMPTY");
+                    ui.PopUp("EMPTY");
                     lastActionTime = Time.time;
                 }
             } 

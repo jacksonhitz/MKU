@@ -76,17 +76,18 @@ public class Settings : MonoBehaviour
         isPaused = true;
         soundManager.Pause();
         menu.enabled = true;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
     public void Resume()
     {
         Time.timeScale = 1f;
         isPaused = false;
         menu.enabled = false;
-        soundManager.music.Play();
-        if (StateManager.state == StateManager.GameState.Intro)
-        {
-            soundManager.dialogue.Play();
-        }
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     public void Exit()
     {

@@ -5,7 +5,7 @@ public class Beer : MonoBehaviour
 {
     PlayerController player;
     SoundManager soundManager;
-    UX ux;
+    UIManager ui;
     float charge = 5f;
     float cooldown = -0.5f;
 
@@ -13,7 +13,7 @@ public class Beer : MonoBehaviour
     {
         player = FindObjectOfType<PlayerController>();
         soundManager = FindObjectOfType<SoundManager>();
-        ux = FindObjectOfType<UX>();
+        ui = FindObjectOfType<UIManager>();
     }
 
     public void Use()
@@ -25,13 +25,13 @@ public class Beer : MonoBehaviour
                 charge--;
                 soundManager.Gulp();
                 player.Heal(10);
-                ux.PopUp("HEALTH UP");
+                ui.PopUp("HEALTH UP");
                 cooldown = Time.time; 
             }
             else
             {
                 soundManager.PillEmpty();
-                ux.PopUp("EMPTY");
+                ui.PopUp("EMPTY");
             }
         }
     }

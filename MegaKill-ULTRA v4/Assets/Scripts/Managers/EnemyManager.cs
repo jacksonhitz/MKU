@@ -9,20 +9,56 @@ public class EnemyManager : MonoBehaviour
     public List<Enemy> enemies;
     float spawnInterval = 20f; 
     PlayerController player;
-    UX ux;
+    UIManager ui;
     GameManager gameManager;
     SceneLoader sceneLoader;
 
     public bool on;
 
-
     void Awake()
     {
         player = FindAnyObjectByType<PlayerController>();
-        ux = FindObjectOfType<UX>();
+        ui = FindObjectOfType<UIManager>();
         gameManager = FindAnyObjectByType<GameManager>();
         sceneLoader = FindObjectOfType<SceneLoader>();
         enemies = new List<Enemy>(); 
+    }
+
+    void OnEnable()
+    {
+        StateManager.OnStateChanged += StateChange;
+    }
+    void OnDisable()
+    {
+        StateManager.OnStateChanged -= StateChange;
+    }
+    void StateChange(StateManager.GameState state)
+    {
+        switch (state)
+        {
+            case StateManager.GameState.Title:
+                
+                break;
+            case StateManager.GameState.Intro:
+                
+                break;
+            case StateManager.GameState.Tutorial:
+                
+                break;
+            case StateManager.GameState.Lvl:
+                Lvl();
+                break;
+            case StateManager.GameState.Outro:
+
+                break;
+        }
+    }
+
+    void Lvl()
+    {
+        enemyHolder.SetActive(true);
+        CallHands();
+        CollectEnemies();
     }
     void Update()
     {
@@ -30,13 +66,6 @@ public class EnemyManager : MonoBehaviour
         {
             sceneLoader.Win();
         }
-    }
-
-    public void Active()
-    {
-        enemyHolder.SetActive(true);
-        CallHands();
-        CollectEnemies();
     }
     public void CollectEnemies()
     {
@@ -63,7 +92,7 @@ public class EnemyManager : MonoBehaviour
 
             if (!player.rooted)
             {
-                ux.PopUp("LOOK DOWN");
+                ui.PopUp("LOOK DOWN");
                 
                 player.rooted = true;
                 Vector3 spawnPos = player.transform.position;

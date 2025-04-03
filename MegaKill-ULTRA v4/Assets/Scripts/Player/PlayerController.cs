@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     public MonoBehaviour leftScript;
     public MonoBehaviour rightScript;
 
-    UX ux;
+    UIManager ui;
     SoundManager soundManager;
     GameManager gameManager;
     Settings settings;
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
-        ux = FindObjectOfType<UX>();
+        ui = FindObjectOfType<UIManager>();
         settings = FindObjectOfType<Settings>();
 
         characterController = GetComponent<CharacterController>(); 
@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Move();
-        if (!settings.isPaused && StateManager.state != StateManager.GameState.Intro)
+        if (!settings.isPaused && StateManager.State != StateManager.GameState.Intro)
         {
             HandleInput();
         }
@@ -391,7 +391,7 @@ public class PlayerController : MonoBehaviour
         {
             health = 100;
         }
-        ux.UpdateHealth(health);
+        ui.UpdateHealth(health);
     }
 
     public void Hit(float dmg)
@@ -408,6 +408,6 @@ public class PlayerController : MonoBehaviour
         {
             soundManager.PlayerHit();
         }
-        ux.UpdateHealth(health);
+        ui.UpdateHealth(health);
     }
 }

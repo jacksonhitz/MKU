@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class Tutorial : MonoBehaviour
+public class TutorialUI : MonoBehaviour
 {
     public TextMeshProUGUI text;
     public string[] lines;
@@ -125,7 +125,7 @@ public class Tutorial : MonoBehaviour
         }
         else
         {
-            gameManager.StartLvl();
+            gameManager.Lvl();
         }
     }
     IEnumerator TypeLine()
@@ -139,7 +139,6 @@ public class Tutorial : MonoBehaviour
         }
 
         yield return new WaitForSeconds(4f);
-        soundManager.StopLine();
         waiting = true;
     }
 }

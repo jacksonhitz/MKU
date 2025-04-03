@@ -1,16 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
-    
-    public enum GameSpeed
-    {
-        Regular,
-        Slow
-    }
     
     public AudioSource music;
     public AudioSource sfx;
@@ -63,13 +58,15 @@ public class SoundManager : MonoBehaviour
     List<AudioClip> lines;
     
     int trackIndex = -1;
-    int lineIndex = 0;
-    
-    public GameSpeed currentSpeed = GameSpeed.Regular;
+    int lineIndex = -1;
+
+    bool sfxPlaying;
+    bool dialoguePlaying;
+
 
     void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance != null || this)
         {
             Destroy(gameObject);
             return;
@@ -78,41 +75,110 @@ public class SoundManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         settings = FindObjectOfType<Settings>();
-        tracks = new List<AudioClip> { title, witch, acid, could, dj, all, hott, threes, life, real, four };
+
+        tracks = new List<AudioClip> { witch, acid, could, dj, all, hott, threes, life, real, four };
         lines = new List<AudioClip> { line1, line2, line3, line4, line5, line6, line7 };
     }
 
-    void Start()
+    void OnEnable()
     {
-        NewTrack(); 
+        StateManager.OnStateChanged += StateChange;
+    }
+    void OnDisable()
+    {
+        StateManager.OnStateChanged -= StateChange;
+    }
+    void StateChange(StateManager.GameState state)
+    {
+        switch (state)
+        {
+            case StateManager.GameState.Title:
+                Title();
+                break;
+            case StateManager.GameState.Intro:
+                Intro();
+                break;
+            case StateManager.GameState.Tutorial:
+                Tutorial();
+                break;
+            case StateManager.GameState.Lvl:
+                Lvl();
+                break;
+            case StateManager.GameState.Outro:
+                Outro();
+                break;
+        }
+    }
+
+    void Title()
+    {
+        music.clip = title;
+        music.Play();
+    }
+    void Intro()
+    {
+        music.Stop();
+        dialogue.Play();
+    }
+    void Tutorial()
+    {
+        dialogue.Stop();
+        trackIndex = -1;
+        NewTrack();
+    }
+    void Lvl()
+    {
+        if (!music.isPlaying)
+        {
+            trackIndex = -1;
+            NewTrack();
+        }
+    }
+    void Outro()
+    {
+
+    }
+
+    
+    public void Pause()
+    {
+        sfxPlaying = sfx.isPlaying;
+        dialoguePlaying = sfx.isPlaying;
+        
+        music.Pause();
+        sfx.Pause();
+        dialogue.Pause();
+    }
+    public void Resume()
+    {
+        music.Play();
+
+        if (sfxPlaying)
+        {
+            sfxPlaying = false;
+            sfx.Play();
+        }
+        if (dialoguePlaying)
+        {
+            dialoguePlaying = false;
+            dialogue.Play();
+        }
+    }
+
+    void NewTrack()
+    {
+        if (tracks.Count > 1)
+        {
+            trackIndex = (trackIndex + 1) % tracks.Count;
+            music.clip = tracks[trackIndex];
+            music.Play();
+        }
     }
 
     void Update()
     {
         UpdateVolume();
     }
-    public void ResetMusic()
-    {
-        trackIndex = -1;
-        NewTrack();
-    }
-
-    public void Pause()
-    {
-        music.Pause();
-        sfx.Pause();
-        dialogue.Pause();
-    }
-
-    public void Play()
-    {
-        music.Play();
-        if (StateManager.state == StateManager.GameState.Intro)
-        {
-            dialogue.Play();
-        }
-    }
-
     public void UpdateVolume()
     {
         float normalizedMusic = settings.musicVolume / 100f;
@@ -128,29 +194,14 @@ public class SoundManager : MonoBehaviour
         source.volume = normalizedSfx;
         
         source.clip = sound;
-        source.pitch = currentSpeed == GameSpeed.Slow ? 0.75f : 1f;
         source.Play();  
     }
-
-    public void StopMusic() => music.Stop();
-    public void StopLine() => dialogue.Stop();
 
     public void NewLine()
     {
         lineIndex = (lineIndex + 1) % lines.Count;
         dialogue.clip = lines[lineIndex];
         dialogue.Play();
-    }
-
-    public void NewTrack()
-    {
-        if (tracks.Count > 1)
-        {
-            trackIndex = (trackIndex + 1) % tracks.Count;
-            music.clip = tracks[trackIndex];
-            music.Play();
-            InvokeNewTrack(); 
-        }
     }
 
     void InvokeNewTrack()
@@ -185,14 +236,6 @@ public class SoundManager : MonoBehaviour
     {
         playerSfx.clip = clip;
         playerSfx.Play();
-    }
-
-    public void SetSpeed(GameSpeed speed)
-    {
-        currentSpeed = speed;
-        float pitchValue = speed == GameSpeed.Slow ? 0.75f : 1f;
-        music.pitch = pitchValue;
-        sfx.pitch = pitchValue;
     }
     public void FadeIn(AudioSource source, float duration)
     {

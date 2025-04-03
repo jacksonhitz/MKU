@@ -1,74 +1,66 @@
 using System.Collections;
 using UnityEngine;
 
-
 public class Shotgun : MonoBehaviour
 {
-   float mag = 75f;
-   float spd = 5f;
-   Vector3 rot = Vector3.zero;
+    float mag = 75f;
+    float spd = 5f;
+    Vector3 rot = Vector3.zero;
 
+    Vector3 originalRot;
+    Vector3 originalPos;
 
-   Vector3 originalRot;
-   Vector3 originalPos;
-
-
-   PlayerController player;
-   SoundManager soundManager;
-   GameManager gameManager;
-   UX ux;
+    PlayerController player;
+    SoundManager soundManager;
+    GameManager gameManager;
+    UIManager ui;
     Rigidbody rb;
 
+    public float shells = 2f;
+    public float reloadBackAmount = 0.2f;
+    public float reloadSpeed = 2f;
+    public float tracerDuration = 0.2f;
 
-   public float shells = 2f;
-   public float reloadBackAmount = 0.2f;
-   public float reloadSpeed = 2f;
-   public float tracerDuration = 0.2f;
+    public TrailRenderer tracerPrefab;
+    public Transform firePoint;
+    public int pellets = 12;
+    public float spreadAngle = 5f;
 
-   public TrailRenderer tracerPrefab;
-   public Transform firePoint;
-   public int pellets = 12;
-   public float spreadAngle = 5f;
+    private bool canFire = true;
+    float fireRate = .5f;
 
-   private bool canFire = true;
-   float fireRate = .5f;
+    public ParticleSystem muzzleFlash;
 
+    void Awake()
+    {
+        soundManager = FindObjectOfType<SoundManager>();
+        gameManager = FindObjectOfType<GameManager>();
+        ui = FindObjectOfType<UIManager>();
+        player = FindObjectOfType<PlayerController>();
+        rb = GetComponent<Rigidbody>();
+    }
 
-   public ParticleSystem muzzleFlash;
+    void Start()
+    {
+        originalRot = transform.localEulerAngles;
+        originalPos = transform.localPosition;
+    }
 
-
-   void Awake()
-   {
-       soundManager = FindObjectOfType<SoundManager>();
-       gameManager = FindObjectOfType<GameManager>();
-       ux = FindObjectOfType<UX>();
-       player = FindObjectOfType<PlayerController>();
-       rb = GetComponent<Rigidbody>();
-   }
-
-
-   void Start()
-   {
-       originalRot = transform.localEulerAngles;
-       originalPos = transform.localPosition;
-   }
-   void Update()
-   {
-       if (rb.isKinematic)
-       {
+    void Update()
+    {
+        if (rb.isKinematic)
+        {
             rot = Vector3.Lerp(rot, Vector3.zero, spd * Time.deltaTime);
             transform.localEulerAngles = originalRot + rot;
-       }
-   }
+        }
+    }
 
+    public void Recoil()
+    {
+        rot += new Vector3(mag, 0, 0f);
+    }
 
-   public void Recoil()
-   {
-       rot += new Vector3(mag, 0, 0f);
-   }
-
-
-   public void Use()
+    public void Use()
     {
         if (canFire)
         {
@@ -91,11 +83,10 @@ public class Shotgun : MonoBehaviour
             else
             {
                 soundManager.ShotEmpty();
-                ux.PopUp("EMPTY");
-            } 
+                ui.PopUp("EMPTY");
+            }
         }
     }
-
 
     void Hitscan(Ray ray)
     {
@@ -107,29 +98,24 @@ public class Shotgun : MonoBehaviour
         }
     }
 
+    IEnumerator FireCooldown()
+    {
+        canFire = false;
+        yield return new WaitForSeconds(fireRate);
+        canFire = true;
+    }
 
-   IEnumerator FireCooldown()
-   {
-       canFire = false;
-       yield return new WaitForSeconds(fireRate);
-       canFire = true;
-   }
-
-
-   IEnumerator HandleTracer(TrailRenderer tracer, Vector3 hitPoint)
-   {
-       tracer.transform.position = firePoint.position;
-       float elapsedTime = 0f;
-       while (elapsedTime < tracerDuration)
-       {
-           tracer.transform.position = Vector3.Lerp(firePoint.position, hitPoint, elapsedTime / tracerDuration);
-           elapsedTime += Time.deltaTime;
-           yield return null;
-       }
-       yield return new WaitForSeconds(tracer.time);
-       Destroy(tracer.gameObject);
-   }
+    IEnumerator HandleTracer(TrailRenderer tracer, Vector3 hitPoint)
+    {
+        tracer.transform.position = firePoint.position;
+        float elapsedTime = 0f;
+        while (elapsedTime < tracerDuration)
+        {
+            tracer.transform.position = Vector3.Lerp(firePoint.position, hitPoint, elapsedTime / tracerDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        yield return new WaitForSeconds(tracer.time);
+        Destroy(tracer.gameObject);
+    }
 }
-
-
-

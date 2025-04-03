@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static InputManager Instance { get; private set; }
     public int score = 0;
 
-    UX ux;
     GameObject player;
     SoundManager soundManager;
     EnemyManager enemyManager;
@@ -33,99 +33,63 @@ public class GameManager : MonoBehaviour
         inputManager = FindObjectOfType<InputManager>();
         sceneLoader = FindObjectOfType<SceneLoader>();
 
-        ux = FindObjectOfType<UX>(); 
         player = GameObject.FindGameObjectWithTag("Player");
         cam = FindObjectOfType<CamController>();
+    }
 
-        doors.AddRange(GameObject.FindGameObjectsWithTag("Door"));
+    void OnEnable()
+    {
+        StateManager.OnStateChanged += StateChange;
+    }
 
-        foreach (GameObject door in doors)
+    void OnDisable()
+    {
+        StateManager.OnStateChanged -= StateChange;
+    }
+
+    void StateChange(StateManager.GameState state)
+    {
+        switch (state)
         {
-            door.SetActive(true);
+            case StateManager.GameState.Title:
+                Title();
+                break;
+            case StateManager.GameState.Intro:
+                Intro();
+                break;
+            case StateManager.GameState.Tutorial:
+                break;
+            case StateManager.GameState.Lvl:
+                // Handle level logic
+                break;
+            case StateManager.GameState.Outro:
+                // Handle score screen logic
+                break;
         }
     }
 
-    void Start()
+    void Title()
+    {
+        
+    }
+    void Intro()
     {
         CollectItems();
-        if (StateManager.state == StateManager.GameState.Intro)
-        {
-            StartIntro();
-        }
-        else
-        {
-            StartLvl();
-        }
     }
-    void Update()
+    public void Tutorial()
     {
-        if (StateManager.state == StateManager.GameState.Intro || StateManager.state == StateManager.GameState.Tutorial)
-        {
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                SkipIntro();
-            }
-        } 
-
-        if (StateManager.state == StateManager.GameState.Lvl)
-        {
-            if (Input.GetKey(KeyCode.Tab))
-            {
-                HighlightAll();
-            }
-            else
-            {
-                HighlightItem();
-            }
-        }
-    }
-
-    void SkipIntro()
-    {
-        PrepLvl();
-        StartLvl();
-    }
-    void PrepLvl()
-    {
-        soundManager.NewTrack();
-        CollectItems();
-        cia.SetActive(false);
-    }
-
-    public void StartIntro()
-    {
-        soundManager.music.Stop();
-        ux.IntroOn();
-    }
-    public void EndIntro()
-    {
+        StateManager.State = StateManager.GameState.Tutorial;
         StartCoroutine(Blink());
     }
-    public void StartTutorial()
+
+    public void Lvl()
     {
-        StateManager.state = StateManager.GameState.Lvl;
-        PrepLvl();
-        ux.TutorialOn();
-    }
-    public void EndTutorial()
-    {
-        StartLvl();
-    }
-    public void StartLvl()
-    {
-        StateManager.state = StateManager.GameState.Lvl;
+        StateManager.State = StateManager.GameState.Lvl;
         
-        OpenDoors();
-
-        ux.TutorialOff();
-        ux.IntroOff();
-        ux.UIOn();
-
-        cia.SetActive(false);
-        
-        enemyManager.Active();
-
-        Debug.Log("LVL STARTED");
+        if (enemyManager != null)
+        {
+            enemyManager.Active();
+        }
     }
     IEnumerator Blink()
     {
@@ -136,7 +100,6 @@ public class GameManager : MonoBehaviour
         cam.CallFadeOut();
         cia.SetActive(false);
         yield return new WaitForSeconds(0.5f);
-        StartTutorial();
         cam.CallFadeIn();
     }
 
@@ -144,13 +107,6 @@ public class GameManager : MonoBehaviour
     {
         fadeOut = true;
         StartCoroutine(ExitCoroutine());
-    }
-    void OpenDoors()
-    {
-        foreach (GameObject door in doors)
-        {
-            door.SetActive(false);
-        }
     }
 
     public void CollectItems()
@@ -212,6 +168,6 @@ public class GameManager : MonoBehaviour
     void Score(int newScore)
     {
         string newString = newScore.ToString();
-        ux.PopUp(newString);
+        //ui.PopUp(newString);
     }
 }

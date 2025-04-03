@@ -6,7 +6,7 @@ public class Meth : MonoBehaviour
 {
     BulletTime bulletTime;
     SoundManager soundManager;
-    UX ux;
+    UIManager ui;
 
     public float charge = 100f;
     float cooldown = -0.5f;
@@ -17,7 +17,7 @@ public class Meth : MonoBehaviour
     {
         bulletTime = FindObjectOfType<BulletTime>();
         soundManager = FindObjectOfType<SoundManager>();
-        ux = FindObjectOfType<UX>();
+        ui = FindObjectOfType<UIManager>();
     }
 
     void Update()
@@ -43,7 +43,7 @@ public class Meth : MonoBehaviour
             }
             if (Time.time - cooldown >= 0.5f)
             {
-                ux.PopUp("TIME SLOWED");
+                ui.PopUp("TIME SLOWED");
                 soundManager.Gulp();
                 cooldown = Time.time; 
             }
@@ -53,7 +53,7 @@ public class Meth : MonoBehaviour
             bulletTime.Reg();
             if (Time.time - cooldown >= 0.5f)
             {
-                ux.PopUp("EMPTY");
+                ui.PopUp("EMPTY");
                 soundManager.PillEmpty();
                 cooldown = Time.time; 
             }

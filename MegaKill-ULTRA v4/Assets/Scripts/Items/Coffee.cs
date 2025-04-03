@@ -5,7 +5,7 @@ public class Coffee : MonoBehaviour
 {
     PlayerController player;
     SoundManager soundManager;
-    UX ux;
+    UIManager ui;
     CamController cam;
     float charge = 5f;
     float cooldown = -0.5f;
@@ -14,7 +14,7 @@ public class Coffee : MonoBehaviour
     {
         player = FindObjectOfType<PlayerController>();
         soundManager = FindObjectOfType<SoundManager>();
-        ux = FindObjectOfType<UX>();
+        ui = FindObjectOfType<UIManager>();
         cam = FindObjectOfType<CamController>();
     }
 
@@ -27,13 +27,13 @@ public class Coffee : MonoBehaviour
                 charge--;
                 soundManager.Gulp();
                 cam.Focus();
-                ux.PopUp("FOCUS UP");
+                ui.PopUp("FOCUS UP");
                 cooldown = Time.time; 
             }
             else
             {
                 soundManager.PillEmpty();
-                ux.PopUp("EMPTY");
+                ui.PopUp("EMPTY");
             }
         }
     }

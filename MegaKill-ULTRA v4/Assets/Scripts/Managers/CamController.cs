@@ -46,9 +46,9 @@ public class CamController : MonoBehaviour
 
     public int phase;
 
-    private float targetSpeedX;
-    private float targetSpeedY;
-    private float lerpSpeed = 0.001f;
+    float targetSpeedX;
+    float targetSpeedY;
+    float lerpSpeed = 0.001f;
 
     PlayerController playerController;
 
@@ -60,8 +60,7 @@ public class CamController : MonoBehaviour
 
         playerController = FindObjectOfType<PlayerController>();
     }
-
-    void Start()
+     void Start()
     {
         currentLerp = 0f;
         currentFrequency = 0;
@@ -94,15 +93,46 @@ public class CamController : MonoBehaviour
         StartCoroutine(FadeIn(2f));
     }
 
+
+
+    void OnEnable()
+    {
+        StateManager.OnStateChanged += StateChange;
+    }
+    void OnDisable()
+    {
+        StateManager.OnStateChanged -= StateChange;
+    }
+    void StateChange(StateManager.GameState state)
+    {
+        switch (state)
+        {
+            case StateManager.GameState.Title:
+                
+                break;
+            case StateManager.GameState.Intro:
+
+                break;
+            case StateManager.GameState.Tutorial:
+                
+                break;
+            case StateManager.GameState.Lvl:
+                
+                break;
+            case StateManager.GameState.Outro:
+
+                break;
+        }
+    }
+
+
     void Update()
     {
         sens = settings.sens;
         
-        if (!settings.isPaused && StateManager.state != StateManager.GameState.Title)
+        if (StateManager.State != StateManager.GameState.Title)
         {
             MoveCam();
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
         }
 
         if (playerController.isDead)
@@ -110,11 +140,9 @@ public class CamController : MonoBehaviour
             TransitionOn();
         }
 
-        
-
         UpdatePost();
 
-        if (StateManager.state != StateManager.GameState.Intro)
+        if (StateManager.State != StateManager.GameState.Intro)
         {
             if(!playerController.isDead)
             {
@@ -136,13 +164,13 @@ public class CamController : MonoBehaviour
         }
         else
         {
-            colorGrading.saturation.value = -180f;
+            //colorGrading.saturation.value = -180f;
         }
     }
 
     public void UpPhase()
     {
-        phase++;
+        //phase++;
     }
 
     void TransitionOn()
@@ -158,7 +186,6 @@ public class CamController : MonoBehaviour
 
     void TransitionOff()
     {
-        sceneLoader.transition = false;
         ResetShader();
     }
 
@@ -320,8 +347,6 @@ public class CamController : MonoBehaviour
         float hue = Mathf.PingPong(Time.time * clrSpd * (redRandom + greenRandom + blueRandom) / 3f, 360f);
         colorGrading.hueShift.value = Mathf.Lerp(-180f, 180f, hue / 360f);
     }
-
-
     void ClrMixer()
     {
         channelMixer.redOutRedIn.value = -200f + Mathf.PingPong(Time.time * clrSpd * redRandom, 50f);

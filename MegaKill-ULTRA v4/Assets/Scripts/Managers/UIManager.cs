@@ -3,8 +3,10 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class UX : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance { get; private set; }
+    
     Camera cam;
     GameManager gameManager;
     Settings settings;
@@ -48,16 +50,23 @@ public class UX : MonoBehaviour
 
     Coroutine currentCoroutine;
 
-    private float eyeIdleAnimationDuration = 1.5f;
-    private Coroutine eyeIdleCoroutine;
-    private bool useAlternateTexture = false;
+    float eyeIdleAnimationDuration = 1.5f;
+    Coroutine eyeIdleCoroutine;
+    bool useAlternateTexture = false;
 
     void Awake()
     {
+        if (Instance != null || this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        
         cam = FindObjectOfType<Camera>();
         gameManager = FindObjectOfType<GameManager>();
     }
-
     void Start()
     {
         health = 100f;
@@ -69,25 +78,49 @@ public class UX : MonoBehaviour
         }
         
         eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
+    }
 
-        if (StateManager.state == StateManager.GameState.Intro || StateManager.state == StateManager.GameState.Title)
+
+
+    void OnEnable()
+    {
+        StateManager.OnStateChanged += StateChange;
+    }
+    void OnDisable()
+    {
+        StateManager.OnStateChanged -= StateChange;
+    }
+    void StateChange(StateManager.GameState state)
+    {
+        switch (state)
         {
-            UIOff();
-        }
-        else
-        {
-            UIOn();
+            case StateManager.GameState.Title:
+                Title();
+                break;
+            case StateManager.GameState.Intro:
+                Intro();
+                break;
+            case StateManager.GameState.Tutorial:
+                Tutorial();
+                break;
+            case StateManager.GameState.Lvl:
+                break;
+            case StateManager.GameState.Outro:
+                break;
         }
     }
 
-    public void IntroOn()
+    void Title()
+    {
+
+    }
+    void Intro()
     {
         UIOn();
         intro.CallDialogue();
     }
-    public void TutorialOn()
+    void Tutorial()
     {
-        UIOn();
         tutorial.CallDialogue();
     }
 
