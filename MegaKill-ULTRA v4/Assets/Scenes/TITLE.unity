@@ -546,6 +546,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 800, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &737882536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 737882538}
+  - component: {fileID: 737882537}
+  m_Layer: 0
+  m_Name: Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &737882537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737882536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f16a2dc3611524e219d196ee58a864b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 0
+  cia: {fileID: 0}
+  fadeOut: 0
+--- !u!4 &737882538
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737882536}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &786425949
 GameObject:
   m_ObjectHideFlags: 0
@@ -2401,7 +2448,6 @@ MonoBehaviour:
   gulp: {fileID: 8300000, guid: c4089dec7ed619643ba97bc407ba5279, type: 3}
   pillEmpty: {fileID: 8300000, guid: 4b37143e069144e4ea6aef339226b458, type: 3}
   batSwing: {fileID: 8300000, guid: a90de70b387614d4280d75d738b8e4a6, type: 3}
-  currentSpeed: 0
 --- !u!4 &847685957602448239
 Transform:
   m_ObjectHideFlags: 0
@@ -2636,7 +2682,6 @@ MonoBehaviour:
   - E TO THROW RIGHT ITEM
   textSpeed: 0.08
   title: 0
-  intro: 0
   tutorial: 1
 --- !u!1 &1054630142484037872
 GameObject:
@@ -4130,7 +4175,7 @@ Transform:
   m_GameObject: {fileID: 9187728695737797774}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -180.98372, y: -289.12836, z: 453.73862}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4498,29 +4543,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85b98c0ae38a64575a3431316b4c2865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenSpace: {fileID: 1293556168407851794}
-  worldSpace: {fileID: 6027363281471575622}
-  tutorial: {fileID: 1051204076511102277}
-  intro: {fileID: 4635500753084962177}
-  crosshair: {fileID: 8547354891955150030}
-  popup: {fileID: 2839140318079047111}
-  currentEye: {fileID: 7920505286081953404}
-  eye100Texture: {fileID: 2800000, guid: 5bef0ae0fb7e64506a238ea5eb650dcf, type: 3}
-  eye80Texture: {fileID: 2800000, guid: 48e180c915f1346ae810b78a24921420, type: 3}
-  eye60Texture: {fileID: 2800000, guid: 239e13f1dc2d04adb9f8df378ddb5fd2, type: 3}
-  eye40Texture: {fileID: 2800000, guid: afa3ca5a5ea534dd68bfc1251cf73e9a, type: 3}
-  eye20Texture: {fileID: 2800000, guid: 431e8e476b69644aeb898d6c9573551e, type: 3}
-  eye10Texture: {fileID: 2800000, guid: 5993afce3716c4db98abeb422bf016b2, type: 3}
-  eyeFlashTexture: {fileID: 2800000, guid: 00a6499ea25584c52b131ef1b5832279, type: 3}
-  eye100Texture2: {fileID: 2800000, guid: 6905902058364ac4ca10498bd421b3be, type: 3}
-  eye80Texture2: {fileID: 2800000, guid: b03abb186e16e80489c268c986c7fef4, type: 3}
-  eye60Texture2: {fileID: 2800000, guid: 509869bc47b62a54090e39911bd79185, type: 3}
-  eye40Texture2: {fileID: 2800000, guid: 8bd7fae2ab178d14faa96d82295ad2a8, type: 3}
-  eye20Texture2: {fileID: 2800000, guid: bb6338f31ce5f7044aa7949ec3cfd98a, type: 3}
-  eye10Texture2: {fileID: 2800000, guid: 0ad38f5f46ab9b24689b8eef74aa4ee8, type: 3}
-  eyeFlashTexture2: {fileID: 2800000, guid: 05c0f0431ac88614da7215d860e6046d, type: 3}
-  eyeHurtTexture: {fileID: 2800000, guid: c834df07fd2205b468a9b30b862a0c91, type: 3}
-  eyeHealTexture: {fileID: 2800000, guid: eec12babe3335884ca195421ed31fbad, type: 3}
 --- !u!114 &2309228556385942112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4796,23 +4818,6 @@ Transform:
   - {fileID: 1455389399823801359}
   m_Father: {fileID: 4809225811967010477}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2509800138012077390
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3798054835628423439}
-  - component: {fileID: 7851651022354397092}
-  m_Layer: 0
-  m_Name: SceneManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!4 &2513306065936370839
 Transform:
   m_ObjectHideFlags: 0
@@ -6439,21 +6444,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -2.5}
   m_SizeDelta: {x: 0, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!4 &3798054835628423439
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2509800138012077390}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3815498948885900472
 GameObject:
   m_ObjectHideFlags: 0
@@ -7633,10 +7623,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sens: 0
   player: {fileID: 9160712683961529242}
+  xRotation: 0
+  yRotation: 0
   dynamicVolume: {fileID: 4036535360072296423}
   staticVolume: {fileID: 48451983645151841}
+  chromaticAberration: {fileID: 0}
+  colorGrading: {fileID: 0}
+  channelMixer: {fileID: 0}
+  chromSpd: 0.5
+  satSpd: 5
+  clrSpd: 0
+  fovSpd: 0
+  redRandom: 0
+  greenRandom: 0
+  blueRandom: 0
+  redStart: 0
+  greenStart: 0
+  blueStart: 0
+  cam: {fileID: 0}
+  originalFOV: 0
+  originalPosition: {x: 0, y: 0, z: 0}
+  swayIntensity: 0.01
+  settings: {fileID: 0}
+  sceneLoader: {fileID: 0}
   camMat: {fileID: -876546973899608171, guid: a79a40f83dc6f4a0f8b6ca0f61778ec5, type: 3}
+  currentLerp: 0.1
+  currentFrequency: 0
+  currentAmplitude: 0
   phase: 2
+  targetSpeedX: 0
+  targetSpeedY: 0
+  lerpSpeed: 0.001
+  playerController: {fileID: 0}
 --- !u!4 &4619350308934109629
 Transform:
   m_ObjectHideFlags: 0
@@ -7694,7 +7712,6 @@ MonoBehaviour:
   - Late Night Channel 4 loves a lunatic acid-head with some style...
   textSpeed: 0.06
   title: 0
-  intro: 1
   tutorial: 0
 --- !u!1 &4636744076090687971
 GameObject:
@@ -9881,17 +9898,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91e53c9bd118041b99cee568f97a38d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menu: {fileID: 0}
-  sfxSlider: {fileID: 9207044352100671681}
-  musicSlider: {fileID: 2007580102470868356}
-  sensSlider: {fileID: 3722868662987332057}
-  sfxInput: {fileID: 2619856455523223183}
-  musicInput: {fileID: 4067412571015262681}
-  sensInput: {fileID: 8244278821030973903}
-  musicVolume: 50
-  sfxVolume: 50
-  sens: 500
-  isPaused: 0
 --- !u!224 &6415478668947551131
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11144,20 +11150,6 @@ Transform:
   - {fileID: 5616502373986363167}
   m_Father: {fileID: 9160712683961529242}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7851651022354397092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2509800138012077390}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11527835960c7409ea77d1b32f24fc3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTutorial: 0
-  transition: 0
 --- !u!224 &7857401012931874094
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13571,10 +13563,10 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 8546160046233106048}
-  - {fileID: 3798054835628423439}
   - {fileID: 2022654111153924751}
   - {fileID: 1173947538938193934}
   - {fileID: 9160712683961529242}
   - {fileID: 637424437}
   - {fileID: 148368224}
   - {fileID: 2107874147}
+  - {fileID: 737882538}

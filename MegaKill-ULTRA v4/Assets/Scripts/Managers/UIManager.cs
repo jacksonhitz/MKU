@@ -1,15 +1,9 @@
 using System.Collections;
 using UnityEngine;
-using TMPro;
-using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
-    
-    Camera cam;
-    GameManager gameManager;
-    Settings settings;
 
     [SerializeField] Canvas screenSpace;
     [SerializeField] Canvas worldSpace;
@@ -19,77 +13,32 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] GameObject crosshair;
 
-    float initialFoV;
-    Vector3 initialCanvasScale;
 
-    [SerializeField] TextMeshProUGUI popup;
+    [SerializeField] PopUp popUp; 
+    [SerializeField] UEye uEye; 
 
-    [SerializeField] RawImage currentEye;
-    [SerializeField] Texture eye100Texture;
-    [SerializeField] Texture eye80Texture;
-    [SerializeField] Texture eye60Texture;
-    [SerializeField] Texture eye40Texture;
-    [SerializeField] Texture eye20Texture;
-    [SerializeField] Texture eye10Texture;
-    [SerializeField] Texture eyeFlashTexture;
-
-    [SerializeField] Texture eye100Texture2;
-    [SerializeField] Texture eye80Texture2;
-    [SerializeField] Texture eye60Texture2;
-    [SerializeField] Texture eye40Texture2;
-    [SerializeField] Texture eye20Texture2;
-    [SerializeField] Texture eye10Texture2;
-    [SerializeField] Texture eyeFlashTexture2;
-    
-    [SerializeField] Texture eyeHurtTexture;
-    [SerializeField] Texture eyeHealTexture;
-
-    float damagedDuration = 0.2f;
-    float health;
-    bool isFlashing = false;
-
-    Coroutine currentCoroutine;
-
-    float eyeIdleAnimationDuration = 1.5f;
-    Coroutine eyeIdleCoroutine;
-    bool useAlternateTexture = false;
 
     void Awake()
     {
-        if (Instance != null || this)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        
-        cam = FindObjectOfType<Camera>();
-        gameManager = FindObjectOfType<GameManager>();
     }
-    void Start()
-    {
-        health = 100f;
-        
-        if (worldSpace != null)
-        {
-            initialFoV = cam.fieldOfView;
-            initialCanvasScale = worldSpace.transform.localScale;
-        }
-        
-        eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
-    }
-
-
 
     void OnEnable()
     {
         StateManager.OnStateChanged += StateChange;
     }
+
     void OnDisable()
     {
         StateManager.OnStateChanged -= StateChange;
     }
+
     void StateChange(StateManager.GameState state)
     {
         switch (state)
@@ -110,17 +59,17 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void Title()
+    void Title() 
     {
 
-         
-
     }
+
     void Intro()
     {
         UIOn();
         intro.CallDialogue();
     }
+
     void Tutorial()
     {
         tutorial.CallDialogue();
@@ -130,6 +79,7 @@ public class UIManager : MonoBehaviour
     {
         tutorial.Off();
     }
+
     public void IntroOff()
     {
         intro.Off();
@@ -150,157 +100,11 @@ public class UIManager : MonoBehaviour
 
     public void PopUp(string text)
     {
-        if (currentCoroutine != null)
-        {
-            if (popup.text == text)
-            {
-                return;
-            }
-            else
-            {
-                StopCoroutine(currentCoroutine);
-                popup.text = "";
-                currentCoroutine = null;
-            }
-        }
-
-        popup.text = text;
-        RectTransform popupTransform = popup.GetComponent<RectTransform>();
-
-        float randomX = Random.Range(-0.2f, 0.3f);
-        float randomY = Random.Range(-0.3f, 0.1f);
-
-        popupTransform.anchoredPosition = new Vector2(randomX, randomY);
-        currentCoroutine = StartCoroutine(PopupEffect(popupTransform));
-    }
-
-    IEnumerator PopupEffect(RectTransform popupTransform)
-    {
-        float duration = 1f;
-        float elapsedTime = 0f;
-        Vector2 startPos = popupTransform.anchoredPosition;
-        Vector2 endPos = startPos + new Vector2(0, .1f);
-
-        while (elapsedTime < duration)
-        {
-            float t = elapsedTime / duration;
-            popupTransform.anchoredPosition = Vector2.Lerp(startPos, endPos, t);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        popup.text = "";
-        currentCoroutine = null;
+        popUp.UpdatePopUp(text); 
     }
 
     public void UpdateHealth(float newHealth)
     {
-        float oldHealth = health;
-        
-        health = newHealth;
-        
-        StopAllCoroutines();
-
-
-        if (newHealth >= oldHealth)
-        {
-            StartCoroutine(HealEye());
-        }
-        else
-        {
-            StartCoroutine(HurtEye());
-        }
-        
-    }
-
-    IEnumerator HurtEye()
-    {
-        Texture previousEye = currentEye.texture;
-        currentEye.texture = eyeHurtTexture;
-        yield return new WaitForSeconds(0.2f);
-        currentEye.texture = previousEye;
-
-        if (health > 10)
-        {
-            currentEye.texture = GetEye();
-            eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
-        }
-        else
-        {
-            StartCoroutine(FlashEye());
-        }
-    }
-
-    IEnumerator HealEye()
-    {
-        Texture previousEye = currentEye.texture;
-        currentEye.texture = eyeHealTexture;
-        yield return new WaitForSeconds(0.2f);
-        currentEye.texture = previousEye;
-        currentEye.texture = GetEye();
-
-        eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
-    }
-
-    IEnumerator FlashEye()
-    {
-        Texture[] flashSequence = new Texture[] 
-        { 
-            eye10Texture, 
-            eye10Texture2, 
-            eyeFlashTexture, 
-            eyeFlashTexture2 
-        };
-        
-        int currentIndex = 0;
-        
-        while (health <= 10)
-        {
-            currentEye.texture = flashSequence[currentIndex];
-            currentIndex = (currentIndex + 1) % flashSequence.Length;
-            
-            yield return new WaitForSeconds(0.2f);
-        }
-        currentEye.texture = GetEye();
-        
-        eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
-    }
-
-    IEnumerator IdleEyeAnimation()
-    {
-        while (true)
-        {
-            useAlternateTexture = !useAlternateTexture;
-            currentEye.texture = GetEye();
-            yield return new WaitForSeconds(eyeIdleAnimationDuration);
-        }
-    }
-
-    Texture GetEye()
-    {
-        if (!useAlternateTexture)
-        {
-            if (health > 80) return eye100Texture;
-            if (health > 60) return eye80Texture;
-            if (health > 40) return eye60Texture;
-            if (health > 20) return eye40Texture;
-            if (health > 10) return eye20Texture;
-            return eye10Texture;
-        }
-        else
-        {
-            if (health > 80) return eye100Texture2;
-            if (health > 60) return eye80Texture2;
-            if (health > 40) return eye60Texture2;
-            if (health > 20) return eye40Texture2;
-            if (health > 10) return eye20Texture2;
-            return eye10Texture2;
-        }
-    }
-
-    Texture GetEyeFlash()
-    {
-        // Return the appropriate flash texture based on whether to use the alternate texture
-        return useAlternateTexture ? eyeFlashTexture2 : eyeFlashTexture;
+        uEye.UpdateHealth(newHealth); 
     }
 }

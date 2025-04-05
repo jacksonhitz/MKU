@@ -13,20 +13,19 @@ public class Dialogue : MonoBehaviour
 
     int index;
     bool started = false;
-    bool waiting = true;
+
     GameManager gameManager;
     SoundManager soundManager;
-    SceneLoader sceneLoader;
 
     public bool title;
-    public bool intro;
     public bool tutorial;
 
-    void Start()
+    bool intro;
+
+    void Awake()
     {
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
-        sceneLoader = FindObjectOfType<SceneLoader>();
     }
 
     public void CallDialogue()
@@ -61,7 +60,6 @@ public class Dialogue : MonoBehaviour
     {
         textComponent.text = string.Empty;
         yield return new WaitForSeconds(.1f);
-        waiting = true;
         
         if (intro)
         {
@@ -116,7 +114,7 @@ public class Dialogue : MonoBehaviour
         else if (StateManager.State == StateManager.GameState.Title)
         {
             yield return new WaitForSeconds(2f);
-            sceneLoader.Subway();
+            gameManager.Intro();
         }
     }
 }

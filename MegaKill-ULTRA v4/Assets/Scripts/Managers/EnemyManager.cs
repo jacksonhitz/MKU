@@ -10,8 +10,6 @@ public class EnemyManager : MonoBehaviour
     float spawnInterval = 20f; 
     PlayerController player;
     UIManager ui;
-    GameManager gameManager;
-    SceneLoader sceneLoader;
 
     public bool on;
 
@@ -19,8 +17,7 @@ public class EnemyManager : MonoBehaviour
     {
         player = FindAnyObjectByType<PlayerController>();
         ui = FindObjectOfType<UIManager>();
-        gameManager = FindAnyObjectByType<GameManager>();
-        sceneLoader = FindObjectOfType<SceneLoader>();
+
         enemies = new List<Enemy>(); 
     }
 
@@ -59,13 +56,6 @@ public class EnemyManager : MonoBehaviour
         enemyHolder.SetActive(true);
         CallHands();
         CollectEnemies();
-    }
-    void Update()
-    {
-        if (enemyHolder.transform.childCount == 0)
-        {
-            sceneLoader.Win();
-        }
     }
     public void CollectEnemies()
     {

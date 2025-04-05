@@ -11,8 +11,9 @@ public class Settings : MonoBehaviour
 
 
     SoundManager soundManager;
-    SceneLoader sceneLoader;
-    [HideInInspector] public Canvas menu;
+    GameManager gameManager;
+    
+    [HideInInspector] Canvas menu;
     
 
     [SerializeField] Slider sfxSlider;
@@ -41,7 +42,7 @@ public class Settings : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         
         soundManager = FindObjectOfType<SoundManager>();
-        sceneLoader = FindObjectOfType<SceneLoader>();
+        gameManager = FindObjectOfType<GameManager>();
         menu = GetComponentInChildren<Canvas>();
     }
 
@@ -86,14 +87,14 @@ public class Settings : MonoBehaviour
     {
         Time.timeScale = 1f;
         isPaused = false;
-        sceneLoader.Title();
+        gameManager.Title();
     }
 
     public void Restart()
     {
         Time.timeScale = 1f;
         isPaused = false;
-        sceneLoader.Restart();
+        gameManager.Restart();
     }
 
     void SFXText(float newValue)

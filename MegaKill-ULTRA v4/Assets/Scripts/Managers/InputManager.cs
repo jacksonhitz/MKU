@@ -58,7 +58,7 @@ public class InputManager : MonoBehaviour
         {
             if (StateManager.State == StateManager.GameState.Title)
             {
-                sceneLoader.Subway();
+                gameManager.Intro();
             }
             if (StateManager.State == StateManager.GameState.Intro)
             {
@@ -68,52 +68,34 @@ public class InputManager : MonoBehaviour
             {
                 gameManager.Lvl();
             }
-
-        }
-        
-        
-        
-        if (StateManager.State == StateManager.GameState.Title)
-        {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                sceneLoader.Subway();
-            }
-        }
-        
-        if (StateManager.State == StateManager.GameState.Lvl)
-        {
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                sceneLoader.Restart();
+                gameManager.Restart();
             }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (!settings.isPaused)
+            if (StateManager.State == StateManager.GameState.Paused)
             {
-                settings.Pause();
+                gameManager.Paused();
+            }
+            else
+            {
+                gameManager.Unpaused();
             }
         }
 
-        if (StateManager.State == StateManager.GameState.Intro || StateManager.State == StateManager.GameState.Tutorial)
-        {
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                //SkipIntro();
-            }
-        } 
 
         if (StateManager.State == StateManager.GameState.Lvl)
         {
             if (Input.GetKey(KeyCode.Tab))
             {
-                //HighlightAll();
+                gameManager.HighlightAll();
             }
             else
             {
-                //HighlightItem();
+                gameManager.HighlightItem();
             }
         }
     }

@@ -66,7 +66,7 @@ public class SoundManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null || this)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;
@@ -139,7 +139,7 @@ public class SoundManager : MonoBehaviour
 
     }
 
-    
+
     public void Pause()
     {
         sfxPlaying = sfx.isPlaying;
@@ -177,7 +177,8 @@ public class SoundManager : MonoBehaviour
 
     void Update()
     {
-        UpdateVolume();
+        //FIX THIS NOW !!
+        //UpdateVolume();
     }
     public void UpdateVolume()
     {

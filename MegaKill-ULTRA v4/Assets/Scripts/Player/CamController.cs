@@ -36,7 +36,6 @@ public class CamController : MonoBehaviour
     private Vector3 originalPosition;
     float swayIntensity = 0.01f;
     Settings settings;
-    SceneLoader sceneLoader;
 
     // Shader variables
     public Material camMat;
@@ -56,7 +55,6 @@ public class CamController : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         settings = FindObjectOfType<Settings>();
-        sceneLoader = FindObjectOfType<SceneLoader>();
 
         playerController = FindObjectOfType<PlayerController>();
     }
@@ -114,7 +112,7 @@ public class CamController : MonoBehaviour
 
                 break;
             case StateManager.GameState.Tutorial:
-                
+                Tutorial();
                 break;
             case StateManager.GameState.Lvl:
                 
@@ -129,6 +127,11 @@ public class CamController : MonoBehaviour
 
                 break;
         }
+    }
+
+    void Tutorial()
+    {
+        StartCoroutine(Blink());
     }
 
 
@@ -165,8 +168,20 @@ public class CamController : MonoBehaviour
         }
     }
 
+    
 
 
+
+    IEnumerator Blink()
+    {
+        CallFadeOut();
+        yield return new WaitForSeconds(0.5f);
+        CallFadeIn();
+        yield return new WaitForSeconds(0.5f);
+        CallFadeOut();
+        yield return new WaitForSeconds(0.5f);
+        CallFadeIn();
+    }
 
     //NOT IN USE, FOR SCALING SHADER
     public void UpPhase()
