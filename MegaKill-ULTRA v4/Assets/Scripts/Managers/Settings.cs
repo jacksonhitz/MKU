@@ -43,7 +43,6 @@ public class Settings : MonoBehaviour
         soundManager = FindObjectOfType<SoundManager>();
         sceneLoader = FindObjectOfType<SceneLoader>();
         menu = GetComponentInChildren<Canvas>();
-
     }
 
     void Start()
@@ -76,18 +75,12 @@ public class Settings : MonoBehaviour
         isPaused = true;
         soundManager.Pause();
         menu.enabled = true;
-
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
     }
     public void Resume()
     {
         Time.timeScale = 1f;
         isPaused = false;
         menu.enabled = false;
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
     public void Exit()
     {

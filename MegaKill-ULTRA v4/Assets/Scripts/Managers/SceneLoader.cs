@@ -16,6 +16,19 @@ public class SceneLoader : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    void Start()
+    {
+        if (SceneManager.GetActiveScene().name == "TITLE")
+        {
+            StateManager.State = StateManager.GameState.Title;
+        }
+    }
+
+    void Update()
+    {
+        Debug.Log(StateManager.State);
+    }
+
     
     public void Restart()
     {
@@ -27,8 +40,6 @@ public class SceneLoader : MonoBehaviour
         Title();
         // CHANGE LATER
     }
-    
-
     public void Title()
     {
         SceneManager.LoadScene(0);
@@ -45,6 +56,16 @@ public class SceneLoader : MonoBehaviour
     {
         SceneManager.LoadScene(2);
         StateManager.State = StateManager.GameState.Outro;
-         // CHANGE LATER
+        // CHANGE LATER
+    }
+
+    public void Paused()
+    {
+        StateManager.State = StateManager.GameState.Paused;
+    }
+
+    public void Previous()
+    {
+        StateManager.State = StateManager.Previous;
     }
 }

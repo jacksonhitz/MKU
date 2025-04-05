@@ -8230,10 +8230,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5001808ae1cec48a186a6466a73d77ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hands: {fileID: 2915591076041330614, guid: 2d22a483db42d4664979781f1635689b, type: 3}
-  enemyHolder: {fileID: 1723163941}
-  enemies: []
-  on: 0
 --- !u!4 &894503172
 Transform:
   m_ObjectHideFlags: 0
@@ -20037,6 +20033,10 @@ PrefabInstance:
     - target: {fileID: 8175354362153700574, guid: 88f521c03c8ec495ea140be89395fac4, type: 3}
       propertyPath: m_Name
       value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8175354362153700574, guid: 88f521c03c8ec495ea140be89395fac4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

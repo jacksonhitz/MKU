@@ -62,12 +62,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Move();
-        if (!settings.isPaused && StateManager.State != StateManager.GameState.Intro)
+        if (StateManager.State == StateManager.GameState.Lvl || StateManager.State == StateManager.GameState.Tutorial || StateManager.State == StateManager.GameState.Tutorial)
         {
             HandleInput();
         }
+        Move();
     }
+
     public void SpeedUp()
     {
         runSpd += 0.3f;
@@ -126,10 +127,18 @@ public class PlayerController : MonoBehaviour
             itemScript.Invoke("Use", 0f);
         }
     }
+
     void Move()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        
+        if (StateManager.State == StateManager.GameState.Testing)
+        {
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        }
+
         float horzInput = Input.GetAxis("Horizontal");
         float vertInput = Input.GetAxis("Vertical");
         movement = transform.right * horzInput + transform.forward * vertInput;
@@ -139,12 +148,11 @@ public class PlayerController : MonoBehaviour
             characterController.Move(movement * runSpd * Time.deltaTime);
         }
 
-        gravity = -9.81f * 10; 
+        gravity = -9.81f * 10;
 
         Vector3 gravityEffect = new Vector3(0f, gravity, 0f);
         characterController.Move(gravityEffect * Time.deltaTime);
     }
-
 
     void Punch(bool left)
     {
@@ -186,12 +194,17 @@ public class PlayerController : MonoBehaviour
     IEnumerator PunchOn(Renderer punch)
     {
         yield return new WaitForSeconds(0.2f);
-        Debug.Log("punch called");
-        soundManager.Punch();
+
+        if (soundManager != null)
+        {
+            soundManager.Punch();
+        }
+    
         punch.enabled = true;
         punchRange.enabled = true;
         Melee(punchRange);
     }
+
     IEnumerator PunchOff(Renderer punch)
     {
         yield return new WaitForSeconds(0.5f);
@@ -228,7 +241,6 @@ public class PlayerController : MonoBehaviour
         {
             InstantiateItem(item, rightHand);
             Destroy(item);
-
         }
     }
 
@@ -248,7 +260,12 @@ public class PlayerController : MonoBehaviour
         }
 
         Item env = newItem.GetComponent<Item>();
-        gameManager.CollectItems();
+
+        if (gameManager != null)
+        {
+            gameManager.CollectItems();
+        }
+
         env.CollidersOff();
         env.DefaultMat();
 
@@ -293,12 +310,12 @@ public class PlayerController : MonoBehaviour
             {
                 leftScript = meth;
                 meth.left = true;
-            } 
+            }
             else
             {
                 rightScript = meth;
                 meth.left = false;
-            } 
+            }
         }
         else if (newItem.TryGetComponent<Beer>(out var beer))
         {
@@ -335,49 +352,48 @@ public class PlayerController : MonoBehaviour
     }
 
     public void Throw(MonoBehaviour itemScript)
-{
-    soundManager.Toss();
-
-    if (itemScript == leftScript)
     {
-        leftScript = null;
+        if (soundManager != null)
+        {
+            soundManager.Toss();
+        }
+    
+        if (itemScript == leftScript)
+        {
+            leftScript = null;
+        }
+        else
+        {
+            rightScript = null;
+        }
+
+        itemScript.transform.SetParent(null);
+
+        Item item = itemScript.GetComponent<Item>();
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+
+        Vector3 throwDirection;
+        if (Physics.Raycast(ray, out hit))
+        {
+            throwDirection = (hit.point - itemScript.transform.position).normalized;
+        }
+        else
+        {
+            throwDirection = ray.direction;
+        }
+
+        item.thrown = true;
+        item.CollidersOn();
+
+        Rigidbody itemRb = itemScript.GetComponent<Rigidbody>();
+        Quaternion initialRotation = itemScript.transform.rotation;
+
+        itemRb.velocity = throwDirection * throwForce;
+        itemRb.angularVelocity = Vector3.right * -10f;
+        itemScript.transform.rotation = initialRotation;
     }
-    else
-    {
-        rightScript = null;
-    }
-    Debug.Log("thrown");
-
-    itemScript.transform.SetParent(null);
-
-    Item item = itemScript.GetComponent<Item>();
-
-    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-    RaycastHit hit;
-
-    Vector3 throwDirection;
-    if (Physics.Raycast(ray, out hit))
-    {
-        throwDirection = (hit.point - itemScript.transform.position).normalized;
-    }
-    else
-    {
-        throwDirection = ray.direction;
-    }
-
-    item.thrown = true;
-    item.CollidersOn();
-
-    Rigidbody itemRb = itemScript.GetComponent<Rigidbody>();
-    Quaternion initialRotation = itemScript.transform.rotation;
-
-    itemRb.velocity = throwDirection * throwForce;
-
-    itemRb.angularVelocity = Vector3.right * -10f; 
-
-    itemScript.transform.rotation = initialRotation;
-}
-
 
     public void SwingBat()
     {
@@ -391,23 +407,42 @@ public class PlayerController : MonoBehaviour
         {
             health = 100;
         }
-        ui.UpdateHealth(health);
+
+        if (ui != null)
+        {
+            ui.UpdateHealth(health);
+        }
     }
 
     public void Hit(float dmg)
     {
         health -= dmg;
-        
+
         if (health <= 0 && !isDead)
         {
             isDead = true;
-            gameManager.CallDead();
-            soundManager.PlayerDeath();
+
+            if (gameManager != null)
+            {
+                gameManager.CallDead();
+            }
+
+            if (soundManager != null)
+            {
+                soundManager.PlayerDeath();
+            }
         }
         else
         {
-            soundManager.PlayerHit();
+            if (soundManager != null)
+            {
+                soundManager.PlayerHit();
+            }
         }
-        ui.UpdateHealth(health);
+
+        if (ui != null)
+        {
+            ui.UpdateHealth(health);
+        }
     }
 }

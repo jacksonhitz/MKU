@@ -113,6 +113,8 @@ public class UIManager : MonoBehaviour
     void Title()
     {
 
+         
+
     }
     void Intro()
     {
@@ -193,7 +195,6 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHealth(float newHealth)
     {
-        // Store the current health for comparison
         float oldHealth = health;
         
         health = newHealth;
@@ -226,7 +227,6 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            // Start the flashing sequence when health is low
             StartCoroutine(FlashEye());
         }
     }
@@ -239,7 +239,6 @@ public class UIManager : MonoBehaviour
         currentEye.texture = previousEye;
         currentEye.texture = GetEye();
 
-        //Restart the idle animation
         eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
     }
 
@@ -257,20 +256,13 @@ public class UIManager : MonoBehaviour
         
         while (health <= 10)
         {
-            // Set the current texture from the sequence
             currentEye.texture = flashSequence[currentIndex];
-            
-            // Move to the next texture in the sequence
             currentIndex = (currentIndex + 1) % flashSequence.Length;
             
-            // Wait before switching to the next texture
             yield return new WaitForSeconds(0.2f);
         }
-        
-        // If health went above 10, return to normal eye
         currentEye.texture = GetEye();
         
-        // Restart the idle animation
         eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
     }
 
@@ -278,20 +270,14 @@ public class UIManager : MonoBehaviour
     {
         while (true)
         {
-            // Toggle between primary and alternate texture
             useAlternateTexture = !useAlternateTexture;
-            
-            // Apply the appropriate texture
             currentEye.texture = GetEye();
-            
-            // Wait before switching to the other texture
             yield return new WaitForSeconds(eyeIdleAnimationDuration);
         }
     }
 
     Texture GetEye()
     {
-        // Return the appropriate texture based on health and whether to use the alternate texture
         if (!useAlternateTexture)
         {
             if (health > 80) return eye100Texture;

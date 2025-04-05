@@ -119,7 +119,13 @@ public class CamController : MonoBehaviour
             case StateManager.GameState.Lvl:
                 
                 break;
+            case StateManager.GameState.Paused:
+                
+                break;
             case StateManager.GameState.Outro:
+
+                break;
+            case StateManager.GameState.Testing:
 
                 break;
         }
@@ -128,46 +134,41 @@ public class CamController : MonoBehaviour
 
     void Update()
     {
-        sens = settings.sens;
         
-        if (StateManager.State != StateManager.GameState.Title)
-        {
-            MoveCam();
-        }
-
-        if (playerController.isDead)
-        {
-            TransitionOn();
-        }
-
+        UpdateShader();
         UpdatePost();
 
-        if (StateManager.State != StateManager.GameState.Intro)
+        if (StateManager.IsActive())
         {
-            if(!playerController.isDead)
-            {
-                currentLerp = 0.15f;
-            }
-            
-            UpdateShader();
-            
-            Debug.Log("shaders called");
+            MoveCam();
 
-            if (dynamicVolume.weight < 5)
-            {
-                dynamicVolume.weight += 0.0001f;
-            }
-            fovSpd = 0.1f * dynamicVolume.weight;
-            clrSpd = 10f * dynamicVolume.weight;
-
-            colorGrading.saturation.value += Time.deltaTime * satSpd;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
         else
         {
-            //colorGrading.saturation.value = -180f;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
+        
+        
+        
+        //this is duct-taped, it should only update when the settings are changed
+        if (settings != null)
+        {
+            sens = settings.sens;
+        }
+        else
+        {
+            sens = 500;
         }
     }
 
+
+
+
+    //NOT IN USE, FOR SCALING SHADER
     public void UpPhase()
     {
         //phase++;
@@ -210,7 +211,6 @@ public class CamController : MonoBehaviour
     void UpdateShader()
     {
         float cap = 4f * phase;
-        Debug.Log(cap);
 
         if (currentAmplitude < cap)
         {
@@ -340,6 +340,35 @@ public class CamController : MonoBehaviour
 
         ClrAdjuster();
         ClrMixer();
+
+
+        if(!playerController.isDead)
+        {
+            currentLerp = 0.15f;
+        }
+        else
+        {
+            TransitionOn();
+        }
+
+        if (dynamicVolume.weight < 5)
+        {
+            dynamicVolume.weight += 0.0001f;
+        }
+        fovSpd = 0.1f * dynamicVolume.weight;
+        clrSpd = 10f * dynamicVolume.weight;
+
+
+        //NOT IN USE, FOR BLACK AND WHITE FADE IN
+        if (StateManager.State != StateManager.GameState.Intro)
+        {
+            
+            colorGrading.saturation.value += Time.deltaTime * satSpd;
+        }
+        else
+        {
+            //colorGrading.saturation.value = -180f;
+        }
     }
 
     void ClrAdjuster()
