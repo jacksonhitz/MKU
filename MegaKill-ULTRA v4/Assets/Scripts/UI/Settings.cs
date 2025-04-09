@@ -8,14 +8,8 @@ using UnityEngine.SceneManagement;
 public class Settings : MonoBehaviour
 {
     public static Settings Instance { get; private set; }
-
-
-    SoundManager soundManager;
-    GameManager gameManager;
+    Canvas menu;
     
-    [HideInInspector] Canvas menu;
-    
-
     [SerializeField] Slider sfxSlider;
     [SerializeField] Slider musicSlider;
     [SerializeField] Slider sensSlider;
@@ -29,8 +23,6 @@ public class Settings : MonoBehaviour
     [HideInInspector] public float sens = 500;
 
 
-    public bool isPaused;
-
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -41,14 +33,12 @@ public class Settings : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         
-        soundManager = FindObjectOfType<SoundManager>();
-        gameManager = FindObjectOfType<GameManager>();
         menu = GetComponentInChildren<Canvas>();
     }
 
     void Start()
     {
-        menu.enabled = false;
+        Unpaused();
         
         sfxSlider.value = sfxVolume;
         musicSlider.value = musicVolume;
@@ -70,32 +60,36 @@ public class Settings : MonoBehaviour
         sensInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
     }
 
-    public void Pause()
+    void OnEnable()
     {
-        Time.timeScale = 0f;
-        isPaused = true;
-        soundManager.Pause();
-        menu.enabled = true;
-    }
-    public void Resume()
-    {
-        Time.timeScale = 1f;
-        isPaused = false;
-        menu.enabled = false;
-    }
-    public void Exit()
-    {
-        Time.timeScale = 1f;
-        isPaused = false;
-        gameManager.Title();
+        StateManager.OnStateChanged += StateChange;
     }
 
-    public void Restart()
+    void OnDisable()
     {
-        Time.timeScale = 1f;
-        isPaused = false;
-        gameManager.Restart();
+        StateManager.OnStateChanged -= StateChange;
     }
+
+    void StateChange(StateManager.GameState state)
+    {
+        if (state == StateManager.GameState.Paused)
+        {
+            Paused();
+        }
+        else
+        {
+            Unpaused();
+        }
+    }
+    public void Paused()
+    {
+        menu.enabled = true;
+    }
+    public void Unpaused()
+    {
+        menu.enabled = false;
+    }
+
 
     void SFXText(float newValue)
     {

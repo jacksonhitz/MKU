@@ -18,7 +18,6 @@ public static class StateManager
     private static GameState state = GameState.Testing;
     private static GameState previous;
 
-
     public static event Action<GameState> OnStateChanged;
     public static GameState Previous => previous;
 
@@ -42,20 +41,32 @@ public static class StateManager
         get => state;
         set
         {
-            if (state != value) 
+            if (state != value)
             {
-                previous = state; 
+                if (state == GameState.Paused)
+                {
+                    SilentState(value);
+                    return;
+                }
+
+                previous = state;
                 state = value;
-                OnStateChanged?.Invoke(state); 
+                OnStateChanged?.Invoke(state);
             }
         }
     }
 
+    public static void SilentState(GameState newState)
+    {
+        previous = state;
+        state = newState;
+    }
 
     public static bool GroupCheck(HashSet<GameState> group)
     {
         return group.Contains(state);
     }
+
     public static bool IsActive() => GroupCheck(Active);
     public static bool IsPassive() => GroupCheck(Passive);
 }

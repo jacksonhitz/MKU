@@ -6,9 +6,7 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
 
-    SceneLoader sceneLoader;
-    Settings settings;
-    [HideInInspector] public GameManager gameManager;
+    GameManager gameManager;
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -19,8 +17,7 @@ public class InputManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        sceneLoader = FindObjectOfType<SceneLoader>();
-        settings = FindObjectOfType<Settings>();
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     void OnEnable()
@@ -36,19 +33,14 @@ public class InputManager : MonoBehaviour
         switch (state)
         {
             case StateManager.GameState.Title:
-
                 break;
             case StateManager.GameState.Intro:
-
                 break;
             case StateManager.GameState.Tutorial:
-
                 break;
             case StateManager.GameState.Lvl:
-
                 break;
             case StateManager.GameState.Outro:
-                
                 break;
         }
     }
@@ -73,6 +65,12 @@ public class InputManager : MonoBehaviour
                 gameManager.Restart();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            //fix later
+        }
+
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {

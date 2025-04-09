@@ -88,25 +88,17 @@ public class SoundManager : MonoBehaviour
     {
         StateManager.OnStateChanged -= StateChange;
     }
-    void StateChange(StateManager.GameState state)
+     void StateChange(StateManager.GameState state)
     {
         switch (state)
         {
-            case StateManager.GameState.Title:
-                Title();
-                break;
-            case StateManager.GameState.Intro:
-                Intro();
-                break;
-            case StateManager.GameState.Tutorial:
-                Tutorial();
-                break;
-            case StateManager.GameState.Lvl:
-                Lvl();
-                break;
-            case StateManager.GameState.Outro:
-                Outro();
-                break;
+            case StateManager.GameState.Title: Title(); break;
+            case StateManager.GameState.Intro: Intro(); break;
+            case StateManager.GameState.Tutorial: Tutorial(); break;
+            case StateManager.GameState.Lvl: Lvl(); break;
+            case StateManager.GameState.Paused: Paused(); break;
+            case StateManager.GameState.Outro: break;
+            case StateManager.GameState.Testing: break;
         }
     }
 
@@ -140,7 +132,7 @@ public class SoundManager : MonoBehaviour
     }
 
 
-    public void Pause()
+    public void Paused()
     {
         sfxPlaying = sfx.isPlaying;
         dialoguePlaying = sfx.isPlaying;
@@ -203,6 +195,10 @@ public class SoundManager : MonoBehaviour
         lineIndex = (lineIndex + 1) % lines.Count;
         dialogue.clip = lines[lineIndex];
         dialogue.Play();
+    }
+    public void StopLine()
+    {
+        dialogue.Stop();
     }
 
     void InvokeNewTrack()

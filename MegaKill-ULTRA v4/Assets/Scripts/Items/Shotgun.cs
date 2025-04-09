@@ -13,7 +13,7 @@ public class Shotgun : MonoBehaviour
     PlayerController player;
     SoundManager soundManager;
     GameManager gameManager;
-    UIManager ui;
+    PopUp popUp;
     Rigidbody rb;
 
     public float shells = 2f;
@@ -35,9 +35,10 @@ public class Shotgun : MonoBehaviour
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
-        ui = FindObjectOfType<UIManager>();
+        popUp = FindObjectOfType<PopUp>();
         player = FindObjectOfType<PlayerController>();
         rb = GetComponent<Rigidbody>();
+        
     }
 
     void Start()
@@ -83,7 +84,6 @@ public class Shotgun : MonoBehaviour
             else
             {
                 soundManager.ShotEmpty();
-                ui.PopUp("EMPTY");
             }
         }
     }

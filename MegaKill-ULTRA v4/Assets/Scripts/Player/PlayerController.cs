@@ -22,10 +22,13 @@ public class PlayerController : MonoBehaviour
     public MonoBehaviour leftScript;
     public MonoBehaviour rightScript;
 
-    UIManager ui;
     SoundManager soundManager;
     GameManager gameManager;
     Settings settings;
+    UEye uEye;
+
+
+
     float health;
     float maxHealth = 100;
 
@@ -49,8 +52,8 @@ public class PlayerController : MonoBehaviour
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
-        ui = FindObjectOfType<UIManager>();
         settings = FindObjectOfType<Settings>();
+        uEye = FindObjectOfType<UEye>();
 
         characterController = GetComponent<CharacterController>(); 
     }
@@ -405,10 +408,7 @@ public class PlayerController : MonoBehaviour
             health = 100;
         }
 
-        if (ui != null)
-        {
-            ui.UpdateHealth(health);
-        }
+        uEye.UpdateHealth(health);
     }
 
     public void Hit(float dmg)
@@ -437,9 +437,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (ui != null)
-        {
-            ui.UpdateHealth(health);
-        }
+        uEye.UpdateHealth(health);
     }
 }

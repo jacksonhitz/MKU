@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     public int score = 0;
 
     SoundManager soundManager;
-    UIManager uIManager;
     EnemyManager enemyManager;
     InputManager inputManager;
     CamController cam;
@@ -37,7 +36,6 @@ public class GameManager : MonoBehaviour
         soundManager = FindObjectOfType<SoundManager>(); 
         enemyManager = FindObjectOfType<EnemyManager>();
         inputManager = FindObjectOfType<InputManager>();
-        uIManager = FindObjectOfType<UIManager>();
     }
     void Start()
     {
@@ -77,16 +75,17 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(2);
         StateManager.State = StateManager.GameState.Outro;
-        // CHANGE LATER
     }
     public void Paused()
     {
         StateManager.State = StateManager.GameState.Paused;
+        Time.timeScale = 0f;
     }
 
     public void Unpaused()
     {
         StateManager.State = StateManager.Previous;
+        Time.timeScale = 1f;
     }
     
     public void Restart()

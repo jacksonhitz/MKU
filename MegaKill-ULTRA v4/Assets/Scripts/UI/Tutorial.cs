@@ -53,37 +53,7 @@ public class TutorialUI : MonoBehaviour
         }
     }
 
-    public void States(State newState)
-    {
-        currentState = newState;
-
-        switch (currentState)
-        {
-            case State.WASD:
-                Debug.Log("Tutorial: WASD");
-                break;
-            case State.Jump:
-                Debug.Log("Tutorial: Jump");
-                break;
-            case State.Kill:
-                Debug.Log("Tutorial: Kill");
-                break;
-            case State.Grab:
-                Debug.Log("Tutorial: Grab");
-                break;
-            case State.Throw:
-                Debug.Log("Tutorial: Throw");
-                break;
-            case State.Slow:
-                Debug.Log("Tutorial: Slow");
-                break;
-            case State.Off:
-                Debug.Log("Tutorial: Off");
-                break;
-            default:
-                break;
-        }
-    }
+    
     public void CallDialogue()
     {
         StartCoroutine(DelayDialogue());
@@ -97,7 +67,6 @@ public class TutorialUI : MonoBehaviour
     {
         index = 0;
         text.text = "";
-        States(State.WASD);
         StartCoroutine(TypeLine());
     }
 

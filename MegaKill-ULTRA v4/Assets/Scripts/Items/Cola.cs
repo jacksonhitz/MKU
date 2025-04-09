@@ -5,7 +5,6 @@ public class Cola : MonoBehaviour
 {
     PlayerController player;
     SoundManager soundManager;
-    UIManager ui;
     float charge = 5f;
     float cooldown = -0.5f;
 
@@ -13,7 +12,6 @@ public class Cola : MonoBehaviour
     {
         player = FindObjectOfType<PlayerController>();
         soundManager = FindObjectOfType<SoundManager>();
-        ui = FindObjectOfType<UIManager>();
     }
 
     public void Use()
@@ -25,13 +23,13 @@ public class Cola : MonoBehaviour
                 charge--;
                 soundManager.Gulp();
                 player.SpeedUp();
-                ui.PopUp("SPEED UP");
+                //ui.PopUp("SPEED UP");
                 cooldown = Time.time; 
             }
             else
             {
                 soundManager.PillEmpty();
-                ui.PopUp("EMPTY");
+                //ui.PopUp("EMPTY");
             }
         }
     }

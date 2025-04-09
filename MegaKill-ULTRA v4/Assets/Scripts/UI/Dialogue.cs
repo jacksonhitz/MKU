@@ -11,16 +11,12 @@ public class Dialogue : MonoBehaviour
     public string[] lines;
     public float textSpeed;
 
-    int index;
+    int index = -1;
     bool started = false;
 
     GameManager gameManager;
     SoundManager soundManager;
 
-    public bool title;
-    public bool tutorial;
-
-    bool intro;
 
     void Awake()
     {
@@ -35,49 +31,40 @@ public class Dialogue : MonoBehaviour
     IEnumerator DelayDialogue()
     {
         yield return new WaitForSeconds(1.5f);
-        StartDialogue();
+        NextLine();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !started && title)
+        if (Input.GetKeyDown(KeyCode.Space) && !started)
         {
             started = true;
             textComponent.text = string.Empty;
             titleText.text = string.Empty;
             subheadText.text = string.Empty;
-            StartDialogue();
+            NextLine();
         }
     }
 
-    void StartDialogue()
+    void OnEnable()
     {
-        index = 0;
-        StartCoroutine(TypeLine());
+        StateManager.OnStateChanged += StateChange;
     }
-
-    IEnumerator TypeLine()
+    void OnDisable()
     {
-        textComponent.text = string.Empty;
-        yield return new WaitForSeconds(.1f);
-        
-        if (intro)
-        {
-            soundManager.NewLine();
-        }
-        foreach (char c in lines[index].ToCharArray())
-        {
-            textComponent.text += c;
-            yield return new WaitForSeconds(textSpeed);
-        }
-        yield return new WaitForSeconds(1f);
-        if (intro)
-        {
-            //soundManager.StopLine();
-        }
-        NextLine();
+        StateManager.OnStateChanged -= StateChange;
     }
+    void StateChange(StateManager.GameState state)
+    {
+        if (state != StateManager.GameState.Paused)
+        {
 
+        }
+        else
+        {
+
+        }
+    }
     void NextLine()
     {
         if (index < lines.Length - 1)
@@ -90,6 +77,30 @@ public class Dialogue : MonoBehaviour
             StartCoroutine(Done());
         }
     }
+
+    IEnumerator TypeLine()
+    {
+        textComponent.text = string.Empty;
+        yield return new WaitForSeconds(.1f);
+        
+        if (StateManager.State == StateManager.GameState.Intro)
+        {
+            soundManager.NewLine();
+        }
+        foreach (char c in lines[index].ToCharArray())
+        {
+            textComponent.text += c;
+            yield return new WaitForSeconds(textSpeed);
+        }
+        yield return new WaitForSeconds(1f);
+        if (StateManager.State == StateManager.GameState.Testing)
+        {
+            soundManager.StopLine();
+        }
+        NextLine();
+    }
+
+    
 
     public void Off()
     {
@@ -116,5 +127,6 @@ public class Dialogue : MonoBehaviour
             yield return new WaitForSeconds(2f);
             gameManager.Intro();
         }
+        textComponent.text = "";
     }
 }

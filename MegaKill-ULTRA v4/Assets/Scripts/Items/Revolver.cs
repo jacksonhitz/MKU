@@ -19,7 +19,6 @@ public class Revolver : MonoBehaviour
    SoundManager soundManager;
    GameManager gameManager;
    Rigidbody rb;
-   UIManager ui;
     
 
 
@@ -52,7 +51,6 @@ public class Revolver : MonoBehaviour
        soundManager = FindObjectOfType<SoundManager>();
        gameManager = FindObjectOfType<GameManager>();
        player = FindObjectOfType<PlayerController>();
-       ui = FindObjectOfType<UIManager>();
        rb = GetComponent<Rigidbody>();
    }
 
@@ -104,7 +102,6 @@ public class Revolver : MonoBehaviour
         else
         {
             soundManager.RevEmpty();
-            ui.PopUp("EMPTY");
         } 
    }
 

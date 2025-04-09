@@ -9,14 +9,12 @@ public class EnemyManager : MonoBehaviour
     public List<Enemy> enemies;
     float spawnInterval = 20f; 
     PlayerController player;
-    UIManager ui;
 
     public bool on;
 
     void Awake()
     {
         player = FindAnyObjectByType<PlayerController>();
-        ui = FindObjectOfType<UIManager>();
 
         enemies = new List<Enemy>(); 
     }
@@ -82,7 +80,7 @@ public class EnemyManager : MonoBehaviour
 
             if (!player.rooted)
             {
-                ui.PopUp("LOOK DOWN");
+                //ui.PopUp("LOOK DOWN");
                 
                 player.rooted = true;
                 Vector3 spawnPos = player.transform.position;
