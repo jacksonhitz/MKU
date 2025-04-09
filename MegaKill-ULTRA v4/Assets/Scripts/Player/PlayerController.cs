@@ -62,10 +62,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (StateManager.State == StateManager.GameState.Lvl || StateManager.State == StateManager.GameState.Tutorial || StateManager.State == StateManager.GameState.Tutorial)
-        {
-            HandleInput();
-        }
+        HandleInput();
         Move();
     }
 

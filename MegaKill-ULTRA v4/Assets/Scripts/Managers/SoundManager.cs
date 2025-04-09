@@ -177,7 +177,7 @@ public class SoundManager : MonoBehaviour
 
     void Update()
     {
-        //FIX THIS NOW !!
+        //FIX THIS NOW !!x
         //UpdateVolume();
     }
     public void UpdateVolume()

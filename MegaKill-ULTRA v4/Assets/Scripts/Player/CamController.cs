@@ -6,17 +6,18 @@ using UnityEngine.Rendering.Universal;
 
 public class CamController : MonoBehaviour
 {
+    Transform player;
+    Camera cam;
+
     [HideInInspector] public float sens = 500f;
-    public Transform player;
+    float xRotation;
+    float yRotation;
 
-    private float xRotation;
-    private float yRotation;
-
-    public Volume dynamicVolume;
-    public Volume staticVolume;
-    private ChromaticAberration chromaticAberration;
-    private ColorAdjustments colorGrading;
-    private ChannelMixer channelMixer;
+    [SerializeField] Volume dynamicVolume;
+    [SerializeField] Volume staticVolume;
+    ChromaticAberration chromaticAberration;
+    ColorAdjustments colorGrading;
+    ChannelMixer channelMixer;
 
     float chromSpd = 0.5f;
     float satSpd = 5f;
@@ -30,14 +31,11 @@ public class CamController : MonoBehaviour
     float greenStart;
     float blueStart;
 
-    Camera cam;
     float originalFOV;
 
-    private Vector3 originalPosition;
+    Vector3 originalPosition;
     float swayIntensity = 0.01f;
-    Settings settings;
 
-    // Shader variables
     public Material camMat;
     float currentLerp = 0.1f;
     float currentFrequency = 0;
@@ -54,25 +52,35 @@ public class CamController : MonoBehaviour
     void Awake()
     {
         cam = GetComponent<Camera>();
-        settings = FindObjectOfType<Settings>();
-
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         playerController = FindObjectOfType<PlayerController>();
     }
-     void Start()
+
+    void Start()
+    {
+       Reset();
+    }
+
+    void Reset()
+    {
+        phase = 2;
+        SetEffects();
+        SetClr();
+        StartCoroutine(FadeIn(2f));
+        //colorGrading.postExposure.value = -10f;
+    }
+
+    void SetEffects()
     {
         currentLerp = 0f;
-        currentFrequency = 0;
-        currentAmplitude = 0;
-        
-        
-        if (camMat != null)
-        {
-            camMat.SetFloat("_Lerp", currentLerp);
-            camMat.SetFloat("_Frequency", currentFrequency);
-            camMat.SetFloat("_Amplitude", currentAmplitude);
+        currentFrequency = 0f;
+        currentAmplitude = 0f;
 
-            RandomizeSpeed();
-        }
+        camMat.SetFloat("_Lerp", currentLerp);
+        camMat.SetFloat("_Frequency", currentFrequency);
+        camMat.SetFloat("_Amplitude", currentAmplitude);
+
+        RandomizeSpeed();
 
         originalFOV = cam.fieldOfView;
         originalPosition = transform.localPosition;
@@ -80,52 +88,29 @@ public class CamController : MonoBehaviour
         staticVolume.profile.TryGet(out chromaticAberration);
         staticVolume.profile.TryGet(out colorGrading);
         dynamicVolume.profile.TryGet(out channelMixer);
-
-        SetClr();
-
-        if (colorGrading != null)
-        {
-            colorGrading.postExposure.value = -10f;
-        }
-
-        StartCoroutine(FadeIn(2f));
     }
-
-
 
     void OnEnable()
     {
         StateManager.OnStateChanged += StateChange;
     }
+
     void OnDisable()
     {
         StateManager.OnStateChanged -= StateChange;
     }
+
     void StateChange(StateManager.GameState state)
     {
         switch (state)
         {
-            case StateManager.GameState.Title:
-                
-                break;
-            case StateManager.GameState.Intro:
-
-                break;
-            case StateManager.GameState.Tutorial:
-                Tutorial();
-                break;
-            case StateManager.GameState.Lvl:
-                
-                break;
-            case StateManager.GameState.Paused:
-                
-                break;
-            case StateManager.GameState.Outro:
-
-                break;
-            case StateManager.GameState.Testing:
-
-                break;
+            case StateManager.GameState.Title: break;
+            case StateManager.GameState.Intro: break;
+            case StateManager.GameState.Tutorial: Tutorial(); break;
+            case StateManager.GameState.Lvl: break;
+            case StateManager.GameState.Paused: break;
+            case StateManager.GameState.Outro: break;
+            case StateManager.GameState.Testing: break;
         }
     }
 
@@ -134,13 +119,15 @@ public class CamController : MonoBehaviour
         StartCoroutine(Blink());
     }
 
-
     void Update()
     {
-        
+        MoveCheck();
         UpdateShader();
         UpdatePost();
+    }
 
+    void MoveCheck()
+    {
         if (StateManager.IsActive())
         {
             MoveCam();
@@ -153,24 +140,7 @@ public class CamController : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
-
-        
-        
-        
-        //this is duct-taped, it should only update when the settings are changed
-        if (settings != null)
-        {
-            sens = settings.sens;
-        }
-        else
-        {
-            sens = 500;
-        }
     }
-
-    
-
-
 
     IEnumerator Blink()
     {
@@ -183,7 +153,6 @@ public class CamController : MonoBehaviour
         CallFadeIn();
     }
 
-    //NOT IN USE, FOR SCALING SHADER
     public void UpPhase()
     {
         //phase++;
@@ -272,17 +241,11 @@ public class CamController : MonoBehaviour
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            if (colorGrading != null)
-            {
-                colorGrading.postExposure.value = Mathf.Lerp(initialExposure, targetExposure, elapsed / duration);
-            }
+            colorGrading.postExposure.value = Mathf.Lerp(initialExposure, targetExposure, elapsed / duration);
             yield return null;
         }
 
-        if (colorGrading != null)
-        {
-            colorGrading.postExposure.value = targetExposure;
-        }
+        colorGrading.postExposure.value = targetExposure;
     }
 
     IEnumerator FadeOut(float duration)
@@ -294,17 +257,11 @@ public class CamController : MonoBehaviour
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            if (colorGrading != null)
-            {
-                colorGrading.postExposure.value = Mathf.Lerp(initialExposure, targetExposure, elapsed / duration);
-            }
+            colorGrading.postExposure.value = Mathf.Lerp(initialExposure, targetExposure, elapsed / duration);
             yield return null;
         }
 
-        if (colorGrading != null)
-        {
-            colorGrading.postExposure.value = targetExposure;
-        }
+        colorGrading.postExposure.value = targetExposure;
     }
 
     void SetClr()
@@ -334,8 +291,6 @@ public class CamController : MonoBehaviour
 
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         player.rotation = Quaternion.Euler(0f, yRotation, 0f);
-
-        Debug.Log("sens: " + sens);
     }
 
     void UpdatePost()
@@ -356,8 +311,7 @@ public class CamController : MonoBehaviour
         ClrAdjuster();
         ClrMixer();
 
-
-        if(!playerController.isDead)
+        if (!playerController.isDead)
         {
             currentLerp = 0.15f;
         }
@@ -370,19 +324,13 @@ public class CamController : MonoBehaviour
         {
             dynamicVolume.weight += 0.0001f;
         }
+
         fovSpd = 0.1f * dynamicVolume.weight;
         clrSpd = 10f * dynamicVolume.weight;
 
-
-        //NOT IN USE, FOR BLACK AND WHITE FADE IN
         if (StateManager.State != StateManager.GameState.Intro)
         {
-            
             colorGrading.saturation.value += Time.deltaTime * satSpd;
-        }
-        else
-        {
-            //colorGrading.saturation.value = -180f;
         }
     }
 
@@ -391,6 +339,7 @@ public class CamController : MonoBehaviour
         float hue = Mathf.PingPong(Time.time * clrSpd * (redRandom + greenRandom + blueRandom) / 3f, 360f);
         colorGrading.hueShift.value = Mathf.Lerp(-180f, 180f, hue / 360f);
     }
+
     void ClrMixer()
     {
         channelMixer.redOutRedIn.value = -200f + Mathf.PingPong(Time.time * clrSpd * redRandom, 50f);
