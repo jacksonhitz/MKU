@@ -281,8 +281,8 @@ public class CamController : MonoBehaviour
 
     void MoveCam()
     {
-        float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * (sens / 2) / Time.timeScale;
-        float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * (sens / 2) Time.timeScale;
+        float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * (sens / 2f) / Time.timeScale;
+        float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * (sens / 2f) / Time.timeScale;
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -89.9f, 89.9f);
