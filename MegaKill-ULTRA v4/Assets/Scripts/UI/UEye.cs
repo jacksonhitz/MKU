@@ -58,7 +58,7 @@ public class UEye : MonoBehaviour
         }
     }
 
-    void On()
+    public void On()
     {
         currentEye.enabled = true;
     }

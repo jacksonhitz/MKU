@@ -33,7 +33,7 @@ public class Crosshair : MonoBehaviour
             Off();
         }
     }
-    void On()
+    public void On()
     {
         obj.SetActive(true);
     }

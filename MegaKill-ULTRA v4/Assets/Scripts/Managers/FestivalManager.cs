@@ -5,6 +5,7 @@ public class FestivalManager : MonoBehaviour
 {
     EnemyManager enemyManager;
     GameManager gameManager;
+    SoundManager soundManager;
     Dialogue dialogue;
     PopUp popUp;
 
@@ -16,6 +17,7 @@ public class FestivalManager : MonoBehaviour
     {
         enemyManager = FindObjectOfType<EnemyManager>();
         gameManager = FindObjectOfType<GameManager>();
+        soundManager = FindAnyObjectByType<SoundManager>();
         dialogue = FindObjectOfType<Dialogue>();
         popUp = FindObjectOfType<PopUp>();
     }

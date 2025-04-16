@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour, IHit
     float health;
     float maxHealth = 100;
 
-    float interactRange = 10f;
+    float interactRange = 20f;
     public bool isDead;
     public Animator swingAnim;
     public Animator punchRAnim;

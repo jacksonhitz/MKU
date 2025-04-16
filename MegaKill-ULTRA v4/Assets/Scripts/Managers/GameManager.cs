@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     InputManager inputManager;
     CamController cam;
     Settings settings;
+    UEye uEye;
+    Crosshair crosshair;
 
     List<Item> items;
     List<GameObject> doors = new List<GameObject>(); 
@@ -38,6 +40,9 @@ public class GameManager : MonoBehaviour
         enemyManager = FindObjectOfType<EnemyManager>();
         inputManager = FindObjectOfType<InputManager>();
         settings = FindObjectOfType<Settings>();
+
+        uEye = FindObjectOfType<UEye>();
+        crosshair = FindObjectOfType<Crosshair>();
     }
     void Start()
     {
@@ -94,6 +99,8 @@ public class GameManager : MonoBehaviour
         {
             soundManager.Unpaused();
         }
+        uEye.On();
+        crosshair.On();
     }
     
     public void Restart()

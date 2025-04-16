@@ -115,7 +115,7 @@ public class SoundManager : MonoBehaviour
         trackIndex = -1;
         NewTrack();
     }
-    void Launch()
+    public void Launch()
     {
         music.clip = acid;
         music.loop = true;
