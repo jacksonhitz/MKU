@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class EnemyPunch : Enemy
 {
-    
     Item item;
     protected override void DropItem()
     {
@@ -20,15 +19,20 @@ public class EnemyPunch : Enemy
     }
     protected override void CallAttack(GameObject target)
     {
-        StartCoroutine(Attack());
+        StartCoroutine(Attack(target));
     }
-    IEnumerator Attack()
+      IEnumerator Attack(GameObject target)
     {
         animator.SetTrigger("Atk");
         yield return new WaitForSeconds(0.2f);
-        target.Hit(dmg)
-        soundManager.EnemySFX(sfx, attackClip);
 
+        IHit hittable = target.GetComponent<IHit>();
+        if (hittable != null)
+        {
+            hittable.Hit(dmg);
+        }
+
+        soundManager.EnemySFX(sfx, attackClip);
         yield break;
     }
 }

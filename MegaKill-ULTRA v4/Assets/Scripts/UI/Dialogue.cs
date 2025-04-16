@@ -120,7 +120,7 @@ public class Dialogue : MonoBehaviour
         else if (StateManager.State == StateManager.GameState.Tutorial)
         {
             textComponent.text = string.Empty;
-            gameManager.Lvl();
+            gameManager.Launch();
         }
         else if (StateManager.State == StateManager.GameState.Title)
         {

@@ -9,7 +9,7 @@ public class InputManager : MonoBehaviour
     GameManager gameManager;
     void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;
@@ -38,8 +38,6 @@ public class InputManager : MonoBehaviour
                 break;
             case StateManager.GameState.Tutorial:
                 break;
-            case StateManager.GameState.Lvl:
-                break;
             case StateManager.GameState.Outro:
                 break;
         }
@@ -58,7 +56,7 @@ public class InputManager : MonoBehaviour
             }
             if (StateManager.State == StateManager.GameState.Tutorial)
             {
-                gameManager.Lvl();
+                gameManager.Fight();
             }
             if (Input.GetKeyDown(KeyCode.Return))
             {
@@ -74,9 +72,11 @@ public class InputManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (StateManager.State == StateManager.GameState.Paused)
+            Debug.Log("paused");
+            if (StateManager.State != StateManager.GameState.Paused)
             {
                 gameManager.Paused();
+                
             }
             else
             {
@@ -84,8 +84,10 @@ public class InputManager : MonoBehaviour
             }
         }
 
+        Debug.Log("is active: " + StateManager.IsActive());
 
-        if (StateManager.State == StateManager.GameState.Lvl)
+
+        if (StateManager.IsActive())
         {
             if (Input.GetKey(KeyCode.Tab))
             {

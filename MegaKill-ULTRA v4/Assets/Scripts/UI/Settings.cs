@@ -11,6 +11,7 @@ public class Settings : MonoBehaviour
     Canvas menu;
     SoundManager soundManager;
     CamController camController;
+    GameManager gameManager;
     
     [SerializeField] Slider sfxSlider;
     [SerializeField] Slider musicSlider;
@@ -27,23 +28,16 @@ public class Settings : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-        
-        menu = GetComponentInChildren<Canvas>();
+        menu = GetComponent<Canvas>();
 
         soundManager = FindObjectOfType<SoundManager>();
         camController = FindObjectOfType<CamController>();
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     void Start()
     {
-        Unpaused();
+        menu.enabled = false;
         
         sfxSlider.value = sfxVolume;
         musicSlider.value = musicVolume;
@@ -63,6 +57,10 @@ public class Settings : MonoBehaviour
         sfxInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
         musicInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
         sensInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
+
+        soundManager.sfx.volume = sfxVolume / 100f;
+        soundManager.dialogue.volume = sfxVolume / 100f;
+        soundManager.music.volume = musicVolume / 300f;
     }
 
     void OnEnable()
@@ -79,20 +77,25 @@ public class Settings : MonoBehaviour
     {
         if (state == StateManager.GameState.Paused)
         {
-            Paused();
+            menu.enabled = true;
         }
         else
         {
-            Unpaused();
+            menu.enabled = false;
         }
     }
-    public void Paused()
-    {
-        menu.enabled = true;
-    }
+
     public void Unpaused()
     {
-        menu.enabled = false;
+        gameManager.Unpaused();
+    }
+    public void Exit()
+    {
+        gameManager.Title();
+    }
+    public void Restart()
+    {
+        gameManager.Restart();
     }
 
 
