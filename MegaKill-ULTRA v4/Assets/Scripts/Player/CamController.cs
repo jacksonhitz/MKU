@@ -15,7 +15,7 @@ public class CamController : MonoBehaviour
 
     [SerializeField] Volume dynamicVolume;
     [SerializeField] Volume staticVolume;
-    
+
     ChromaticAberration chromaticAberration;
     ColorAdjustments colorGrading;
     ChannelMixer channelMixer;
@@ -281,8 +281,8 @@ public class CamController : MonoBehaviour
 
     void MoveCam()
     {
-        float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * sens / Time.timeScale;
-        float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * sens / Time.timeScale;
+        float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * (sens / 2) / Time.timeScale;
+        float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * (sens / 2) Time.timeScale;
 
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -89.9f, 89.9f);
