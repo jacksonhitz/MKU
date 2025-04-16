@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IHit
 {
     public float runSpd = 5f;
     public float jumpForce = 5f;
@@ -63,7 +63,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        HandleInput();
+        if (StateManager.IsActive())
+        {
+            HandleInput();
+        }
         Move();
     }
 
@@ -74,22 +77,24 @@ public class PlayerController : MonoBehaviour
 
     void HandleInput()
     {
-        if (Input.GetMouseButton(0))
+        if (StateManager.State != StateManager.GameState.Explore)
         {
-            if (Input.GetKey(KeyCode.LeftControl))
+            if (Input.GetMouseButton(0))
+            {
+                if (Input.GetKey(KeyCode.LeftControl))
+                {
+                    HandleUse(rightScript, false);
+                }
+                else
+                {
+                    HandleUse(leftScript, true);
+                }
+            }
+            else if (Input.GetMouseButton(1))
             {
                 HandleUse(rightScript, false);
             }
-            else
-            {
-                HandleUse(leftScript, true);
-            }
         }
-        else if (Input.GetMouseButton(1))
-        {
-            HandleUse(rightScript, false);
-        }
-
         if (Input.GetKeyDown(KeyCode.Q))
         {
             if (leftScript == null)
@@ -212,21 +217,38 @@ public class PlayerController : MonoBehaviour
 
     void Interact(bool left)
     {
+        Debug.Log("interacted");
+
         RaycastHit hit;
         Ray ray = cam.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
 
-        if (Physics.Raycast(ray, out hit, range, LayerMask.GetMask("Ground", "Item")) && hit.transform.CompareTag("Item"))
+        if (Physics.Raycast(ray, out hit, range, LayerMask.GetMask("Ground", "Item", "NPC")))
         {
-            Item item = hit.transform.GetComponent<Item>();
-            if (item != null && item.available)
+            int hitLayer = hit.transform.gameObject.layer;
+
+            if (hitLayer == LayerMask.NameToLayer("Item"))
             {
-                if (Vector3.Distance(transform.position, hit.transform.position) <= pickupRange)
+                Item item = hit.transform.GetComponent<Item>();
+                if (item != null && item.available)
                 {
-                    Pickup(hit.transform.gameObject, left);
+                    if (Vector3.Distance(transform.position, hit.transform.position) <= pickupRange)
+                    {
+                        Pickup(hit.transform.gameObject, left);
+                    }
+                }
+            }
+            else if (hitLayer == LayerMask.NameToLayer("NPC"))
+            {
+                Debug.Log("NPC");
+                Enemy enemy = hit.transform.GetComponent<Enemy>();
+                if (enemy != null && enemy.friendly)
+                {
+                    Debug.Log("DRUGS GIVEN");
                 }
             }
         }
     }
+
 
     void Pickup(GameObject item, bool left)
     {

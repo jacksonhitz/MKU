@@ -94,7 +94,7 @@ public class TutorialUI : MonoBehaviour
         }
         else
         {
-            gameManager.Lvl();
+           
         }
     }
     IEnumerator TypeLine()

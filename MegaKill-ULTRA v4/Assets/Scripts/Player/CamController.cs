@@ -107,7 +107,6 @@ public class CamController : MonoBehaviour
             case StateManager.GameState.Title: break;
             case StateManager.GameState.Intro: break;
             case StateManager.GameState.Tutorial: Tutorial(); break;
-            case StateManager.GameState.Lvl: break;
             case StateManager.GameState.Paused: break;
             case StateManager.GameState.Outro: break;
             case StateManager.GameState.Testing: break;

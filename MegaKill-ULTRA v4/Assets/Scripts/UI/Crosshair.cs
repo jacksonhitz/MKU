@@ -9,6 +9,11 @@ public class Crosshair : MonoBehaviour
     {
         obj = transform.GetChild(0).gameObject;
     }
+
+    void Start()
+    {
+        Off();
+    }
     void OnEnable()
     {
         StateManager.OnStateChanged += StateChange;
@@ -19,7 +24,7 @@ public class Crosshair : MonoBehaviour
     }
     void StateChange(StateManager.GameState state)
     {
-        if (state != StateManager.GameState.Title)
+        if (StateManager.IsActive())
         {
             On();
         }

@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class SoundManager : MonoBehaviour
 {
@@ -74,10 +73,12 @@ public class SoundManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        settings = FindObjectOfType<Settings>();
-
         tracks = new List<AudioClip> { witch, acid, could, dj, all, hott, threes, life, real, four };
         lines = new List<AudioClip> { line1, line2, line3, line4, line5, line6, line7 };
+    }
+    void Start()
+    {
+        Title();
     }
 
     void OnEnable()
@@ -96,10 +97,8 @@ public class SoundManager : MonoBehaviour
             case StateManager.GameState.Intro: Intro(); break;
             case StateManager.GameState.Tutorial: Tutorial(); break;
             case StateManager.GameState.Launch: Launch(); break;
-            case StateManager.GameState.Launch: Tango(); break;
+            case StateManager.GameState.Tango: Tango(); break;
             case StateManager.GameState.Paused: Paused(); break;
-            case StateManager.GameState.Outro: break;
-            case StateManager.GameState.Testing: break;
         }
     }
 
@@ -107,6 +106,7 @@ public class SoundManager : MonoBehaviour
     {
         music.clip = title;
         music.Play();
+        Debug.Log("playing");
     }
     void Intro()
     {
@@ -133,6 +133,9 @@ public class SoundManager : MonoBehaviour
 
     public void Paused()
     {
+        Debug.Log("sound paused");
+        
+       
         sfxPlaying = sfx.isPlaying;
         dialoguePlaying = sfx.isPlaying;
         
@@ -140,7 +143,7 @@ public class SoundManager : MonoBehaviour
         sfx.Pause();
         dialogue.Pause();
     }
-    public void Resume()
+    public void Unpaused()
     {
         music.Play();
 
@@ -202,7 +205,7 @@ public class SoundManager : MonoBehaviour
     public void TossHit() => PlaySfx(tossHit);
     public void Heartbeat() => PlaySfx(heartbeat);
     public void PlayerHit() => PlaySfx(playerHit);
-    public void PlayerDeath() => PlayerSfx(playerDeath);
+    public void PlayerDeath() => PlaySfx(playerDeath);
     public void Gulp() => PlaySfx(gulp);
     public void PillEmpty() => PlaySfx(pillEmpty);
 
@@ -212,11 +215,6 @@ public class SoundManager : MonoBehaviour
         sfx.Play();
     }
 
-    void PlayerSfx(AudioClip clip)
-    {
-        playerSfx.clip = clip;
-        playerSfx.Play();
-    }
     public void FadeIn(AudioSource source, float duration)
     {
         StartCoroutine(FadeInCoroutine(source, duration));

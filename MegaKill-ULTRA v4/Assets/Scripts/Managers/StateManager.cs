@@ -12,6 +12,9 @@ public static class StateManager
         Launch,
         Tango,
         Paused,
+        Dead,
+        Explore,
+        Fight,
         Outro,
         Testing
     }
@@ -24,7 +27,7 @@ public static class StateManager
 
     private static readonly HashSet<GameState> Lvls = new()
     {
-        GameState.Launch
+        GameState.Launch,
         GameState.Tango,
         GameState.Testing
     };
@@ -34,13 +37,16 @@ public static class StateManager
         GameState.Tutorial,
         GameState.Launch,
         GameState.Tango,
+        GameState.Explore,
+        GameState.Fight,
         GameState.Testing
     };
     private static readonly HashSet<GameState> Passive = new()
     {
         GameState.Title,
         GameState.Outro,
-        GameState.Paused
+        GameState.Paused,
+        GameState.Dead,
     };
 
     public static GameState State
@@ -59,6 +65,7 @@ public static class StateManager
                 previous = state;
                 state = value;
                 OnStateChanged?.Invoke(state);
+                Debug.Log("state Check");
             }
         }
     }

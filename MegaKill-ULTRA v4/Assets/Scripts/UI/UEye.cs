@@ -40,7 +40,8 @@ public class UEye : MonoBehaviour
     }
     void StateChange(StateManager.GameState state)
     {
-        if (state != StateManager.GameState.Title)
+        Debug.Log("state changed");
+        if (StateManager.IsActive())
         {
             On();
         }

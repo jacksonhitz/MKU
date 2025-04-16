@@ -32,14 +32,14 @@ public class EnemyManager : MonoBehaviour
             case StateManager.GameState.Title: break;
             case StateManager.GameState.Intro: break;
             case StateManager.GameState.Tutorial: break;
-            case StateManager.GameState.Lvl: Lvl(); break;
+            case StateManager.GameState.Fight: Fight(); break;
             case StateManager.GameState.Paused: break;
             case StateManager.GameState.Outro: break;
-            case StateManager.GameState.Testing: Lvl(); break;
+            case StateManager.GameState.Testing: Fight(); break;
         }
     }
 
-    void Lvl()
+    void Fight()
     {
         Debug.Log("called enemies");
         enemyHolder.SetActive(true);

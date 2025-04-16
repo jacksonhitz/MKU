@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     EnemyManager enemyManager;
     InputManager inputManager;
     CamController cam;
+    Settings settings;
 
     List<Item> items;
     List<GameObject> doors = new List<GameObject>(); 
@@ -36,24 +37,17 @@ public class GameManager : MonoBehaviour
         soundManager = FindObjectOfType<SoundManager>(); 
         enemyManager = FindObjectOfType<EnemyManager>();
         inputManager = FindObjectOfType<InputManager>();
+        settings = FindObjectOfType<Settings>();
     }
     void Start()
     {
-        if (SceneManager.GetActiveScene().name == "TITLE")
-        {
-            StateManager.State = StateManager.GameState.Title;
-        }
-        else
-        {
-            StateManager.State = StateManager.GameState.Testing;
-        }
+        StateManager.State = StateManager.GameState.Testing;
+        CollectItems();
     }
     void Update()
     {
         Debug.Log(StateManager.State);
     }
-
-
 
     public void Title()
     {
@@ -64,8 +58,6 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(1);
         StateManager.State = StateManager.GameState.Intro;
-
-        CollectItems();
     }
     public void Tutorial()
     {
@@ -75,9 +67,13 @@ public class GameManager : MonoBehaviour
     {
         StateManager.State = StateManager.GameState.Launch;
     }
-    public void Launch()
+    public void Tango()
     {
         StateManager.State = StateManager.GameState.Tango;
+    }
+    public void Fight()
+    {
+        StateManager.State = StateManager.GameState.Fight;
     }
     public void Outro()
     {
@@ -93,6 +89,11 @@ public class GameManager : MonoBehaviour
     {
         StateManager.State = StateManager.Previous;
         Time.timeScale = 1f;
+
+        if (soundManager != null)
+        {
+            soundManager.Unpaused();
+        }
     }
     
     public void Restart()
@@ -122,6 +123,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (Item item in items)
         {
+            Debug.Log("item highlighted");
             if (!item.isHovering || !item.available)
             {
                 item.DefaultMat();

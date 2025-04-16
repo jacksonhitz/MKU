@@ -5,8 +5,9 @@ using System.Collections.Generic;
 
 public abstract class Enemy : MonoBehaviour
 {
-    enum EnemyState { Passive, Active, Brawl, Static }
-    [SerializeField] EnemyState currentState;
+    public enum EnemyState { Wander, Active, Brawl, Static }
+    public EnemyState currentState;
+    public bool friendly;
 
     [Header("SFX")]
     public AudioClip attackClip;
@@ -16,6 +17,9 @@ public abstract class Enemy : MonoBehaviour
 
     [Header("VFX")]
     public GameObject deathEffect;
+
+    [Header("Brawl Settings")]
+    [Range(0f, 1f)] public float playerPriorityChance = 0.5f;
 
     // REFERENCES
     [HideInInspector] public NavMeshAgent agent;
@@ -44,6 +48,9 @@ public abstract class Enemy : MonoBehaviour
     Vector3 wanderDestination;
     float wanderTimer;
 
+    GameObject currentBrawlTarget;
+    float brawlTargetTimer;
+
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -53,8 +60,6 @@ public abstract class Enemy : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
         enemyManager = FindObjectOfType<EnemyManager>();
-        
-        currentState = EnemyState.Active;
     }
 
     protected virtual void Update()
@@ -65,8 +70,8 @@ public abstract class Enemy : MonoBehaviour
 
         switch (currentState)
         {
-            case EnemyState.Passive:
-                PassiveBehavior();
+            case EnemyState.Wander:
+                WanderBehavior();
                 break;
             case EnemyState.Active:
                 ActiveBehavior();
@@ -96,7 +101,7 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    void PassiveBehavior()
+    void WanderBehavior()
     {
         wanderTimer -= Time.deltaTime;
 
@@ -104,7 +109,7 @@ public abstract class Enemy : MonoBehaviour
         {
             wanderDestination = GetRandomWanderPoint();
             agent.SetDestination(wanderDestination);
-            wanderTimer = Random.Range(5f, 50);
+            wanderTimer = Random.Range(5f, 50f);
         }
     }
 
@@ -138,22 +143,30 @@ public abstract class Enemy : MonoBehaviour
 
     void BrawlBehavior()
     {
-        GameObject target = FindClosestTarget();
+        brawlTargetTimer -= Time.deltaTime;
 
-        if (target != null)
+        if (currentBrawlTarget == null ||
+            (currentBrawlTarget.CompareTag("Enemy") && currentBrawlTarget.GetComponent<Enemy>().isDead) ||
+            brawlTargetTimer <= 0f)
         {
-            float distance = Vector3.Distance(transform.position, target.transform.position);
+            currentBrawlTarget = ChooseBrawlTarget();
+            brawlTargetTimer = Random.Range(1f, 10f);
+        }
+
+        if (currentBrawlTarget != null)
+        {
+            float distance = Vector3.Distance(transform.position, currentBrawlTarget.transform.position);
 
             if (distance < attackRange)
             {
                 agent.ResetPath();
-                LookTowards(target.transform.position);
-                StartCoroutine(AttackCheck(target));
+                LookTowards(currentBrawlTarget.transform.position);
+                StartCoroutine(AttackCheck(currentBrawlTarget));
             }
             else
             {
-                agent.SetDestination(target.transform.position);
-                LookTowards(target.transform.position);
+                agent.SetDestination(currentBrawlTarget.transform.position);
+                LookTowards(currentBrawlTarget.transform.position);
             }
         }
         else
@@ -162,30 +175,28 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    GameObject FindClosestTarget()
+    GameObject ChooseBrawlTarget()
     {
-        float closestDistance = Mathf.Infinity;
-        GameObject closestTarget = null;
+        List<GameObject> possibleTargets = new List<GameObject>();
 
         float playerDistance = Vector3.Distance(transform.position, player.transform.position);
-        if (playerDistance <= detectionRange)
-        {
-            closestDistance = playerDistance;
-            closestTarget = player.gameObject;
-        }
+        bool playerInRange = playerDistance <= detectionRange;
+
+        if (playerInRange && Random.value < playerPriorityChance)
+            return player.gameObject;
 
         foreach (Enemy enemy in enemyManager.enemies)
         {
             if (enemy == this || enemy.isDead) continue;
             float distance = Vector3.Distance(transform.position, enemy.transform.position);
-            if (distance < closestDistance && distance <= detectionRange)
-            {
-                closestDistance = distance;
-                closestTarget = enemy.gameObject;
-            }
+            if (distance <= detectionRange)
+                possibleTargets.Add(enemy.gameObject);
         }
 
-        return closestTarget;
+        if (possibleTargets.Count == 0)
+            return playerInRange ? player.gameObject : null;
+
+        return possibleTargets[Random.Range(0, possibleTargets.Count)];
     }
 
     public IEnumerator AttackCheck(GameObject target)
@@ -213,7 +224,10 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    public void Hit(float dmg);
+    public void Hit(float dmg)
+    {
+
+    }
 
     public void HitCheck(bool lethal)
     {
