@@ -28,11 +28,6 @@ public class EnemyFlyingEye : Enemy
         dmg = 20f;
     }
 
-    protected override void Hit(bool lethal)
-    {
-        Dead();
-    }
-
     protected override void CallAttack(GameObject target)
     {
         StartCoroutine(Attack());

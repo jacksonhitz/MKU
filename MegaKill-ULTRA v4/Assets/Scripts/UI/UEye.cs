@@ -5,18 +5,25 @@ using UnityEngine.UI;
 public class UEye : MonoBehaviour
 {
     [SerializeField] RawImage currentEye;
+
     [SerializeField] Texture eye100Texture;
     [SerializeField] Texture eye80Texture;
+    [SerializeField] Texture eye75Texture;
     [SerializeField] Texture eye60Texture;
+    [SerializeField] Texture eye50Texture;
     [SerializeField] Texture eye40Texture;
+    [SerializeField] Texture eye25Texture;
     [SerializeField] Texture eye20Texture;
     [SerializeField] Texture eye10Texture;
     [SerializeField] Texture eyeFlashTexture;
 
     [SerializeField] Texture eye100Texture2;
     [SerializeField] Texture eye80Texture2;
+    [SerializeField] Texture eye75Texture2;
     [SerializeField] Texture eye60Texture2;
+    [SerializeField] Texture eye50Texture2;
     [SerializeField] Texture eye40Texture2;
+    [SerializeField] Texture eye25Texture2;
     [SerializeField] Texture eye20Texture2;
     [SerializeField] Texture eye10Texture2;
     [SerializeField] Texture eyeFlashTexture2;

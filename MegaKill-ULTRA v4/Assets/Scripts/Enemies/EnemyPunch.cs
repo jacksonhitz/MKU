@@ -13,9 +13,9 @@ public class EnemyPunch : Enemy
     }
     protected override void Start()
     {
-        attackRange = 3f;
+        attackRange = 6f;
         attackRate = 1f;
-        dmg = 5f;
+        dmg = 10f;
     }
     protected override void CallAttack(GameObject target)
     {
@@ -32,7 +32,7 @@ public class EnemyPunch : Enemy
             hittable.Hit(dmg);
         }
 
-        soundManager.EnemySFX(sfx, attackClip);
+      //  soundManager.EnemySFX(sfx, attackClip);
         yield break;
     }
 }

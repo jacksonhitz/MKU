@@ -6,7 +6,9 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
 
+    Settings settings;
     GameManager gameManager;
+
     void Awake()
     {
         if (Instance != null)
@@ -18,6 +20,7 @@ public class InputManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         gameManager = FindObjectOfType<GameManager>();
+        settings = FindObjectOfType<Settings>();
     }
 
     void OnEnable()
@@ -76,16 +79,14 @@ public class InputManager : MonoBehaviour
             if (StateManager.State != StateManager.GameState.Paused)
             {
                 gameManager.Paused();
-                
             }
             else
             {
-                gameManager.Unpaused();
+                settings.Unpaused();
             }
         }
 
         Debug.Log("is active: " + StateManager.IsActive());
-
 
         if (StateManager.IsActive())
         {

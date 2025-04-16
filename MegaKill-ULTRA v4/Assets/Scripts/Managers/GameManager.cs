@@ -134,13 +134,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    
-    public void Kill(Enemy enemy)
-    {
-        enemyManager.EnemyDead(enemy);
-        cam.UpPhase();
-        Score(100);
-    }
 
     public void CallDead()
     {

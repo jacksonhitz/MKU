@@ -29,7 +29,6 @@ public static class StateManager
     {
         GameState.Launch,
         GameState.Tango,
-        GameState.Testing
     };
     private static readonly HashSet<GameState> Active = new()
     {
@@ -37,7 +36,6 @@ public static class StateManager
         GameState.Tutorial,
         GameState.Launch,
         GameState.Tango,
-        GameState.Explore,
         GameState.Fight,
         GameState.Testing
     };

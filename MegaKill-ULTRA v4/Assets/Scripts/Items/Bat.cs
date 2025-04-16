@@ -55,7 +55,7 @@ public class Bat : MonoBehaviour
                 {
                     enemy = collider.transform.GetComponent<Enemy>();
                 }
-                enemy?.HitCheck(true);
+                enemy?.Hit(100);
             }
         }
     }

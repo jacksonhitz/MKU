@@ -3,7 +3,7 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class Enemy : MonoBehaviour
+public abstract class Enemy : MonoBehaviour, IHit
 {
     public enum EnemyState { Wander, Active, Brawl, Static }
     public EnemyState currentState;
@@ -19,7 +19,7 @@ public abstract class Enemy : MonoBehaviour
     public GameObject deathEffect;
 
     [Header("Brawl Settings")]
-    [Range(0f, 1f)] public float playerPriorityChance = 0.5f;
+    float playerPriorityChance = 0.5f;
 
     // REFERENCES
     [HideInInspector] public NavMeshAgent agent;
@@ -34,9 +34,11 @@ public abstract class Enemy : MonoBehaviour
     protected float dmg;
     protected float attackRate;
     protected float attackRange;
-    protected float detectionRange = 15f;
+    protected float detectionRange = 100f;
     protected bool isAttacking;
     protected bool detectedPlayer;
+
+    public bool dosed;
 
     // VAR
     float stunDuration = 2f;
@@ -45,21 +47,27 @@ public abstract class Enemy : MonoBehaviour
     bool isStunned;
     bool hasSpawnedDeathEffect = false;
 
+    float maxHealth = 100f;
+    float health;
+
     Vector3 wanderDestination;
     float wanderTimer;
 
-    GameObject currentBrawlTarget;
+    public GameObject currentBrawlTarget;
     float brawlTargetTimer;
 
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         sfx = GetComponent<AudioSource>();
+
         animator = GetComponentInChildren<Animator>();
         player = FindObjectOfType<PlayerController>();
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
         enemyManager = FindObjectOfType<EnemyManager>();
+
+        health = maxHealth;
     }
 
     protected virtual void Update()
@@ -109,21 +117,23 @@ public abstract class Enemy : MonoBehaviour
         {
             wanderDestination = GetRandomWanderPoint();
             agent.SetDestination(wanderDestination);
-            wanderTimer = Random.Range(5f, 50f);
+            wanderTimer = Random.Range(1f, 10);
         }
     }
 
     Vector3 GetRandomWanderPoint()
     {
-        Vector3 randomDirection = Random.insideUnitSphere * 5f;
+        Vector3 randomDirection = Random.insideUnitSphere * 50f;
         randomDirection += transform.position;
         NavMeshHit navHit;
-        NavMesh.SamplePosition(randomDirection, out navHit, 5f, NavMesh.AllAreas);
+        NavMesh.SamplePosition(randomDirection, out navHit, 50f, NavMesh.AllAreas);
         return navHit.position;
     }
 
     void ActiveBehavior()
     {
+        if (friendly) return;
+
         if (los && Vector3.Distance(transform.position, player.transform.position) < attackRange)
         {
             agent.ResetPath();
@@ -150,7 +160,7 @@ public abstract class Enemy : MonoBehaviour
             brawlTargetTimer <= 0f)
         {
             currentBrawlTarget = ChooseBrawlTarget();
-            brawlTargetTimer = Random.Range(1f, 10f);
+            brawlTargetTimer = Random.Range(1f, 3f);
         }
 
         if (currentBrawlTarget != null)
@@ -165,8 +175,9 @@ public abstract class Enemy : MonoBehaviour
             }
             else
             {
-                agent.SetDestination(currentBrawlTarget.transform.position);
-                LookTowards(currentBrawlTarget.transform.position);
+                Vector3 spreadPosition = GetSpreadPosition(currentBrawlTarget.transform.position);
+                agent.SetDestination(spreadPosition);
+                LookTowards(spreadPosition);
             }
         }
         else
@@ -175,10 +186,23 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    Vector3 GetSpreadPosition(Vector3 targetPosition)
+    {
+        float spreadRadius = 1.5f;
+        Vector2 randomOffset = Random.insideUnitCircle * spreadRadius;
+        Vector3 offset3D = new Vector3(randomOffset.x, 0, randomOffset.y);
+        Vector3 spreadDestination = targetPosition + offset3D;
+
+        NavMeshHit navHit;
+        if (NavMesh.SamplePosition(spreadDestination, out navHit, 2f, NavMesh.AllAreas))
+            return navHit.position;
+
+        return targetPosition;
+    }
+
     GameObject ChooseBrawlTarget()
     {
         List<GameObject> possibleTargets = new List<GameObject>();
-
         float playerDistance = Vector3.Distance(transform.position, player.transform.position);
         bool playerInRange = playerDistance <= detectionRange;
 
@@ -188,9 +212,21 @@ public abstract class Enemy : MonoBehaviour
         foreach (Enemy enemy in enemyManager.enemies)
         {
             if (enemy == this || enemy.isDead) continue;
+
             float distance = Vector3.Distance(transform.position, enemy.transform.position);
             if (distance <= detectionRange)
-                possibleTargets.Add(enemy.gameObject);
+            {
+                int attackers = 0;
+                foreach (Enemy other in enemyManager.enemies)
+                {
+                    if (other == this || other.isDead) continue;
+                    if (other.currentBrawlTarget == enemy.gameObject)
+                        attackers++;
+                }
+
+                if (attackers < 3)
+                    possibleTargets.Add(enemy.gameObject);
+            }
         }
 
         if (possibleTargets.Count == 0)
@@ -205,7 +241,15 @@ public abstract class Enemy : MonoBehaviour
         {
             animator.SetBool("isAttacking", true);
             isAttacking = true;
+
             CallAttack(target);
+
+            Enemy targetEnemy = target.GetComponent<Enemy>();
+            if (targetEnemy != null && !targetEnemy.isDead)
+            {
+                targetEnemy.currentState = EnemyState.Brawl;
+            }
+
             yield return new WaitForSeconds(attackRate);
             isAttacking = false;
             animator.SetBool("isAttacking", false);
@@ -226,26 +270,22 @@ public abstract class Enemy : MonoBehaviour
 
     public void Hit(float dmg)
     {
+      //  soundManager.EnemySFX(sfx, hitClip);
 
-    }
-
-    public void HitCheck(bool lethal)
-    {
-        soundManager.EnemySFX(sfx, hitClip);
-        Hit(lethal);
-    }
-
-    protected virtual void Hit(bool lethal)
-    {
-        if (lethal || isStunned)
+        health -= dmg;
+        Debug.Log("health: " + health);
+        if (health <= 0)
         {
             Dead();
         }
         else
         {
-            soundManager.EnemySFX(sfx, stunClip);
-            StopAllCoroutines();
-            StartCoroutine(Stun());
+            if (health == 50)
+            {
+                StopAllCoroutines();
+                StartCoroutine(Stun());
+              //  soundManager.EnemySFX(sfx, stunClip);
+            }
         }
     }
 
@@ -263,7 +303,6 @@ public abstract class Enemy : MonoBehaviour
         agent.isStopped = false;
 
         yield return new WaitForSeconds(attackRate);
-
         isAttacking = false;
     }
 
@@ -273,7 +312,7 @@ public abstract class Enemy : MonoBehaviour
 
         isDead = true;
         StopAllCoroutines();
-        gameManager.Kill(this);
+        enemyManager.Kill(this);
         DropItem();
 
         if (!hasSpawnedDeathEffect && deathEffect != null)

@@ -52,10 +52,44 @@ public class EnemyManager : MonoBehaviour
         enemies.AddRange(FindObjectsOfType<Enemy>()); 
     }
 
-    public void EnemyDead(Enemy enemy)
+    public void Brawl()
+    {
+        foreach (Enemy enemy in enemies)
+        {
+            if (enemy.dosed)
+            {
+                enemy.currentState = Enemy.EnemyState.Brawl;
+            }
+        }
+        
+        List<Enemy> nonDosedEnemies = new List<Enemy>();
+        foreach (Enemy enemy in enemies)
+        {
+            if (!enemy.dosed)
+            {
+                nonDosedEnemies.Add(enemy);
+            }
+        }
+
+        int numToConvert = Mathf.CeilToInt(nonDosedEnemies.Count * 0.2f);
+
+        for (int i = 0; i < nonDosedEnemies.Count; i++)
+        {
+            Enemy temp = nonDosedEnemies[i];
+            int randomIndex = Random.Range(i, nonDosedEnemies.Count);
+            nonDosedEnemies[i] = nonDosedEnemies[randomIndex];
+            nonDosedEnemies[randomIndex] = temp;
+        }
+        for (int i = 0; i < numToConvert; i++)
+        {
+            nonDosedEnemies[i].currentState = Enemy.EnemyState.Brawl;
+        }
+    }
+
+
+    public void Kill(Enemy enemy)
     {
         enemies.Remove(enemy);
-        
     }
 
     public void CallHands()

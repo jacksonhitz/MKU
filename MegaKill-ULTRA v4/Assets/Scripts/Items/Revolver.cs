@@ -110,7 +110,14 @@ public class Revolver : MonoBehaviour
     {
         if (Physics.Raycast(ray, out RaycastHit hit, player.range))
         {
-            if (hit.transform.CompareTag("Enemy")) hit.transform.GetComponent<Enemy>()?.HitCheck(true);
+            if (hit.transform.CompareTag("Enemy"))
+            {
+                Enemy enemy = hit.transform.GetComponentInParent<Enemy>();
+                if (enemy != null)
+                {
+                    enemy.Hit(100);
+                }
+            }
             TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
             StartCoroutine(HandleTracer(tracer, hit.point));
         }

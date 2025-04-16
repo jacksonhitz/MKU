@@ -60,7 +60,7 @@ public class Item : MonoBehaviour
             available = true;
             if (collision.gameObject.CompareTag("Enemy"))
             {
-                collision.gameObject.GetComponent<Enemy>()?.HitCheck(false);
+                collision.gameObject.GetComponent<Enemy>()?.Hit(50);
             }
         }
     }

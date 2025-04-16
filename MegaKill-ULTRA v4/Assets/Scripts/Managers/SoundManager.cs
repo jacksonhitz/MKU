@@ -76,10 +76,6 @@ public class SoundManager : MonoBehaviour
         tracks = new List<AudioClip> { witch, acid, could, dj, all, hott, threes, life, real, four };
         lines = new List<AudioClip> { line1, line2, line3, line4, line5, line6, line7 };
     }
-    void Start()
-    {
-        Title();
-    }
 
     void OnEnable()
     {
@@ -122,6 +118,7 @@ public class SoundManager : MonoBehaviour
     void Launch()
     {
         music.clip = acid;
+        music.loop = true;
         music.Play();
     }
     void Tango()
@@ -181,6 +178,8 @@ public class SoundManager : MonoBehaviour
         lineIndex = (lineIndex + 1) % lines.Count;
         dialogue.clip = lines[lineIndex];
         dialogue.Play();
+
+        Debug.Log("dialogue playing");
     }
     public void StopLine()
     {

@@ -79,23 +79,22 @@ public class Settings : MonoBehaviour
         {
             menu.enabled = true;
         }
-        else
-        {
-            menu.enabled = false;
-        }
     }
 
     public void Unpaused()
     {
         gameManager.Unpaused();
+        menu.enabled = false;
     }
     public void Exit()
     {
         gameManager.Title();
+        menu.enabled = false;
     }
     public void Restart()
     {
         gameManager.Restart();
+        menu.enabled = false;
     }
 
 

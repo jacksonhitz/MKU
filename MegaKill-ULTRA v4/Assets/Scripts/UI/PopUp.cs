@@ -4,28 +4,33 @@ using TMPro;
 
 public class PopUp : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI popup;
-
+    TextMeshProUGUI popupText;
     Coroutine currentCoroutine;
+
+    void Awake()
+    {
+        popupText = GetComponent<TextMeshProUGUI>();
+
+    }
 
     public void UpdatePopUp(string text)
     {
         if (currentCoroutine != null)
         {
-            if (popup.text == text)
+            if (popupText.text == text)
             {
                 return;
             }
             else
             {
                 StopCoroutine(currentCoroutine);
-                popup.text = "";
+                popupText.text = "";
                 currentCoroutine = null;
             }
         }
 
-        popup.text = text;
-        RectTransform popupTransform = popup.GetComponent<RectTransform>();
+        popupText.text = text;
+        RectTransform popupTransform = popupText.GetComponent<RectTransform>();
 
         float randomX = Random.Range(-0.2f, 0.3f);
         float randomY = Random.Range(-0.3f, 0.1f);
@@ -49,7 +54,7 @@ public class PopUp : MonoBehaviour
             yield return null;
         }
 
-        popup.text = "";
+        popupText.text = "";
         currentCoroutine = null;
     }
 }

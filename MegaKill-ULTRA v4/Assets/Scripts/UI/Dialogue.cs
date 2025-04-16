@@ -7,16 +7,15 @@ public class Dialogue : MonoBehaviour
 {
     public TextMeshProUGUI textComponent;
     public TextMeshProUGUI titleText;
-    public TextMeshProUGUI subheadText;
     public string[] lines;
     public float textSpeed;
 
     int index = -1;
     bool started = false;
+    bool customTyping = false;
 
     GameManager gameManager;
     SoundManager soundManager;
-
 
     void Awake()
     {
@@ -24,53 +23,48 @@ public class Dialogue : MonoBehaviour
         soundManager = FindObjectOfType<SoundManager>();
     }
 
-    public void CallDialogue()
+    void OnEnable()
     {
-        StartCoroutine(DelayDialogue());
+        StateManager.OnStateChanged += StateChange;
     }
-    IEnumerator DelayDialogue()
+
+    void OnDisable()
     {
-        yield return new WaitForSeconds(1.5f);
-        NextLine();
+        StateManager.OnStateChanged -= StateChange;
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space) && !started)
         {
-            started = true;
-            textComponent.text = string.Empty;
-            titleText.text = string.Empty;
-            subheadText.text = string.Empty;
-            NextLine();
+           // started = true;
+           // ClearText();
+           // NextLine();
         }
     }
 
-    void OnEnable()
+    public void CallDialogue()
     {
-        StateManager.OnStateChanged += StateChange;
+        StartCoroutine(DelayDialogue());
     }
-    void OnDisable()
+
+    IEnumerator DelayDialogue()
     {
-        StateManager.OnStateChanged -= StateChange;
+        yield return new WaitForSeconds(1.5f);
+        NextLine();
     }
+
     void StateChange(StateManager.GameState state)
     {
-        if (state != StateManager.GameState.Paused)
-        {
-
-        }
-        else
-        {
-
-        }
+        
     }
+
     void NextLine()
     {
         if (index < lines.Length - 1)
         {
             index++;
-            StartCoroutine(TypeLine());
+            StartCoroutine(TypeLine(lines[index]));
         }
         else
         {
@@ -78,34 +72,50 @@ public class Dialogue : MonoBehaviour
         }
     }
 
-    IEnumerator TypeLine()
+    IEnumerator TypeLine(string text)
     {
         textComponent.text = string.Empty;
-        yield return new WaitForSeconds(.1f);
-        
-        if (StateManager.State == StateManager.GameState.Intro)
-        {
-            soundManager.NewLine();
-        }
-        foreach (char c in lines[index].ToCharArray())
+        yield return new WaitForSeconds(0.1f);
+
+        soundManager.NewLine();
+
+        foreach (char c in text.ToCharArray())
         {
             textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
         }
+
         yield return new WaitForSeconds(1f);
-        if (StateManager.State == StateManager.GameState.Testing)
+
+        soundManager.StopLine();
+
+        if (customTyping)
         {
-            soundManager.StopLine();
+            customTyping = false;
         }
-        NextLine();
+        else
+        {
+            NextLine();
+        }
     }
 
-    
+    public void TypeText(string customText)
+    {
+        StopAllCoroutines();
+        customTyping = true;
+        StartCoroutine(TypeLine(customText));
+    }
 
     public void Off()
     {
         StopAllCoroutines();
+        ClearText();
+    }
+
+    void ClearText()
+    {
         textComponent.text = string.Empty;
+        if (titleText != null) titleText.text = string.Empty;
     }
 
     IEnumerator Done()
@@ -127,6 +137,5 @@ public class Dialogue : MonoBehaviour
             yield return new WaitForSeconds(2f);
             gameManager.Intro();
         }
-        textComponent.text = "";
     }
 }

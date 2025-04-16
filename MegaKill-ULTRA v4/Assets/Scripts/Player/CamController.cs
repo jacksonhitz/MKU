@@ -15,6 +15,7 @@ public class CamController : MonoBehaviour
 
     [SerializeField] Volume dynamicVolume;
     [SerializeField] Volume staticVolume;
+    
     ChromaticAberration chromaticAberration;
     ColorAdjustments colorGrading;
     ChannelMixer channelMixer;

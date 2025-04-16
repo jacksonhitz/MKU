@@ -36,11 +36,6 @@ public class EnemyHands : Enemy
             movementData[child] = (randomRange, randomSpd);
         }
     }
-    protected override void Hit(bool lethal)
-    {
-        player.rooted = false;
-        Dead();
-    }
 
     IEnumerator PlayAnim(Transform child)
     {

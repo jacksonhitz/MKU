@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IHit
 {
-    public float runSpd = 5f;
-    public float jumpForce = 5f;
-    public float throwForce = 50f;
+    public float runSpd;
+    public float throwForce;
     public float gravity;
     public float range;
     public Camera cam;
@@ -26,11 +25,13 @@ public class PlayerController : MonoBehaviour, IHit
     GameManager gameManager;
     Settings settings;
     UEye uEye;
+    FestivalManager festivalManager;
+    PopUp popUp;
 
     float health;
     float maxHealth = 100;
 
-    float pickupRange = 10f;
+    float interactRange = 10f;
     public bool isDead;
     public Animator swingAnim;
     public Animator punchRAnim;
@@ -46,12 +47,17 @@ public class PlayerController : MonoBehaviour, IHit
 
     CharacterController characterController;
 
+    float verticalVelocity;
+    public float jumpHeight = 5f;
+
     void Awake()
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
         settings = FindObjectOfType<Settings>();
         uEye = FindObjectOfType<UEye>();
+        popUp = FindObjectOfType<PopUp>();
+        festivalManager = FindObjectOfType<FestivalManager>();
 
         characterController = GetComponent<CharacterController>(); 
     }
@@ -77,7 +83,7 @@ public class PlayerController : MonoBehaviour, IHit
 
     void HandleInput()
     {
-        if (StateManager.State != StateManager.GameState.Explore)
+        if (StateManager.State != StateManager.GameState.Tango)
         {
             if (Input.GetMouseButton(0))
             {
@@ -131,7 +137,7 @@ public class PlayerController : MonoBehaviour, IHit
         }
     }
 
-    void Move()
+     void Move()
     {
         if (StateManager.State == StateManager.GameState.Testing)
         {
@@ -151,10 +157,22 @@ public class PlayerController : MonoBehaviour, IHit
             characterController.Move(movement * runSpd * Time.deltaTime);
         }
 
-        gravity = -9.81f * 10;
+        if (isGrounded && verticalVelocity < 0)
+        {
+            verticalVelocity = -2f;
+        }
+        else
+        {
+            verticalVelocity += -9.81f * 10 * Time.deltaTime;
+        }
 
-        Vector3 gravityEffect = new Vector3(0f, gravity, 0f);
-        characterController.Move(gravityEffect * Time.deltaTime);
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !rooted)
+        {
+            verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * -9.81f * 10);
+        }
+
+        Vector3 finalMove = (movement * runSpd) + Vector3.up * verticalVelocity;
+        characterController.Move(finalMove * Time.deltaTime);
     }
 
     void Punch(bool left)
@@ -187,9 +205,12 @@ public class PlayerController : MonoBehaviour, IHit
         Collider[] hitColliders = Physics.OverlapBox(range.bounds.center, range.bounds.extents, range.transform.rotation);
         foreach (Collider hit in hitColliders)
         {
+            Debug.Log("hit1");
             if (hit.CompareTag("Enemy"))
             {
-                hit.GetComponentInParent<Enemy>()?.HitCheck(false);
+                Debug.Log("hit2");
+                Enemy enemy = hit.GetComponentInParent<Enemy>();
+                enemy.Hit(50);
             }
         }
     }
@@ -229,9 +250,9 @@ public class PlayerController : MonoBehaviour, IHit
             if (hitLayer == LayerMask.NameToLayer("Item"))
             {
                 Item item = hit.transform.GetComponent<Item>();
-                if (item != null && item.available)
+                if (item != null && item.available && StateManager.State != StateManager.GameState.Tango)
                 {
-                    if (Vector3.Distance(transform.position, hit.transform.position) <= pickupRange)
+                    if (Vector3.Distance(transform.position, hit.transform.position) <= interactRange)
                     {
                         Pickup(hit.transform.gameObject, left);
                     }
@@ -240,10 +261,23 @@ public class PlayerController : MonoBehaviour, IHit
             else if (hitLayer == LayerMask.NameToLayer("NPC"))
             {
                 Debug.Log("NPC");
-                Enemy enemy = hit.transform.GetComponent<Enemy>();
-                if (enemy != null && enemy.friendly)
+                Transform current = hit.transform;
+                Enemy enemy = null;
+
+                while (current != null)
                 {
-                    Debug.Log("DRUGS GIVEN");
+                    enemy = current.GetComponent<Enemy>();
+                    if (enemy != null)
+                        break;
+                    current = current.parent;
+                }
+
+                if (enemy != null && enemy.friendly && StateManager.State == StateManager.GameState.Tango)
+                {
+                    if (Vector3.Distance(transform.position, hit.transform.position) <= interactRange)
+                    {
+                        festivalManager.Dosed(enemy);
+                    }
                 }
             }
         }
