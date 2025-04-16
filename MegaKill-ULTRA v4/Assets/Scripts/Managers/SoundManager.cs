@@ -77,6 +77,11 @@ public class SoundManager : MonoBehaviour
         lines = new List<AudioClip> { line1, line2, line3, line4, line5, line6, line7 };
     }
 
+    void Start()
+    {
+        Title();
+    }
+
     void OnEnable()
     {
         StateManager.OnStateChanged += StateChange;

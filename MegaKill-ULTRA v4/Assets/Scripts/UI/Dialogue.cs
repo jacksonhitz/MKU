@@ -6,7 +6,9 @@ using UnityEngine.SceneManagement;
 public class Dialogue : MonoBehaviour
 {
     public TextMeshProUGUI textComponent;
-    public TextMeshProUGUI titleText;
+
+    public GameObject titleScreen;
+
     public string[] lines;
     public float textSpeed;
 
@@ -37,9 +39,9 @@ public class Dialogue : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && !started)
         {
-           // started = true;
-           // ClearText();
-           // NextLine();
+           started = true;
+           ClearText();
+           NextLine();
         }
     }
 
@@ -115,12 +117,16 @@ public class Dialogue : MonoBehaviour
     void ClearText()
     {
         textComponent.text = string.Empty;
-        if (titleText != null) titleText.text = string.Empty;
+
+        if (titleScreen != null)
+        {
+            titleScreen.SetActive(false);
+        }
     }
 
     IEnumerator Done()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
         if (StateManager.State == StateManager.GameState.Intro)
         {
