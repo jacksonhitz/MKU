@@ -9,6 +9,8 @@ public class Settings : MonoBehaviour
 {
     public static Settings Instance { get; private set; }
     Canvas menu;
+    SoundManager soundManager;
+    CamController camController;
     
     [SerializeField] Slider sfxSlider;
     [SerializeField] Slider musicSlider;
@@ -34,6 +36,9 @@ public class Settings : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         
         menu = GetComponentInChildren<Canvas>();
+
+        soundManager = FindObjectOfType<SoundManager>();
+        camController = FindObjectOfType<CamController>();
     }
 
     void Start()
@@ -95,12 +100,17 @@ public class Settings : MonoBehaviour
     {
         sfxVolume = newValue;
         sfxInput.text = sfxVolume.ToString("F0");
+
+        soundManager.sfx.volume = sfxVolume / 100f;
+        soundManager.dialogue.volume = sfxVolume / 100f;
     }
 
     void MusicText(float newValue)
     {
         musicVolume = newValue;
         musicInput.text = musicVolume.ToString("F0");
+
+        soundManager.music.volume = musicVolume / 300f;
     }
 
     void SensText(float newValue)
@@ -117,6 +127,9 @@ public class Settings : MonoBehaviour
             sfxSlider.value = sfxVolume;
         }
         sfxInput.text = sfxVolume.ToString("F0");
+
+        soundManager.sfx.volume = sfxVolume / 100f;
+        soundManager.dialogue.volume = sfxVolume / 100f;
     }
 
     void MusicSlider(string newValue)
@@ -127,6 +140,8 @@ public class Settings : MonoBehaviour
             musicSlider.value = musicVolume;
         }
         musicInput.text = musicVolume.ToString("F0");
+
+        soundManager.music.volume = musicVolume / 300f;
     }
 
     void SensSlider(string newValue)

@@ -9,7 +9,6 @@ public class SoundManager : MonoBehaviour
     
     public AudioSource music;
     public AudioSource sfx;
-    public AudioSource playerSfx;
     public AudioSource dialogue;
 
     public AudioClip title;
@@ -52,8 +51,6 @@ public class SoundManager : MonoBehaviour
     public AudioClip pillEmpty;
     public AudioClip batSwing;
 
-    Settings settings;
-
     List<AudioClip> tracks;
     List<AudioClip> lines;
     
@@ -62,6 +59,9 @@ public class SoundManager : MonoBehaviour
 
     bool sfxPlaying;
     bool dialoguePlaying;
+
+    [HideInInspector] public float musicVol;
+    [HideInInspector] public float sfxVol;
 
 
     void Awake()
@@ -88,14 +88,15 @@ public class SoundManager : MonoBehaviour
     {
         StateManager.OnStateChanged -= StateChange;
     }
-     void StateChange(StateManager.GameState state)
+    void StateChange(StateManager.GameState state)
     {
         switch (state)
         {
             case StateManager.GameState.Title: Title(); break;
             case StateManager.GameState.Intro: Intro(); break;
             case StateManager.GameState.Tutorial: Tutorial(); break;
-            case StateManager.GameState.Lvl: Lvl(); break;
+            case StateManager.GameState.Launch: Launch(); break;
+            case StateManager.GameState.Launch: Tango(); break;
             case StateManager.GameState.Paused: Paused(); break;
             case StateManager.GameState.Outro: break;
             case StateManager.GameState.Testing: break;
@@ -118,17 +119,15 @@ public class SoundManager : MonoBehaviour
         trackIndex = -1;
         NewTrack();
     }
-    void Lvl()
+    void Launch()
     {
-        if (!music.isPlaying)
-        {
-            trackIndex = -1;
-            NewTrack();
-        }
+        music.clip = acid;
+        music.Play();
     }
-    void Outro()
+    void Tango()
     {
-
+        music.clip = witch;
+        music.Play();
     }
 
 
@@ -167,25 +166,9 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        //FIX THIS NOW !!x
-        //UpdateVolume();
-    }
-    public void UpdateVolume()
-    {
-        float normalizedMusic = settings.musicVolume / 100f;
-        float normalizedSfx = settings.sfxVolume / 100f;
-        music.volume = normalizedMusic / 3;
-        sfx.volume = normalizedSfx;
-        dialogue.volume = normalizedSfx;
-    }
-
     public void EnemySFX(AudioSource source, AudioClip sound)
     {
-        float normalizedSfx = settings.sfxVolume / 100f;
-        source.volume = normalizedSfx;
-        
+        source.volume = sfx.volume;
         source.clip = sound;
         source.Play();  
     }

@@ -23,7 +23,7 @@ public class EnemyShotgun : Enemy
         dmg = 5f;
     }
 
-    protected override void CallAttack()
+    protected override void CallAttack(GameObject target)
     {
         StartCoroutine(Attack());
     }

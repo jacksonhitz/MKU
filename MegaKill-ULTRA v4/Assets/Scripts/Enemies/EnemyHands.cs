@@ -12,9 +12,8 @@ public class EnemyHands : Enemy
     Transform[] children;
     Dictionary<Transform, (Vector3 range, float speed)> movementData;
 
-    protected override void Pathfind(){}
     protected override void DropItem(){}
-    protected override void CallAttack(){}
+    protected override void CallAttack(GameObject target){}
     protected override void Start()
     {
         int childCount = transform.childCount;

@@ -9,26 +9,33 @@ public static class StateManager
         Title,
         Intro,
         Tutorial,
-        Lvl,
+        Launch,
+        Tango,
         Paused,
         Outro,
         Testing
     }
 
-    private static GameState state = GameState.Testing;
+    private static GameState state;
     private static GameState previous;
 
     public static event Action<GameState> OnStateChanged;
     public static GameState Previous => previous;
 
+    private static readonly HashSet<GameState> Lvls = new()
+    {
+        GameState.Launch
+        GameState.Tango,
+        GameState.Testing
+    };
     private static readonly HashSet<GameState> Active = new()
     {
         GameState.Intro,
         GameState.Tutorial,
-        GameState.Lvl,
+        GameState.Launch,
+        GameState.Tango,
         GameState.Testing
     };
-
     private static readonly HashSet<GameState> Passive = new()
     {
         GameState.Title,

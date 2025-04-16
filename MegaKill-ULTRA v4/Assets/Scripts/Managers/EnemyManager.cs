@@ -10,8 +10,6 @@ public class EnemyManager : MonoBehaviour
     float spawnInterval = 20f; 
     PlayerController player;
 
-    public bool on;
-
     void Awake()
     {
         player = FindAnyObjectByType<PlayerController>();
@@ -31,26 +29,19 @@ public class EnemyManager : MonoBehaviour
     {
         switch (state)
         {
-            case StateManager.GameState.Title:
-                
-                break;
-            case StateManager.GameState.Intro:
-                
-                break;
-            case StateManager.GameState.Tutorial:
-                
-                break;
-            case StateManager.GameState.Lvl:
-                Lvl();
-                break;
-            case StateManager.GameState.Outro:
-
-                break;
+            case StateManager.GameState.Title: break;
+            case StateManager.GameState.Intro: break;
+            case StateManager.GameState.Tutorial: break;
+            case StateManager.GameState.Lvl: Lvl(); break;
+            case StateManager.GameState.Paused: break;
+            case StateManager.GameState.Outro: break;
+            case StateManager.GameState.Testing: Lvl(); break;
         }
     }
 
     void Lvl()
     {
+        Debug.Log("called enemies");
         enemyHolder.SetActive(true);
         CallHands();
         CollectEnemies();
@@ -69,7 +60,7 @@ public class EnemyManager : MonoBehaviour
 
     public void CallHands()
     {
-        StartCoroutine(SpawnHands());
+        //StartCoroutine(SpawnHands());
     }
 
     IEnumerator SpawnHands()

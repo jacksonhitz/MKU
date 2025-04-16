@@ -27,8 +27,6 @@ public class PlayerController : MonoBehaviour
     Settings settings;
     UEye uEye;
 
-
-
     float health;
     float maxHealth = 100;
 

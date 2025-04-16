@@ -33,16 +33,16 @@ public class EnemyFlyingEye : Enemy
         Dead();
     }
 
-    protected override void CallAttack()
+    protected override void CallAttack(GameObject target)
     {
         StartCoroutine(Attack());
     }
 
-    protected override void Pathfind()
+    void Pathfind()
     {
         if (los && Vector3.Distance(transform.position, player.transform.position) < attackRange)
         {
-            StartCoroutine(AttackCheck());
+             //startCoroutine(AttackCheck());
             LookTowards(player.transform.position);
         }
         else if (detectedPlayer && Vector3.Distance(transform.position, player.transform.position) <= detectionRange)

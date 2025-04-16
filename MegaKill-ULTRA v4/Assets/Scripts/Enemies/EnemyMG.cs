@@ -28,7 +28,7 @@ public class EnemyMG : Enemy
         dmg = 3f; 
     }
 
-    protected override void CallAttack()
+    protected override void CallAttack(GameObject target)
     {
         if (bullets > 0 && !reloading)
         {

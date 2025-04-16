@@ -25,7 +25,7 @@ public class EnemyRevolver : Enemy
         dmg = 10f;
     }
 
-    protected override void CallAttack()
+    protected override void CallAttack(GameObject target)
     {
         StartCoroutine(Attack());
     }

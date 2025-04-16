@@ -1,9 +1,13 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using System.Collections.Generic;
 
 public abstract class Enemy : MonoBehaviour
 {
+    enum EnemyState { Passive, Active, Brawl, Static }
+    [SerializeField] EnemyState currentState;
+
     [Header("SFX")]
     public AudioClip attackClip;
     public AudioClip deadClip;
@@ -35,7 +39,10 @@ public abstract class Enemy : MonoBehaviour
     [HideInInspector] public bool los;
     [HideInInspector] public bool isDead;
     bool isStunned;
-    bool hasSpawnedDeathEffect = false; // Prevent multiple death effects
+    bool hasSpawnedDeathEffect = false;
+
+    Vector3 wanderDestination;
+    float wanderTimer;
 
     void Awake()
     {
@@ -46,12 +53,30 @@ public abstract class Enemy : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
         enemyManager = FindObjectOfType<EnemyManager>();
+        
+        currentState = EnemyState.Active;
     }
 
     protected virtual void Update()
     {
+        if (isDead || isStunned) return;
+
         LOS();
-        Pathfind();
+
+        switch (currentState)
+        {
+            case EnemyState.Passive:
+                PassiveBehavior();
+                break;
+            case EnemyState.Active:
+                ActiveBehavior();
+                break;
+            case EnemyState.Brawl:
+                BrawlBehavior();
+                break;
+        }
+
+        animator.SetBool("Run", agent.velocity.magnitude > 0.1f);
     }
 
     public void LOS()
@@ -71,15 +96,36 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    protected virtual void Pathfind()
+    void PassiveBehavior()
+    {
+        wanderTimer -= Time.deltaTime;
+
+        if (wanderTimer <= 0f)
+        {
+            wanderDestination = GetRandomWanderPoint();
+            agent.SetDestination(wanderDestination);
+            wanderTimer = Random.Range(5f, 50);
+        }
+    }
+
+    Vector3 GetRandomWanderPoint()
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * 5f;
+        randomDirection += transform.position;
+        NavMeshHit navHit;
+        NavMesh.SamplePosition(randomDirection, out navHit, 5f, NavMesh.AllAreas);
+        return navHit.position;
+    }
+
+    void ActiveBehavior()
     {
         if (los && Vector3.Distance(transform.position, player.transform.position) < attackRange)
         {
             agent.ResetPath();
             LookTowards(player.transform.position);
-            StartCoroutine(AttackCheck());
+            StartCoroutine(AttackCheck(player.gameObject));
         }
-        else if (detectedPlayer && !isStunned && Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
+        else if (detectedPlayer && Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
         {
             agent.SetDestination(player.transform.position);
             LookTowards(player.transform.position);
@@ -88,17 +134,67 @@ public abstract class Enemy : MonoBehaviour
         {
             agent.ResetPath();
         }
-
-        animator.SetBool("Run", agent.velocity.magnitude > 0.1f);
     }
 
-    public IEnumerator AttackCheck()
+    void BrawlBehavior()
+    {
+        GameObject target = FindClosestTarget();
+
+        if (target != null)
+        {
+            float distance = Vector3.Distance(transform.position, target.transform.position);
+
+            if (distance < attackRange)
+            {
+                agent.ResetPath();
+                LookTowards(target.transform.position);
+                StartCoroutine(AttackCheck(target));
+            }
+            else
+            {
+                agent.SetDestination(target.transform.position);
+                LookTowards(target.transform.position);
+            }
+        }
+        else
+        {
+            agent.ResetPath();
+        }
+    }
+
+    GameObject FindClosestTarget()
+    {
+        float closestDistance = Mathf.Infinity;
+        GameObject closestTarget = null;
+
+        float playerDistance = Vector3.Distance(transform.position, player.transform.position);
+        if (playerDistance <= detectionRange)
+        {
+            closestDistance = playerDistance;
+            closestTarget = player.gameObject;
+        }
+
+        foreach (Enemy enemy in enemyManager.enemies)
+        {
+            if (enemy == this || enemy.isDead) continue;
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            if (distance < closestDistance && distance <= detectionRange)
+            {
+                closestDistance = distance;
+                closestTarget = enemy.gameObject;
+            }
+        }
+
+        return closestTarget;
+    }
+
+    public IEnumerator AttackCheck(GameObject target)
     {
         if (!isAttacking)
         {
             animator.SetBool("isAttacking", true);
             isAttacking = true;
-            CallAttack();
+            CallAttack(target);
             yield return new WaitForSeconds(attackRate);
             isAttacking = false;
             animator.SetBool("isAttacking", false);
@@ -116,6 +212,8 @@ public abstract class Enemy : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
         }
     }
+
+    public void Hit(float dmg);
 
     public void HitCheck(bool lethal)
     {
@@ -157,7 +255,7 @@ public abstract class Enemy : MonoBehaviour
 
     public void Dead()
     {
-        if (isDead) return; // Ensure dead logic only executes once
+        if (isDead) return;
 
         isDead = true;
         StopAllCoroutines();
@@ -167,13 +265,13 @@ public abstract class Enemy : MonoBehaviour
         if (!hasSpawnedDeathEffect && deathEffect != null)
         {
             Instantiate(deathEffect, transform.position, Quaternion.identity);
-            hasSpawnedDeathEffect = true; // Mark effect as spawned
+            hasSpawnedDeathEffect = true;
         }
 
         Destroy(gameObject);
     }
 
-    protected abstract void CallAttack();
+    protected abstract void CallAttack(GameObject target);
     protected abstract void Start();
     protected abstract void DropItem();
 }

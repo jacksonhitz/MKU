@@ -43,6 +43,10 @@ public class GameManager : MonoBehaviour
         {
             StateManager.State = StateManager.GameState.Title;
         }
+        else
+        {
+            StateManager.State = StateManager.GameState.Testing;
+        }
     }
     void Update()
     {
@@ -67,9 +71,13 @@ public class GameManager : MonoBehaviour
     {
         StateManager.State = StateManager.GameState.Tutorial;
     }
-    public void Lvl()
+    public void Launch()
     {
-        StateManager.State = StateManager.GameState.Lvl;
+        StateManager.State = StateManager.GameState.Launch;
+    }
+    public void Launch()
+    {
+        StateManager.State = StateManager.GameState.Tango;
     }
     public void Outro()
     {
@@ -81,7 +89,6 @@ public class GameManager : MonoBehaviour
         StateManager.State = StateManager.GameState.Paused;
         Time.timeScale = 0f;
     }
-
     public void Unpaused()
     {
         StateManager.State = StateManager.Previous;

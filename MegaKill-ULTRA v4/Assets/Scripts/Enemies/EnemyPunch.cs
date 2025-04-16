@@ -18,7 +18,7 @@ public class EnemyPunch : Enemy
         attackRate = 1f;
         dmg = 5f;
     }
-    protected override void CallAttack()
+    protected override void CallAttack(GameObject target)
     {
         StartCoroutine(Attack());
     }
@@ -26,7 +26,7 @@ public class EnemyPunch : Enemy
     {
         animator.SetTrigger("Atk");
         yield return new WaitForSeconds(0.2f);
-        player.Hit(dmg);
+        target.Hit(dmg)
         soundManager.EnemySFX(sfx, attackClip);
 
         yield break;
