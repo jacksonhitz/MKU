@@ -160,9 +160,9 @@ public class CamController : MonoBehaviour
 
     void TransitionOn()
     {
-        currentAmplitude += 0.1f;
-        currentFrequency += 0.1f;
-        currentLerp += 0.01f;
+        currentAmplitude += 0.001f;
+        currentFrequency += 0.01f;
+        currentLerp += 0.001f;
 
         camMat.SetFloat("_Lerp", currentAmplitude);
         camMat.SetFloat("_Frequency", currentFrequency);
@@ -198,11 +198,11 @@ public class CamController : MonoBehaviour
 
         if (currentAmplitude < cap)
         {
-            currentAmplitude += 0.001f;
+            currentAmplitude += 0.002f;
         }
         if (currentFrequency < cap * 2)
         {
-            currentFrequency += 0.001f;
+            currentFrequency += 0.002f;
         }
 
         camMat.SetFloat("_Lerp", currentLerp);

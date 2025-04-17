@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         StateManager.State = StateManager.GameState.Title;
-        CollectItems();
     }
     void Update()
     {
@@ -56,13 +55,14 @@ public class GameManager : MonoBehaviour
 
     public void Title()
     {
-        SceneManager.LoadScene(0);
-        StateManager.State = StateManager.GameState.Title;
+       // SceneManager.LoadScene(0);
+       // StateManager.State = StateManager.GameState.Title;
     }
     public void Intro()
     {
-        SceneManager.LoadScene(1);
-        StateManager.State = StateManager.GameState.Intro;
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(sceneIndex + 1);
+       // StateManager.State = StateManager.GameState.Intro;
     }
     public void Tutorial()
     {
@@ -99,8 +99,6 @@ public class GameManager : MonoBehaviour
         {
             soundManager.Unpaused();
         }
-        uEye.On();
-        crosshair.On();
     }
     
     public void Restart()

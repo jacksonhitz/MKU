@@ -49,10 +49,8 @@ public class InputManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            if (StateManager.State == StateManager.GameState.Title)
-            {
-                gameManager.Intro();
-            }
+            gameManager.Intro();
+            
             if (StateManager.State == StateManager.GameState.Intro)
             {
                 gameManager.Tutorial();
@@ -61,15 +59,6 @@ public class InputManager : MonoBehaviour
             {
                 gameManager.Fight();
             }
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                gameManager.Restart();
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            //fix later
         }
 
 

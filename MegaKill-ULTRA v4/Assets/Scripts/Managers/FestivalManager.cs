@@ -24,8 +24,9 @@ public class FestivalManager : MonoBehaviour
 
     void Start()
     {
-        dialogue.TypeText("Q / E TO HAND OUT MKU");
         gameManager.Tango();
+        gameManager.CollectItems();
+        dialogue.TypeText("Q / E TO HAND OUT MKU");
     }
 
     public void Dosed(Enemy enemy)
@@ -62,7 +63,7 @@ public class FestivalManager : MonoBehaviour
         yield return new WaitForSeconds(10f);
         dialogue.Off();
         yield return new WaitForSeconds(10f);
-        soundManager.Launch();
+      //  soundManager.Launch();
         dialogue.TypeText("10!");
         yield return new WaitForSeconds(1f);
         dialogue.TypeText("9!");

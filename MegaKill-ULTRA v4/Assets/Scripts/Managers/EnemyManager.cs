@@ -61,7 +61,7 @@ public class EnemyManager : MonoBehaviour
                 enemy.currentState = Enemy.EnemyState.Brawl;
             }
         }
-        
+
         List<Enemy> nonDosedEnemies = new List<Enemy>();
         foreach (Enemy enemy in enemies)
         {
@@ -71,7 +71,7 @@ public class EnemyManager : MonoBehaviour
             }
         }
 
-        int numToConvert = Mathf.CeilToInt(nonDosedEnemies.Count * 0.2f);
+        int numToConvert = Mathf.CeilToInt(nonDosedEnemies.Count * 0.5f);
 
         for (int i = 0; i < nonDosedEnemies.Count; i++)
         {

@@ -61,7 +61,7 @@ public class Dialogue : MonoBehaviour
         
     }
 
-    void NextLine()
+    public void NextLine()
     {
         if (index < lines.Length - 1)
         {
@@ -76,10 +76,12 @@ public class Dialogue : MonoBehaviour
 
     IEnumerator TypeLine(string text)
     {
+        Debug.Log("typing");
+        
         textComponent.text = string.Empty;
         yield return new WaitForSeconds(0.1f);
 
-        soundManager.NewLine();
+      //  soundManager.NewLine();
 
         foreach (char c in text.ToCharArray())
         {
@@ -89,7 +91,7 @@ public class Dialogue : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        soundManager.StopLine();
+     //   soundManager.StopLine();
 
         if (customTyping)
         {

@@ -83,18 +83,18 @@ public class Settings : MonoBehaviour
 
     public void Unpaused()
     {
-        gameManager.Unpaused();
         menu.enabled = false;
+        gameManager.Unpaused();
     }
     public void Exit()
     {
-        gameManager.Title();
         menu.enabled = false;
+        gameManager.Title();
     }
     public void Restart()
     {
-        gameManager.Restart();
         menu.enabled = false;
+        gameManager.Restart();
     }
 
 
