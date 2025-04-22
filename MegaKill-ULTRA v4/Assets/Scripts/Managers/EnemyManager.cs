@@ -59,6 +59,8 @@ public class EnemyManager : MonoBehaviour
             if (enemy.dosed)
             {
                 enemy.currentState = Enemy.EnemyState.Brawl;
+                //enemy.StartCoroutine(enemy.StartBrawlAggression());
+
             }
         }
 
@@ -80,10 +82,10 @@ public class EnemyManager : MonoBehaviour
             nonDosedEnemies[i] = nonDosedEnemies[randomIndex];
             nonDosedEnemies[randomIndex] = temp;
         }
-        for (int i = 0; i < numToConvert; i++)
-        {
-            nonDosedEnemies[i].currentState = Enemy.EnemyState.Brawl;
-        }
+        //for (int i = 0; i < numToConvert; i++)
+        //{
+        //    nonDosedEnemies[i].currentState = Enemy.EnemyState.Brawl;
+        //}
     }
 
 

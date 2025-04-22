@@ -111,23 +111,31 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     void WanderBehavior()
     {
-        wanderTimer -= Time.deltaTime;
+        agent.speed = 10f; // Slow stroll when wandering
 
-        if (wanderTimer <= 0f)
+        // Continuously choose new wander points
+        if (!agent.hasPath || agent.remainingDistance <= agent.stoppingDistance + 5f)
         {
             wanderDestination = GetRandomWanderPoint();
-            agent.SetDestination(wanderDestination);
-            wanderTimer = Random.Range(1f, 10);
+            agent.SetDestination(wanderDestination);  // Update destination immediately
         }
     }
 
     Vector3 GetRandomWanderPoint()
     {
-        Vector3 randomDirection = Random.insideUnitSphere * 50f;
+        // Choose a random direction within a 50-unit radius
+        Vector3 randomDirection = Random.insideUnitSphere * 25f;
         randomDirection += transform.position;
         NavMeshHit navHit;
-        NavMesh.SamplePosition(randomDirection, out navHit, 50f, NavMesh.AllAreas);
-        return navHit.position;
+
+        // Get a valid position on the NavMesh
+        if (NavMesh.SamplePosition(randomDirection, out navHit, 25f, NavMesh.AllAreas))
+        {
+            return navHit.position;
+        }
+
+        // Fallback: return the current position if no valid spot found
+        return transform.position;
     }
 
     void ActiveBehavior()
@@ -153,6 +161,8 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     void BrawlBehavior()
     {
+        agent.speed = 30f; // Faster speed when brawling
+
         brawlTargetTimer -= Time.deltaTime;
 
         if (currentBrawlTarget == null ||
@@ -160,11 +170,13 @@ public abstract class Enemy : MonoBehaviour, IHit
             brawlTargetTimer <= 0f)
         {
             currentBrawlTarget = ChooseBrawlTarget();
-            brawlTargetTimer = Random.Range(1f, 3f);
+            brawlTargetTimer = Random.Range(4f, 6f);
         }
 
         if (currentBrawlTarget != null)
         {
+            Debug.DrawLine(transform.position, currentBrawlTarget.transform.position, Color.red);
+
             float distance = Vector3.Distance(transform.position, currentBrawlTarget.transform.position);
 
             if (distance < attackRange)
@@ -202,43 +214,63 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     GameObject ChooseBrawlTarget()
     {
-        List<GameObject> possibleTargets = new List<GameObject>();
+        List<GameObject> validEnemyTargets = new List<GameObject>();
         float playerDistance = Vector3.Distance(transform.position, player.transform.position);
         bool playerInRange = playerDistance <= detectionRange;
 
-        if (playerInRange && Random.value < playerPriorityChance)
-            return player.gameObject;
+        // Dynamically scale chance based on proximity to player
+        float proximity = 1f - Mathf.Clamp01(playerDistance / detectionRange);
+        float dynamicChance = playerPriorityChance * proximity * 1.1f;
 
+        // Random chance to target player if nearby
+        if (playerInRange && Random.value < dynamicChance)
+        {
+            Debug.Log($"{gameObject.name} is targeting PLAYER (Chance: {dynamicChance:F2})");
+
+            return player.gameObject;
+        }
+
+        // Look for other enemies to fight
         foreach (Enemy enemy in enemyManager.enemies)
         {
             if (enemy == this || enemy.isDead) continue;
 
             float distance = Vector3.Distance(transform.position, enemy.transform.position);
-            if (distance <= detectionRange)
-            {
-                int attackers = 0;
-                foreach (Enemy other in enemyManager.enemies)
-                {
-                    if (other == this || other.isDead) continue;
-                    if (other.currentBrawlTarget == enemy.gameObject)
-                        attackers++;
-                }
+            if (distance > detectionRange) continue;
 
-                if (attackers < 3)
-                    possibleTargets.Add(enemy.gameObject);
+            // Limit dogpiling: max 3 attackers per target
+            int currentAttackers = 0;
+            foreach (Enemy other in enemyManager.enemies)
+            {
+                if (other == this || other.isDead) continue;
+                if (other.currentBrawlTarget == enemy.gameObject)
+                    currentAttackers++;
+            }
+
+            if (currentAttackers < 3)
+            {
+                validEnemyTargets.Add(enemy.gameObject);
             }
         }
 
-        if (possibleTargets.Count == 0)
-            return playerInRange ? player.gameObject : null;
+        if (validEnemyTargets.Count > 0)
+        {
+            GameObject selected = validEnemyTargets[Random.Range(0, validEnemyTargets.Count)];
+            Debug.Log($"{gameObject.name} is targeting ENEMY: {selected.name}");
+            return selected;
+        }
 
-        return possibleTargets[Random.Range(0, possibleTargets.Count)];
+        // Fallback: target player if in range, otherwise null
+        return playerInRange ? player.gameObject : null;
     }
+
 
     public IEnumerator AttackCheck(GameObject target)
     {
         if (!isAttacking)
         {
+            Debug.Log($"{gameObject.name} is ATTACKING {target.name}");
+
             animator.SetBool("isAttacking", true);
             isAttacking = true;
 
@@ -254,7 +286,12 @@ public abstract class Enemy : MonoBehaviour, IHit
             isAttacking = false;
             animator.SetBool("isAttacking", false);
         }
-        else yield break;
+        else
+        {
+            Debug.Log($"{gameObject.name} tried to attack but was already attacking");
+
+        }
+        //yield break;
     }
 
     public void LookTowards(Vector3 targetPosition)
@@ -323,6 +360,12 @@ public abstract class Enemy : MonoBehaviour, IHit
 
         Destroy(gameObject);
     }
+
+    //public IEnumerator StartBrawlAggression()
+    //{
+    //    yield return new WaitForSeconds(Random.Range(0.5f, 2f)); // dramatic delay
+    //    currentBrawlTarget = ChooseBrawlTarget();
+    //}
 
     protected abstract void CallAttack(GameObject target);
     protected abstract void Start();
