@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52b2338300dac4974a92e542a44ebbad, type: 3}
+  m_Name: Meth
+  m_EditorClassIdentifier: 
+  itemName: Meth
+  type: 0
+  prefab: {fileID: 878057178216048300, guid: 2dbd512b4592f420397467e34fbacf25, type: 3}
+  charge: 1
+  cooldown: 1
+  heal: 20
+  trip: 0

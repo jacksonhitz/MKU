@@ -11,11 +11,10 @@ GameObject:
   - component: {fileID: 8753330170846326433}
   - component: {fileID: 4376177414361818833}
   - component: {fileID: 637005088604375901}
-  - component: {fileID: 4654931640410317639}
   - component: {fileID: 3825381051940751318}
   - component: {fileID: 5043512255394732553}
   - component: {fileID: 1820597989652305064}
-  - component: {fileID: -3326599580837955891}
+  - component: {fileID: 3016741023168049042}
   m_Layer: 6
   m_Name: Meth
   m_TagString: Item
@@ -88,23 +87,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4654931640410317639
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 878057178216048300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db88e1bc7ad6e4676ad52bcce1d96a1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  def: {fileID: 2100000, guid: 01a7c465e988d489aa88ce8b42119b3d, type: 2}
-  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  isHovering: 0
-  thrown: 0
-  currentState: 0
 --- !u!64 &3825381051940751318
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -177,7 +159,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
---- !u!114 &-3326599580837955891
+--- !u!114 &3016741023168049042
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,8 +168,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 878057178216048300}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b8c282c3abfa43c080c55608c8bfb15, type: 3}
+  m_Script: {fileID: 11500000, guid: b1d62dc33965b4530afc963c943a9cea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  charge: 100
-  left: 0
+  def: {fileID: 2100000, guid: 01a7c465e988d489aa88ce8b42119b3d, type: 2}
+  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
+  rb: {fileID: 0}
+  soundManager: {fileID: 0}
+  playerController: {fileID: 0}
+  popUp: {fileID: 0}
+  isHovering: 0
+  thrown: 0
+  currentState: 0
+  data: {fileID: 0}
