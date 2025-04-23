@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 30, y: 30, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -100,13 +100,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db88e1bc7ad6e4676ad52bcce1d96a1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  available: 1
-  enemyHas: 0
   def: {fileID: 2100000, guid: 01a7c465e988d489aa88ce8b42119b3d, type: 2}
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  rend: {fileID: 637005088604375901}
   isHovering: 0
   thrown: 0
+  currentState: 0
 --- !u!64 &3825381051940751318
 MeshCollider:
   m_ObjectHideFlags: 0
