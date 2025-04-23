@@ -602,7 +602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textComponent: {fileID: 1882787584799500071}
-  titleText: {fileID: 0}
+  titleScreen: {fileID: 0}
   lines:
   - WASD TO MOVE
   - LEFT MOUSE FOR LEFT HAND
@@ -2943,7 +2943,7 @@ GameObject:
   - component: {fileID: 5880255219150062770}
   m_Layer: 0
   m_Name: Right
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4938,7 +4938,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runSpd: 30
-  jumpForce: 10
   throwForce: 35
   gravity: -9.8
   range: 1000
@@ -4962,6 +4961,7 @@ MonoBehaviour:
   punchRange: {fileID: 372933160457287439}
   batRange: {fileID: 681679764641570269}
   rooted: 0
+  jumpHeight: 5
 --- !u!143 &4853229913406527991
 CharacterController:
   m_ObjectHideFlags: 0
@@ -9908,7 +9908,7 @@ GameObject:
   - component: {fileID: 5908787568474587674}
   m_Layer: 0
   m_Name: Left
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10076,7 +10076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textComponent: {fileID: 3657069203263731459}
-  titleText: {fileID: 0}
+  titleScreen: {fileID: 0}
   lines:
   - Congratulations, Agent
   - You are going to be a part of American History
