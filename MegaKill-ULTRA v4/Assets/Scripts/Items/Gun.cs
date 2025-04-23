@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-
 public class Gun : Item
 {
     public GunData data;
@@ -17,8 +16,10 @@ public class Gun : Item
     [SerializeField] TrailRenderer tracerPrefab;
     [SerializeField] float tracerDuration;
 
-    void Start()
+    public override void Start()
     {
+        base.Start();
+
         originalRot = transform.localEulerAngles;
         bullets = data.maxBullets;
     }

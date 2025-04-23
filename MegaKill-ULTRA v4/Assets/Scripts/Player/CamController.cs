@@ -22,7 +22,8 @@ public class CamController : MonoBehaviour
 
     float chromSpd = 0.5f;
     float satSpd = 5f;
-    float clrSpd;
+    float mixerSpd;
+    float hueSpd;
     float fovSpd;
 
     float redRandom;
@@ -58,7 +59,8 @@ public class CamController : MonoBehaviour
 
     void Start()
     {
-       Reset();
+        Reset();
+        Blink();
     }
 
     void Reset()
@@ -67,7 +69,6 @@ public class CamController : MonoBehaviour
         SetEffects();
         SetClr();
         StartCoroutine(FadeIn(2f));
-        //colorGrading.postExposure.value = -10f;
     }
 
     void SetEffects()
@@ -159,9 +160,9 @@ public class CamController : MonoBehaviour
 
     void TransitionOn()
     {
-        currentAmplitude += 0.001f;
-        currentFrequency += 0.01f;
-        currentLerp += 0.001f;
+        currentAmplitude += 0.00001f;
+        currentFrequency += 0.0001f;
+        currentLerp += 0.00001f;
 
         camMat.SetFloat("_Lerp", currentAmplitude);
         camMat.SetFloat("_Frequency", currentFrequency);
@@ -265,13 +266,13 @@ public class CamController : MonoBehaviour
 
     void SetClr()
     {
-        redRandom = Random.Range(0.75f, 1.25f);
-        greenRandom = Random.Range(0.75f, 1.25f);
-        blueRandom = Random.Range(0.75f, 1.25f);
+        redRandom = Random.Range(25f, 50f);
+        greenRandom = Random.Range(25f, 50f);
+        blueRandom = Random.Range(25f, 50f);
 
-        redStart = Random.Range(-200f, -150f);
-        greenStart = Random.Range(-200f, -150f);
-        blueStart = Random.Range(-200f, -150f);
+        redStart = Random.Range(-200f, -100f);
+        greenStart = Random.Range(-200f, -100f);
+        blueStart = Random.Range(-200f, -100f);
 
         channelMixer.redOutRedIn.value = redStart;
         channelMixer.greenOutGreenIn.value = greenStart;
@@ -307,7 +308,7 @@ public class CamController : MonoBehaviour
         float rotationSwayY = Mathf.Cos(Time.time * 1.5f) * swayIntensity * 0.5f * dynamicVolume.weight;
         transform.localRotation = Quaternion.Euler(rotationSwayX, rotationSwayY, 0) * Quaternion.Euler(xRotation, 0f, 0f);
 
-        ClrAdjuster();
+        ClrHue();
         ClrMixer();
 
         if (!playerController.isDead)
@@ -325,7 +326,8 @@ public class CamController : MonoBehaviour
         }
 
         fovSpd = 0.1f * dynamicVolume.weight;
-        clrSpd = 10f * dynamicVolume.weight;
+        mixerSpd = 10f * dynamicVolume.weight;
+        hueSpd = dynamicVolume.weight;
 
         if (StateManager.State != StateManager.GameState.Intro)
         {
@@ -333,16 +335,16 @@ public class CamController : MonoBehaviour
         }
     }
 
-    void ClrAdjuster()
+    void ClrHue()
     {
-        float hue = Mathf.PingPong(Time.time * clrSpd * (redRandom + greenRandom + blueRandom) / 3f, 360f);
+        float hue = Mathf.PingPong(Time.time * hueSpd * (redRandom + greenRandom + blueRandom) / 3f, 360f);
         colorGrading.hueShift.value = Mathf.Lerp(-180f, 180f, hue / 360f);
     }
 
     void ClrMixer()
     {
-        channelMixer.redOutRedIn.value = -200f + Mathf.PingPong(Time.time * clrSpd * redRandom, 50f);
-        channelMixer.greenOutGreenIn.value = -200f + Mathf.PingPong(Time.time * clrSpd * greenRandom, 50f);
-        channelMixer.blueOutBlueIn.value = -200f + Mathf.PingPong(Time.time * clrSpd * blueRandom, 50f);
+        channelMixer.redOutRedIn.value = redStart + Mathf.PingPong(Time.time * mixerSpd, redRandom);
+        channelMixer.greenOutGreenIn.value = greenStart + Mathf.PingPong(Time.time * mixerSpd, greenRandom);
+        channelMixer.blueOutBlueIn.value = blueStart + Mathf.PingPong(Time.time * mixerSpd, blueRandom);
     }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 public class MG : Gun
 {
     float cooldown = -0.15f;
+
     public override void Use()
     {
         if (!canFire) return;

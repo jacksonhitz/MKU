@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class Settings : MonoBehaviour
 {
     public static Settings Instance { get; private set; }
+
     Canvas menu;
     SoundManager soundManager;
-    CamController camController;
     GameManager gameManager;
     
     [SerializeField] Slider sfxSlider;
@@ -28,10 +27,17 @@ public class Settings : MonoBehaviour
 
     void Awake()
     {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         menu = GetComponent<Canvas>();
 
         soundManager = FindObjectOfType<SoundManager>();
-        camController = FindObjectOfType<CamController>();
         gameManager = FindObjectOfType<GameManager>();
     }
 

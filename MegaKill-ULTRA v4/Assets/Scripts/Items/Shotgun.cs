@@ -8,6 +8,7 @@ public class Shotgun : Gun
         if (!canFire) return;
         if (bullets > 0)
         {
+            StartCoroutine(FireCooldown());
             Recoil();
             soundManager.ShotShot();
             data.muzzleFlash?.Play();

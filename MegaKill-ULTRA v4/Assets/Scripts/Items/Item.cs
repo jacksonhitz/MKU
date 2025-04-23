@@ -25,7 +25,7 @@ public class Item : MonoBehaviour
     public ItemState currentState;
 
 
-    void Awake()
+    public void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rend = GetComponent<Renderer>();
@@ -33,7 +33,7 @@ public class Item : MonoBehaviour
         playerController = FindObjectOfType<PlayerController>();
         popUp = FindObjectOfType<PopUp>();
     }
-    void Start()
+    public virtual void Start()
     {
         SetState();
     }
@@ -57,6 +57,8 @@ public class Item : MonoBehaviour
                 CollidersOn();
                 break;
         }
+
+        Debug.Log("parent");
     }
 
     void OnCollisionEnter(Collision collision)
@@ -83,6 +85,13 @@ public class Item : MonoBehaviour
                 collision.gameObject.GetComponent<Enemy>()?.Hit(50);
             }
         }
+    }
+
+    public void Thrown()
+    {
+        transform.SetParent(null);
+        SetState();
+        thrown = true;
     }
 
     public void Dropped()

@@ -149,9 +149,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d527f4be3efeb47bfa7e665bf5eca8f3, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8436110755037307105}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d527f4be3efeb47bfa7e665bf5eca8f3, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 3637294264480402648}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d527f4be3efeb47bfa7e665bf5eca8f3, type: 3}
       insertIndex: -1
@@ -168,27 +165,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d527f4be3efeb47bfa7e665bf5eca8f3, type: 3}
   m_PrefabInstance: {fileID: 2885253872919796298}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8436110755037307105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2651233480305370907}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db88e1bc7ad6e4676ad52bcce1d96a1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  def: {fileID: 2100000, guid: 9a1100b901fef4380b0c56bc3fe250ef, type: 2}
-  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  rb: {fileID: 0}
-  soundManager: {fileID: 0}
-  playerController: {fileID: 0}
-  popUp: {fileID: 0}
-  isHovering: 0
-  thrown: 0
-  currentState: 0
 --- !u!114 &3637294264480402648
 MonoBehaviour:
   m_ObjectHideFlags: 0

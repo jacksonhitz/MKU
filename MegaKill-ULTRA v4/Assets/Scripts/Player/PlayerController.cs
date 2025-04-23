@@ -83,23 +83,20 @@ public class PlayerController : MonoBehaviour, IHit
 
     void HandleInput()
     {
-        if (StateManager.State != StateManager.GameState.Tango)
+        if (Input.GetMouseButton(0))
         {
-            if (Input.GetMouseButton(0))
-            {
-                if (Input.GetKey(KeyCode.LeftControl))
-                {
-                    HandleUse(rightScript, false);
-                }
-                else
-                {
-                    HandleUse(leftScript, true);
-                }
-            }
-            else if (Input.GetMouseButton(1))
+            if (Input.GetKey(KeyCode.LeftControl))
             {
                 HandleUse(rightScript, false);
             }
+            else
+            {
+                HandleUse(leftScript, true);
+            }
+        }
+        else if (Input.GetMouseButton(1))
+        {
+            HandleUse(rightScript, false);
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -250,7 +247,7 @@ public class PlayerController : MonoBehaviour, IHit
             if (hitLayer == LayerMask.NameToLayer("Item"))
             {
                 Item item = hit.transform.GetComponent<Item>();
-                if (item != null && item.currentState == Item.ItemState.Available && StateManager.State != StateManager.GameState.Tango)
+                if (item != null && item.currentState == Item.ItemState.Available)
                 {
                     if (Vector3.Distance(transform.position, hit.transform.position) <= interactRange)
                     {
@@ -273,11 +270,14 @@ public class PlayerController : MonoBehaviour, IHit
                     current = current.parent;
                 }
 
-                if (enemy != null && enemy.friendly && StateManager.State == StateManager.GameState.Tango)
+                if (enemy != null && enemy.friendly)
                 {
                     if (Vector3.Distance(transform.position, hit.transform.position) <= interactRange)
                     {
-                        festivalManager.Dosed(enemy);
+                        if (festivalManager != null)
+                        {
+                            festivalManager.Dosed(enemy);
+                        }
                     }
                 }
             }
@@ -441,6 +441,7 @@ public class PlayerController : MonoBehaviour, IHit
 
         item.thrown = true;
         item.CollidersOn();
+        item.currentState = Item.ItemState.Available;
 
         Rigidbody itemRb = itemScript.GetComponent<Rigidbody>();
         Quaternion initialRotation = itemScript.transform.rotation;

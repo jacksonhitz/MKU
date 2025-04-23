@@ -12,10 +12,9 @@ GameObject:
   - component: {fileID: 7449472457481851698}
   - component: {fileID: 3698209305514908039}
   - component: {fileID: 1258568333328715428}
-  - component: {fileID: 506580047061419032}
   - component: {fileID: 4616430144967476298}
   - component: {fileID: 3698185343826165967}
-  - component: {fileID: 1734565127521603682}
+  - component: {fileID: 2035690347638745225}
   m_Layer: 6
   m_Name: Beer
   m_TagString: Item
@@ -110,24 +109,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2534964839176971238, guid: 99c4f208c447d4fed9bfba9f56d6a4e3, type: 3}
---- !u!114 &506580047061419032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5934096883743438160}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db88e1bc7ad6e4676ad52bcce1d96a1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  available: 1
-  enemyHas: 0
-  def: {fileID: -6478536213147159724, guid: 99c4f208c447d4fed9bfba9f56d6a4e3, type: 3}
-  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  isHovering: 0
-  thrown: 0
 --- !u!54 &4616430144967476298
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -178,7 +159,7 @@ CapsuleCollider:
   m_Height: 0.06045347
   m_Direction: 1
   m_Center: {x: 0, y: 0.00000023841858, z: 0.020226613}
---- !u!114 &1734565127521603682
+--- !u!114 &2035690347638745225
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -187,6 +168,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 5934096883743438160}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 201eb6da54e98405ca25ac2c7ab6f5f9, type: 3}
+  m_Script: {fileID: 11500000, guid: b1d62dc33965b4530afc963c943a9cea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  def: {fileID: -6478536213147159724, guid: 99c4f208c447d4fed9bfba9f56d6a4e3, type: 3}
+  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
+  rb: {fileID: 0}
+  soundManager: {fileID: 0}
+  playerController: {fileID: 0}
+  popUp: {fileID: 0}
+  isHovering: 0
+  thrown: 0
+  currentState: 0
+  data: {fileID: 11400000, guid: 3686a5ff459184a15a9b31dd0e1a1646, type: 2}
