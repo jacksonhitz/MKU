@@ -14,14 +14,7 @@ public class Item : MonoBehaviour
 
     string parent;
 
-    public enum ItemState
-    {
-        Available,
-        Enemy,
-        Player
-    }
-    public ItemState currentState;
-
+    
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -33,8 +26,7 @@ public class Item : MonoBehaviour
         SetState();
     }
 
-
-    public void Use() { }
+    public virtual void Use() { }
 
     public void SetState()
     {
