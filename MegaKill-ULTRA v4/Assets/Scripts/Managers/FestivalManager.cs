@@ -24,7 +24,8 @@ public class FestivalManager : MonoBehaviour
 
     void Start()
     {
-        gameManager.Tango();
+        //gameManager.Tango();
+        gameManager.Testing();
         gameManager.CollectItems();
         dialogue.TypeText("Q / E TO HAND OUT MKU");
     }

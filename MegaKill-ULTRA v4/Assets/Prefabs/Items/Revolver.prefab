@@ -82,15 +82,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d527f4be3efeb47bfa7e665bf5eca8f3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 681.63165
+      value: 799.053
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d527f4be3efeb47bfa7e665bf5eca8f3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.22
+      value: 0.392
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d527f4be3efeb47bfa7e665bf5eca8f3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 438.4813
+      value: 134.81264
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d527f4be3efeb47bfa7e665bf5eca8f3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -180,12 +180,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db88e1bc7ad6e4676ad52bcce1d96a1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  available: 1
-  enemyHas: 1
   def: {fileID: 2100000, guid: 9a1100b901fef4380b0c56bc3fe250ef, type: 2}
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
   isHovering: 0
   thrown: 0
+  currentState: 0
 --- !u!114 &3637294264480402648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,7 +256,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30

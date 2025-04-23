@@ -53,7 +53,6 @@ public class CamController : MonoBehaviour
     void Awake()
     {
         cam = GetComponent<Camera>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
         playerController = FindObjectOfType<PlayerController>();
     }
 
@@ -290,7 +289,7 @@ public class CamController : MonoBehaviour
         yRotation += mouseX;
 
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        player.rotation = Quaternion.Euler(0f, yRotation, 0f);
+        playerController.transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
     }
 
     void UpdatePost()

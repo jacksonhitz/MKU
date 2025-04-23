@@ -3,61 +3,81 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    public bool available;
-    public bool enemyHas;
     public Material def;
     public Material glow;
 
     Renderer rend;
-    Coroutine scaleCoroutine;
-    Vector3 originalScale;
-    GameManager gameManager;
-    PlayerController player;
     Rigidbody rb;
-    float scaleDuration = 0.5f;
+
     public bool isHovering;
     public bool thrown;
 
+    string parent;
+
+    public enum ItemState
+    {
+        Available,
+        Enemy,
+        Player
+    }
+    public ItemState currentState;
+
     void Awake()
     {
-        gameManager = FindAnyObjectByType<GameManager>();
-        player = FindAnyObjectByType<PlayerController>();
         rb = GetComponent<Rigidbody>();
         rend = GetComponent<Renderer>();
     }
+
     void Start()
     {
-        originalScale = transform.localScale;
-        
-        if (enemyHas)
+        SetState();
+    }
+
+
+    public void Use() { }
+
+    public void SetState()
+    {
+        GameObject parentObj = transform.parent.gameObject;
+        parent = parentObj.tag;
+
+        switch (parent)
         {
-            CollidersOff();
+            case "Enemy":
+                currentState = ItemState.Enemy;
+                CollidersOff();
+                break;
+            case "Player":
+                currentState = ItemState.Player;
+                CollidersOff();
+                break;
+            default:
+                currentState = ItemState.Available;
+                CollidersOn();
+                break;
         }
     }
 
-    public void Use(){}
 
     void OnCollisionEnter(Collision collision)
     {
         Debug.Log("collision");
+
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("player collision");
-            Collider collider = GetComponent<Collider>();
-            if (collider == null)
+
+            Collider ownCollider = GetComponent<Collider>() ?? GetComponentInParent<Collider>();
+            if (ownCollider != null)
             {
-                collider = GetComponentInParent<Collider>();
-            }
-            if (collider != null)
-            {
-                Physics.IgnoreCollision(collision.collider, collider);
+                Physics.IgnoreCollision(collision.collider, ownCollider);
                 Debug.Log("worked");
             }
         }
-        else if(thrown)
+        else if (thrown)
         {
             thrown = false;
-            available = true;
+
             if (collision.gameObject.CompareTag("Enemy"))
             {
                 collision.gameObject.GetComponent<Enemy>()?.Hit(50);
@@ -67,12 +87,10 @@ public class Item : MonoBehaviour
 
     public void Dropped()
     {
-        enemyHas = false;
-        
-        CollidersOn();
-
         transform.SetParent(null);
-        Rigidbody rb = GetComponent<Rigidbody>();
+        SetState();
+
+
         rb.isKinematic = false;
 
         Vector3 randomDirection = new Vector3(
@@ -80,7 +98,6 @@ public class Item : MonoBehaviour
             Random.Range(0.25f, .5f),
             Random.Range(-.1f, .1f)
         );
-
         rb.AddForce(randomDirection * 5f, ForceMode.Impulse);
 
         Vector3 randomTorque = new Vector3(
@@ -88,61 +105,46 @@ public class Item : MonoBehaviour
             Random.Range(-20f, 20f),
             Random.Range(-20f, 20f)
         );
-
         rb.AddTorque(randomTorque, ForceMode.Impulse);
     }
 
     public void CollidersOn()
     {
         Debug.Log("colliders on");
-        
-        if(!thrown)
-        {
-            available = true;
-        }
 
         rb.useGravity = true;
         rb.isKinematic = false;
 
-        MeshCollider meshCollider = GetComponent<MeshCollider>();
-        meshCollider.enabled = true;
+        if (TryGetComponent(out MeshCollider meshCollider))
+            meshCollider.enabled = true;
 
-        CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
-        if (capsuleCollider != null)
-        {
+        if (TryGetComponent(out CapsuleCollider capsuleCollider))
             capsuleCollider.enabled = true;
-        }
     }
     public void CollidersOff()
     {
         Debug.Log("colliders off");
-        
-        available = false;
+
         rb.useGravity = false;
         rb.isKinematic = true;
-        
-        MeshCollider meshCollider = GetComponent<MeshCollider>();
-        meshCollider.enabled = false;
 
-        CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
-        if (capsuleCollider != null)
-        {
+        if (TryGetComponent(out MeshCollider meshCollider))
+            meshCollider.enabled = false;
+
+        if (TryGetComponent(out CapsuleCollider capsuleCollider))
             capsuleCollider.enabled = false;
-        }
     }
 
+
+    // HIGHLIGHT ITEM
     void OnMouseEnter()
     {
-        if (available)
-        {
-            isHovering = true;
-        }
+        isHovering = true;
     }
     void OnMouseExit()
     {
         isHovering = false;
     }
-
     public void DefaultMat()
     {
         if (rend != null)

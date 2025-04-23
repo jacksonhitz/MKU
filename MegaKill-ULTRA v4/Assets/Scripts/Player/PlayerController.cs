@@ -250,11 +250,12 @@ public class PlayerController : MonoBehaviour, IHit
             if (hitLayer == LayerMask.NameToLayer("Item"))
             {
                 Item item = hit.transform.GetComponent<Item>();
-                if (item != null && item.available && StateManager.State != StateManager.GameState.Tango)
+                if (item != null && item.currentState == Item.ItemState.Available && StateManager.State != StateManager.GameState.Tango)
                 {
                     if (Vector3.Distance(transform.position, hit.transform.position) <= interactRange)
                     {
                         Pickup(hit.transform.gameObject, left);
+                        item.SetState();
                     }
                 }
             }
