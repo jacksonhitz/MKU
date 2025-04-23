@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0be30229ac0b449e3a4e5753804774e0, type: 3}
+  m_Name: MG
+  m_EditorClassIdentifier: 
+  itemName: MachineGun
+  type: 1
+  prefab: {fileID: 1936025654514190454, guid: b9a6a6497397147d489d8c3a3fe9a0e3, type: 3}
+  dmg: 100
+  fireRate: 0.15
+  maxBullets: 12
+  recoilMag: 20
+  recoilSpd: 5
+  muzzleFlash: {fileID: 6847902066312781993, guid: b4badc72dfe5f435c839b4d6e9bf6e22, type: 3}
+  spreadAngle: 5
+  pellets: 0

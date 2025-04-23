@@ -4,38 +4,23 @@ using UnityEngine;
 
 public class Gun : Item
 {
-    public GunData gunData;
+    public GunData data;
+    public Transform firePoint;
 
     public bool canFire = true;
 
     public float bullets;
 
-    public SoundManager soundManager;
-
     Vector3 rot = Vector3.zero;
     Vector3 originalRot;
 
-    PlayerController player;
-    Rigidbody rb;
-
-
     [SerializeField] TrailRenderer tracerPrefab;
     [SerializeField] float tracerDuration;
-    [SerializeField] Transform firePoint;
-
-
-    void Awake()
-    {
-        soundManager = FindObjectOfType<SoundManager>();
-        player = FindObjectOfType<PlayerController>();
-        rb = GetComponent<Rigidbody>();
-    }
-
 
     void Start()
     {
         originalRot = transform.localEulerAngles;
-        bullets = gunData.maxBullets;
+        bullets = data.maxBullets;
     }
 
 
@@ -43,19 +28,19 @@ public class Gun : Item
     {
         if (rb.isKinematic)
         {
-            rot = Vector3.Lerp(rot, Vector3.zero, gunData.recoilSpd * Time.deltaTime);
+            rot = Vector3.Lerp(rot, Vector3.zero, data.recoilSpd * Time.deltaTime);
             transform.localEulerAngles = originalRot + rot;
         }
     }
 
     public void Recoil()
     {
-        rot += new Vector3(-gunData.recoilMag, 0, 0f);
+        rot += new Vector3(-data.recoilMag, 0, 0f);
     }
 
     public void Hitscan(Ray ray)
     {
-        if (Physics.Raycast(ray, out RaycastHit hit, player.range))
+        if (Physics.Raycast(ray, out RaycastHit hit, playerController.range))
         {
             if (hit.transform.CompareTag("Enemy"))
             {
@@ -73,7 +58,7 @@ public class Gun : Item
     public IEnumerator FireCooldown()
     {
         canFire = false;
-        yield return new WaitForSeconds(gunData.fireRate);
+        yield return new WaitForSeconds(data.fireRate);
         canFire = true;
     }
 

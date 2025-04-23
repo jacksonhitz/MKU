@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0be30229ac0b449e3a4e5753804774e0, type: 3}
+  m_Name: Rev
+  m_EditorClassIdentifier: 
+  itemName: Revolver
+  type: 0
+  prefab: {fileID: 2651233480305370907, guid: 802cefe5936ce4703a57437d09d7bfaa, type: 3}
+  dmg: 100
+  fireRate: 0.5
+  maxBullets: 6
+  recoilMag: 75
+  recoilSpd: 5
+  muzzleFlash: {fileID: 6847902066312781993, guid: b4badc72dfe5f435c839b4d6e9bf6e22, type: 3}
+  spreadAngle: 0
+  pellets: 0

@@ -10,4 +10,10 @@ public class GunData : ItemData
     public float recoilSpd;
 
     public ParticleSystem muzzleFlash;
+
+    //mg-sg
+    public float spreadAngle;
+
+    //sg
+    public float pellets;
 }

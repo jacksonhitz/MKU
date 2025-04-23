@@ -126,11 +126,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1907060701819011112, guid: b4badc72dfe5f435c839b4d6e9bf6e22, type: 3}
   m_PrefabInstance: {fileID: 4404702614576278075}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &7072911002034047634 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 6847902066312781993, guid: b4badc72dfe5f435c839b4d6e9bf6e22, type: 3}
-  m_PrefabInstance: {fileID: 4404702614576278075}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4662406064354611471
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -264,9 +259,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5533236420663803554}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 6752212996552917909}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
       insertIndex: -1
@@ -288,23 +280,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
   m_PrefabInstance: {fileID: 4662406064354611471}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5533236420663803554
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5509406807236734046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db88e1bc7ad6e4676ad52bcce1d96a1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  def: {fileID: 2100000, guid: 0e209ad317140724dad00467bef9123f, type: 2}
-  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  isHovering: 0
-  thrown: 0
-  currentState: 0
 --- !u!114 &6752212996552917909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,15 +292,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30dbf7e3d6b0b41ec8ce1ee9ba038f0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shells: 2
-  reloadBackAmount: 0.2
-  reloadSpeed: 2
-  tracerDuration: 0.2
-  tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
+  def: {fileID: 2100000, guid: 0e209ad317140724dad00467bef9123f, type: 2}
+  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
+  rb: {fileID: 0}
+  soundManager: {fileID: 0}
+  playerController: {fileID: 0}
+  popUp: {fileID: 0}
+  isHovering: 0
+  thrown: 0
+  currentState: 0
+  data: {fileID: 11400000, guid: 7cc510392bd654d50a0c6ebc4619c468, type: 2}
   firePoint: {fileID: 1246947121164660830}
-  pellets: 12
-  spreadAngle: 5
-  muzzleFlash: {fileID: 7072911002034047634}
+  canFire: 1
+  bullets: 0
+  tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
+  tracerDuration: 0.2
 --- !u!54 &-981899418213429439
 Rigidbody:
   m_ObjectHideFlags: 0

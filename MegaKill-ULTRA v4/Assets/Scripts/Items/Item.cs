@@ -3,35 +3,44 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    public Material def;
-    public Material glow;
+    [SerializeField] Material def;
+    [SerializeField] Material glow;
+
+    [HideInInspector] public Rigidbody rb;
+    [HideInInspector] public SoundManager soundManager;
+    [HideInInspector] public PlayerController playerController;
+    [HideInInspector] public PopUp popUp;
 
     Renderer rend;
-    Rigidbody rb;
-
+    
     public bool isHovering;
     public bool thrown;
 
-    string parent;
+    public enum ItemState
+    {
+        Available,
+        Enemy,
+        Player
+    }
+    public ItemState currentState;
 
-    
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rend = GetComponent<Renderer>();
+        soundManager = FindObjectOfType<SoundManager>();
+        playerController = FindObjectOfType<PlayerController>();
+        popUp = FindObjectOfType<PopUp>();
     }
-
     void Start()
     {
         SetState();
     }
-
-    public virtual void Use() { }
-
     public void SetState()
     {
         GameObject parentObj = transform.parent.gameObject;
-        parent = parentObj.tag;
+        string parent = parentObj.tag;
 
         switch (parent)
         {
@@ -49,7 +58,6 @@ public class Item : MonoBehaviour
                 break;
         }
     }
-
 
     void OnCollisionEnter(Collision collision)
     {
@@ -151,4 +159,6 @@ public class Item : MonoBehaviour
             rend.material = glow;
         }
     }
+
+    public virtual void Use() { }
 }

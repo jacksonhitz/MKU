@@ -12,7 +12,7 @@ public class Revolver : Gun
             StartCoroutine(FireCooldown());
             Recoil();
             soundManager.RevShot();
-            gunData.muzzleFlash.Play();
+            data.muzzleFlash.Play();
 
             bullets--;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -20,6 +20,7 @@ public class Revolver : Gun
         }
         else
         {
+            popUp.UpdatePopUp("EMPTY");
             soundManager.RevEmpty();
         } 
    }

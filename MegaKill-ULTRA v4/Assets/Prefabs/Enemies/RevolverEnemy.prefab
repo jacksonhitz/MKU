@@ -97,6 +97,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1108e9bb1a524dd49c8500e424299bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 0
+  friendly: 0
   attackClip: {fileID: 8300000, guid: 367374544470efc42878098299fafbea, type: 3}
   deadClip: {fileID: 8300000, guid: f0cc4e588be2cf3429eb7c42af516337, type: 3}
   hitClip: {fileID: 8300000, guid: d76e15cf2d007ce4eb1945e4e673ef2e, type: 3}
@@ -109,8 +111,10 @@ MonoBehaviour:
   enemyManager: {fileID: 0}
   animator: {fileID: 0}
   sfx: {fileID: 0}
+  dosed: 0
   los: 0
   isDead: 0
+  currentBrawlTarget: {fileID: 0}
   bulletPrefab: {fileID: 1119319840285959126, guid: d147d45e6f7774ded8a27310e81aec32, type: 3}
   firePoint: {fileID: 4530525775220589631}
   tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
@@ -482,6 +486,10 @@ PrefabInstance:
     - target: {fileID: -4819223349682164798, guid: 2c25b0c6cde864284a44d510910a494b, type: 3}
       propertyPath: m_Layer
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: -4819223349682164798, guid: 2c25b0c6cde864284a44d510910a494b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -4819223349682164798, guid: 2c25b0c6cde864284a44d510910a494b, type: 3}
       propertyPath: m_TagString

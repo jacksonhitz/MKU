@@ -10,7 +10,6 @@ public class PopUp : MonoBehaviour
     void Awake()
     {
         popupText = GetComponent<TextMeshProUGUI>();
-
     }
 
     public void UpdatePopUp(string text)
