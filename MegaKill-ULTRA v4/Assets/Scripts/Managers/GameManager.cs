@@ -64,6 +64,10 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(sceneIndex + 1);
        // StateManager.State = StateManager.GameState.Intro;
     }
+    public void Testing()
+    {
+        StateManager.State = StateManager.GameState.Testing;
+    }
     public void Tutorial()
     {
         StateManager.State = StateManager.GameState.Tutorial;
@@ -128,14 +132,13 @@ public class GameManager : MonoBehaviour
     {
         foreach (Item item in items)
         {
-            Debug.Log("item highlighted");
-            if (!item.isHovering || !item.available)
+            if (item.isHovering && item.currentState == Item.ItemState.Available)
             {
-                item.DefaultMat();
+                item.GlowMat();
             }
             else
             {
-                item.GlowMat();
+                item.DefaultMat();
             }
         }
     }

@@ -141,27 +141,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
       propertyPath: m_LocalScale.x
-      value: 50
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
       propertyPath: m_LocalScale.y
-      value: 50
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
       propertyPath: m_LocalScale.z
-      value: 50
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.3
+      value: 807.38574
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.3
+      value: 1.17
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.8
+      value: 119.8767
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
       propertyPath: m_LocalRotation.w
@@ -300,13 +300,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db88e1bc7ad6e4676ad52bcce1d96a1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  available: 1
-  enemyHas: 0
   def: {fileID: 2100000, guid: 0e209ad317140724dad00467bef9123f, type: 2}
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  rend: {fileID: 6302123836059504011}
   isHovering: 0
   thrown: 0
+  currentState: 0
 --- !u!114 &6752212996552917909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -319,15 +317,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30dbf7e3d6b0b41ec8ce1ee9ba038f0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullets: 6
   shells: 2
   reloadBackAmount: 0.2
   reloadSpeed: 2
   tracerDuration: 0.2
-  scaredRad: 50
-  npcMask:
-    serializedVersion: 2
-    m_Bits: 4096
   tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
   firePoint: {fileID: 1246947121164660830}
   pellets: 12
@@ -405,8 +398,3 @@ CapsuleCollider:
   m_Height: 0.054933637
   m_Direction: 1
   m_Center: {x: 0.0000037658215, y: -0.0011231708, z: 0.00032168272}
---- !u!23 &6302123836059504011 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 3b5f703c8d27047e3b79f1dd3c585e86, type: 3}
-  m_PrefabInstance: {fileID: 4662406064354611471}
-  m_PrefabAsset: {fileID: 0}
