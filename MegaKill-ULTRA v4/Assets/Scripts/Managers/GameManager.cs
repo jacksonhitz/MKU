@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        StateManager.State = StateManager.GameState.Title;
+        StateManager.State = StateManager.GameState.Testing;
     }
     void Update()
     {

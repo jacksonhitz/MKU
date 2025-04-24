@@ -2916,7 +2916,7 @@ GameObject:
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6107885997448364535
 Transform:
   m_ObjectHideFlags: 0
@@ -2926,8 +2926,8 @@ Transform:
   m_GameObject: {fileID: 2744282850420240418}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.058, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: -1.5, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5028932264311322238}
@@ -4937,8 +4937,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeadb03b8e53448f6ad31efdbc83b439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runSpd: 30
-  throwForce: 35
+  runSpd: 20
+  throwForce: 200
   gravity: -9.8
   range: 1000
   cam: {fileID: 2527585751099497462}
@@ -4946,7 +4946,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  groundDistance: 0.1
+  groundDistance: 0.5
   isGrounded: 0
   leftHand: {fileID: 5908787568474587674}
   rightHand: {fileID: 5880255219150062770}
@@ -9963,8 +9963,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.2, y: -0.6}
-  m_SizeDelta: {x: 75, y: 50}
+  m_AnchoredPosition: {x: -0.4, y: -0.5}
+  m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &8863382538342218257
 CanvasRenderer:
@@ -9994,7 +9994,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3766233ed3da08d43a32e0df4b9b3e82, type: 2}
   m_sharedMaterial: {fileID: -2044733195535088278, guid: 3766233ed3da08d43a32e0df4b9b3e82, type: 2}
@@ -10077,12 +10077,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textComponent: {fileID: 3657069203263731459}
   titleScreen: {fileID: 0}
-  lines:
-  - Congratulations, Agent
-  - You are going to be a part of American History
-  - You are going to do some very bad things to some very bad people
-  - Oh, and put on a good show, would you?
-  - Late Night Channel 4 loves a lunatic acid-head with some style...
+  lines: []
   textSpeed: 0.06
 --- !u!1 &7810005327386895430
 GameObject:
