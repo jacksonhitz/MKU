@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class StateManager 
+public static class StateManager
 {
     public enum GameState
     {
@@ -52,19 +52,11 @@ public static class StateManager
         get => state;
         set
         {
-            if (state != value)
-            {
-                if (state == GameState.Paused)
-                {
-                    SilentState(value);
-                    return;
-                }
+            previous = state;
+            state = value;
 
-                previous = state;
-                state = value;
-                OnStateChanged?.Invoke(state);
-                Debug.Log("state Check");
-            }
+            OnStateChanged?.Invoke(state);
+            Debug.Log($"State changed to {state}");
         }
     }
 
@@ -72,6 +64,7 @@ public static class StateManager
     {
         previous = state;
         state = newState;
+        // Notice: no event firing here (still silent)
     }
 
     public static bool GroupCheck(HashSet<GameState> group)

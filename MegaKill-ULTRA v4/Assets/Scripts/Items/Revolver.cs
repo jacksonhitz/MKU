@@ -9,6 +9,8 @@ public class Revolver : Gun
         if (!canFire) return;
         if (bullets > 0)
         {
+            Debug.Log("FUCK OFF");
+
             StartCoroutine(FireCooldown());
             Recoil();
             soundManager.RevShot();
@@ -17,6 +19,8 @@ public class Revolver : Gun
             bullets--;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Hitscan(ray);
+
+            Debug.Log("shot fired");
         }
         else
         {

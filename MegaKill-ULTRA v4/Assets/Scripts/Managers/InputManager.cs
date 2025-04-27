@@ -23,6 +23,11 @@ public class InputManager : MonoBehaviour
         settings = FindObjectOfType<Settings>();
     }
 
+    void Start()
+    {
+        StateChange(StateManager.State);
+    }
+
     void OnEnable()
     {
         StateManager.OnStateChanged += StateChange;
@@ -55,10 +60,6 @@ public class InputManager : MonoBehaviour
             {
                 gameManager.Tutorial();
             }
-            if (StateManager.State == StateManager.GameState.Tutorial)
-            {
-                gameManager.Fight();
-            }
         }
 
 
@@ -82,6 +83,7 @@ public class InputManager : MonoBehaviour
             if (Input.GetKey(KeyCode.Tab))
             {
                 gameManager.HighlightAll();
+                Debug.Log("highlighted");
             }
             else
             {

@@ -80,6 +80,7 @@ public class SoundManager : MonoBehaviour
     void Start()
     {
         Title();
+        StateChange(StateManager.State);
     }
 
     void OnEnable()

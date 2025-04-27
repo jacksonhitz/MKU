@@ -25,8 +25,8 @@ public class PlayerController : MonoBehaviour, IHit
     GameManager gameManager;
     Settings settings;
     UEye uEye;
-    FestivalManager festivalManager;
     PopUp popUp;
+    Festival festival;
 
     float health;
     float maxHealth = 100;
@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour, IHit
         settings = FindObjectOfType<Settings>();
         uEye = FindObjectOfType<UEye>();
         popUp = FindObjectOfType<PopUp>();
-        festivalManager = FindObjectOfType<FestivalManager>();
+        festival = FindObjectOfType<Festival>();
 
         characterController = GetComponent<CharacterController>(); 
     }
@@ -274,9 +274,9 @@ public class PlayerController : MonoBehaviour, IHit
                 {
                     if (Vector3.Distance(transform.position, hit.transform.position) <= interactRange)
                     {
-                        if (festivalManager != null)
+                        if (festival != null)
                         {
-                            festivalManager.Dosed(enemy);
+                            festival.Dosed(enemy);
                         }
                     }
                 }

@@ -37,12 +37,12 @@ public class Dialogue : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !started)
-        {
-           started = true;
-           ClearText();
-           NextLine();
-        }
+      //  if (Input.GetKeyDown(KeyCode.Space) && !started)
+      //  {
+      //     started = true;
+      //     ClearText();
+      //     NextLine();
+      //  }
     }
 
     public void CallDialogue()

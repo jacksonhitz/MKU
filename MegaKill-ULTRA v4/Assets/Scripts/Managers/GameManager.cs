@@ -9,16 +9,8 @@ public class GameManager : MonoBehaviour
     public int score = 0;
 
     SoundManager soundManager;
-    EnemyManager enemyManager;
-    InputManager inputManager;
-    CamController cam;
-    Settings settings;
-    UEye uEye;
-    Crosshair crosshair;
 
     List<Item> items;
-    List<GameObject> doors = new List<GameObject>(); 
-    public GameObject cia;
 
     [HideInInspector] public bool fadeOut;
 
@@ -36,17 +28,8 @@ public class GameManager : MonoBehaviour
         
         items = new List<Item>();  
 
-        soundManager = FindObjectOfType<SoundManager>(); 
-        enemyManager = FindObjectOfType<EnemyManager>();
-        inputManager = FindObjectOfType<InputManager>();
-        settings = FindObjectOfType<Settings>();
+        soundManager = FindObjectOfType<SoundManager>();
 
-        uEye = FindObjectOfType<UEye>();
-        crosshair = FindObjectOfType<Crosshair>();
-    }
-    void Start()
-    {
-        StateManager.State = StateManager.GameState.Title;
     }
     void Update()
     {
