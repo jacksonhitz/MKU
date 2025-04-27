@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour, IHit
     public Animator swingAnim;
     public Animator punchRAnim;
     public Animator punchLAnim;
+    public Animator throwRAnim;
     public Renderer punchR;
     public Renderer punchL;
     public Collider punchRange;
@@ -495,4 +496,20 @@ public class PlayerController : MonoBehaviour, IHit
 
         uEye.UpdateHealth(health);
     }
+
+    public class ThrowController : MonoBehaviour
+{
+    public Animator throwRAnim; // Assign this in Inspector
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E)) // Throw with E key
+        {
+            if (throwRAnim != null)
+            {
+                throwRAnim.SetTrigger("ThrowR");
+            }
+        }
+    }
+}
 }
