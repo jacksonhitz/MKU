@@ -111,13 +111,15 @@ public class CamController : MonoBehaviour
 
     void Update()
     {
-        MoveCheck();
-        UpdateShader();
-        UpdatePost();
-
-        if (StateManager.State == StateManager.GameState.TUTORIAL)
+        if (StateManager.State == StateManager.GameState.DEAD)
         {
             TransitionOn();
+        }
+        else
+        {
+            MoveCheck();
+            UpdateShader();
+            UpdatePost();
         }
     }
 
@@ -155,11 +157,9 @@ public class CamController : MonoBehaviour
 
     void TransitionOn()
     {
-        currentAmplitude += 0.00001f;
-        currentFrequency += 0.0001f;
-        currentLerp += 0.00001f;
+        currentAmplitude += 0.1f;
+        currentFrequency += 0.1f;
 
-        camMat.SetFloat("_Lerp", currentAmplitude);
         camMat.SetFloat("_Frequency", currentFrequency);
         camMat.SetFloat("_Amplitude", currentFrequency);
     }
@@ -306,14 +306,7 @@ public class CamController : MonoBehaviour
         ClrHue();
         ClrMixer();
 
-        if (!playerController.isDead)
-        {
-            currentLerp = 0.15f;
-        }
-        else
-        {
-            TransitionOn();
-        }
+        currentLerp = 0.15f;
 
         if (dynamicVolume.weight < 5)
         {
