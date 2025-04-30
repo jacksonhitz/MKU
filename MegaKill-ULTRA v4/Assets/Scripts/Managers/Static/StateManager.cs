@@ -1,74 +1,62 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class StateManager
 {
     public enum GameState
     {
-        Title,
-        Intro,
-        Paused,
-        Dead,
-        Outro,
+        TITLE,
+        INTRO,
 
-        Tutorial,
-        Launch,
-        Tango,
-        Sable,
-        Spearhead,
+        TUTORIAL,
+        TANGO,
+        SABLE,
+        SPEARHEAD,
+        LAUNCH,
 
-        Fight,
-        Testing
+        FIGHT,
+        TESTING,
+
+        PAUSED,
+        DEAD,
+        OUTRO,
     }
-    static readonly List<GameState> StateList = new List<GameState>
-    {
-        GameState.Title,
-        GameState.Intro,
-        GameState.Tutorial,
-        GameState.Launch,
-        GameState.Tango,
-        GameState.Sable,
-        GameState.Spearhead,
-        GameState.Fight,
-        GameState.Testing,
-        GameState.Paused,
-        GameState.Dead,
-        GameState.Outro
-    };
 
-    private static GameState state;
-    private static GameState previous;
+    static GameState state;
+    static GameState previous;
 
     public static event Action<GameState> OnStateChanged;
     public static GameState Previous => previous;
 
-    private static readonly HashSet<GameState> Lvls = new()
+    static readonly HashSet<GameState> Scene = new()
     {
-        GameState.Tutorial, //Tutorial
-        GameState.Launch, //Subway (Broken)
-        GameState.Tango, //Festival
-        GameState.Sable, //RUSSIA WIP
-        GameState.Spearhead, //Vietnam (Not in yet)
+        GameState.TUTORIAL,
+        GameState.LAUNCH,
+        GameState.TANGO,
+        GameState.SABLE,
+        GameState.SPEARHEAD,
     };
-    private static readonly HashSet<GameState> Active = new()
-    {
-        GameState.Tutorial,
-        GameState.Launch,
-        GameState.Tango,
-        GameState.Sable, 
-        GameState.Spearhead,
 
-        GameState.Fight,
-        GameState.Testing
-    };
-    private static readonly HashSet<GameState> Passive = new()
+    static readonly HashSet<GameState> Active = new()
     {
-        GameState.Title,
-        GameState.Intro,
-        GameState.Outro,
-        GameState.Paused,
-        GameState.Dead,
+        GameState.TUTORIAL,
+        GameState.LAUNCH,
+        GameState.TANGO,
+        GameState.SABLE,
+        GameState.SPEARHEAD,
+        GameState.FIGHT,
+        GameState.TESTING
+    };
+
+    static readonly HashSet<GameState> Passive = new()
+    {
+        GameState.TITLE,
+        GameState.INTRO,
+        GameState.OUTRO,
+        GameState.PAUSED,
+        GameState.DEAD,
     };
 
     public static GameState State
@@ -91,43 +79,39 @@ public static class StateManager
     }
 
     public static bool GroupCheck(HashSet<GameState> group) => group.Contains(state);
+
     public static bool IsActive() => GroupCheck(Active);
     public static bool IsPassive() => GroupCheck(Passive);
-
-    public static void Tutorial() => State = GameState.Tutorial;
-    public static void Launch() => State = GameState.Launch;
-    public static void Tango() => State = GameState.Tango;
-    public static void Sable() => State = GameState.Tango;
-    public static void Spearhead() => State = GameState.Spearhead;
-
-    public static void Fight() => State = GameState.Fight;
-    public static void Testing() => State = GameState.Testing;
+    public static bool IsScene() => GroupCheck(Scene);
 
 
-    public static void Title() => State = GameState.Title;
-    public static void Intro() => State = GameState.Intro;
-    public static void Outro() => State = GameState.Outro;
-    public static void Dead() => State = GameState.Dead;
 
-    public static void Paused()
+
+    public static void LoadState(GameState newState)
     {
-        State = GameState.Paused;
-        Time.timeScale = 0f;
+        if (State != newState && Scene.Contains(newState))
+        {
+            void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+            {
+                State = newState;
+                SceneManager.sceneLoaded -= OnSceneLoaded;
+            }
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.LoadScene(newState.ToString());
+
+            Debug.Log("Loading " + newState);
+        }
+        else
+        {
+            State = newState;
+        }
     }
-
-    public static void Unpaused()
-    {
-        State = Previous;
-        Time.timeScale = 1f;
-    }
-
-
     public static void NextState()
     {
-        int stateIndex = StateList.IndexOf(state);
-        if (stateIndex >= 0 && stateIndex < StateList.Count - 1)
-        {
-            State = StateList[stateIndex + 1]; 
-        }
+        GameState[] values = (GameState[])Enum.GetValues(typeof(GameState));
+        int currentIndex = Array.IndexOf(values, state);
+        int nextIndex = (currentIndex + 1) % values.Length;
+        LoadState(values[nextIndex]);
     }
 }

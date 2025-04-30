@@ -22,6 +22,7 @@ public class ItemManager : MonoBehaviour
     void Start()
     {
         items = new List<Item>();
+        CollectItems();
     }
    
     public void CollectItems()

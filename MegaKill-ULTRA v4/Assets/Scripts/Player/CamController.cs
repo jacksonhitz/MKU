@@ -105,18 +105,8 @@ public class CamController : MonoBehaviour
     {
         switch (state)
         {
-            case StateManager.GameState.Title: break;
-            case StateManager.GameState.Intro: break;
-            case StateManager.GameState.Tutorial: Tutorial(); break;
-            case StateManager.GameState.Paused: break;
-            case StateManager.GameState.Outro: break;
-            case StateManager.GameState.Testing: break;
+            case StateManager.GameState.TUTORIAL: StartCoroutine(Blink()); break;
         }
-    }
-
-    void Tutorial()
-    {
-        StartCoroutine(Blink());
     }
 
     void Update()
@@ -124,6 +114,11 @@ public class CamController : MonoBehaviour
         MoveCheck();
         UpdateShader();
         UpdatePost();
+
+        if (StateManager.State == StateManager.GameState.TUTORIAL)
+        {
+            TransitionOn();
+        }
     }
 
     void MoveCheck()
@@ -328,11 +323,6 @@ public class CamController : MonoBehaviour
         fovSpd = 0.1f * dynamicVolume.weight;
         mixerSpd = 10f * dynamicVolume.weight;
         hueSpd = dynamicVolume.weight;
-
-        if (StateManager.State != StateManager.GameState.Intro)
-        {
-            //colorGrading.saturation.value += Time.deltaTime * satSpd;
-        }
     }
 
     void ClrHue()

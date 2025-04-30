@@ -24,8 +24,8 @@ public class Festival : MonoBehaviour
 
     void Start()
     {
-        StateManager.Tango();
-        if (itemManager != null) itemManager.CollectItems();
+        StateManager.LoadState(StateManager.GameState.TANGO);
+        itemManager?.CollectItems();
         dialogue.TypeText("Q / E TO HAND OUT MKU");
     }
 
@@ -85,7 +85,7 @@ public class Festival : MonoBehaviour
         yield return new WaitForSeconds(1f);
         dialogue.Off();
 
-        StateManager.Fight();
+        StateManager.LoadState(StateManager.GameState.FIGHT);
         enemyManager.Brawl();
     }
 }

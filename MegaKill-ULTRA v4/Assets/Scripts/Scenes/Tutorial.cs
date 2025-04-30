@@ -44,9 +44,7 @@ public class Tutorial : MonoBehaviour
     }
     void Start()
     {
-        StateManager.Tutorial();
-        if (itemManager != null) itemManager.CollectItems();
-        
+        itemManager?.CollectItems();
     }
 
     void Update() //Run input checks for current tutorial stage, based on state manager
@@ -311,13 +309,14 @@ public class Tutorial : MonoBehaviour
             TutorialStateManager.State = TutorialStateManager.TutorialState.Done;
             completion[1] = completion[3] = false;
             //Set on-screen text/color/visibility
-            instruction.text = "GOOD JOB!";
             controls[0].color = todo;
             controls[0].gameObject.SetActive(false);
             controls[1].gameObject.SetActive(false);
             controls[3].gameObject.SetActive(false);
 
-            Debug.Log("Changed state to Done");
+            // load scene
+
+            StateManager.LoadState(StateManager.GameState.TANGO);
         }
     }
 }

@@ -13,7 +13,7 @@ public class Russia : MonoBehaviour
 
     void Start()
     {
-        StateManager.Testing();
+        StateManager.LoadState(StateManager.GameState.SABLE);
 
         if (itemManager != null) itemManager.CollectItems();
     }

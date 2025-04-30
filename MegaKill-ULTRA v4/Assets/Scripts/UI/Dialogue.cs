@@ -29,7 +29,7 @@ public class Dialogue : MonoBehaviour
       //  }
     }
 
-    public void CallDialogue()
+    public void Play()
     {
         StartCoroutine(DelayDialogue());
     }

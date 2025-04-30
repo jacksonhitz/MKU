@@ -81,7 +81,7 @@ public class Settings : MonoBehaviour
 
     void StateChange(StateManager.GameState state)
     {
-        if (state == StateManager.GameState.Paused)
+        if (state == StateManager.GameState.PAUSED)
         {
             menu.enabled = true;
         }
@@ -90,14 +90,13 @@ public class Settings : MonoBehaviour
     public void Unpaused()
     {
         menu.enabled = false;
-        StateManager.Unpaused();
+        // broken
     }
     public void Exit()
     {
         menu.enabled = false;
-        StateManager.Title();
 
-        //also probably broken
+        // broken
     }
     public void Restart()
     {

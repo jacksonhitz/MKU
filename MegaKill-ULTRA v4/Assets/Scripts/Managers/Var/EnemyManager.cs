@@ -29,13 +29,13 @@ public class EnemyManager : MonoBehaviour
     {
         switch (state)
         {
-            case StateManager.GameState.Title: break;
-            case StateManager.GameState.Intro: break;
-            case StateManager.GameState.Tutorial: break;
-            case StateManager.GameState.Fight: Fight(); break;
-            case StateManager.GameState.Paused: break;
-            case StateManager.GameState.Outro: break;
-            case StateManager.GameState.Testing: Fight(); break;
+            case StateManager.GameState.TITLE: break;
+            case StateManager.GameState.INTRO: break;
+            case StateManager.GameState.TUTORIAL: break;
+            case StateManager.GameState.FIGHT: Fight(); break;
+            case StateManager.GameState.PAUSED: break;
+            case StateManager.GameState.OUTRO: break;
+            case StateManager.GameState.TESTING: Fight(); break;
         }
     }
 

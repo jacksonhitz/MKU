@@ -95,12 +95,12 @@ public class SoundManager : MonoBehaviour
     {
         switch (state)
         {
-            case StateManager.GameState.Title: Title(); break;
-            case StateManager.GameState.Intro: Intro(); break;
-            case StateManager.GameState.Tutorial: Tutorial(); break;
-            case StateManager.GameState.Launch: Launch(); break;
-            case StateManager.GameState.Tango: Tango(); break;
-            case StateManager.GameState.Paused: Paused(); break;
+            case StateManager.GameState.TITLE: Title(); break;
+            case StateManager.GameState.INTRO: Intro(); break;
+            case StateManager.GameState.TUTORIAL: Tutorial(); break;
+            case StateManager.GameState.TANGO: Tango(); break;
+            case StateManager.GameState.PAUSED: Paused(); break;
+            case StateManager.GameState.FIGHT: Fight(); break;
         }
     }
 
@@ -108,7 +108,6 @@ public class SoundManager : MonoBehaviour
     {
         music.clip = title;
         music.Play();
-        Debug.Log("playing");
     }
     void Intro()
     {
@@ -118,19 +117,21 @@ public class SoundManager : MonoBehaviour
     void Tutorial()
     {
         dialogue.Stop();
-        trackIndex = -1;
-        NewTrack();
-    }
-    public void Launch()
-    {
-        music.clip = acid;
-        music.loop = true;
+        music.clip = hott;
         music.Play();
     }
     void Tango()
     {
+        dialogue.Stop();
         music.clip = witch;
         music.Play();
+    }
+    void Fight()
+    {
+        dialogue.Stop();
+        music.clip = acid;
+        music.Play();
+
     }
 
 

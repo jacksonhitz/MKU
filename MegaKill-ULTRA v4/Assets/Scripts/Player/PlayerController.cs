@@ -138,7 +138,7 @@ public class PlayerController : MonoBehaviour, IHit
 
      void Move()
     {
-        if (StateManager.State == StateManager.GameState.Testing)
+        if (StateManager.State == StateManager.GameState.TESTING)
         {
             isGrounded = true;
         }
@@ -468,13 +468,14 @@ public class PlayerController : MonoBehaviour, IHit
     {
         health -= dmg;
 
-        if (health <= 0 && !isDead)
+        if (health <= 0 && StateManager.State != StateManager.GameState.DEAD)
         {
-            StateManager.Dead();
+            StateManager.LoadState(StateManager.GameState.DEAD);
 
             if (soundManager != null)
             {
                 soundManager.PlayerDeath();
+                StartCoroutine(Dead());
             }
         }
         else
@@ -486,5 +487,15 @@ public class PlayerController : MonoBehaviour, IHit
         }
 
         uEye.UpdateHealth(health);
+    }
+
+    IEnumerator Dead()
+    {
+        yield return new WaitForSeconds(3f);
+
+        StateManager.LoadState(StateManager.GameState.TITLE);
+
+
+
     }
 }

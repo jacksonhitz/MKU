@@ -6,6 +6,6 @@ public class Title : MonoBehaviour
 {
     void Start()
     {
-        StateManager.Title();
+        StateManager.LoadState(StateManager.GameState.TITLE);
     }
 }

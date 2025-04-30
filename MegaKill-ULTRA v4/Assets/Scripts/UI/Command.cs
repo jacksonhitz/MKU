@@ -34,7 +34,7 @@ public class Command : MonoBehaviour
 
     void StateChange(StateManager.GameState state)
     {
-        if (StateManager.State == StateManager.GameState.Fight)
+        if (StateManager.State == StateManager.GameState.FIGHT)
         {
             On();
         }
