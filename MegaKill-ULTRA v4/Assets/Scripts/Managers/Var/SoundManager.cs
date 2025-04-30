@@ -131,7 +131,6 @@ public class SoundManager : MonoBehaviour
         dialogue.Stop();
         music.clip = acid;
         music.Play();
-
     }
 
 

@@ -471,11 +471,11 @@ public class PlayerController : MonoBehaviour, IHit
         if (health <= 0 && StateManager.State != StateManager.GameState.DEAD)
         {
             StateManager.LoadState(StateManager.GameState.DEAD);
+            StartCoroutine(Dead());
 
             if (soundManager != null)
             {
                 soundManager.PlayerDeath();
-                StartCoroutine(Dead());
             }
         }
         else
@@ -491,11 +491,10 @@ public class PlayerController : MonoBehaviour, IHit
 
     IEnumerator Dead()
     {
+
+
         yield return new WaitForSeconds(3f);
 
         StateManager.LoadState(StateManager.GameState.TITLE);
-
-
-
     }
 }

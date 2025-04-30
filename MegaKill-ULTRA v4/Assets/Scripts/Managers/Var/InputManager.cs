@@ -38,6 +38,10 @@ public class InputManager : MonoBehaviour
             {
                 StateManager.LoadState(StateManager.GameState.TUTORIAL);
             }
+            else if (StateManager.State == StateManager.GameState.TUTORIAL)
+            {
+                StateManager.LoadState(StateManager.GameState.TANGO);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))

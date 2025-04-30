@@ -32,6 +32,7 @@ public static class StateManager
 
     static readonly HashSet<GameState> Scene = new()
     {
+        GameState.TITLE,
         GameState.TUTORIAL,
         GameState.LAUNCH,
         GameState.TANGO,
@@ -83,9 +84,6 @@ public static class StateManager
     public static bool IsActive() => GroupCheck(Active);
     public static bool IsPassive() => GroupCheck(Passive);
     public static bool IsScene() => GroupCheck(Scene);
-
-
-
 
     public static void LoadState(GameState newState)
     {
