@@ -119,6 +119,7 @@ public class PlayerController : MonoBehaviour, IHit
             else
             {
                 Throw(rightScript);
+                throwRAnim.SetTrigger("Throw");
             }
         }
     }
@@ -496,20 +497,4 @@ public class PlayerController : MonoBehaviour, IHit
 
         uEye.UpdateHealth(health);
     }
-
-    public class ThrowController : MonoBehaviour
-{
-    public Animator throwRAnim; // Assign this in Inspector
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E)) // Throw with E key
-        {
-            if (throwRAnim != null)
-            {
-                throwRAnim.SetTrigger("ThrowR");
-            }
-        }
-    }
-}
 }
