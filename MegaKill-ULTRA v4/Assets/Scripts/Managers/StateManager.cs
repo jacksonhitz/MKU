@@ -64,7 +64,6 @@ public static class StateManager
     {
         previous = state;
         state = newState;
-        // Notice: no event firing here (still silent)
     }
 
     public static bool GroupCheck(HashSet<GameState> group)
