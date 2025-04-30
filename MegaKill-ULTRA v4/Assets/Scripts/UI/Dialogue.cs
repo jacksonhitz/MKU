@@ -1,38 +1,22 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement;
 
 public class Dialogue : MonoBehaviour
 {
     public TextMeshProUGUI textComponent;
 
-    public GameObject titleScreen;
-
     public string[] lines;
     public float textSpeed;
 
     int index = -1;
-    bool started = false;
     bool customTyping = false;
 
-    GameManager gameManager;
     SoundManager soundManager;
 
     void Awake()
     {
-        gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
-    }
-
-    void OnEnable()
-    {
-        StateManager.OnStateChanged += StateChange;
-    }
-
-    void OnDisable()
-    {
-        StateManager.OnStateChanged -= StateChange;
     }
 
     void Update()
@@ -56,11 +40,6 @@ public class Dialogue : MonoBehaviour
         NextLine();
     }
 
-    void StateChange(StateManager.GameState state)
-    {
-        
-    }
-
     public void NextLine()
     {
         if (index < lines.Length - 1)
@@ -76,12 +55,11 @@ public class Dialogue : MonoBehaviour
 
     IEnumerator TypeLine(string text)
     {
-        Debug.Log("typing");
         
         textComponent.text = string.Empty;
         yield return new WaitForSeconds(0.1f);
 
-      //  soundManager.NewLine();
+        soundManager?.NewLine();
 
         foreach (char c in text.ToCharArray())
         {
@@ -91,7 +69,7 @@ public class Dialogue : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-     //   soundManager.StopLine();
+        soundManager?.StopLine();
 
         if (customTyping)
         {
@@ -113,37 +91,18 @@ public class Dialogue : MonoBehaviour
     public void Off()
     {
         StopAllCoroutines();
-        ClearText();
-    }
-
-    void ClearText()
-    {
         textComponent.text = string.Empty;
-
-        if (titleScreen != null)
-        {
-            titleScreen.SetActive(false);
-        }
     }
 
     IEnumerator Done()
     {
         yield return new WaitForSeconds(2f);
 
-        if (StateManager.State == StateManager.GameState.Intro)
+        textComponent.text = string.Empty;
+
+        if (StateManager.IsPassive())
         {
-            textComponent.text = string.Empty;
-            gameManager.Tutorial();
-        }
-        else if (StateManager.State == StateManager.GameState.Tutorial)
-        {
-            textComponent.text = string.Empty;
-            gameManager.Launch();
-        }
-        else if (StateManager.State == StateManager.GameState.Title)
-        {
-            yield return new WaitForSeconds(2f);
-            gameManager.Intro();
+            StateManager.NextState();
         }
     }
 }

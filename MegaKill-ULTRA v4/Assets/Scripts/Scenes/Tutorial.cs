@@ -7,7 +7,7 @@ using TMPro;
 
 public class Tutorial : MonoBehaviour
 {
-    GameManager gameManager;
+    ItemManager itemManager;
 
     //Main instruction text
     [SerializeField]
@@ -40,14 +40,13 @@ public class Tutorial : MonoBehaviour
 
     void Awake()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        itemManager = FindObjectOfType<ItemManager>();
     }
     void Start()
     {
-        gameManager.Tutorial();
-        gameManager.CollectItems();
+        StateManager.Tutorial();
+        if (itemManager != null) itemManager.CollectItems();
         
-        //Allow controls text to have the color changed
     }
 
     void Update() //Run input checks for current tutorial stage, based on state manager

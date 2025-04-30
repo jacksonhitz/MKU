@@ -318,11 +318,6 @@ public class PlayerController : MonoBehaviour, IHit
 
         Item env = newItem.GetComponent<Item>();
 
-        if (gameManager != null)
-        {
-            gameManager.CollectItems();
-        }
-
         env.CollidersOff();
         env.DefaultMat();
 
@@ -475,12 +470,7 @@ public class PlayerController : MonoBehaviour, IHit
 
         if (health <= 0 && !isDead)
         {
-            isDead = true;
-
-            if (gameManager != null)
-            {
-                gameManager.CallDead();
-            }
+            StateManager.Dead();
 
             if (soundManager != null)
             {

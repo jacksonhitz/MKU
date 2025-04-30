@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public class Title : MonoBehaviour
+public class TitleUI : MonoBehaviour
 {
     void Start()
     {
-        StateManager.Title();
+        
+    }
+
+    void Update()
+    {
+        
     }
 }

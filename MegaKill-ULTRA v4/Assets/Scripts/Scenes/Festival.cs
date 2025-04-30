@@ -4,10 +4,10 @@ using UnityEngine;
 public class Festival : MonoBehaviour
 {
     EnemyManager enemyManager;
-    GameManager gameManager;
     SoundManager soundManager;
     Dialogue dialogue;
     PopUp popUp;
+    ItemManager itemManager;
 
     int dosedCount;
 
@@ -16,16 +16,16 @@ public class Festival : MonoBehaviour
     void Awake()
     {
         enemyManager = FindObjectOfType<EnemyManager>();
-        gameManager = FindObjectOfType<GameManager>();
         soundManager = FindAnyObjectByType<SoundManager>();
+        itemManager = FindObjectOfType<ItemManager>();
         dialogue = FindObjectOfType<Dialogue>();
         popUp = FindObjectOfType<PopUp>();
     }
 
     void Start()
     {
-        gameManager.Tango();
-        gameManager.CollectItems();
+        StateManager.Tango();
+        if (itemManager != null) itemManager.CollectItems();
         dialogue.TypeText("Q / E TO HAND OUT MKU");
     }
 
@@ -63,7 +63,6 @@ public class Festival : MonoBehaviour
         yield return new WaitForSeconds(10f);
         dialogue.Off();
         yield return new WaitForSeconds(10f);
-        gameManager.Launch();
         dialogue.TypeText("10!");
         yield return new WaitForSeconds(1f);
         dialogue.TypeText("9!");
@@ -86,7 +85,7 @@ public class Festival : MonoBehaviour
         yield return new WaitForSeconds(1f);
         dialogue.Off();
 
-        gameManager.Fight();
+        StateManager.Fight();
         enemyManager.Brawl();
     }
 }

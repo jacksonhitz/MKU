@@ -4,20 +4,17 @@ using UnityEngine;
 
 public class Russia : MonoBehaviour
 {
-    GameManager gameManager;
-
+    ItemManager itemManager;
 
     void Awake()
     {
-        gameManager = FindObjectOfType<GameManager>();
+        itemManager = FindObjectOfType<ItemManager>();
     }
 
     void Start()
     {
-        if (gameManager != null)
-        {
-            gameManager.Testing();
-            gameManager.CollectItems();
-        }
+        StateManager.Testing();
+
+        if (itemManager != null) itemManager.CollectItems();
     }
 }

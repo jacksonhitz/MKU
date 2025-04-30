@@ -90,17 +90,20 @@ public class Settings : MonoBehaviour
     public void Unpaused()
     {
         menu.enabled = false;
-        gameManager.Unpaused();
+        StateManager.Unpaused();
     }
     public void Exit()
     {
         menu.enabled = false;
-        gameManager.Title();
+        StateManager.Title();
+
+        //also probably broken
     }
     public void Restart()
     {
         menu.enabled = false;
-        gameManager.Restart();
+
+        //broken
     }
 
 
