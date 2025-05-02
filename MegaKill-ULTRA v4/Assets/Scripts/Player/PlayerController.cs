@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour, IHit
 
     SoundManager soundManager;
     GameManager gameManager;
-    Settings settings;
     UEye uEye;
     PopUp popUp;
     Festival festival;
@@ -55,7 +54,6 @@ public class PlayerController : MonoBehaviour, IHit
     {
         soundManager = FindObjectOfType<SoundManager>();
         gameManager = FindObjectOfType<GameManager>();
-        settings = FindObjectOfType<Settings>();
         uEye = FindObjectOfType<UEye>();
         popUp = FindObjectOfType<PopUp>();
         festival = FindObjectOfType<Festival>();
@@ -491,8 +489,6 @@ public class PlayerController : MonoBehaviour, IHit
 
     IEnumerator Dead()
     {
-
-
         yield return new WaitForSeconds(3f);
 
         StateManager.LoadState(StateManager.GameState.TITLE);

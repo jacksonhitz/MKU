@@ -28,7 +28,7 @@ public static class StateManager
     static GameState previous;
 
     public static event Action<GameState> OnStateChanged;
-    public static GameState Previous => previous;
+    public static GameState PREVIOUS => previous;
 
     static readonly HashSet<GameState> Scene = new()
     {

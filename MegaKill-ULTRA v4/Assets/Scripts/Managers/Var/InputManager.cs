@@ -5,7 +5,6 @@ public class InputManager : MonoBehaviour
     public static InputManager Instance { get; private set; }
 
     ItemManager itemManager;
-    Settings settings;
 
     void Awake()
     {
@@ -18,7 +17,6 @@ public class InputManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         itemManager = FindObjectOfType<ItemManager>();
-        settings = FindObjectOfType<Settings>();
     }
 
     void Update()
@@ -52,7 +50,8 @@ public class InputManager : MonoBehaviour
             }
             else
             {
-                settings?.Unpaused();
+                // FIX LATER
+                
             }
         }
 
