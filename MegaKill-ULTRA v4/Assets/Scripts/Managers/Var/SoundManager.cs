@@ -6,10 +6,19 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
     
+        [Header("Audio Sources")]
     public AudioSource music;
-    public AudioSource sfx;
+    public AudioSource sfx;        // For 2D non-spatial sounds
     public AudioSource dialogue;
-
+    
+    [Header("3D Sound Settings")]
+    public float minDistance = 5f;
+    public float maxDistance = 30f;
+    public AnimationCurve falloffCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+    public int spatialPoolSize = 10;
+    private List<AudioSource> spatialAudioPool;
+    
+    [Header("Music Tracks")]
     public AudioClip title;
     public AudioClip acid;
     public AudioClip witch;
@@ -22,6 +31,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip four;
     public AudioClip all;
 
+    [Header("Dialogue")]
     public AudioClip line0;
     public AudioClip line1;
     public AudioClip line2;
@@ -31,24 +41,62 @@ public class SoundManager : MonoBehaviour
     public AudioClip line6;
     public AudioClip line7;
 
+    [Header("2D SFX")]
+    public AudioClip heartbeat;
+    public AudioClip playerDeath;
+    public AudioClip pillEmpty;
+    public AudioClip giveDrug;
+
+    public AudioClip[] gulpSounds;
+
+    public void Gulp()
+    {
+        if (gulpSounds != null && gulpSounds.Length > 0)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, gulpSounds.Length);
+        
+            PlaySfx(gulpSounds[randomIndex]);
+        }
+        else
+        {
+            Debug.LogWarning("No gulp sounds assigned to SoundManager!");
+        }
+    }
+
+    public AudioClip[] punchSounds;
+
+    public void Punch()
+    {
+        if (punchSounds != null && punchSounds.Length > 0)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, punchSounds.Length);
+            PlaySfx(punchSounds[randomIndex]);
+        }
+        else if (punch != null)
+        {
+            PlaySfx(punch);
+        }
+        else
+        {
+            Debug.LogWarning("No punch sounds assigned to SoundManager!");
+        }
+    }
+
+    [Header("3D SFX")]
     public AudioClip revShot;
     public AudioClip revEmpty;
     public AudioClip shotShot;
     public AudioClip shotEmpty;
     public AudioClip mgShot;
     public AudioClip mgEmpty;
+    public AudioClip batSwing;
     public AudioClip punch;
     public AudioClip toss;
     public AudioClip tossHit;
     public AudioClip playerHit;
-    public AudioClip heartbeat;
-    public AudioClip playerDeath;
     public AudioClip enemyDeath;
     public AudioClip enemyHit;
     public AudioClip enemyStun;
-    public AudioClip gulp;
-    public AudioClip pillEmpty;
-    public AudioClip batSwing;
 
     List<AudioClip> tracks;
     List<AudioClip> lines;
@@ -75,6 +123,12 @@ public class SoundManager : MonoBehaviour
 
         tracks = new List<AudioClip> { witch, acid, could, dj, all, hott, threes, life, real, four };
         lines = new List<AudioClip> { line1, line2, line3, line4, line5, line6, line7 };
+
+        // Initialize spatial audio pool
+        InitializeSpatialAudioPool();
+            
+        // Configure audio sources for 2D/3D
+        ConfigureAudioSources();
     }
 
     void Start()
@@ -138,14 +192,21 @@ public class SoundManager : MonoBehaviour
     {
         Debug.Log("sound paused");
         
-       
         sfxPlaying = sfx.isPlaying;
-        dialoguePlaying = sfx.isPlaying;
+        dialoguePlaying = dialogue.isPlaying;
         
         music.Pause();
         sfx.Pause();
         dialogue.Pause();
+        
+        // Also pause all spatial audio sources
+        foreach (AudioSource source in spatialAudioPool)
+        {
+            if (source.isPlaying)
+                source.Pause();
+        }
     }
+
     public void Unpaused()
     {
         music.Play();
@@ -159,6 +220,13 @@ public class SoundManager : MonoBehaviour
         {
             dialoguePlaying = false;
             dialogue.Play();
+        }
+        
+        // Unpause all spatial audio sources
+        foreach (AudioSource source in spatialAudioPool)
+        {
+            if (source.gameObject.activeSelf && !source.isPlaying)
+                source.Play();
         }
     }
 
@@ -174,9 +242,18 @@ public class SoundManager : MonoBehaviour
 
     public void EnemySFX(AudioSource source, AudioClip sound)
     {
+        if (source == null || sound == null) return;
+        
+        // Configure the source for 3D spatial sound
+        source.spatialBlend = 1f;
+        source.rolloffMode = AudioRolloffMode.Custom;
+        source.minDistance = minDistance;
+        source.maxDistance = maxDistance;
+        source.SetCustomCurve(AudioSourceCurveType.CustomRolloff, falloffCurve);
+        
         source.volume = sfx.volume;
         source.clip = sound;
-        source.Play();  
+        source.Play();
     }
 
     public void NewLine()
@@ -198,6 +275,44 @@ public class SoundManager : MonoBehaviour
         Invoke(nameof(NewTrack), trackLength);
     }
 
+    // 3D
+    //public void PlaySpatialRevShot(Vector3 position) => PlaySpatialSound(revShot, position);
+    //public void PlaySpatialRevEmpty(Vector3 position) => PlaySpatialSound(revEmpty, position);
+    //public void PlaySpatialShotShot(Vector3 position) => PlaySpatialSound(shotShot, position);
+    //public void PlaySpatialShotEmpty(Vector3 position) => PlaySpatialSound(shotEmpty, position);
+    //public void PlaySpatialMGShot(Vector3 position) => PlaySpatialSound(mgShot, position);
+    //public void PlaySpatialMGEmpty(Vector3 position) => PlaySpatialSound(mgEmpty, position);
+    //public void PlaySpatialBatSwing(Vector3 position) => PlaySpatialSound(batSwing, position);
+    //public void PlaySpatialToss(Vector3 position) => PlaySpatialSound(toss, position);
+    //public void PlaySpatialTossHit(Vector3 position) => PlaySpatialSound(tossHit, position);
+    //public void PlaySpatialPlayerHit(Vector3 position) => PlaySpatialSound(playerHit, position);
+    //public void PlaySpatialEnemyDeath(Vector3 position) => PlaySpatialSound(enemyDeath, position);
+    //public void PlaySpatialEnemyHit(Vector3 position) => PlaySpatialSound(enemyHit, position);
+    //public void PlaySpatialEnemyStun(Vector3 position) => PlaySpatialSound(enemyStun, position);
+
+    public void RevShot() => PlaySpatialSound(revShot, Camera.main.transform.position);
+    public void RevEmpty() => PlaySpatialSound(revEmpty, Camera.main.transform.position);
+    public void ShotShot() => PlaySpatialSound(shotShot, Camera.main.transform.position);
+    public void ShotEmpty() => PlaySpatialSound(shotEmpty, Camera.main.transform.position);
+    public void MGShot() => PlaySpatialSound(mgShot, Camera.main.transform.position);
+    public void MGEmpty() => PlaySpatialSound(mgEmpty, Camera.main.transform.position);
+    public void BatSwing() => PlaySpatialSound(batSwing, Camera.main.transform.position); 
+    public void Toss() => PlaySpatialSound(toss, Camera.main.transform.position);
+    public void TossHit() => PlaySpatialSound(tossHit, Camera.main.transform.position);
+    public void PlayerHit() => PlaySpatialSound(playerHit, Camera.main.transform.position);
+    //public void EnemyHit(Vector3 position) => PlaySpatialSound(enemyHit, position);
+    public void EnemyDeath() => PlaySpatialSound(enemyDeath, Camera.main.transform.position);
+    public void EnemyHit() => PlaySpatialSound(enemyHit, Camera.main.transform.position);
+    public void EnemyStun() => PlaySpatialSound(enemyStun, Camera.main.transform.position);
+    
+
+    // 2D
+    public void Heartbeat() => PlaySfx(heartbeat);
+    public void PlayerDeath() => PlaySfx(playerDeath);
+    public void PillEmpty() => PlaySfx(pillEmpty);
+    public void GiveDrug() => PlaySfx(giveDrug);
+
+    /*
     public void RevShot() => PlaySfx(revShot);
     public void RevEmpty() => PlaySfx(revEmpty);
     public void ShotShot() => PlaySfx(shotShot);
@@ -208,16 +323,100 @@ public class SoundManager : MonoBehaviour
     public void Punch() => PlaySfx(punch);
     public void Toss() => PlaySfx(toss);
     public void TossHit() => PlaySfx(tossHit);
-    public void Heartbeat() => PlaySfx(heartbeat);
     public void PlayerHit() => PlaySfx(playerHit);
-    public void PlayerDeath() => PlaySfx(playerDeath);
     public void Gulp() => PlaySfx(gulp);
-    public void PillEmpty() => PlaySfx(pillEmpty);
+    */
 
     void PlaySfx(AudioClip clip)
     {
         sfx.clip = clip;
         sfx.Play();
+    }
+
+    // <--! Shit that Leon added that hopefully works !-->
+
+    private void InitializeSpatialAudioPool()
+    {
+        spatialAudioPool = new List<AudioSource>();
+        
+        GameObject poolParent = new GameObject("SpatialAudioPool");
+        poolParent.transform.parent = this.transform;
+        
+        // Create the specified number of audio sources in the pool
+        for (int i = 0; i < spatialPoolSize; i++)
+        {
+            GameObject audioObj = new GameObject("SpatialAudioSource_" + i);
+            audioObj.transform.parent = poolParent.transform;
+            
+            AudioSource source = audioObj.AddComponent<AudioSource>();
+            
+            // Configure for 3D spatial audio
+            source.spatialBlend = 1.0f;  // Fully 3D
+            source.rolloffMode = AudioRolloffMode.Custom;
+            source.minDistance = minDistance;
+            source.maxDistance = maxDistance;
+            source.SetCustomCurve(AudioSourceCurveType.CustomRolloff, falloffCurve);
+            source.playOnAwake = false;
+            source.loop = false;
+            
+            spatialAudioPool.Add(source);
+            
+            // Deactivate initially
+            audioObj.SetActive(false);
+        }
+        
+        Debug.Log($"Initialized spatial audio pool with {spatialPoolSize} sources");
+    }    
+
+    private void ConfigureAudioSources()
+    {
+        // Ensure music and dialogue are 2D
+        music.spatialBlend = 0f;
+        dialogue.spatialBlend = 0f;
+        sfx.spatialBlend = 0f;
+    }
+
+    private AudioSource GetSpatialAudioSource()
+    {
+        foreach (AudioSource source in spatialAudioPool)
+        {
+            if (!source.isPlaying)
+            {
+                source.gameObject.SetActive(true);
+                return source;
+            }
+        }
+        
+        // If all sources are active, use the oldest one (first in the list)
+        AudioSource oldestSource = spatialAudioPool[0];
+        oldestSource.Stop();
+        oldestSource.gameObject.SetActive(true);
+        
+        // Move to the end of the list (round-robin)
+        spatialAudioPool.RemoveAt(0);
+        spatialAudioPool.Add(oldestSource);
+        
+        return oldestSource;
+    }
+
+    public void PlaySpatialSound(AudioClip clip, Vector3 position, float volumeMultiplier = 1f)
+    {
+        if (clip == null) return;
+        
+        AudioSource source = GetSpatialAudioSource();
+        source.transform.position = position;
+        source.clip = clip;
+        source.volume = sfxVol * volumeMultiplier;
+        source.Play();
+        
+        // Auto-disable the GameObject when done playing
+        StartCoroutine(ReturnToPoolWhenFinished(source));
+    }
+
+    private IEnumerator ReturnToPoolWhenFinished(AudioSource source)
+    {
+        yield return new WaitForSeconds(source.clip.length + 0.1f);
+        source.gameObject.SetActive(false);
     }
 
     public void FadeIn(AudioSource source, float duration)

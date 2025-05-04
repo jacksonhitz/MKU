@@ -307,7 +307,8 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     public void Hit(float dmg)
     {
-      //  soundManager.EnemySFX(sfx, hitClip);
+        soundManager.EnemySFX(sfx, hitClip);
+        //soundManager.EnemyHit(transform.position);
 
         health -= dmg;
         Debug.Log("health: " + health);
@@ -321,7 +322,7 @@ public abstract class Enemy : MonoBehaviour, IHit
             {
                 StopAllCoroutines();
                 StartCoroutine(Stun());
-              //  soundManager.EnemySFX(sfx, stunClip);
+                soundManager.EnemySFX(sfx, stunClip);
             }
         }
     }

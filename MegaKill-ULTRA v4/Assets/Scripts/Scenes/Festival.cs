@@ -39,6 +39,7 @@ public class Festival : MonoBehaviour
         if (!enemy.dosed)
         {
             popUp.UpdatePopUp("DRUGS DISTRIBUTED");
+            soundManager.GiveDrug();
 
             enemy.dosed = true;
             enemy.friendly = false;
