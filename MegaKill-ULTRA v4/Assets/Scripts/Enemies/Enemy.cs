@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public abstract class Enemy : MonoBehaviour, IHit
 {
-    public enum EnemyState { Wander, Active, Brawl, Static }
+    public enum EnemyState { Wander, Active, Brawl, Static, Pathing }
     public EnemyState currentState;
     public bool friendly;
 
@@ -29,6 +29,16 @@ public abstract class Enemy : MonoBehaviour, IHit
     [HideInInspector] public EnemyManager enemyManager;
     [HideInInspector] public Animator animator;
     [HideInInspector] public AudioSource sfx;
+
+    [Header("Static Pathing Coordinates")]
+    public PathingPoint[] pathingPoints;
+    int currentPathIndex = 0;
+
+    [System.Serializable]
+    public class PathingPoint
+    {
+        public Vector3 position;
+    }
 
     // PUBLIC VAR
     protected float dmg;
@@ -86,6 +96,9 @@ public abstract class Enemy : MonoBehaviour, IHit
                 break;
             case EnemyState.Brawl:
                 BrawlBehavior();
+                break;
+            case EnemyState.Pathing:
+                PathingBehavior();
                 break;
         }
 
@@ -292,6 +305,22 @@ public abstract class Enemy : MonoBehaviour, IHit
 
         }
         //yield break;
+    }
+
+    void PathingBehavior()
+    {
+        agent.speed = 10f;
+        if (pathingPoints.Length == 0)
+        {
+            Debug.LogError("Pathing Behavior: No pathing points assigned.");
+            return;
+        }
+        if (!agent.pathPending && agent.remainingDistance < 0.2f)
+        {
+            agent.SetDestination(pathingPoints[currentPathIndex].position);
+
+            currentPathIndex = (currentPathIndex + 1) % pathingPoints.Length;
+        }
     }
 
     public void LookTowards(Vector3 targetPosition)
