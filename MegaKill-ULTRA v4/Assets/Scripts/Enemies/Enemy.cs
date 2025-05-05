@@ -32,6 +32,7 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     [Header("Static Pathing Coordinates")]
     public PathingPoint[] pathingPoints;
+    [SerializeField] bool isStaticPathing;
     int currentPathIndex = 0;
 
     [System.Serializable]
@@ -317,6 +318,11 @@ public abstract class Enemy : MonoBehaviour, IHit
         }
         if (!agent.pathPending && agent.remainingDistance < 0.2f)
         {
+            if (isStaticPathing && currentPathIndex == pathingPoints.Length - 1)
+            {
+                agent.SetDestination(pathingPoints[currentPathIndex].position); // Destination is the last point
+                return; // Stop at the last point if static pathing
+            }
             agent.SetDestination(pathingPoints[currentPathIndex].position);
 
             currentPathIndex = (currentPathIndex + 1) % pathingPoints.Length;
