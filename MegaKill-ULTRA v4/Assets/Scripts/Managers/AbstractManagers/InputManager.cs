@@ -1,30 +1,13 @@
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
+public abstract class InputManager : MonoBehaviour
 {
-    public static InputManager Instance { get; private set; }
-
-    ItemManager itemManager;
-
-    void Awake()
-    {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        itemManager = FindObjectOfType<ItemManager>();
-    }
-
     void Update()
     {
         UpdateInputs();
     }
 
-    void UpdateInputs()
+    protected void UpdateInputs()
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
@@ -54,17 +37,7 @@ public class InputManager : MonoBehaviour
                 
             }
         }
-
-        if (StateManager.IsActive())
-        {
-            if (Input.GetKey(KeyCode.Tab))
-            {
-                itemManager?.HighlightAll();
-            }
-            else
-            {
-                itemManager?.HighlightItem();
-            }
-        }
     }
+
+    void 
 }
