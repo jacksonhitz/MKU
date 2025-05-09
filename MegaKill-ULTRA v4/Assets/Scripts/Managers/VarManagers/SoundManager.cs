@@ -8,7 +8,7 @@ public class SoundManager : MonoBehaviour
     
         [Header("Audio Sources")]
     public AudioSource music;
-    public AudioSource sfx;        // For 2D non-spatial sounds
+    public AudioSource sfx;        
     public AudioSource dialogue;
     
     [Header("3D Sound Settings")]
@@ -53,7 +53,7 @@ public class SoundManager : MonoBehaviour
     {
         if (gulpSounds != null && gulpSounds.Length > 0)
         {
-            int randomIndex = UnityEngine.Random.Range(0, gulpSounds.Length);
+            int randomIndex = Random.Range(0, gulpSounds.Length);
         
             PlaySfx(gulpSounds[randomIndex]);
         }
@@ -69,7 +69,7 @@ public class SoundManager : MonoBehaviour
     {
         if (punchSounds != null && punchSounds.Length > 0)
         {
-            int randomIndex = UnityEngine.Random.Range(0, punchSounds.Length);
+            int randomIndex = Random.Range(0, punchSounds.Length);
             PlaySfx(punchSounds[randomIndex]);
         }
         else if (punch != null)
@@ -195,7 +195,6 @@ public class SoundManager : MonoBehaviour
         sfxPlaying = sfx.isPlaying;
         dialoguePlaying = dialogue.isPlaying;
         
-        music.Pause();
         sfx.Pause();
         dialogue.Pause();
         

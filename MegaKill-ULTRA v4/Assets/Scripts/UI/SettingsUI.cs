@@ -14,7 +14,7 @@ public class SettingsUI : MonoBehaviour
 
     void Start()
     {
-        if (menu != null) menu.enabled = false;
+        menu.enabled = false;
 
         // Initialize values from manager
         sfxSlider.value = SettingsManager.Instance.SFXVolume;
@@ -58,15 +58,15 @@ public class SettingsUI : MonoBehaviour
         }
     }
 
-    public void Unpaused()
+    public void Resume()
     {
         menu.enabled = false;
-        StateManager.LoadState(StateManager.PREVIOUS);
+        StateManager.SilentState(StateManager.PREVIOUS);
     }
 
     public void Exit()
     {
-        Application.Quit();
+        StateManager.LoadState(StateManager.GameState.TITLE);
     }
 
     public void Restart()

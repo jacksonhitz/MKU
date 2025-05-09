@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Russia : MonoBehaviour
+public class Spearhead : MonoBehaviour
 {
     ItemManager itemManager;
 
@@ -13,8 +13,8 @@ public class Russia : MonoBehaviour
 
     void Start()
     {
-        StateManager.LoadState(StateManager.GameState.SABLE);
+        StateManager.LoadState(StateManager.GameState.SPEARHEAD);
 
-        if (itemManager != null) itemManager.CollectItems();
+        itemManager?.CollectItems();
     }
 }
