@@ -10,6 +10,8 @@ public class TitleUI : MonoBehaviour
     [SerializeField] Dialogue tangoText;
     [SerializeField] GameObject titleScreen;
 
+    [SerializeField] GameObject settingsScreen;
+
     void Awake()
     {
         title = FindObjectOfType<Title>();
@@ -20,17 +22,40 @@ public class TitleUI : MonoBehaviour
         introText.Play();
         titleScreen.SetActive(false);
     }
+
+    //Not sure if this will be used as it's simple to connect to them through the Unity UI
     public void ChaptersButton()
     {
 
     }
+
+    public void InstructionsButton()
+    {
+        StateManager.LoadState(StateManager.GameState.TUTORIAL);
+    }
+
+    public void TangoButton()
+    {
+        StateManager.LoadState(StateManager.GameState.TANGO);
+    }
+
+    public void SableButton()
+    {
+        StateManager.LoadState(StateManager.GameState.SABLE);
+    }
+
+    public void SpearheadButton()
+    {
+        StateManager.LoadState(StateManager.GameState.SPEARHEAD);
+    }
     public void OptionsButton()
     {
-
+        settingsScreen.SetActive(true);
     }
     public void ExitButton()
     {
-
+        Debug.Log("Quitting/Exiting Application");
+        Application.Quit();
     }
 
     public void TangoFile()
