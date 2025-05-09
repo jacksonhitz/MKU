@@ -634,7 +634,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textComponent: {fileID: 1882787584799500071}
-  titleScreen: {fileID: 0}
   lines:
   - WASD TO MOVE
   - LEFT MOUSE FOR LEFT HAND
@@ -5445,6 +5444,7 @@ GameObject:
   - component: {fileID: 5028932264311322238}
   - component: {fileID: 3770122598786963699}
   - component: {fileID: 4853229913406527991}
+  - component: {fileID: 7493894693461358224}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -5486,18 +5486,17 @@ MonoBehaviour:
   throwForce: 200
   gravity: -9.8
   range: 1000
-  cam: {fileID: 2527585751099497462}
+  groundDistance: 0.5
+  jumpHeight: 5
   groundCheck: {fileID: 6107885997448364535}
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  groundDistance: 0.5
-  isGrounded: 0
+  cam: {fileID: 2527585751099497462}
   leftHand: {fileID: 5908787568474587674}
   rightHand: {fileID: 5880255219150062770}
   leftScript: {fileID: 0}
   rightScript: {fileID: 0}
-  isDead: 0
   swingAnim: {fileID: 8530075765181786441}
   punchRAnim: {fileID: 1047277799574153519}
   punchLAnim: {fileID: 8388470578561645797}
@@ -5506,8 +5505,9 @@ MonoBehaviour:
   punchL: {fileID: 8885470995603086759}
   punchRange: {fileID: 372933160457287439}
   batRange: {fileID: 681679764641570269}
+  isGrounded: 0
+  isDead: 0
   rooted: 0
-  jumpHeight: 5
 --- !u!143 &4853229913406527991
 CharacterController:
   m_ObjectHideFlags: 0
@@ -5534,6 +5534,18 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7493894693461358224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958635896117000374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cfc7ac0261c1400e8cb7a471de2e659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4082425620499348217
 GameObject:
   m_ObjectHideFlags: 0
@@ -11382,7 +11394,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textComponent: {fileID: 3657069203263731459}
-  titleScreen: {fileID: 0}
   lines: []
   textSpeed: 0.06
 --- !u!1 &7810005327386895430
@@ -12928,7 +12939,6 @@ GameObject:
   - component: {fileID: 5390377560497014778}
   - component: {fileID: 7878758892299191526}
   - component: {fileID: 593120302127198479}
-  - component: {fileID: 9165773263018053028}
   m_Layer: 0
   m_Name: Settings
   m_TagString: Untagged
@@ -13022,27 +13032,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &9165773263018053028
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8923652154241955314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3e3ced4f55e94aee99ac994481c3884, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sfxSlider: {fileID: 9018247984193689949}
-  musicSlider: {fileID: 7162132168811435691}
-  sensSlider: {fileID: 5974260538929468410}
-  sfxInput: {fileID: 6578661644881881248}
-  musicInput: {fileID: 17164240164815715}
-  sensInput: {fileID: 4402335761666062590}
-  musicVolume: 50
-  sfxVolume: 50
-  sens: 500
 --- !u!1 &8942310953708009343
 GameObject:
   m_ObjectHideFlags: 0
