@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour, IHit
     float maxHealth = 100;
     bool canPunch = true;
     float punchCooldown = 0.75f;
-    float interactRange = 20f;
+    float interactRange = 30f;
 
     CharacterController characterController;
     SoundManager soundManager;
@@ -76,11 +76,6 @@ public class PlayerController : MonoBehaviour, IHit
 
         Vector3 movement = transform.right * moveDir.x + transform.forward * moveDir.y;
 
-        if (!rooted)
-        {
-            characterController.Move(movement * runSpd * Time.deltaTime);
-        }
-
         if (isGrounded && verticalVelocity < 0)
         {
             verticalVelocity = -2f;
@@ -95,8 +90,24 @@ public class PlayerController : MonoBehaviour, IHit
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
 
-        Vector3 finalMove = (movement * runSpd) + Vector3.up * verticalVelocity;
-        characterController.Move(finalMove * Time.deltaTime);
+        if (!rooted)
+        {
+            Vector3 finalMove = (movement * runSpd) + Vector3.up * verticalVelocity;
+            characterController.Move(finalMove * Time.deltaTime);
+        }
+    }
+
+
+    public void Interact()
+    {
+        Debug.Log("interact caled");
+
+        Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+        if (Physics.Raycast(ray, out RaycastHit hit, interactRange))
+        {
+            IInteractable interactable = hit.collider.transform.GetComponentInParent<IInteractable>();
+            interactable?.Interact(this);
+        }
     }
 
     public void UseLeft()
@@ -118,7 +129,7 @@ public class PlayerController : MonoBehaviour, IHit
     public void Left()
     {
         if (leftScript == null)
-            Interact(true);
+            GrabCheck(true);
         else
             Throw(leftScript);
     }
@@ -126,7 +137,7 @@ public class PlayerController : MonoBehaviour, IHit
     public void Right()
     {
         if (rightScript == null)
-            Interact(false);
+            GrabCheck(false);
         else
         {
             Throw(rightScript);
@@ -176,19 +187,19 @@ public class PlayerController : MonoBehaviour, IHit
         punchRange.enabled = false;
     }
 
-    void Interact(bool left)
+    void GrabCheck(bool left)
     {
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
         if (Physics.Raycast(ray, out RaycastHit hit, interactRange))
         {
             if (hit.collider.TryGetComponent(out Item item))
             {
-                Pickup(item.gameObject, left);
+                Grab(item.gameObject, left);
             }
         }
     }
 
-    void Pickup(GameObject item, bool left)
+    void Grab(GameObject item, bool left)
     {
         if (left && leftScript != null) return;
         if (!left && rightScript != null) return;

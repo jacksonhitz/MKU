@@ -37,6 +37,10 @@ public class PlayerInputs : InputManager
 
             playerController?.Move(moveDir, jump);
 
+            //INTERACT
+            if (Input.GetKeyDown(KeyCode.F))
+                playerController?.Interact();
+
 
             // USE/SHOOT
             if (Input.GetMouseButton(0))
@@ -50,7 +54,6 @@ public class PlayerInputs : InputManager
             {
                 playerController?.UseRight();
             }
-
 
             // LEFT/RIGHT
             if (Input.GetKeyDown(KeyCode.Q))
