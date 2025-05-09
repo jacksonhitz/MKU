@@ -28,17 +28,19 @@ public static class StateManager
     static GameState previous;
 
     public static event Action<GameState> OnStateChanged;
+    public static event Action<GameState> OnSilentChanged;
     public static GameState PREVIOUS => previous;
 
-    static readonly HashSet<GameState> Scene = new()
+    static readonly List<GameState> SceneOrder = new()
     {
         GameState.TITLE,
         GameState.TUTORIAL,
-        GameState.LAUNCH,
         GameState.TANGO,
         GameState.SABLE,
         GameState.SPEARHEAD,
+        //GameState.LAUNCH, // Uncomment if needed
     };
+    static readonly HashSet<GameState> Scene = new(SceneOrder);
 
     static readonly HashSet<GameState> Active = new()
     {
@@ -77,7 +79,9 @@ public static class StateManager
     {
         previous = state;
         state = newState;
+        OnSilentChanged?.Invoke(state);
     }
+
 
     public static bool GroupCheck(HashSet<GameState> group) => group.Contains(state);
 
@@ -102,14 +106,14 @@ public static class StateManager
         }
         else
         {
-            State = newState;
+            SilentState(newState);
         }
     }
+
     public static void NextState()
     {
-        GameState[] values = (GameState[])Enum.GetValues(typeof(GameState));
-        int currentIndex = Array.IndexOf(values, state);
-        int nextIndex = (currentIndex + 1) % values.Length;
-        LoadState(values[nextIndex]);
+        int currentIndex = SceneOrder.IndexOf(state);
+        int nextIndex = (currentIndex + 1) % SceneOrder.Count;
+        LoadState(SceneOrder[nextIndex]);
     }
 }

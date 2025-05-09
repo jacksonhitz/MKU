@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class SettingsUI : MonoBehaviour
 {
@@ -43,36 +44,48 @@ public class SettingsUI : MonoBehaviour
     void OnEnable()
     {
         StateManager.OnStateChanged += OnStateChanged;
+        StateManager.OnSilentChanged += OnStateChanged;
     }
 
     void OnDisable()
     {
         StateManager.OnStateChanged -= OnStateChanged;
+        StateManager.OnSilentChanged -= OnStateChanged;
     }
+
 
     void OnStateChanged(StateManager.GameState state)
     {
+        Debug.Log("state called");
+
         if (state == StateManager.GameState.PAUSED)
         {
             menu.enabled = true;
+            Debug.Log("menu enabled");
+        }
+        else
+        {
+            menu.enabled = false;
+            Debug.Log("menu disabled");
         }
     }
 
     public void Resume()
     {
-        menu.enabled = false;
         StateManager.SilentState(StateManager.PREVIOUS);
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     public void Exit()
     {
         StateManager.LoadState(StateManager.GameState.TITLE);
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     public void Restart()
     {
-        menu.enabled = false;
-        StateManager.LoadState(StateManager.State);
+        StateManager.LoadState(StateManager.PREVIOUS);
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     void OnSFXSliderChanged(float value)
