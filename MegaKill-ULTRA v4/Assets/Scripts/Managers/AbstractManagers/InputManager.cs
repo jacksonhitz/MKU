@@ -1,18 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
+public abstract class InputManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        
+        UpdateBase();
+        UpdateItems();
+        UpdatePlayer();
     }
+
+    void UpdateBase()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            StateManager.NextState();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (StateManager.State != StateManager.GameState.PAUSED)
+                StateManager.LoadState(StateManager.GameState.PAUSED);
+            else
+            {
+                StateManager.SilentState(StateManager.PREVIOUS);
+            }
+        }
+    }
+
+    protected abstract void UpdateItems();
+    protected abstract void UpdatePlayer();
 }
+
+

@@ -3,7 +3,7 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class Enemy : MonoBehaviour, IHit
+public abstract class Enemy : MonoBehaviour, IHit, IInteractable
 {
     public enum EnemyState { Wander, Active, Brawl, Static, Pathing }
     public EnemyState currentState;
@@ -29,6 +29,8 @@ public abstract class Enemy : MonoBehaviour, IHit
     [HideInInspector] public EnemyManager enemyManager;
     [HideInInspector] public Animator animator;
     [HideInInspector] public AudioSource sfx;
+
+    Festival festival;
 
     [Header("Static Pathing Coordinates")]
     public PathingPoint[] pathingPoints;
@@ -77,6 +79,8 @@ public abstract class Enemy : MonoBehaviour, IHit
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
         enemyManager = FindObjectOfType<EnemyManager>();
+
+        festival = FindObjectOfType<Festival>();
 
         health = maxHealth;
     }
@@ -337,6 +341,15 @@ public abstract class Enemy : MonoBehaviour, IHit
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+        }
+    }
+
+    public void Interact(PlayerController playercontroller)
+    {
+        if (friendly)
+        {
+            festival.Dosed(this);
+            friendly = false;
         }
     }
 

@@ -26,7 +26,7 @@ public class Festival : MonoBehaviour
     {
         StateManager.LoadState(StateManager.GameState.TANGO);
         itemManager?.CollectItems();
-        dialogue.TypeText("Q / E TO HAND OUT MKU");
+        dialogue.TypeText("F TO HAND OUT MKU");
     }
 
     public void Dosed(Enemy enemy)

@@ -6,3 +6,8 @@ public interface IHit
 {
     void Hit(float dmg);
 }
+
+public interface IInteractable
+{
+    void Interact(PlayerController playerController);
+}
