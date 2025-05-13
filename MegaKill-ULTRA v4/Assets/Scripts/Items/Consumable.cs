@@ -11,7 +11,6 @@ public class Consumable : Item
     {
         base.Start();
         charge = data.charge;
-
     }
 
     public override void Use()
@@ -19,7 +18,7 @@ public class Consumable : Item
         if (charge > 0)
         {
             charge--;
-            playerController.Heal(data.heal);
+            player.health.Heal(data.heal);
             //trip
             cooldown = Time.time;
 

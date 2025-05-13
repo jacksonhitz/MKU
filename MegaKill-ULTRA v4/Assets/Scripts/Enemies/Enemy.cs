@@ -344,7 +344,7 @@ public abstract class Enemy : MonoBehaviour, IHit, IInteractable
         }
     }
 
-    public void Interact(PlayerController playercontroller)
+    public void Interact()
     {
         if (friendly)
         {

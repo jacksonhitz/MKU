@@ -41,7 +41,7 @@ public class Gun : Item
 
     public void Hitscan(Ray ray)
     {
-        if (Physics.Raycast(ray, out RaycastHit hit, playerController.range))
+        if (Physics.Raycast(ray, out RaycastHit hit, data.range))
         {
             if (hit.transform.CompareTag("Enemy"))
             {

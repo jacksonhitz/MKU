@@ -43,10 +43,10 @@ public class Bullet : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerController playerController = collision.gameObject.GetComponentInParent<PlayerController>();
-            if (playerController != null)
+            PlayerController player = collision.gameObject.GetComponentInParent<PlayerController>();
+            if (player != null)
             {
-                playerController.Hit(dmg);
+                player.health.Hit(dmg);
             }
         }
         Destroy(gameObject);

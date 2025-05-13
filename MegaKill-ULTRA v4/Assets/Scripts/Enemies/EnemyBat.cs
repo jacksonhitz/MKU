@@ -22,7 +22,7 @@ public class EnemyBat : Enemy
     IEnumerator Attack()
     {
         animator.SetTrigger("Atk");
-        player.Hit(dmg);
+        player.health.Hit(dmg);
         soundManager.EnemySFX(sfx, attackClip);
 
         yield break;

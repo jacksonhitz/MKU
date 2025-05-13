@@ -8,7 +8,7 @@ public class Item : MonoBehaviour
 
     [HideInInspector] public Rigidbody rb;
     [HideInInspector] public SoundManager soundManager;
-    [HideInInspector] public PlayerController playerController;
+    [HideInInspector] public PlayerController player;
     [HideInInspector] public PopUp popUp;
 
     Renderer rend;
@@ -24,41 +24,75 @@ public class Item : MonoBehaviour
     }
     public ItemState currentState;
 
-
     public void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rend = GetComponent<Renderer>();
         soundManager = FindObjectOfType<SoundManager>();
-        playerController = FindObjectOfType<PlayerController>();
+        player = FindObjectOfType<PlayerController>();
         popUp = FindObjectOfType<PopUp>();
     }
     public virtual void Start()
     {
-        SetState();
-    }
-    public void SetState()
-    {
-        GameObject parentObj = transform.parent.gameObject;
-        string parent = parentObj.tag;
-
-        switch (parent)
+        if (transform.parent != null)
         {
-            case "Enemy":
-                currentState = ItemState.Enemy;
+            string tag = transform.parent.tag;
+            if (System.Enum.TryParse(tag, out ItemState state)) SetState(state);
+            else SetState(ItemState.Available);
+        }
+        else SetState(ItemState.Available);
+    }
+
+    public void SetState(ItemState state)
+    {
+        currentState = state;
+        switch (state)
+        {
+            case ItemState.Enemy:
                 CollidersOff();
                 break;
-            case "Player":
-                currentState = ItemState.Player;
+            case ItemState.Player:
                 CollidersOff();
                 break;
-            default:
-                currentState = ItemState.Available;
+            case ItemState.Available:
                 CollidersOn();
                 break;
         }
+    }
+    public void PlayerGrabbed()
+    {
+        SetState(ItemState.Player);
+    }
+    public void EnemyGrabbed()
+    {
+        SetState(ItemState.Enemy);
+    }
+    public void Thrown()
+    {
+        transform.SetParent(null);
+        SetState(ItemState.Available);
+        thrown = true;
+    }
+    public void Dropped()
+    {
+        transform.SetParent(null);
+        SetState(ItemState.Available);
 
-        Debug.Log("parent");
+        rb.isKinematic = false;
+
+        Vector3 randomDirection = new Vector3(
+            Random.Range(-.1f, .1f),
+            Random.Range(0.25f, .5f),
+            Random.Range(-.1f, .1f)
+        );
+        rb.AddForce(randomDirection * 5f, ForceMode.Impulse);
+
+        Vector3 randomTorque = new Vector3(
+            Random.Range(-20f, 20f),
+            Random.Range(-20f, 20f),
+            Random.Range(-20f, 20f)
+        );
+        rb.AddTorque(randomTorque, ForceMode.Impulse);
     }
 
     void OnCollisionEnter(Collision collision)
@@ -85,36 +119,6 @@ public class Item : MonoBehaviour
                 collision.gameObject.GetComponent<Enemy>()?.Hit(50);
             }
         }
-    }
-
-    public void Thrown()
-    {
-        transform.SetParent(null);
-        SetState();
-        thrown = true;
-    }
-
-    public void Dropped()
-    {
-        transform.SetParent(null);
-        SetState();
-
-
-        rb.isKinematic = false;
-
-        Vector3 randomDirection = new Vector3(
-            Random.Range(-.1f, .1f),
-            Random.Range(0.25f, .5f),
-            Random.Range(-.1f, .1f)
-        );
-        rb.AddForce(randomDirection * 5f, ForceMode.Impulse);
-
-        Vector3 randomTorque = new Vector3(
-            Random.Range(-20f, 20f),
-            Random.Range(-20f, 20f),
-            Random.Range(-20f, 20f)
-        );
-        rb.AddTorque(randomTorque, ForceMode.Impulse);
     }
 
     public void CollidersOn()
@@ -156,6 +160,7 @@ public class Item : MonoBehaviour
     }
     public void DefaultMat()
     {
+        isHovering = false;
         if (rend != null)
         {
             rend.material = def;

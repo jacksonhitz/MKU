@@ -12,4 +12,5 @@ public class ItemData : ScriptableObject
     public string itemName;
     public ItemType type;
     public GameObject prefab;
+    public Vector3 pos;
 }

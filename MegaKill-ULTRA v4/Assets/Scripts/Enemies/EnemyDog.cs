@@ -19,7 +19,7 @@ public class EnemyDog : Enemy
     {
         animator.SetTrigger("Atk");
         soundManager.EnemySFX(sfx, attackClip);
-        player.Hit(dmg);
+        player.health.Hit(dmg);
         soundManager.EnemySFX(sfx, attackClip);
 
         yield break;

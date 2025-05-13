@@ -6,7 +6,7 @@ public class ItemManager : MonoBehaviour
 {
     public static ItemManager Instance { get; private set; }
 
-    List<Item> items;
+    [SerializeField] List<Item> items;
 
     void Awake()
     {

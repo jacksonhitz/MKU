@@ -3722,7 +3722,12 @@ GameObject:
   m_Component:
   - component: {fileID: 5028932264311322238}
   - component: {fileID: 3770122598786963699}
+  - component: {fileID: 4858683849832461900}
+  - component: {fileID: 4013446450485899524}
+  - component: {fileID: 2738128887218828491}
+  - component: {fileID: 2696409501945406757}
   - component: {fileID: 4689944491773041080}
+  - component: {fileID: 3224170306473505317}
   - component: {fileID: 4853229913406527991}
   m_Layer: 10
   m_Name: Player
@@ -3761,32 +3766,84 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeadb03b8e53448f6ad31efdbc83b439, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 2527585751099497462}
+  sound: {fileID: 0}
+  left: {fileID: 5880255219150062770}
+  right: {fileID: 5908787568474587674}
+  combat: {fileID: 0}
+  movement: {fileID: 0}
+  interact: {fileID: 0}
+  items: {fileID: 0}
+  health: {fileID: 0}
+--- !u!114 &4858683849832461900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958635896117000374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd813d4fc901c491e9c8ca4f9541e45e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   runSpd: 30
-  throwForce: 200
   gravity: -98
-  range: 1000
   groundDistance: 0.5
   jumpHeight: 5
   groundCheck: {fileID: 6107885997448364535}
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  cam: {fileID: 2527585751099497462}
-  leftHand: {fileID: 5908787568474587674}
-  rightHand: {fileID: 5880255219150062770}
-  leftScript: {fileID: 0}
-  rightScript: {fileID: 0}
-  swingAnim: {fileID: 8530075765181786441}
+  isGrounded: 0
+  rooted: 0
+--- !u!114 &4013446450485899524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958635896117000374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 257693d63c4c24ee18ebf259da02350a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftItem: {fileID: 0}
+  rightItem: {fileID: 0}
+  throwForce: 100
+--- !u!114 &2738128887218828491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958635896117000374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bc79151c7afe413ebdee802ae47c50d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  swingAnim: {fileID: 0}
   punchRAnim: {fileID: 1047277799574153519}
   punchLAnim: {fileID: 8388470578561645797}
-  throwRAnim: {fileID: 1839468792335702266}
+  throwRAnim: {fileID: 0}
   punchR: {fileID: 282627973548570201}
   punchL: {fileID: 8885470995603086759}
   punchRange: {fileID: 372933160457287439}
-  batRange: {fileID: 681679764641570269}
-  isGrounded: 0
-  isDead: 0
-  rooted: 0
+--- !u!114 &2696409501945406757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958635896117000374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdf63a31241894d0a857f52e02a7eff3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 0
 --- !u!114 &4689944491773041080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3797,6 +3854,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cfc7ac0261c1400e8cb7a471de2e659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3224170306473505317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958635896117000374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 144869aab4be24f53a73e6dc59ddbdbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!143 &4853229913406527991

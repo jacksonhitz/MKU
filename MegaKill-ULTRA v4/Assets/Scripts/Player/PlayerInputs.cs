@@ -3,16 +3,17 @@ using UnityEngine;
 public class PlayerInputs : InputManager
 {
     ItemManager itemManager;
-    PlayerController playerController;
+    PlayerController controller;
 
     void Awake()
     {
         itemManager = FindObjectOfType<ItemManager>();
-        playerController = FindObjectOfType<PlayerController>();
+        controller = FindObjectOfType<PlayerController>();
+
 
         if (itemManager == null)
             Debug.LogWarning("ItemManager not found");
-        if (playerController == null)
+        if (controller == null)
             Debug.LogWarning("PlayerController not found");
     }
 
@@ -35,33 +36,32 @@ public class PlayerInputs : InputManager
             Vector2 moveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             bool jump = Input.GetKeyDown(KeyCode.Space);
 
-            playerController?.Move(moveDir, jump);
+            controller.movement.Move(moveDir, jump);
 
             //INTERACT
             if (Input.GetKeyDown(KeyCode.F))
-                playerController?.Interact();
+                controller.interact?.Interact();
 
 
             // USE/SHOOT
             if (Input.GetMouseButton(0))
             {
                 if (Input.GetKey(KeyCode.LeftControl))
-                    playerController?.UseRight();
+                    controller.items?.UseRight();
                 else
-                    playerController?.UseLeft();
+                    controller.items?.UseLeft();
             }
             else if (Input.GetMouseButton(1))
             {
-                playerController?.UseRight();
+                controller.items?.UseRight();
             }
 
             // LEFT/RIGHT
             if (Input.GetKeyDown(KeyCode.Q))
-                playerController?.Left();
+                controller.items?.Left();
 
             if (Input.GetKeyDown(KeyCode.E))
-                playerController?.Right();
-
+                controller.items?.Right();
         }
     }
 }

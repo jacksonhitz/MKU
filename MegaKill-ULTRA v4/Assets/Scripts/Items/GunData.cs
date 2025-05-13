@@ -8,6 +8,7 @@ public class GunData : ItemData
     public float maxBullets;
     public float recoilMag;
     public float recoilSpd;
+    public float range;
 
     public ParticleSystem muzzleFlash;
 

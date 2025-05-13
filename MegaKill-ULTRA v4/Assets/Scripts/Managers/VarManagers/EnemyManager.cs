@@ -105,11 +105,11 @@ public class EnemyManager : MonoBehaviour
         {
             yield return new WaitForSeconds(spawnInterval);
 
-            if (!player.rooted)
+           // if (!player.rooted)
             {
                 //ui.PopUp("LOOK DOWN");
                 
-                player.rooted = true;
+              //  player.rooted = true;
                 Vector3 spawnPos = player.transform.position;
                 spawnPos.y -= 1f;
                 Instantiate(hands, spawnPos, Quaternion.identity);

@@ -16,7 +16,7 @@ public class MG : Gun
             bullets--;
 
             Vector3 spread = new Vector3(Random.Range(-data.spreadAngle, data.spreadAngle), Random.Range(-data.spreadAngle, data.spreadAngle), 0f);
-            Quaternion rotation = Quaternion.Euler(playerController.cam.transform.eulerAngles + spread);
+            Quaternion rotation = Quaternion.Euler(Camera.main.transform.eulerAngles + spread);
             Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
             Hitscan(ray);
         }
