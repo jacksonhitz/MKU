@@ -7,6 +7,7 @@ public abstract class InputManager : MonoBehaviour
         UpdateBase();
         UpdateItems();
         UpdatePlayer();
+
     }
 
     void UpdateBase()

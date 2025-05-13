@@ -7,6 +7,7 @@ public static class StateManager
 {
     public enum GameState
     {
+        TESTING,
         TITLE,
         INTRO,
 
@@ -17,7 +18,6 @@ public static class StateManager
         LAUNCH,
 
         FIGHT,
-        TESTING,
 
         PAUSED,
         DEAD,
@@ -38,7 +38,7 @@ public static class StateManager
         GameState.TANGO,
         GameState.SABLE,
         GameState.SPEARHEAD,
-        //GameState.LAUNCH, // Uncomment if needed
+        //GameState.LAUNCH, 
     };
     static readonly HashSet<GameState> Scene = new(SceneOrder);
 
