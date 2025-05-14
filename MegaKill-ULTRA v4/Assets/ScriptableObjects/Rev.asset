@@ -13,13 +13,16 @@ MonoBehaviour:
   m_Name: Rev
   m_EditorClassIdentifier: 
   itemName: Revolver
-  type: 0
+  type: 1
   prefab: {fileID: 2651233480305370907, guid: 802cefe5936ce4703a57437d09d7bfaa, type: 3}
+  pos: {x: 0, y: -0.1, z: 0.33}
+  rot: {x: -90, y: 0, z: 0}
   dmg: 100
   fireRate: 0.5
   maxBullets: 6
   recoilMag: 75
   recoilSpd: 5
+  range: 0
   muzzleFlash: {fileID: 6847902066312781993, guid: b4badc72dfe5f435c839b4d6e9bf6e22, type: 3}
   spreadAngle: 0
   pellets: 0

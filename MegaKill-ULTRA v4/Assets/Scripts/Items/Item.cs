@@ -11,6 +11,8 @@ public class Item : MonoBehaviour
     [HideInInspector] public PlayerController player;
     [HideInInspector] public PopUp popUp;
 
+    [HideInInspector] public ItemData itemData;
+
     Renderer rend;
     
     public bool isHovering;

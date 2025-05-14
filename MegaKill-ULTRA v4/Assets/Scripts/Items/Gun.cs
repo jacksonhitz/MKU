@@ -20,7 +20,7 @@ public class Gun : Item
     {
         base.Start();
 
-        originalRot = transform.localEulerAngles;
+        itemData = data;
         bullets = data.maxBullets;
     }
 
@@ -30,7 +30,7 @@ public class Gun : Item
         if (rb.isKinematic)
         {
             rot = Vector3.Lerp(rot, Vector3.zero, data.recoilSpd * Time.deltaTime);
-            transform.localEulerAngles = originalRot + rot;
+            transform.localEulerAngles = data.rot + rot;
         }
     }
 

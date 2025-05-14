@@ -60,8 +60,8 @@ public class PlayerItems : MonoBehaviour
         item.transform.SetParent(hand);
         item.PlayerGrabbed();
 
-        item.transform.localPosition = Vector3.zero;
-        item.transform.localRotation = Quaternion.identity;
+        item.transform.localPosition = item.itemData.pos;
+        item.transform.localRotation = Quaternion.Euler(item.itemData.rot);
     }
 
     public void Throw(Item item)

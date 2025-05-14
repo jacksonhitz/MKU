@@ -10,6 +10,7 @@ public class Consumable : Item
     public override void Start()
     {
         base.Start();
+        itemData = data;
         charge = data.charge;
     }
 
