@@ -155,6 +155,7 @@ public class SoundManager : MonoBehaviour
             case StateManager.GameState.TANGO: Tango(); break;
             case StateManager.GameState.PAUSED: Paused(); break;
             case StateManager.GameState.FIGHT: Fight(); break;
+            case StateManager.GameState.DEAD: Dead(); break;
         }
     }
 
@@ -184,6 +185,12 @@ public class SoundManager : MonoBehaviour
     {
         dialogue.Stop();
         music.clip = acid;
+        music.Play();
+    }
+    void Dead()
+    {
+        dialogue.Stop();
+        music.clip = playerDeath;
         music.Play();
     }
 

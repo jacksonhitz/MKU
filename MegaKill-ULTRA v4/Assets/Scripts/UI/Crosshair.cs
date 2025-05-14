@@ -13,17 +13,20 @@ public class Crosshair : MonoBehaviour
     void Start()
     {
          Off();
-         StateChange(StateManager.State);
+         OnStateChanged(StateManager.State);
     }
     void OnEnable()
     {
-        StateManager.OnStateChanged += StateChange;
+        StateManager.OnStateChanged += OnStateChanged;
+        StateManager.OnSilentChanged += OnStateChanged;
     }
+
     void OnDisable()
     {
-        StateManager.OnStateChanged -= StateChange;
+        StateManager.OnStateChanged -= OnStateChanged;
+        StateManager.OnSilentChanged -= OnStateChanged;
     }
-    void StateChange(StateManager.GameState state)
+    void OnStateChanged(StateManager.GameState state)
     {
         if (StateManager.IsActive())
         {

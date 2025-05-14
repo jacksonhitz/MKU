@@ -91,24 +91,21 @@ public static class StateManager
 
     public static void LoadState(GameState newState)
     {
-        if (State != newState && Scene.Contains(newState))
+        if (State != newState || previous != GameState.PAUSED)
         {
-            void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+            State = newState;
+            if (Scene.Contains(newState) && SceneManager.GetActiveScene().name != newState.ToString())
             {
-                State = newState;
-                SceneManager.sceneLoaded -= OnSceneLoaded;
+                SceneManager.LoadScene(newState.ToString());
+                Debug.Log("Loading Scene " + newState);
             }
-
-            SceneManager.sceneLoaded += OnSceneLoaded;
-            SceneManager.LoadScene(newState.ToString());
-
-            Debug.Log("Loading " + newState);
         }
         else
         {
             SilentState(newState);
         }
     }
+
 
     public static void NextState()
     {

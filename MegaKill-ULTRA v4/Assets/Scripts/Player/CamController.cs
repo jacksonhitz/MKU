@@ -68,6 +68,7 @@ public class CamController : MonoBehaviour
         phase = 2;
         SetEffects();
         SetClr();
+        ResetShader();
         StartCoroutine(FadeIn(2f));
     }
 
@@ -159,16 +160,11 @@ public class CamController : MonoBehaviour
     {
         currentAmplitude += 1f;
         currentFrequency += 1f;
-        currentLerp += 0.1f;
+        currentLerp += 0.001f;
 
         camMat.SetFloat("_Frequency", currentFrequency);
         camMat.SetFloat("_Amplitude", currentFrequency);
         camMat.SetFloat("_Lerp", currentLerp);
-    }
-
-    void TransitionOff()
-    {
-        ResetShader();
     }
 
     void ResetShader()

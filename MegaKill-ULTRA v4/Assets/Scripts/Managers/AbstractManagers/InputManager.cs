@@ -8,6 +8,8 @@ public abstract class InputManager : MonoBehaviour
         UpdateItems();
         UpdatePlayer();
 
+        Debug.Log(StateManager.State);
+
     }
 
     void UpdateBase()
@@ -17,8 +19,13 @@ public abstract class InputManager : MonoBehaviour
             StateManager.NextState();
         }
 
+        if (Input.GetKeyDown(KeyCode.B)) StateManager.LoadState(StateManager.GameState.FIGHT);
+        
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+
+            Debug.Log("called pause");
             if (StateManager.State != StateManager.GameState.PAUSED)
                 StateManager.LoadState(StateManager.GameState.PAUSED);
             else

@@ -5,6 +5,12 @@ public class PlayerHealth : MonoBehaviour, IHitable
 {
     [SerializeField] float health;
     float maxHealth = 100;
+    UEye uEye;
+
+    void Awake()
+    {
+        uEye = FindObjectOfType<UEye>();
+    }
 
     void Start()
     {
@@ -14,22 +20,31 @@ public class PlayerHealth : MonoBehaviour, IHitable
     public void Heal(float heal)
     {
         if (StateManager.State != StateManager.GameState.DEAD)
+        {
             health = Mathf.Min(health + heal, maxHealth);
+            uEye.UpdateHealth(health);
+        }
     }
 
     public void Hit(float dmg)
     {
         if (StateManager.State != StateManager.GameState.DEAD)
+        {
             health -= dmg;
-        if (health <= 0)
-            StartCoroutine(Dead());
+            uEye.UpdateHealth(health);
 
-        Debug.Log("player hit");
+        }
+        if (health <= 0)
+        {
+            StateManager.LoadState(StateManager.GameState.DEAD);
+            StartCoroutine(Return());
+        }
     }
 
-    IEnumerator Dead()
+    IEnumerator Return()
     {
         yield return new WaitForSeconds(3f);
-        StateManager.LoadState(StateManager.GameState.DEAD);
+        StateManager.LoadState(StateManager.GameState.TITLE);
+        Debug.Log("title called");
     }
 }

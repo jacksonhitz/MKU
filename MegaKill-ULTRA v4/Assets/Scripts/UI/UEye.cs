@@ -39,13 +39,16 @@ public class UEye : MonoBehaviour
 
     void OnEnable()
     {
-        StateManager.OnStateChanged += StateChange;
+        StateManager.OnStateChanged += OnStateChanged;
+        StateManager.OnSilentChanged += OnStateChanged;
     }
+
     void OnDisable()
     {
-        StateManager.OnStateChanged -= StateChange;
+        StateManager.OnStateChanged -= OnStateChanged;
+        StateManager.OnSilentChanged -= OnStateChanged;
     }
-    void StateChange(StateManager.GameState state)
+    void OnStateChanged(StateManager.GameState state)
     {
         Debug.Log("state changed");
         if (StateManager.IsActive())

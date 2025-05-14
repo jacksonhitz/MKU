@@ -24,15 +24,14 @@ public class Command : MonoBehaviour
 
     void OnEnable()
     {
-        StateManager.OnStateChanged += StateChange;
+        StateManager.OnStateChanged += OnStateChanged;
     }
 
     void OnDisable()
     {
-        StateManager.OnStateChanged -= StateChange;
+        StateManager.OnStateChanged -= OnStateChanged;
     }
-
-    void StateChange(StateManager.GameState state)
+    void OnStateChanged(StateManager.GameState state)
     {
         if (StateManager.State == StateManager.GameState.FIGHT)
         {
