@@ -30,7 +30,7 @@ public class Gun : Item
         if (rb.isKinematic)
         {
             rot = Vector3.Lerp(rot, Vector3.zero, data.recoilSpd * Time.deltaTime);
-            transform.localEulerAngles = data.rot + rot;
+           // transform.localEulerAngles = data.rot + rot;
         }
     }
 
@@ -41,10 +41,13 @@ public class Gun : Item
 
     public void Hitscan(Ray ray)
     {
+        Debug.Log("scan 1");
         if (Physics.Raycast(ray, out RaycastHit hit, data.range))
         {
+            Debug.Log("scan 2");
             if (hit.transform.CompareTag("Enemy"))
             {
+                Debug.Log("scan 3");
                 Enemy enemy = hit.transform.GetComponentInParent<Enemy>();
                 if (enemy != null)
                 {

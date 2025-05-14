@@ -26,13 +26,10 @@ public class EnemyPunch : Enemy
         animator.SetTrigger("Atk");
         yield return new WaitForSeconds(0.2f);
 
-        IHit hittable = target.GetComponent<IHit>();
-        if (hittable != null)
-        {
-            hittable.Hit(dmg);
-        }
+        IHitable iHit = target.GetComponent<IHitable>();
+        iHit?.Hit(dmg);
 
-      //  soundManager.EnemySFX(sfx, attackClip);
+        //  soundManager.EnemySFX(sfx, attackClip);
         yield break;
     }
 }

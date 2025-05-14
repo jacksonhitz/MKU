@@ -13,13 +13,16 @@ MonoBehaviour:
   m_Name: SG
   m_EditorClassIdentifier: 
   itemName: Shotgun
-  type: 0
+  type: 1
   prefab: {fileID: 5509406807236734046, guid: 0b63b1f844bb54e78ad021a14b5bd3b6, type: 3}
+  pos: {x: 0, y: -0.4, z: 0.5}
+  rot: {x: -90, y: 0, z: 180}
   dmg: 100
   fireRate: 0.5
   maxBullets: 2
   recoilMag: -75
   recoilSpd: 5
+  range: 1000
   muzzleFlash: {fileID: 6847902066312781993, guid: b4badc72dfe5f435c839b4d6e9bf6e22, type: 3}
   spreadAngle: 5
   pellets: 12

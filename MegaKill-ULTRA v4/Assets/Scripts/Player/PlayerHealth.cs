@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour, IHit
+public class PlayerHealth : MonoBehaviour, IHitable
 {
     [SerializeField] float health;
     float maxHealth = 100;
@@ -23,6 +23,8 @@ public class PlayerHealth : MonoBehaviour, IHit
             health -= dmg;
         if (health <= 0)
             StartCoroutine(Dead());
+
+        Debug.Log("player hit");
     }
 
     IEnumerator Dead()

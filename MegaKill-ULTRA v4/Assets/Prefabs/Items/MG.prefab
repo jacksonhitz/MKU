@@ -154,8 +154,9 @@ MonoBehaviour:
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
   rb: {fileID: 0}
   soundManager: {fileID: 0}
-  playerController: {fileID: 0}
+  player: {fileID: 0}
   popUp: {fileID: 0}
+  itemData: {fileID: 0}
   isHovering: 0
   thrown: 0
   currentState: 0
@@ -164,7 +165,7 @@ MonoBehaviour:
   canFire: 1
   bullets: 0
   tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
-  tracerDuration: 0
+  tracerDuration: 0.2
 --- !u!64 &-1718197032171698968
 MeshCollider:
   m_ObjectHideFlags: 0

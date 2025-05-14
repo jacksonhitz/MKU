@@ -71,10 +71,13 @@ public class PlayerCombat : MonoBehaviour
         Collider[] hits = Physics.OverlapBox(range.bounds.center, range.bounds.extents, range.transform.rotation);
         foreach (Collider hit in hits)
         {
-            if (hit.TryGetComponent(out IHit iHit))
+            if (hit.transform.CompareTag("Enemy"))
             {
-                iHit.Hit(20f);
+                IHitable iHit = hit.GetComponentInParent<IHitable>();
+                iHit?.Hit(50f);
+               // break;
             }
         }
     }
+
 }

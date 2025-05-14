@@ -3,7 +3,7 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class Enemy : MonoBehaviour, IHit, IInteractable
+public abstract class Enemy : MonoBehaviour, IHitable, IInteractable
 {
     public enum EnemyState { Wander, Active, Brawl, Static, Pathing }
     public EnemyState currentState;
