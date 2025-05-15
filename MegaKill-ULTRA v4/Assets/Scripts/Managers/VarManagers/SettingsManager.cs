@@ -8,7 +8,7 @@ public class SettingsManager : MonoBehaviour
     public float SFXVolume { get; private set; } = 50;
     public float Sensitivity { get; private set; } = 500;
 
-    SoundManager soundManager;
+    SoundManager sound;
 
     void Awake()
     {
@@ -19,25 +19,38 @@ public class SettingsManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
 
-        soundManager = FindObjectOfType<SoundManager>();
+    void OnEnable()
+    {
+        StateManager.OnStateChanged += StateChange;
+    }
+    void OnDisable()
+    {
+        StateManager.OnStateChanged -= StateChange;
+    }
+    void StateChange(StateManager.GameState state)
+    {
+        sound = SoundManager.Instance;
+        switch (state)
+        {
+          //  case StateManager.GameState.TITLE: Title(); break;
+
+        }
     }
 
     public void SetMusicVolume(float value)
     {
         MusicVolume = Mathf.Clamp(value, 0, 100);
-        if (soundManager != null)
-            soundManager.music.volume = MusicVolume / 300f;
+
+        sound.music.volume = MusicVolume / 300f;
     }
 
     public void SetSFXVolume(float value)
     {
         SFXVolume = Mathf.Clamp(value, 0, 100);
-        if (soundManager != null)
-        {
-            soundManager.sfx.volume = SFXVolume / 100f;
-            soundManager.dialogue.volume = SFXVolume / 100f;
-        }
+        sound.sfx.volume = SFXVolume / 100f;
+        sound.dialogue.volume = SFXVolume / 100f;
     }
 
     public void SetSensitivity(float value)

@@ -12,10 +12,10 @@ public static class StateManager
         INTRO,
 
         TUTORIAL,
+        REHEARSAL,
         TANGO,
         SABLE,
         SPEARHEAD,
-        LAUNCH,
 
         FIGHT,
 
@@ -35,17 +35,17 @@ public static class StateManager
     {
         GameState.TITLE,
         GameState.TUTORIAL,
+        GameState.REHEARSAL,
         GameState.TANGO,
         GameState.SABLE,
         GameState.SPEARHEAD,
-        //GameState.LAUNCH, 
     };
     static readonly HashSet<GameState> Scene = new(SceneOrder);
 
     static readonly HashSet<GameState> Active = new()
     {
         GameState.TUTORIAL,
-        GameState.LAUNCH,
+        GameState.REHEARSAL,
         GameState.TANGO,
         GameState.SABLE,
         GameState.SPEARHEAD,

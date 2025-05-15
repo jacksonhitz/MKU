@@ -4,17 +4,23 @@ using UnityEngine;
 public class GunData : ItemData
 {
     public float dmg;
-    public float fireRate;
     public float maxBullets;
     public float recoilMag;
     public float recoilSpd;
     public float range;
+    public float vel;
 
-    public ParticleSystem muzzleFlash;
+    [Header("Enemy")]
+    public GameObject bulletPrefab;
 
-    //mg-sg
+    [Header("MG/SG")]
     public float spreadAngle;
 
-    //sg
+    [Header("SG")]
     public float pellets;
+
+    [Header("VFX")]
+    public ParticleSystem muzzleFlash;
+    public TrailRenderer tracerPrefab;
+    public float tracerDuration;
 }

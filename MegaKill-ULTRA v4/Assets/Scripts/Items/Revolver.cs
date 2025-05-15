@@ -1,34 +1,48 @@
 using System.Collections;
 using UnityEngine;
 
-
 public class Revolver : Gun
 {
-   public override void Use()
-   {
-        if (!canFire) return;
-        if (bullets > 0)
+    float targetAdjust = 0.25f;
+
+    public override void Use()
+    {
+        Vector3 dir; 
+        if (currentState == ItemState.Player)
         {
-            Debug.Log("FUCK OFF");
-
-            StartCoroutine(FireCooldown());
-            Recoil();
-            soundManager.RevShot();
-            data.muzzleFlash.Play();
-
-            bullets--;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Hitscan(ray);
+            dir = ray.direction;
+            if (bullets > 0)
+            {
+                bullets--;
+                FireBasic();
+                FireRay(dir);
 
-            Debug.Log("shot fired");
+                sound?.RevShot();
+            }
+            else
+            {
+                popUp?.UpdatePopUp("EMPTY");
+                sound?.RevEmpty();
+            }
         }
-        else
+        else if (currentState == ItemState.Enemy && holder is Enemy enemy)
         {
-            popUp.UpdatePopUp("EMPTY");
-            soundManager.RevEmpty();
-        } 
-   }
+            Vector3 target = enemy.target.transform.position;
+            target.y += targetAdjust;
+            dir = (target - firePoint.position).normalized;
+
+            FireBasic();
+            FireBullet(dir);
+
+            //sound?.EnemySFX(enemy.sfx, enemy.attackClip);
+        }
+    }
+
+    void FireBasic()
+    {
+        Recoil();
+        data.muzzleFlash?.Play();
+    }
+
 }
-
-
-

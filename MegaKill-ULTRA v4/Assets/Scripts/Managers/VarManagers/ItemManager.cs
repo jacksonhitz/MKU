@@ -10,13 +10,7 @@ public class ItemManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     void Start()

@@ -43,18 +43,15 @@ public class SettingsUI : MonoBehaviour
 
     void OnEnable()
     {
-        StateManager.OnStateChanged += OnStateChanged;
-        StateManager.OnSilentChanged += OnStateChanged;
+        StateManager.OnStateChanged += StateChange;
+        StateManager.OnSilentChanged += StateChange;
     }
-
     void OnDisable()
     {
-        StateManager.OnStateChanged -= OnStateChanged;
-        StateManager.OnSilentChanged -= OnStateChanged;
+        StateManager.OnStateChanged -= StateChange;
+        StateManager.OnSilentChanged -= StateChange;
     }
-
-
-    void OnStateChanged(StateManager.GameState state)
+    void StateChange(StateManager.GameState state)
     {
         Debug.Log("state called");
 

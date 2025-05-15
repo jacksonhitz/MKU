@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     // All refrences in playerController are shared between multiple compartments in order to avoid extra refrences between compartments.
     // All other refrences that are specific to a compartment are stored within that compartment
 
-
     [Header("External")]
     public Camera cam;
     public SoundManager sound;
@@ -28,7 +27,6 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
-        sound = FindObjectOfType<SoundManager>();
         cam = Camera.main;
 
         combat = GetComponent<PlayerCombat>();
@@ -36,5 +34,10 @@ public class PlayerController : MonoBehaviour
         interact = GetComponent<PlayerInteract>();
         items = GetComponent<PlayerItems>();
         health = GetComponent<PlayerHealth>();
+    }
+
+    void Start()
+    {
+        sound = SoundManager.Instance;
     }
 }

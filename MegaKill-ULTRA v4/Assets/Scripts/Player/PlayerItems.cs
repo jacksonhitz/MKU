@@ -19,7 +19,7 @@ public class PlayerItems : MonoBehaviour
         if (leftItem == null)
             controller.combat.Punch(controller.left);
         else
-            leftItem.Invoke("Use", 0f);
+            leftItem.Invoke("UseCheck", 0f);
     }
 
     public void UseRight()
@@ -27,7 +27,7 @@ public class PlayerItems : MonoBehaviour
         if (rightItem == null)
             controller.combat.Punch(controller.right);
         else
-            rightItem.Invoke("Use", 0f);
+            rightItem.Invoke("UseCheck", 0f);
     }
 
     public void Left()
@@ -58,7 +58,7 @@ public class PlayerItems : MonoBehaviour
         if (hand == controller.left) leftItem = item;
         else rightItem = item;
         item.transform.SetParent(hand);
-        item.PlayerGrabbed();
+        item.PlayerGrabbed(controller);
 
         item.transform.localPosition = item.itemData.pos;
         item.transform.localRotation = Quaternion.Euler(item.itemData.rot);

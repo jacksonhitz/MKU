@@ -66,7 +66,7 @@ public abstract class Enemy : MonoBehaviour, IHitable, IInteractable
     Vector3 wanderDestination;
     float wanderTimer;
 
-    public GameObject currentBrawlTarget;
+    public GameObject target;
     float brawlTargetTimer;
 
     void Awake()
@@ -179,33 +179,31 @@ public abstract class Enemy : MonoBehaviour, IHitable, IInteractable
 
     void BrawlBehavior()
     {
-        agent.speed = 30f; // Faster speed when brawling
+        agent.speed = 30f; 
 
         brawlTargetTimer -= Time.deltaTime;
 
-        if (currentBrawlTarget == null ||
-            (currentBrawlTarget.CompareTag("Enemy") && currentBrawlTarget.GetComponent<Enemy>().isDead) ||
-            brawlTargetTimer <= 0f)
+        if (target == null || (target.CompareTag("Enemy") && target.GetComponent<Enemy>().isDead) || brawlTargetTimer <= 0f)
         {
-            currentBrawlTarget = ChooseBrawlTarget();
+            target = ChooseBrawlTarget();
             brawlTargetTimer = Random.Range(4f, 6f);
         }
 
-        if (currentBrawlTarget != null)
+        if (target != null)
         {
-            Debug.DrawLine(transform.position, currentBrawlTarget.transform.position, Color.red);
+            Debug.DrawLine(transform.position, target.transform.position, Color.red);
 
-            float distance = Vector3.Distance(transform.position, currentBrawlTarget.transform.position);
+            float distance = Vector3.Distance(transform.position, target.transform.position);
 
             if (distance < attackRange)
             {
                 agent.ResetPath();
-                LookTowards(currentBrawlTarget.transform.position);
-                StartCoroutine(AttackCheck(currentBrawlTarget));
+                LookTowards(target.transform.position);
+                StartCoroutine(AttackCheck(target));
             }
             else
             {
-                Vector3 spreadPosition = GetSpreadPosition(currentBrawlTarget.transform.position);
+                Vector3 spreadPosition = GetSpreadPosition(target.transform.position);
                 agent.SetDestination(spreadPosition);
                 LookTowards(spreadPosition);
             }
@@ -261,7 +259,7 @@ public abstract class Enemy : MonoBehaviour, IHitable, IInteractable
             foreach (Enemy other in enemyManager.enemies)
             {
                 if (other == this || other.isDead) continue;
-                if (other.currentBrawlTarget == enemy.gameObject)
+                if (other.target == enemy.gameObject)
                     currentAttackers++;
             }
 

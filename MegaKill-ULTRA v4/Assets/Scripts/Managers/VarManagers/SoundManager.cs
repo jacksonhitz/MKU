@@ -6,7 +6,7 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
     
-        [Header("Audio Sources")]
+    [Header("Audio Sources")]
     public AudioSource music;
     public AudioSource sfx;        
     public AudioSource dialogue;
@@ -113,14 +113,6 @@ public class SoundManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
         tracks = new List<AudioClip> { witch, acid, could, dj, all, hott, threes, life, real, four };
         lines = new List<AudioClip> { line1, line2, line3, line4, line5, line6, line7 };
 

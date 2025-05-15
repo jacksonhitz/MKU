@@ -1,22 +1,24 @@
 using System.Collections;
 using UnityEngine;
 
-public class Item : MonoBehaviour
+public abstract class Item : MonoBehaviour
 {
     [SerializeField] Material def;
     [SerializeField] Material glow;
 
     [HideInInspector] public Rigidbody rb;
-    [HideInInspector] public SoundManager soundManager;
-    [HideInInspector] public PlayerController player;
+    [HideInInspector] public SoundManager sound;
     [HideInInspector] public PopUp popUp;
-
-    [HideInInspector] public ItemData itemData;
 
     Renderer rend;
     
     public bool isHovering;
     public bool thrown;
+
+    public ItemData itemData;
+    public MonoBehaviour holder;
+
+    bool useable;
 
     public enum ItemState
     {
@@ -30,10 +32,14 @@ public class Item : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rend = GetComponent<Renderer>();
-        soundManager = FindObjectOfType<SoundManager>();
-        player = FindObjectOfType<PlayerController>();
         popUp = FindObjectOfType<PopUp>();
+
+        sound = SoundManager.Instance;
+
+        useable = true;
     }
+
+    //STATE MANAGING
     public virtual void Start()
     {
         if (transform.parent != null)
@@ -44,7 +50,6 @@ public class Item : MonoBehaviour
         }
         else SetState(ItemState.Available);
     }
-
     public void SetState(ItemState state)
     {
         currentState = state;
@@ -61,14 +66,37 @@ public class Item : MonoBehaviour
                 break;
         }
     }
-    public void PlayerGrabbed()
+    public void PlayerGrabbed(PlayerController player)
     {
+        holder = player;
         SetState(ItemState.Player);
     }
-    public void EnemyGrabbed()
+    public void EnemyGrabbed(Enemy enemy)
     {
+        holder = enemy;
         SetState(ItemState.Enemy);
     }
+
+    //USE
+    IEnumerator UseTimer()
+    {
+        useable = false;
+        yield return new WaitForSeconds(itemData.rate);
+        useable = true;
+    }
+    public void UseCheck()
+    {
+        Debug.Log("check");
+        if (useable)
+        {
+            Use();
+            StartCoroutine(UseTimer());
+        }
+    }
+    public virtual void Use() { }
+
+
+
     public void Thrown()
     {
         transform.SetParent(null);
@@ -176,5 +204,5 @@ public class Item : MonoBehaviour
         }
     }
 
-    public virtual void Use() { }
+    
 }
