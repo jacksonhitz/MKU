@@ -17,11 +17,12 @@ public class EnemyPunch : Enemy
         attackRate = 1f;
         dmg = 10f;
     }
-    protected override void CallAttack(GameObject target)
+    protected override void CallPunch()
     {
-        StartCoroutine(Attack(target));
+        StartCoroutine(Attack());
     }
-      IEnumerator Attack(GameObject target)
+
+    IEnumerator Attack()
     {
         animator.SetTrigger("Atk");
         yield return new WaitForSeconds(0.2f);
@@ -29,7 +30,8 @@ public class EnemyPunch : Enemy
         IHitable iHit = target.GetComponent<IHitable>();
         iHit?.Hit(dmg);
 
-        //  soundManager.EnemySFX(sfx, attackClip);
+        soundManager.EnemySFX(sfx, attackClip);
         yield break;
     }
+
 }

@@ -28,8 +28,14 @@ public abstract class Item : Interactable
         popUp = FindObjectOfType<PopUp>();
     }
 
-    //STATE MANAGING
+
     public virtual void Start()
+    {
+        FindState();
+    }
+
+    //STATE MANAGING
+    public void FindState()
     {
         if (transform.parent != null)
         {
@@ -46,24 +52,33 @@ public abstract class Item : Interactable
         {
             case ItemState.Enemy:
                 CollidersOff();
+                EnemyPass();
+                holder = GetComponentInParent<Enemy>();
                 break;
             case ItemState.Player:
                 CollidersOff();
+                holder = GetComponentInParent<PlayerController>();
                 break;
             case ItemState.Available:
                 CollidersOn();
+                holder = null;
                 isUseable = true;
                 break;
         }
     }
+    public void EnemyPass()
+    {
+        holder = GetComponentInParent<Enemy>();
+        var enemy = holder as Enemy;
+        enemy.item = this;
+    }
+    
     public void PlayerGrabbed(PlayerController player)
     {
-        holder = player;
         SetState(ItemState.Player);
     }
     public void EnemyGrabbed(Enemy enemy)
     {
-        holder = enemy;
         SetState(ItemState.Enemy);
     }
 

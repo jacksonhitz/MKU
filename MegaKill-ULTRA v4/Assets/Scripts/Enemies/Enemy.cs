@@ -3,9 +3,9 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class Enemy : MonoBehaviour, IHitable, IInteractable
+public class Enemy : MonoBehaviour, IHitable, IInteractable
 {
-    public enum EnemyState { Wander, Active, Brawl, Static, Pathing }
+    public enum EnemyState { Active, Wander, Brawl, Static, Pathing }
     public EnemyState currentState;
     public bool friendly;
 
@@ -17,6 +17,11 @@ public abstract class Enemy : MonoBehaviour, IHitable, IInteractable
 
     [Header("VFX")]
     public GameObject deathEffect;
+
+    [Header("Items")]
+    public Item item;
+
+
 
     [Header("Brawl Settings")]
     float playerPriorityChance = 0.5f;
@@ -64,10 +69,13 @@ public abstract class Enemy : MonoBehaviour, IHitable, IInteractable
     float health;
 
     Vector3 wanderDestination;
-    float wanderTimer;
 
     public GameObject target;
     float brawlTargetTimer;
+
+    
+    protected virtual void Start() { }
+    protected virtual void DropItem() { }
 
     void Awake()
     {
@@ -127,6 +135,33 @@ public abstract class Enemy : MonoBehaviour, IHitable, IInteractable
         }
     }
 
+    public IEnumerator AttackCheck()
+    {
+        if (!isAttacking)
+        {
+            animator.SetBool("isAttacking", true);
+            isAttacking = true;
+
+            ItemCheck();
+
+            Enemy targetEnemy = target.GetComponent<Enemy>();
+            if (targetEnemy != null && !targetEnemy.isDead)
+            {
+                targetEnemy.currentState = EnemyState.Brawl;
+            }
+
+            yield return new WaitForSeconds(attackRate);
+            isAttacking = false;
+            animator.SetBool("isAttacking", false);
+        }
+    }
+    void ItemCheck()
+    {
+        if (item != null) item.UseCheck();
+        else CallPunch();
+    }
+    protected virtual void CallPunch() { }
+
     void WanderBehavior()
     {
         agent.speed = 10f; // Slow stroll when wandering
@@ -164,7 +199,7 @@ public abstract class Enemy : MonoBehaviour, IHitable, IInteractable
         {
             agent.ResetPath();
             LookTowards(player.transform.position);
-            StartCoroutine(AttackCheck(player.gameObject));
+            StartCoroutine(AttackCheck());
         }
         else if (detectedPlayer && Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
         {
@@ -199,7 +234,7 @@ public abstract class Enemy : MonoBehaviour, IHitable, IInteractable
             {
                 agent.ResetPath();
                 LookTowards(target.transform.position);
-                StartCoroutine(AttackCheck(target));
+                StartCoroutine(AttackCheck());
             }
             else
             {
@@ -281,34 +316,7 @@ public abstract class Enemy : MonoBehaviour, IHitable, IInteractable
     }
 
 
-    public IEnumerator AttackCheck(GameObject target)
-    {
-        if (!isAttacking)
-        {
-            Debug.Log($"{gameObject.name} is ATTACKING {target.name}");
-
-            animator.SetBool("isAttacking", true);
-            isAttacking = true;
-
-            CallAttack(target);
-
-            Enemy targetEnemy = target.GetComponent<Enemy>();
-            if (targetEnemy != null && !targetEnemy.isDead)
-            {
-                targetEnemy.currentState = EnemyState.Brawl;
-            }
-
-            yield return new WaitForSeconds(attackRate);
-            isAttacking = false;
-            animator.SetBool("isAttacking", false);
-        }
-        else
-        {
-            Debug.Log($"{gameObject.name} tried to attack but was already attacking");
-
-        }
-        //yield break;
-    }
+    
 
     void PathingBehavior()
     {
@@ -414,7 +422,5 @@ public abstract class Enemy : MonoBehaviour, IHitable, IInteractable
     //    currentBrawlTarget = ChooseBrawlTarget();
     //}
 
-    protected abstract void CallAttack(GameObject target);
-    protected abstract void Start();
-    protected abstract void DropItem();
+
 }
