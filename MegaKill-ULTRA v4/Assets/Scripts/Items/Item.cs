@@ -1,24 +1,17 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class Item : MonoBehaviour
+public abstract class Item : Interactable
 {
-    [SerializeField] Material def;
-    [SerializeField] Material glow;
-
     [HideInInspector] public Rigidbody rb;
-    [HideInInspector] public SoundManager sound;
     [HideInInspector] public PopUp popUp;
-
-    Renderer rend;
     
-    public bool isHovering;
     public bool thrown;
 
     public ItemData itemData;
     public MonoBehaviour holder;
 
-    bool useable;
+    bool isUseable;
 
     public enum ItemState
     {
@@ -28,15 +21,11 @@ public abstract class Item : MonoBehaviour
     }
     public ItemState currentState;
 
-    public void Awake()
+    public override void Awake()
     {
+        base.Awake();
         rb = GetComponent<Rigidbody>();
-        rend = GetComponent<Renderer>();
         popUp = FindObjectOfType<PopUp>();
-
-        sound = SoundManager.Instance;
-
-        useable = true;
     }
 
     //STATE MANAGING
@@ -63,6 +52,7 @@ public abstract class Item : MonoBehaviour
                 break;
             case ItemState.Available:
                 CollidersOn();
+                isUseable = true;
                 break;
         }
     }
@@ -80,14 +70,13 @@ public abstract class Item : MonoBehaviour
     //USE
     IEnumerator UseTimer()
     {
-        useable = false;
+        isUseable = false;
         yield return new WaitForSeconds(itemData.rate);
-        useable = true;
+        isUseable = true;
     }
     public void UseCheck()
     {
-        Debug.Log("check");
-        if (useable)
+        if (isUseable)
         {
             Use();
             StartCoroutine(UseTimer());
@@ -177,32 +166,4 @@ public abstract class Item : MonoBehaviour
         if (TryGetComponent(out CapsuleCollider capsuleCollider))
             capsuleCollider.enabled = false;
     }
-
-
-    // HIGHLIGHT ITEM
-    void OnMouseEnter()
-    {
-        isHovering = true;
-    }
-    void OnMouseExit()
-    {
-        isHovering = false;
-    }
-    public void DefaultMat()
-    {
-        isHovering = false;
-        if (rend != null)
-        {
-            rend.material = def;
-        }
-    }
-    public void GlowMat()
-    {
-        if (rend != null)
-        {
-            rend.material = glow;
-        }
-    }
-
-    
 }

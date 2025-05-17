@@ -7,7 +7,7 @@ using TMPro;
 
 public class Tutorial : MonoBehaviour
 {
-    ItemManager itemManager;
+    InteractionManager interacts;
 
     //Main instruction text
     [SerializeField]
@@ -40,14 +40,15 @@ public class Tutorial : MonoBehaviour
 
     void Awake()
     {
-        itemManager = FindObjectOfType<ItemManager>();
+        interacts = FindObjectOfType<InteractionManager>();
     }
     void Start()
     {
-        itemManager?.CollectItems();
+        interacts?.Collect();
+        StateManager.LoadState(StateManager.GameState.TUTORIAL);
     }
 
-    void Update() //Run input checks for current tutorial stage, based on state manager
+    void Update() 
     {
         switch (TutorialStateManager.State) 
         {

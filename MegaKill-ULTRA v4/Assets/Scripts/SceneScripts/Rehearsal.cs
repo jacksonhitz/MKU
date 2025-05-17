@@ -4,18 +4,15 @@ using UnityEngine;
 
 public class Rehearsal : MonoBehaviour
 {
-    ItemManager itemManager;
-    Dialogue file;
+    InteractionManager interacts;
 
     void Awake()
     {
-        itemManager = FindObjectOfType<ItemManager>();
+        interacts = FindObjectOfType<InteractionManager>();
     }
-
     void Start()
     {
+        interacts?.Collect();
         StateManager.LoadState(StateManager.GameState.REHEARSAL);
-
-        itemManager?.CollectItems();
     }
 }

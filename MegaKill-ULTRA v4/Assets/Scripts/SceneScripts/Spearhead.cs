@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class Spearhead : MonoBehaviour
 {
-    ItemManager itemManager;
+    InteractionManager interacts;
 
     void Awake()
     {
-        itemManager = FindObjectOfType<ItemManager>();
+        interacts = FindObjectOfType<InteractionManager>();
     }
-
     void Start()
     {
+        interacts?.Collect();
         StateManager.LoadState(StateManager.GameState.SPEARHEAD);
-
-        itemManager?.CollectItems();
     }
 }

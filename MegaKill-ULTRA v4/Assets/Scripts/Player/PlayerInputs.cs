@@ -2,19 +2,13 @@ using UnityEngine;
 
 public class PlayerInputs : InputManager
 {
-    ItemManager itemManager;
+    InteractionManager interacts;
     PlayerController controller;
 
     void Awake()
     {
-        itemManager = FindObjectOfType<ItemManager>();
+        interacts = FindObjectOfType<InteractionManager>();
         controller = FindObjectOfType<PlayerController>();
-
-
-        if (itemManager == null)
-            Debug.LogWarning("ItemManager not found");
-        if (controller == null)
-            Debug.LogWarning("PlayerController not found");
     }
 
     protected override void UpdateItems()
@@ -22,9 +16,9 @@ public class PlayerInputs : InputManager
         if (StateManager.IsActive())
         {
             if (Input.GetKey(KeyCode.Tab))
-                itemManager?.HighlightAll();
+                interacts?.HighlightAll();
             else
-                itemManager?.HighlightItem();
+                interacts?.HighlightOne();
         }
     }
 

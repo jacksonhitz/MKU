@@ -7,7 +7,7 @@ public class Festival : MonoBehaviour
     SoundManager soundManager;
     Dialogue dialogue;
     PopUp popUp;
-    ItemManager itemManager;
+    InteractionManager interacts;
 
     int dosedCount;
 
@@ -17,15 +17,16 @@ public class Festival : MonoBehaviour
     {
         enemyManager = FindObjectOfType<EnemyManager>();
         soundManager = FindAnyObjectByType<SoundManager>();
-        itemManager = FindObjectOfType<ItemManager>();
+        interacts = FindObjectOfType<InteractionManager>();
         dialogue = FindObjectOfType<Dialogue>();
         popUp = FindObjectOfType<PopUp>();
     }
 
     void Start()
     {
+        interacts?.Collect();
         StateManager.LoadState(StateManager.GameState.TANGO);
-        itemManager?.CollectItems();
+
         dialogue.TypeText("F TO HAND OUT MKU");
     }
 
