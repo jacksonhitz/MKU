@@ -30,7 +30,7 @@ public class PlayerHealth : MonoBehaviour, IHitable
     {
         if (StateManager.State != StateManager.GameState.DEAD)
         {
-            health -= dmg;
+           // health -= dmg;
             uEye.UpdateHealth(health);
 
         }

@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
 
 
 
+
     [Header("Brawl Settings")]
     float playerPriorityChance = 0.5f;
 
@@ -50,8 +51,8 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
 
     // PUBLIC VAR
     protected float dmg;
-    protected float attackRate;
-    protected float attackRange;
+    [SerializeField] protected float attackRate;
+    [SerializeField] protected float attackRange;
     protected float detectionRange = 100f;
     protected bool isAttacking;
     protected bool detectedPlayer;
@@ -73,10 +74,7 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
     public GameObject target;
     float brawlTargetTimer;
 
-    
-    protected virtual void Start() { }
-    protected virtual void DropItem() { }
-
+   
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -92,6 +90,8 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
 
         health = maxHealth;
     }
+
+    protected virtual void Start() { }
 
     protected virtual void Update()
     {
@@ -134,7 +134,6 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
             los = false;
         }
     }
-
     public IEnumerator AttackCheck()
     {
         if (!isAttacking)
@@ -155,12 +154,38 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
             animator.SetBool("isAttacking", false);
         }
     }
+
+
+    //ITEMS
+    public virtual void SetItem(Item newItem)
+    {
+        item = newItem;
+        attackRate = item.itemData.rate;
+        //should be weapondata eventually
+        if (item.itemData is GunData gunData)
+        {
+            attackRange = gunData.range;
+        }
+    }
     void ItemCheck()
     {
         if (item != null) item.UseCheck();
-        else CallPunch();
+        else CallAttack();
     }
-    protected virtual void CallPunch() { }
+    protected virtual void CallAttack() { }
+    protected virtual void DropItem()
+    {
+        if (item != null)
+        {
+            item.Dropped();
+            // CLEAR RATE/RANGE
+        }
+    }
+
+
+
+
+
 
     void WanderBehavior()
     {
@@ -195,7 +220,9 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
     {
         if (friendly) return;
 
-        if (los && Vector3.Distance(transform.position, player.transform.position) < attackRange)
+        target = player.gameObject;
+
+        if (los && Vector3.Distance(transform.position, player.transform.position) <= attackRange)
         {
             agent.ResetPath();
             LookTowards(player.transform.position);

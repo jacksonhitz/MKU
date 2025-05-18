@@ -3,21 +3,14 @@ using UnityEngine;
 
 public class EnemyPunch : Enemy
 {
-    Item item;
-    protected override void DropItem()
-    {
-        if (item != null)
-        {
-            item.Dropped();
-        }
-    }
+    
     protected override void Start()
     {
         attackRange = 6f;
         attackRate = 1f;
         dmg = 10f;
     }
-    protected override void CallPunch()
+    protected override void CallAttack()
     {
         StartCoroutine(Attack());
     }
@@ -33,5 +26,4 @@ public class EnemyPunch : Enemy
         soundManager.EnemySFX(sfx, attackClip);
         yield break;
     }
-
 }

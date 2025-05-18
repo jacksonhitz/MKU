@@ -11,7 +11,7 @@ public class EnemyDog : Enemy
         attackRate = 2f;
         dmg = 10f;
     }
-    protected override void CallAttack(GameObject target)
+    protected override void CallAttack()
     {
         StartCoroutine(Attack());
     }

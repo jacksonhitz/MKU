@@ -32,18 +32,32 @@ public abstract class Item : Interactable
     public virtual void Start()
     {
         FindState();
+        isUseable = true;
     }
 
-    //STATE MANAGING
+    //STATE MANAGING (Set State should probably be rewritten in a dict or something to match states with scripts) 
     public void FindState()
     {
         if (transform.parent != null)
         {
-            string tag = transform.parent.tag;
-            if (System.Enum.TryParse(tag, out ItemState state)) SetState(state);
-            else SetState(ItemState.Available);
+            holder = GetComponentInParent<Enemy>();
+            var enemy = holder as Enemy;
+            if (enemy != null)
+            {
+                enemy.SetItem(this);
+                SetState(ItemState.Enemy);
+                return;
+            }
+            
+            holder = GetComponentInParent<PlayerController>();
+            var player = holder as PlayerController;
+            if (player != null)
+            {
+                SetState(ItemState.Player);
+                return;
+            }
         }
-        else SetState(ItemState.Available);
+        SetState(ItemState.Available);
     }
     public void SetState(ItemState state)
     {
@@ -52,35 +66,21 @@ public abstract class Item : Interactable
         {
             case ItemState.Enemy:
                 CollidersOff();
-                EnemyPass();
-                holder = GetComponentInParent<Enemy>();
                 break;
             case ItemState.Player:
                 CollidersOff();
-                holder = GetComponentInParent<PlayerController>();
                 break;
             case ItemState.Available:
                 CollidersOn();
                 holder = null;
-                isUseable = true;
                 break;
         }
     }
-    public void EnemyPass()
+    public void Grabbed()
     {
-        holder = GetComponentInParent<Enemy>();
-        var enemy = holder as Enemy;
-        enemy.item = this;
+        FindState();
     }
-    
-    public void PlayerGrabbed(PlayerController player)
-    {
-        SetState(ItemState.Player);
-    }
-    public void EnemyGrabbed(Enemy enemy)
-    {
-        SetState(ItemState.Enemy);
-    }
+
 
     //USE
     IEnumerator UseTimer()
@@ -91,10 +91,12 @@ public abstract class Item : Interactable
     }
     public void UseCheck()
     {
+        Debug.Log("check1");
         if (isUseable)
         {
             Use();
             StartCoroutine(UseTimer());
+            Debug.Log("check2");
         }
     }
     public virtual void Use() { }

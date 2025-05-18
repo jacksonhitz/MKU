@@ -27,7 +27,7 @@ public class EnemyFlyingEye : Enemy
         dmg = 20f;
     }
 
-    protected override void CallAttack(GameObject target)
+    protected override void CallAttack()
     {
         StartCoroutine(Attack());
     }
