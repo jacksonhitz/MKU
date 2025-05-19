@@ -206,19 +206,33 @@ public class Tutorial : MonoBehaviour
         //Check if both are done
         if (completion[1] && completion[3])
         {
-            TutorialStateManager.State = TutorialStateManager.TutorialState.Items;
+            // TutorialStateManager.State = TutorialStateManager.TutorialState.Items;
             completion[1] = completion[3] = false;
             //Set on-screen text/color/visibility
-            instruction.text = "HIGHLIGHT";
-            controls[2].gameObject.SetActive(true);
-            controls[2].color = todo;
-            controls[2].text = "TAB";
-            controls[0].color = todo;
-            controls[0].gameObject.SetActive(false);
-            controls[1].gameObject.SetActive(false);
-            controls[3].gameObject.SetActive(false);
+            // instruction.text = "HIGHLIGHT";
+            // controls[2].gameObject.SetActive(true);
+            // controls[2].color = todo;
+            // controls[2].text = "TAB";
+            // controls[0].color = todo;
+            // controls[0].gameObject.SetActive(false);
+            // controls[1].gameObject.SetActive(false);
+            // controls[3].gameObject.SetActive(false);
 
-            Debug.Log("Changed state to Items");
+            // Debug.Log("Changed state to Items");
+            TutorialStateManager.State = TutorialStateManager.TutorialState.Use;
+            instruction.text = "USE";
+            controls[0].gameObject.SetActive(true);
+            controls[0].color = header;
+            controls[0].text = "CLICK";
+            controls[1].gameObject.SetActive(true);
+            controls[1].color = todo;
+            controls[1].text = "LEFT";
+            controls[2].gameObject.SetActive(false);
+            controls[3].gameObject.SetActive(true);
+            controls[3].color = todo;
+            controls[3].text = "RIGHT";
+
+            Debug.Log("Changed state to Use");
         }
     }
     void Items()
@@ -315,16 +329,7 @@ public class Tutorial : MonoBehaviour
             TutorialStateManager.State = TutorialStateManager.TutorialState.Fight;
             //Set on-screen text/color/visibility
             instruction.text = "FIGHT";
-            controls[0].gameObject.SetActive(true);
-            controls[0].text = "CLICK";
-            controls[0].color = header;
-            controls[1].gameObject.SetActive(true);
-            controls[1].text = "LEFT";
-            controls[1].color = todo;
             controls[2].gameObject.SetActive(false);
-            controls[3].gameObject.SetActive(true);
-            controls[3].text = "RIGHT";
-            controls[3].color = todo;
 
             Debug.Log("Changed state to Punch");
         }
@@ -338,12 +343,6 @@ public class Tutorial : MonoBehaviour
             //Change to last scene
             StateManager.LoadState(StateManager.GameState.TANGO);
         }
-    }
-
-    void Done()
-    {
-        //Change to last scene
-        StateManager.LoadState(StateManager.GameState.TANGO);
     }
 }
 
