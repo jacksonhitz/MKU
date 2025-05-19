@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
     // REFERENCES
     [HideInInspector] public NavMeshAgent agent;
     [HideInInspector] public PlayerController player;
-    [HideInInspector] public GameManager gameManager;
+    // [HideInInspector] public GameManager gameManager;
     [HideInInspector] public SoundManager soundManager;
     // [HideInInspector] public EnemyManager enemyManager;
     [HideInInspector] public Animator animator;
@@ -82,7 +82,7 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
 
         animator = GetComponentInChildren<Animator>();
         player = FindObjectOfType<PlayerController>();
-        gameManager = FindObjectOfType<GameManager>();
+        // gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
         // enemyManager = FindObjectOfType<EnemyManager>();
 
