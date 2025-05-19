@@ -35,7 +35,7 @@ public static class StateManager
         GameState.TITLE,
         GameState.TUTORIAL,
         GameState.REHEARSAL,
-        GameState.TANGO1,
+        GameState.TANGO,
         GameState.TANGO2,
         GameState.SABLE,
         GameState.SPEARHEAD
@@ -117,8 +117,8 @@ public static class StateManager
 
     public static void NextState()
     {
-        int currentIndex = SceneOrder.IndexOf(state);
-        int nextIndex = (currentIndex + 1) % SceneOrder.Count;
-        LoadState(SceneOrder[nextIndex]);
+        int currentIndex = StateOrder.IndexOf(state);
+        int nextIndex = (currentIndex + 1) % StateOrder.Count;
+        LoadState(StateOrder[nextIndex]);
     }
 }
