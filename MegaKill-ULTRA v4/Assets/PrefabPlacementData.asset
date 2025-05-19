@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ac32793cf3e46ab9efb49c3c53df640, type: 3}
+  m_Name: PrefabPlacementData
+  m_EditorClassIdentifier: 
+  entries:
+  - prefab: {fileID: 2651233480305370907, guid: 802cefe5936ce4703a57437d09d7bfaa, type: 3}
+    category: 0
+    placementData:
+      rotationRandomness: {x: 74.17, y: 90, z: 0}
+      rotationOffset: {x: 0, y: 90, z: -90}
+      scaleRandomnessMin: 1
+      scaleRandomnessMax: 1
+      normalAligned: 0
+      randomFlipX: 1
+      randomFlipY: 1
+      randomFlipZ: 1
+  - prefab: {fileID: 919132149155446097, guid: 4e351c256b7cded4ea88f84d74bda01e, type: 3}
+    category: 0
+    placementData:
+      rotationRandomness: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+      scaleRandomnessMin: 1
+      scaleRandomnessMax: 1
+      normalAligned: 0
+      randomFlipX: 0
+      randomFlipY: 0
+      randomFlipZ: 0
+  - prefab: {fileID: 5934096883743438160, guid: f1a601e8eddc64c308b3c7f88d2ef8f1, type: 3}
+    category: 0
+    placementData:
+      rotationRandomness: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+      scaleRandomnessMin: 10
+      scaleRandomnessMax: 10
+      normalAligned: 1
+      randomFlipX: 0
+      randomFlipY: 0
+      randomFlipZ: 0
+  containerEntries: []
+  categoryNames:
+  - Test
+  - Test2
+  - Test3
+  selectedCategory: -1
+  selectedEnemy: {fileID: 0}
