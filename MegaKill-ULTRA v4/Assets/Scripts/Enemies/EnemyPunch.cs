@@ -6,9 +6,9 @@ public class EnemyPunch : Enemy
     
     protected override void Start()
     {
-        attackRange = 6f;
-        attackRate = 1f;
-        dmg = 10f;
+      //  attackRange = 6f;
+       // attackRate = 1f;
+       // dmg = 10f;
     }
     protected override void CallAttack()
     {

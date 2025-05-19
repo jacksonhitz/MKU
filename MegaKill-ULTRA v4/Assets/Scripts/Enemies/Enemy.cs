@@ -21,9 +21,6 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
     [Header("Items")]
     public Item item;
 
-
-
-
     [Header("Brawl Settings")]
     float playerPriorityChance = 0.5f;
 
@@ -161,7 +158,6 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
     {
         item = newItem;
         attackRate = item.itemData.rate;
-        //should be weapondata eventually
         if (item.itemData is GunData gunData)
         {
             attackRange = gunData.range;
