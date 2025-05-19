@@ -14,10 +14,9 @@ public static class StateManager
         TUTORIAL,
         REHEARSAL,
         TANGO,
+        TANGO2,
         SABLE,
         SPEARHEAD,
-
-        FIGHT,
 
         PAUSED,
         DEAD,
@@ -31,16 +30,26 @@ public static class StateManager
     public static event Action<GameState> OnSilentChanged;
     public static GameState PREVIOUS => previous;
 
-    static readonly List<GameState> SceneOrder = new()
+    static readonly List<GameState> StateOrder = new()
     {
         GameState.TITLE,
+        GameState.TUTORIAL,
+        GameState.REHEARSAL,
+        GameState.TANGO1,
+        GameState.TANGO2,
+        GameState.SABLE,
+        GameState.SPEARHEAD
+    };
+    static readonly HashSet<GameState> Order = new(StateOrder);
+
+    static readonly HashSet<GameState> Scene = new()
+    {
         GameState.TUTORIAL,
         GameState.REHEARSAL,
         GameState.TANGO,
         GameState.SABLE,
         GameState.SPEARHEAD,
     };
-    static readonly HashSet<GameState> Scene = new(SceneOrder);
 
     static readonly HashSet<GameState> Active = new()
     {
@@ -49,7 +58,6 @@ public static class StateManager
         GameState.TANGO,
         GameState.SABLE,
         GameState.SPEARHEAD,
-        GameState.FIGHT,
         GameState.TESTING
     };
 

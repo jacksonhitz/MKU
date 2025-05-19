@@ -87,7 +87,7 @@ public class Festival : MonoBehaviour
         yield return new WaitForSeconds(1f);
         dialogue.Off();
 
-        StateManager.LoadState(StateManager.GameState.FIGHT);
+        StateManager.LoadState(StateManager.GameState.TANGO2);
         enemyManager.Brawl();
     }
 }

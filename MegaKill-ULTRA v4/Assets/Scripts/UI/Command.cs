@@ -33,7 +33,7 @@ public class Command : MonoBehaviour
     }
     void OnStateChanged(StateManager.GameState state)
     {
-        if (StateManager.State == StateManager.GameState.FIGHT)
+        if (StateManager.State == StateManager.GameState.TANGO2)
         {
             On();
         }

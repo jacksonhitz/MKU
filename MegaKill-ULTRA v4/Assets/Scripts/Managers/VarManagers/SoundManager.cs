@@ -146,9 +146,9 @@ public class SoundManager : MonoBehaviour
             case StateManager.GameState.TUTORIAL: Tutorial(); break;
             case StateManager.GameState.TANGO: Tango(); break;
             case StateManager.GameState.PAUSED: Paused(); break;
-            case StateManager.GameState.FIGHT: Fight(); break;
+            case StateManager.GameState.TANGO2: Fight(); break;
             case StateManager.GameState.DEAD: Dead(); break;
-        }
+        }   
     }
 
     void Title()

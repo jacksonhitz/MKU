@@ -28,7 +28,7 @@ public class Interactable : MonoBehaviour, IInteractable
     public virtual void Interact()
     {
         if (type == Type.Door) rend.enabled = false;
-        else if (type == Type.Extract && StateManager.State == StateManager.GameState.FIGHT) StateManager.NextState();
+        else if (type == Type.Extract && StateManager.State == StateManager.GameState.TANGO2) StateManager.NextState();
     }
 
     public virtual void Awake()
