@@ -384,7 +384,7 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
 
     public void Hit(float dmg)
     {
-        soundManager.EnemySFX(sfx, hitClip);
+        soundManager?.EnemySFX(sfx, hitClip);
         //soundManager.EnemyHit(transform.position);
 
         health -= dmg;
@@ -399,7 +399,7 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
             {
                 StopAllCoroutines();
                 StartCoroutine(Stun());
-                soundManager.EnemySFX(sfx, stunClip);
+                soundManager?.EnemySFX(sfx, stunClip);
             }
         }
     }
@@ -427,7 +427,7 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
 
         isDead = true;
         StopAllCoroutines();
-        enemyManager.Kill(this);
+        enemyManager?.Kill(this);
         DropItem();
 
         if (!hasSpawnedDeathEffect && deathEffect != null)
