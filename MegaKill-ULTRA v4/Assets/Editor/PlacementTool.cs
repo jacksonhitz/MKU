@@ -63,7 +63,7 @@ namespace EditorTools
             if (
                 Event.current.type != EventType.MouseDown
                 || Event.current.button != 0
-                || Event.current.modifiers != EventModifiers.Alt
+                || Event.current.modifiers != EventModifiers.Shift
             )
             {
                 return;
@@ -73,6 +73,7 @@ namespace EditorTools
             if (!isHit.HasValue)
             {
                 return;
+
             }
 
             var hit = isHit.Value;

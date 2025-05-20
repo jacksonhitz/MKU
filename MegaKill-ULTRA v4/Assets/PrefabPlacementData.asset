@@ -13,17 +13,6 @@ MonoBehaviour:
   m_Name: PrefabPlacementData
   m_EditorClassIdentifier: 
   entries:
-  - prefab: {fileID: 2651233480305370907, guid: 802cefe5936ce4703a57437d09d7bfaa, type: 3}
-    category: 0
-    placementData:
-      rotationRandomness: {x: 74.17, y: 90, z: 0}
-      rotationOffset: {x: 0, y: 90, z: -90}
-      scaleRandomnessMin: 1
-      scaleRandomnessMax: 1
-      normalAligned: 0
-      randomFlipX: 1
-      randomFlipY: 1
-      randomFlipZ: 1
   - prefab: {fileID: 919132149155446097, guid: 4e351c256b7cded4ea88f84d74bda01e, type: 3}
     category: 0
     placementData:
@@ -43,6 +32,39 @@ MonoBehaviour:
       scaleRandomnessMin: 10
       scaleRandomnessMax: 10
       normalAligned: 1
+      randomFlipX: 0
+      randomFlipY: 0
+      randomFlipZ: 0
+  - prefab: {fileID: 2651233480305370907, guid: 802cefe5936ce4703a57437d09d7bfaa, type: 3}
+    category: 0
+    placementData:
+      rotationRandomness: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+      scaleRandomnessMin: 1
+      scaleRandomnessMax: 1
+      normalAligned: 0
+      randomFlipX: 0
+      randomFlipY: 0
+      randomFlipZ: 0
+  - prefab: {fileID: 7980256793533960580, guid: 4183e639df4dfaa4fb1601113c5ffb4a, type: 3}
+    category: 0
+    placementData:
+      rotationRandomness: {x: 90, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+      scaleRandomnessMin: 1
+      scaleRandomnessMax: 1
+      normalAligned: 0
+      randomFlipX: 0
+      randomFlipY: 0
+      randomFlipZ: 0
+  - prefab: {fileID: 668013839215919135, guid: 2cb0d5a243048c14e9d98361532c9a27, type: 3}
+    category: 0
+    placementData:
+      rotationRandomness: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+      scaleRandomnessMin: 1
+      scaleRandomnessMax: 1
+      normalAligned: 0
       randomFlipX: 0
       randomFlipY: 0
       randomFlipZ: 0
