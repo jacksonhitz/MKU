@@ -57,6 +57,7 @@ public static class StateManager
         GameState.TUTORIAL,
         GameState.REHEARSAL,
         GameState.TANGO,
+        GameState.TANGO2,
         GameState.SABLE,
         GameState.SPEARHEAD,
         GameState.TESTING
@@ -92,9 +93,9 @@ public static class StateManager
 
     public static void LoadState(GameState newState)
     {
-        if (State != newState)
+        if (state != newState)
         {
-            State = newState;
+            state = newState;
             if (Scene.Contains(newState))
             {
                 SceneManager.LoadScene(newState.ToString());
@@ -108,7 +109,6 @@ public static class StateManager
         previous = state;
         state = newState;
         OnSilentChanged?.Invoke(state);
-
     }
 
 

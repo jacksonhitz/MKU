@@ -74,7 +74,7 @@ public class PlayerCombat : MonoBehaviour
             if (hit.transform.CompareTag("Enemy"))
             {
                 IHitable iHit = hit.GetComponentInParent<IHitable>();
-                iHit?.Hit(50f);
+                iHit?.Hit(5f);
                // break;
             }
         }

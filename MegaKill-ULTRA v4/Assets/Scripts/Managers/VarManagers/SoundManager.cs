@@ -125,11 +125,6 @@ public class SoundManager : MonoBehaviour
         ConfigureAudioSources();
     }
 
-    void Start()
-    {
-        Title();
-        StateChange(StateManager.State);
-    }
 
     void OnEnable()
     {
@@ -146,6 +141,7 @@ public class SoundManager : MonoBehaviour
             case StateManager.GameState.TITLE: Title(); break;
             case StateManager.GameState.INTRO: Intro(); break;
             case StateManager.GameState.TUTORIAL: Tutorial(); break;
+            case StateManager.GameState.REHEARSAL: Rehearsal(); break;
             case StateManager.GameState.TANGO: Tango(); break;
             case StateManager.GameState.PAUSED: Paused(); break;
             case StateManager.GameState.TANGO2: Fight(); break;
@@ -167,6 +163,12 @@ public class SoundManager : MonoBehaviour
     {
         dialogue.Stop();
         music.clip = hott;
+        music.Play();
+    }
+    void Rehearsal()
+    {
+        dialogue.Stop();
+        music.clip = could;
         music.Play();
     }
     void Tango()
@@ -290,6 +292,8 @@ public class SoundManager : MonoBehaviour
     //public void PlaySpatialEnemyHit(Vector3 position) => PlaySpatialSound(enemyHit, position);
     //public void PlaySpatialEnemyStun(Vector3 position) => PlaySpatialSound(enemyStun, position);
 
+
+    /*
     public void RevShot() => PlaySpatialSound(revShot, Camera.main.transform.position);
     public void RevEmpty() => PlaySpatialSound(revEmpty, Camera.main.transform.position);
     public void ShotShot() => PlaySpatialSound(shotShot, Camera.main.transform.position);
@@ -304,6 +308,7 @@ public class SoundManager : MonoBehaviour
     public void EnemyDeath() => PlaySpatialSound(enemyDeath, Camera.main.transform.position);
     public void EnemyHit() => PlaySpatialSound(enemyHit, Camera.main.transform.position);
     public void EnemyStun() => PlaySpatialSound(enemyStun, Camera.main.transform.position);
+    */
     
 
     // 2D
@@ -312,7 +317,7 @@ public class SoundManager : MonoBehaviour
     public void PillEmpty() => PlaySfx(pillEmpty);
     public void GiveDrug() => PlaySfx(giveDrug);
 
-    /*
+
     public void RevShot() => PlaySfx(revShot);
     public void RevEmpty() => PlaySfx(revEmpty);
     public void ShotShot() => PlaySfx(shotShot);
@@ -320,12 +325,12 @@ public class SoundManager : MonoBehaviour
     public void MGShot() => PlaySfx(mgShot);
     public void MGEmpty() => PlaySfx(mgEmpty);
     public void BatSwing() => PlaySfx(batSwing);
-    public void Punch() => PlaySfx(punch);
+   // public void Punch() => PlaySfx(punch);
     public void Toss() => PlaySfx(toss);
     public void TossHit() => PlaySfx(tossHit);
     public void PlayerHit() => PlaySfx(playerHit);
-    public void Gulp() => PlaySfx(gulp);
-    */
+  //  public void Gulp() => PlaySfx(gulp);
+
 
     void PlaySfx(AudioClip clip)
     {

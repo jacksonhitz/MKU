@@ -94,8 +94,8 @@ public abstract class Item : Interactable
         Debug.Log("check1");
         if (isUseable)
         {
-            Use();
             StartCoroutine(UseTimer());
+            Use();
             Debug.Log("check2");
         }
     }
@@ -152,7 +152,7 @@ public abstract class Item : Interactable
 
             if (collision.gameObject.CompareTag("Enemy"))
             {
-                collision.gameObject.GetComponent<Enemy>()?.Hit(50);
+                collision.gameObject.GetComponent<Enemy>()?.Hit(5);
             }
         }
     }

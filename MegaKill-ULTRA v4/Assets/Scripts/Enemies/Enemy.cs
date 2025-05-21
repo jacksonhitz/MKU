@@ -63,7 +63,7 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
     bool isStunned;
     bool hasSpawnedDeathEffect = false;
 
-    float maxHealth = 100f;
+    float maxHealth = 10f;
     float health;
 
     Vector3 wanderDestination;
@@ -395,7 +395,7 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
         }
         else
         {
-            if (health == 50)
+            if (health == 5)
             {
                 StopAllCoroutines();
                 StartCoroutine(Stun());

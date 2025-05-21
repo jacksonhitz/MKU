@@ -272,26 +272,6 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Item
       objectReference: {fileID: 0}
-    - target: {fileID: -5861409178561632961, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4819223349682164798, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: -4819223349682164798, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
-      propertyPath: m_TagString
-      value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: -1206874426333947015, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -1206874426333947015, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 6719245597448002910, guid: 1856a80665d584fb5b5ba1ac5deb8a89, type: 3}
     - target: {fileID: -8881470526164718381, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
       propertyPath: m_Layer
       value: 12
@@ -395,6 +375,14 @@ PrefabInstance:
     - target: {fileID: -6723820338189692906, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 25.941385
+      objectReference: {fileID: 0}
+    - target: {fileID: -6615942463076616880, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: -6615942463076616880, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: -6559808192206589689, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -888,6 +876,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 178.4093
       objectReference: {fileID: 0}
+    - target: {fileID: -5861409178561632961, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4819223349682164798, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: -4819223349682164798, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: -1206874426333947015, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1206874426333947015, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 6719245597448002910, guid: 1856a80665d584fb5b5ba1ac5deb8a89, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8821623529969584324, guid: 2c25b0c6cde864284a44d510910a494b, type: 3}
@@ -898,15 +906,15 @@ PrefabInstance:
       addedObject: {fileID: 1736389728026928784}
     - targetCorrespondingSourceObject: {fileID: -6615942463076616880, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4952828241359150951}
+      addedObject: {fileID: 5263238581337300950}
   m_SourcePrefab: {fileID: 100100000, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
 --- !u!1 &5055908224773521029 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6615942463076616880, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
   m_PrefabInstance: {fileID: 7063125119559584725}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &4952828241359150951
-CapsuleCollider:
+--- !u!65 &5263238581337300950
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -923,11 +931,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.03
-  m_Height: 0.3
-  m_Direction: 2
-  m_Center: {x: -0.00000045245346, y: -0.00043560975, z: 0.10854561}
+  serializedVersion: 3
+  m_Size: {x: 17.86831, y: 25.154333, z: 4.92333}
+  m_Center: {x: 0.0000022351742, y: 11.559778, z: -0.13536851}
 --- !u!4 &7318344595752987710 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}

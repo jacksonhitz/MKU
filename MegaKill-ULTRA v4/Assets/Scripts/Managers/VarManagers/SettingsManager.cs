@@ -10,8 +10,6 @@ public class SettingsManager : MonoBehaviour
 
     public SoundManager sound;
 
-    
-
     void Awake()
     {
         if (Instance != null)
@@ -37,7 +35,6 @@ public class SettingsManager : MonoBehaviour
         SetMusicVolume(musicVolume);
         SetSFXVolume(sFXVolume);
         SetSensitivity(sensitivity);
-
     }
 
     public void SetMusicVolume(float value)

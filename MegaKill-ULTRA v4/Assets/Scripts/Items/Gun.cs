@@ -34,12 +34,12 @@ public class Gun : Item
     public void FireRay(Vector3 dir)
     {
         Ray ray = new Ray(firePoint.position, dir);
-        if (Physics.Raycast(ray, out RaycastHit hit, data.range))
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000f))
         {
             if (hit.transform.CompareTag("Enemy"))
             {
                 Enemy enemy = hit.transform.GetComponentInParent<Enemy>();
-                enemy?.Hit(data.dmg);
+                enemy?.Hit(10f);
             }
 
             StartCoroutine(HandleTracer(hit.point, true));
