@@ -113,6 +113,8 @@ public class SoundManager : MonoBehaviour
 
     void Awake()
     {
+        Instance = this;
+
         tracks = new List<AudioClip> { witch, acid, could, dj, all, hott, threes, life, real, four };
         lines = new List<AudioClip> { line1, line2, line3, line4, line5, line6, line7 };
 

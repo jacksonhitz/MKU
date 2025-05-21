@@ -2,32 +2,25 @@ using UnityEngine;
 
 public class SettingsManager : MonoBehaviour
 {
-    public float MusicVolume { get; private set; } = 50;
-    public float SFXVolume { get; private set; } = 50;
-    public float Sensitivity { get; private set; } = 500;
+    public static SettingsManager Instance { get; private set; }
 
-    SoundManager sound;
+    public float musicVolume { get; private set; } = 50;
+    public float sFXVolume { get; private set; } = 50;
+    public float sensitivity { get; private set; } = 500;
 
-    //Instance tracking/singleton management
-    private static SettingsManager _instance;
-    public static SettingsManager Instance
+    public SoundManager sound;
+
+    
+
+    void Awake()
     {
-        get
+        if (Instance != null)
         {
-            if (_instance is null) Debug.LogError("Settings Manager is NULL");
-            return _instance;
+            Destroy(gameObject);
+            return;
         }
-    }
-    private void Awake()
-    {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     void OnEnable()
@@ -41,29 +34,28 @@ public class SettingsManager : MonoBehaviour
     void StateChange(StateManager.GameState state)
     {
         sound = SoundManager.Instance;
-        switch (state)
-        {
-          //  case StateManager.GameState.TITLE: Title(); break;
+        SetMusicVolume(musicVolume);
+        SetSFXVolume(sFXVolume);
+        SetSensitivity(sensitivity);
 
-        }
     }
 
     public void SetMusicVolume(float value)
     {
-        MusicVolume = Mathf.Clamp(value, 0, 100);
+        musicVolume = Mathf.Clamp(value, 0, 100);
 
-        sound.music.volume = MusicVolume / 300f;
+        sound.music.volume = musicVolume / 300f;
     }
 
     public void SetSFXVolume(float value)
     {
-        SFXVolume = Mathf.Clamp(value, 0, 100);
-        sound.sfx.volume = SFXVolume / 100f;
-        sound.dialogue.volume = SFXVolume / 100f;
+        sFXVolume = Mathf.Clamp(value, 0, 100);
+        sound.sfx.volume = sFXVolume / 100f;
+        sound.dialogue.volume = sFXVolume / 100f;
     }
 
     public void SetSensitivity(float value)
     {
-        Sensitivity = Mathf.Clamp(value, 0, 1000);
+        sensitivity = Mathf.Clamp(value, 0, 1000);
     }
 }

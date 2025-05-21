@@ -44,6 +44,7 @@ public static class StateManager
 
     static readonly HashSet<GameState> Scene = new()
     {
+        GameState.TITLE,
         GameState.TUTORIAL,
         GameState.REHEARSAL,
         GameState.TANGO,
@@ -83,14 +84,6 @@ public static class StateManager
         }
     }
 
-    public static void SilentState(GameState newState)
-    {
-        previous = state;
-        state = newState;
-        OnSilentChanged?.Invoke(state);
-    }
-
-
     public static bool GroupCheck(HashSet<GameState> group) => group.Contains(state);
 
     public static bool IsActive() => GroupCheck(Active);
@@ -99,19 +92,23 @@ public static class StateManager
 
     public static void LoadState(GameState newState)
     {
-        if (State != newState || previous != GameState.PAUSED)
+        if (State != newState)
         {
             State = newState;
-            if (Scene.Contains(newState) && SceneManager.GetActiveScene().name != newState.ToString())
+            if (Scene.Contains(newState))
             {
                 SceneManager.LoadScene(newState.ToString());
                 Debug.Log("Loading Scene " + newState);
             }
         }
-        else
-        {
-            SilentState(newState);
-        }
+        
+    }
+    public static void LoadSilent(GameState newState)
+    {
+        previous = state;
+        state = newState;
+        OnSilentChanged?.Invoke(state);
+
     }
 
 
