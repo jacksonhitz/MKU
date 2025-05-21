@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: PrefabPlacementData
   m_EditorClassIdentifier: 
   entries:
-  - prefab: {fileID: 919132149155446097, guid: 4e351c256b7cded4ea88f84d74bda01e, type: 3}
+  - prefab: {fileID: 7743751185009534674, guid: 0befcf5eb0336034ca24ad2b027ea1ab, type: 3}
     category: 0
     placementData:
       rotationRandomness: {x: 0, y: 0, z: 0}
       rotationOffset: {x: 0, y: 0, z: 0}
-      scaleRandomnessMin: 1
+      scaleRandomnessMin: 100
       scaleRandomnessMax: 1
       normalAligned: 0
       randomFlipX: 0
@@ -58,6 +58,17 @@ MonoBehaviour:
       randomFlipY: 0
       randomFlipZ: 0
   - prefab: {fileID: 668013839215919135, guid: 2cb0d5a243048c14e9d98361532c9a27, type: 3}
+    category: 0
+    placementData:
+      rotationRandomness: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+      scaleRandomnessMin: 1
+      scaleRandomnessMax: 1
+      normalAligned: 0
+      randomFlipX: 0
+      randomFlipY: 0
+      randomFlipZ: 0
+  - prefab: {fileID: 4315557129730795435, guid: 6941bdf75d0a82a40b950059e9028743, type: 3}
     category: 0
     placementData:
       rotationRandomness: {x: 0, y: 0, z: 0}
