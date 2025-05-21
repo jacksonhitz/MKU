@@ -16,10 +16,10 @@ MonoBehaviour:
   - prefab: {fileID: 7743751185009534674, guid: 0befcf5eb0336034ca24ad2b027ea1ab, type: 3}
     category: 0
     placementData:
-      rotationRandomness: {x: 0, y: 0, z: 0}
-      rotationOffset: {x: 0, y: 0, z: 0}
-      scaleRandomnessMin: 100
-      scaleRandomnessMax: 1
+      rotationRandomness: {x: 45, y: 45, z: 45}
+      rotationOffset: {x: 270, y: 0, z: 0}
+      scaleRandomnessMin: 300
+      scaleRandomnessMax: 600
       normalAligned: 0
       randomFlipX: 0
       randomFlipY: 0
@@ -73,8 +73,41 @@ MonoBehaviour:
     placementData:
       rotationRandomness: {x: 0, y: 0, z: 0}
       rotationOffset: {x: 0, y: 0, z: 0}
-      scaleRandomnessMin: 1
-      scaleRandomnessMax: 1
+      scaleRandomnessMin: 10
+      scaleRandomnessMax: 10
+      normalAligned: 0
+      randomFlipX: 0
+      randomFlipY: 0
+      randomFlipZ: 0
+  - prefab: {fileID: 4755802690838097073, guid: 9cf88d468cc698f42bb8f7c179f06293, type: 3}
+    category: 0
+    placementData:
+      rotationRandomness: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+      scaleRandomnessMin: 5
+      scaleRandomnessMax: 10
+      normalAligned: 0
+      randomFlipX: 0
+      randomFlipY: 0
+      randomFlipZ: 0
+  - prefab: {fileID: 1736843522575633913, guid: b8dbf67455adeda45a6a59e60e15228b, type: 3}
+    category: 0
+    placementData:
+      rotationRandomness: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+      scaleRandomnessMin: 2
+      scaleRandomnessMax: 5
+      normalAligned: 0
+      randomFlipX: 0
+      randomFlipY: 0
+      randomFlipZ: 0
+  - prefab: {fileID: 3936863884736437111, guid: f3a985bf9f6a3a84097b536511562600, type: 3}
+    category: 0
+    placementData:
+      rotationRandomness: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+      scaleRandomnessMin: 2
+      scaleRandomnessMax: 2
       normalAligned: 0
       randomFlipX: 0
       randomFlipY: 0
