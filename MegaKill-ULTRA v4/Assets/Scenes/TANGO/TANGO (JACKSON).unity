@@ -58757,6 +58757,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1315694431143931435, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
+      propertyPath: pathingPoints.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1315694431143931435, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
+      propertyPath: pathingPoints.Array.data[0].position.x
+      value: 90.37761
+      objectReference: {fileID: 0}
+    - target: {fileID: 1315694431143931435, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
+      propertyPath: pathingPoints.Array.data[0].position.y
+      value: -34.990616
+      objectReference: {fileID: 0}
+    - target: {fileID: 1315694431143931435, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
+      propertyPath: pathingPoints.Array.data[0].position.z
+      value: 797.4896
+      objectReference: {fileID: 0}
+    - target: {fileID: 1315694431143931435, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
+      propertyPath: pathingPoints.Array.data[1].position.x
+      value: 351.4806
+      objectReference: {fileID: 0}
+    - target: {fileID: 1315694431143931435, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
+      propertyPath: pathingPoints.Array.data[1].position.y
+      value: -34.990616
+      objectReference: {fileID: 0}
+    - target: {fileID: 1315694431143931435, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
+      propertyPath: pathingPoints.Array.data[1].position.z
+      value: 797.4896
+      objectReference: {fileID: 0}
     - target: {fileID: 9212990541556629421, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
       propertyPath: m_Name
       value: EnemyPunch (114)
