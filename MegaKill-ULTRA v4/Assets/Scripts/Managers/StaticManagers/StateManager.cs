@@ -93,9 +93,10 @@ public static class StateManager
 
     public static void LoadState(GameState newState)
     {
-        if (state != newState)
+        if (State != newState)
         {
-            state = newState;
+            Debug.Log("state changed");
+            State = newState;
             if (Scene.Contains(newState))
             {
                 SceneManager.LoadScene(newState.ToString());
@@ -109,6 +110,7 @@ public static class StateManager
         previous = state;
         state = newState;
         OnSilentChanged?.Invoke(state);
+
     }
 
 
