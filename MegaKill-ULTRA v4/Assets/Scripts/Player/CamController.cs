@@ -158,8 +158,8 @@ public class CamController : MonoBehaviour
 
     void TransitionOn()
     {
-        currentAmplitude += 1f;
-        currentFrequency += 1f;
+        currentAmplitude += .1f;
+        currentFrequency += .1f;
         currentLerp += 0.001f;
 
         camMat.SetFloat("_Frequency", currentFrequency);
@@ -187,15 +187,13 @@ public class CamController : MonoBehaviour
 
     void UpdateShader()
     {
-        float cap = 4f * phase;
-
-        if (currentAmplitude < cap)
+        if (currentAmplitude < phase)
         {
-            currentAmplitude += 0.002f;
+            currentAmplitude += 0.0005f;
         }
-        if (currentFrequency < cap * 2)
+        if (currentFrequency < phase * 5)
         {
-            currentFrequency += 0.002f;
+            currentFrequency += 0.0005f;
         }
 
         camMat.SetFloat("_Lerp", currentLerp);

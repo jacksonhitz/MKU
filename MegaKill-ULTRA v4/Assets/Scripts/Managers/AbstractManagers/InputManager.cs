@@ -29,7 +29,7 @@ public abstract class InputManager : MonoBehaviour
                 StateManager.LoadState(StateManager.GameState.PAUSED);
             else
             {
-                StateManager.SilentState(StateManager.PREVIOUS);
+                StateManager.LoadSilent(StateManager.PREVIOUS);
             }
         }
     }

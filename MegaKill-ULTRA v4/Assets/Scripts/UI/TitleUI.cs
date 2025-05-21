@@ -29,11 +29,14 @@ public class TitleUI : MonoBehaviour
 
     }
 
-    public void InstructionsButton()
+    public void InstructionButton()
     {
         StateManager.LoadState(StateManager.GameState.TUTORIAL);
     }
-
+    public void RehearsalButton()
+    {
+        StateManager.LoadState(StateManager.GameState.REHEARSAL);
+    }
     public void TangoButton()
     {
         StateManager.LoadState(StateManager.GameState.TANGO);
@@ -43,7 +46,6 @@ public class TitleUI : MonoBehaviour
     {
         StateManager.LoadState(StateManager.GameState.SABLE);
     }
-
     public void SpearheadButton()
     {
         StateManager.LoadState(StateManager.GameState.SPEARHEAD);

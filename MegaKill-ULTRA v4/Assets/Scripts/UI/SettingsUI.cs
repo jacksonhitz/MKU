@@ -18,13 +18,13 @@ public class SettingsUI : MonoBehaviour
         menu.enabled = false;
 
         // Initialize values from manager
-        sfxSlider.value = SettingsManager.Instance.SFXVolume;
-        musicSlider.value = SettingsManager.Instance.MusicVolume;
-        sensSlider.value = SettingsManager.Instance.Sensitivity;
+        sfxSlider.value = SettingsManager.Instance.sFXVolume;
+        musicSlider.value = SettingsManager.Instance.musicVolume;
+        sensSlider.value = SettingsManager.Instance.sensitivity;
 
-        sfxInput.text = SettingsManager.Instance.SFXVolume.ToString("F0");
-        musicInput.text = SettingsManager.Instance.MusicVolume.ToString("F0");
-        sensInput.text = SettingsManager.Instance.Sensitivity.ToString("F0");
+        sfxInput.text = SettingsManager.Instance.sFXVolume.ToString("F0");
+        musicInput.text = SettingsManager.Instance.musicVolume.ToString("F0");
+        sensInput.text = SettingsManager.Instance.sensitivity.ToString("F0");
 
         // Setup input validation
         sfxInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
@@ -69,7 +69,7 @@ public class SettingsUI : MonoBehaviour
 
     public void Resume()
     {
-        StateManager.SilentState(StateManager.PREVIOUS);
+        StateManager.LoadSilent(StateManager.PREVIOUS);
         EventSystem.current.SetSelectedGameObject(null);
     }
 
@@ -110,7 +110,7 @@ public class SettingsUI : MonoBehaviour
             SettingsManager.Instance.SetSFXVolume(v);
             sfxSlider.value = v;
         }
-        sfxInput.text = SettingsManager.Instance.SFXVolume.ToString("F0");
+        sfxInput.text = SettingsManager.Instance.sFXVolume.ToString("F0");
     }
 
     void OnMusicInputChanged(string value)
@@ -120,7 +120,7 @@ public class SettingsUI : MonoBehaviour
             SettingsManager.Instance.SetMusicVolume(v);
             musicSlider.value = v;
         }
-        musicInput.text = SettingsManager.Instance.MusicVolume.ToString("F0");
+        musicInput.text = SettingsManager.Instance.musicVolume.ToString("F0");
     }
 
     void OnSensitivityInputChanged(string value)
@@ -130,6 +130,6 @@ public class SettingsUI : MonoBehaviour
             SettingsManager.Instance.SetSensitivity(v);
             sensSlider.value = v;
         }
-        sensInput.text = SettingsManager.Instance.Sensitivity.ToString("F0");
+        sensInput.text = SettingsManager.Instance.sensitivity.ToString("F0");
     }
 }
