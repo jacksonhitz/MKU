@@ -304,6 +304,9 @@ public class Tutorial : MonoBehaviour
         //Check if both are done - end tutorial if so
         if (completion[1] && completion[3])
         {
+            StateManager.NextState();
+
+            /*
             TutorialStateManager.State = TutorialStateManager.TutorialState.Interact;
             completion[1] = completion[3] = false;
             //Set on-screen text/color/visibility
@@ -317,6 +320,7 @@ public class Tutorial : MonoBehaviour
             controls[3].gameObject.SetActive(false);
 
             Debug.Log("Changed state to Interact");
+            */
 
         }
     }
