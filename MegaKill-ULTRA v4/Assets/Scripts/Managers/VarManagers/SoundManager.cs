@@ -49,7 +49,7 @@ public class SoundManager : MonoBehaviour
 
     public AudioClip[] gulpSounds;
 
-    public void Gulp()
+    public void Gulped()
     {
         if (gulpSounds != null && gulpSounds.Length > 0)
         {
@@ -65,7 +65,7 @@ public class SoundManager : MonoBehaviour
 
     public AudioClip[] punchSounds;
 
-    public void Punch()
+    public void Punched()
     {
         if (punchSounds != null && punchSounds.Length > 0)
         {
@@ -125,6 +125,10 @@ public class SoundManager : MonoBehaviour
         ConfigureAudioSources();
     }
 
+    void Start()
+    {
+        StateChange(StateManager.STATE);
+    }
 
     void OnEnable()
     {
@@ -139,7 +143,6 @@ public class SoundManager : MonoBehaviour
         switch (state)
         {
             case StateManager.GameState.TITLE: Title(); break;
-            case StateManager.GameState.INTRO: Intro(); break;
             case StateManager.GameState.TUTORIAL: Tutorial(); break;
             case StateManager.GameState.REHEARSAL: Rehearsal(); break;
             case StateManager.GameState.TANGO: Tango(); break;
@@ -153,11 +156,6 @@ public class SoundManager : MonoBehaviour
     {
         music.clip = title;
         music.Play();
-    }
-    void Intro()
-    {
-        music.Stop();
-        dialogue.Play();
     }
     void Tutorial()
     {
@@ -325,11 +323,11 @@ public class SoundManager : MonoBehaviour
     public void MGShot() => PlaySfx(mgShot);
     public void MGEmpty() => PlaySfx(mgEmpty);
     public void BatSwing() => PlaySfx(batSwing);
-   // public void Punch() => PlaySfx(punch);
+    public void Punch() { }  //BROKEN
     public void Toss() => PlaySfx(toss);
     public void TossHit() => PlaySfx(tossHit);
     public void PlayerHit() => PlaySfx(playerHit);
-  //  public void Gulp() => PlaySfx(gulp);
+    public void Gulp() { }    //BROKEN
 
 
     void PlaySfx(AudioClip clip)

@@ -193,11 +193,12 @@ public class Tutorial : MonoBehaviour
     void Pickup()
     {
         // q/e to pickup to left/right hand
-        if (Input.GetKeyDown(KeyCode.Q) && !completion[1] && leftHand.childCount > 0) {
+        if (Input.GetKeyDown(KeyCode.Q) && !completion[1])
+        {
             controls[1].color = done;
             completion[1] = true;
         }
-        if (Input.GetKeyDown(KeyCode.E) && !completion[3] && rightHand.childCount > 0)
+        if (Input.GetKeyDown(KeyCode.E) && !completion[3])
         {
             controls[3].color = done;
             completion[3] = true;

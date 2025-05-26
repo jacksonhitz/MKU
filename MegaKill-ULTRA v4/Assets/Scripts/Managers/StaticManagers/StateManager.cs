@@ -9,7 +9,6 @@ public static class StateManager
     {
         TESTING,
         TITLE,
-        INTRO,
 
         TUTORIAL,
         REHEARSAL,
@@ -29,6 +28,7 @@ public static class StateManager
     public static event Action<GameState> OnStateChanged;
     public static event Action<GameState> OnSilentChanged;
     public static GameState PREVIOUS => previous;
+    public static GameState STATE => state;
 
     static readonly List<GameState> StateOrder = new()
     {
@@ -66,7 +66,6 @@ public static class StateManager
     static readonly HashSet<GameState> Passive = new()
     {
         GameState.TITLE,
-        GameState.INTRO,
         GameState.OUTRO,
         GameState.PAUSED,
         GameState.DEAD,

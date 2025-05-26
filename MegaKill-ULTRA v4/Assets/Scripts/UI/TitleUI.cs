@@ -18,7 +18,6 @@ public class TitleUI : MonoBehaviour
     }
     public void StartButton()
     {
-        StateManager.LoadState(StateManager.GameState.INTRO);
         introText.Play();
         titleScreen.SetActive(false);
     }

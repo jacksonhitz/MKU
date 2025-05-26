@@ -47,7 +47,6 @@ public class EnemyManager : MonoBehaviour
         switch (state)
         {
             case StateManager.GameState.TITLE: break;
-            case StateManager.GameState.INTRO: break;
             case StateManager.GameState.TUTORIAL: break;
             case StateManager.GameState.TANGO2: Fight(); break;
             case StateManager.GameState.PAUSED: break;
