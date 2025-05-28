@@ -4,11 +4,11 @@ public class SettingsManager : MonoBehaviour
 {
     public static SettingsManager Instance { get; private set; }
 
-    public float MusicVolume { get; private set; } = 50;
-    public float SFXVolume { get; private set; } = 50;
-    public float Sensitivity { get; private set; } = 500;
+    public float musicVolume { get; private set; } = 50;
+    public float sFXVolume { get; private set; } = 50;
+    public float sensitivity { get; private set; } = 500;
 
-    SoundManager soundManager;
+    public SoundManager sound;
 
     void Awake()
     {
@@ -17,32 +17,42 @@ public class SettingsManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    }
 
-        soundManager = FindObjectOfType<SoundManager>();
+    void OnEnable()
+    {
+        StateManager.OnStateChanged += StateChange;
+    }
+    void OnDisable()
+    {
+        StateManager.OnStateChanged -= StateChange;
+    }
+    void StateChange(StateManager.GameState state)
+    {
+        sound = SoundManager.Instance;
+        SetMusicVolume(musicVolume);
+        SetSFXVolume(sFXVolume);
+        SetSensitivity(sensitivity);
     }
 
     public void SetMusicVolume(float value)
     {
-        MusicVolume = Mathf.Clamp(value, 0, 100);
-        if (soundManager != null)
-            soundManager.music.volume = MusicVolume / 300f;
+        musicVolume = Mathf.Clamp(value, 0, 100);
+
+        sound.music.volume = musicVolume / 300f;
     }
 
     public void SetSFXVolume(float value)
     {
-        SFXVolume = Mathf.Clamp(value, 0, 100);
-        if (soundManager != null)
-        {
-            soundManager.sfx.volume = SFXVolume / 100f;
-            soundManager.dialogue.volume = SFXVolume / 100f;
-        }
+        sFXVolume = Mathf.Clamp(value, 0, 100);
+        sound.sfx.volume = sFXVolume / 100f;
+        sound.dialogue.volume = sFXVolume / 100f;
     }
 
     public void SetSensitivity(float value)
     {
-        Sensitivity = Mathf.Clamp(value, 0, 1000);
+        sensitivity = Mathf.Clamp(value, 0, 1000);
     }
 }

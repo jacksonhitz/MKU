@@ -1,34 +1,54 @@
 using System.Collections;
 using UnityEngine;
 
-
 public class Revolver : Gun
 {
-   public override void Use()
-   {
-        if (!canFire) return;
-        if (bullets > 0)
+    float targetAdjust = 0.25f;
+
+    public override void Use()
+    {
+        Vector3 dir; 
+        if (currentState == ItemState.Player)
         {
-            Debug.Log("FUCK OFF");
+            if (bullets > 0)
+            {
+                bullets--;
 
-            StartCoroutine(FireCooldown());
-            Recoil();
-            soundManager.RevShot();
-            data.muzzleFlash.Play();
+                Vector3 spread = new Vector3(Random.Range(-data.spreadAngle, data.spreadAngle), Random.Range(-data.spreadAngle, data.spreadAngle), 0f);
+                Quaternion rotation = Quaternion.Euler(Camera.main.transform.eulerAngles + spread);
+                Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
+                dir = ray.direction;
 
-            bullets--;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Hitscan(ray);
+                FireBasic();
+                FireRay(dir);
 
-            Debug.Log("shot fired");
+                SoundManager.Instance.RevShot();
+            }
+            else
+            {
+                popUp?.UpdatePopUp("EMPTY");
+                SoundManager.Instance.RevEmpty();
+            }
         }
-        else
+        else if (currentState == ItemState.Enemy && holder is Enemy enemy)
         {
-            popUp.UpdatePopUp("EMPTY");
-            soundManager.RevEmpty();
-        } 
-   }
+            Vector3 target = enemy.target.transform.position;
+            target.y += targetAdjust;
+            dir = (target - firePoint.position).normalized;
+
+            enemy.CallUse();
+
+            FireBasic();
+            FireBullet(dir);
+
+            //sound?.EnemySFX(enemy.sfx, enemy.attackClip);
+        }
+    }
+
+    void FireBasic()
+    {
+        Recoil();
+        muzzleFlash.Play();
+    }
+
 }
-
-
-

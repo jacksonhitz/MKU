@@ -2,32 +2,53 @@ using UnityEngine;
 
 public class MG : Gun
 {
-    float cooldown = -0.15f;
+    float targetAdjust = 0.25f;
 
     public override void Use()
     {
-        if (!canFire) return;
-        if (bullets > 0)
+        Vector3 dir;
+        if (currentState == ItemState.Player)
         {
-            StartCoroutine(FireCooldown());
-            Recoil();
-            soundManager.MGShot();
-            data.muzzleFlash.Play();
-            bullets--;
-
-            Vector3 spread = new Vector3(Random.Range(-data.spreadAngle, data.spreadAngle), Random.Range(-data.spreadAngle, data.spreadAngle), 0f);
-            Quaternion rotation = Quaternion.Euler(playerController.cam.transform.eulerAngles + spread);
-            Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
-            Hitscan(ray);
-        }
-        else
-        {
-            if (Time.time - cooldown >= 0.5f)
+            if (bullets > 0)
             {
-                popUp.UpdatePopUp("EMPTY");
-                soundManager.MGEmpty();
-                cooldown = Time.time;
+                bullets--;
+                Vector3 spread = new Vector3(Random.Range(-data.spreadAngle, data.spreadAngle), Random.Range(-data.spreadAngle, data.spreadAngle), 0f);
+                Quaternion rotation = Quaternion.Euler(Camera.main.transform.eulerAngles + spread);
+                Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
+                dir = ray.direction;
+
+                FireBasic();
+                FireRay(dir);
+
+                SoundManager.Instance.MGShot();
+            }
+            else
+            {
+                popUp?.UpdatePopUp("EMPTY");
+                SoundManager.Instance.SGEmpty();
             }
         }
+        else if (currentState == ItemState.Enemy && holder is Enemy enemy)
+        {
+            Vector3 spread = new Vector3(Random.Range(-data.spreadAngle, data.spreadAngle), Random.Range(-data.spreadAngle, data.spreadAngle), 0f);
+            Quaternion rotation = Quaternion.Euler(spread);
+
+            Vector3 target = enemy.target.transform.position;
+            target.y += targetAdjust;
+            dir = rotation * (target - firePoint.position).normalized;
+
+            enemy.CallUse();
+
+            FireBasic();
+            FireBullet(dir);
+
+            //sound?.EnemySFX(enemy.sfx, enemy.attackClip);
+        }
+    }
+
+    void FireBasic()
+    {
+        Recoil();
+        muzzleFlash.Play();
     }
 }

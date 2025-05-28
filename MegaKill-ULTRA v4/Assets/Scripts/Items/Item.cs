@@ -1,20 +1,17 @@
 using System.Collections;
 using UnityEngine;
 
-public class Item : MonoBehaviour
+public abstract class Item : Interactable
 {
-    [SerializeField] Material def;
-    [SerializeField] Material glow;
-
     [HideInInspector] public Rigidbody rb;
-    [HideInInspector] public SoundManager soundManager;
-    [HideInInspector] public PlayerController playerController;
     [HideInInspector] public PopUp popUp;
-
-    Renderer rend;
     
-    public bool isHovering;
     public bool thrown;
+
+    public ItemData itemData;
+    public MonoBehaviour holder;
+
+    bool isUseable;
 
     public enum ItemState
     {
@@ -24,41 +21,114 @@ public class Item : MonoBehaviour
     }
     public ItemState currentState;
 
-
-    public void Awake()
+    public override void Awake()
     {
+        base.Awake();
         rb = GetComponent<Rigidbody>();
-        rend = GetComponent<Renderer>();
-        soundManager = FindObjectOfType<SoundManager>();
-        playerController = FindObjectOfType<PlayerController>();
         popUp = FindObjectOfType<PopUp>();
     }
+
+
     public virtual void Start()
     {
-        SetState();
+        FindState();
+        isUseable = true;
     }
-    public void SetState()
-    {
-        GameObject parentObj = transform.parent.gameObject;
-        string parent = parentObj.tag;
 
-        switch (parent)
+    //STATE MANAGING (Set State should probably be rewritten in a dict or something to match states with scripts) 
+    public void FindState()
+    {
+        if (transform.parent != null)
         {
-            case "Enemy":
-                currentState = ItemState.Enemy;
+            holder = GetComponentInParent<Enemy>();
+            var enemy = holder as Enemy;
+            if (enemy != null)
+            {
+                enemy.SetItem(this);
+                SetState(ItemState.Enemy);
+                return;
+            }
+            
+            holder = GetComponentInParent<PlayerController>();
+            var player = holder as PlayerController;
+            if (player != null)
+            {
+                SetState(ItemState.Player);
+                return;
+            }
+        }
+        SetState(ItemState.Available);
+    }
+    public void SetState(ItemState state)
+    {
+        currentState = state;
+        switch (state)
+        {
+            case ItemState.Enemy:
                 CollidersOff();
                 break;
-            case "Player":
-                currentState = ItemState.Player;
+            case ItemState.Player:
                 CollidersOff();
                 break;
-            default:
-                currentState = ItemState.Available;
+            case ItemState.Available:
                 CollidersOn();
+                holder = null;
                 break;
         }
+    }
+    public void Grabbed()
+    {
+        FindState();
+    }
 
-        Debug.Log("parent");
+
+    //USE
+    IEnumerator UseTimer()
+    {
+        isUseable = false;
+        yield return new WaitForSeconds(itemData.rate);
+        isUseable = true;
+    }
+    public void UseCheck()
+    {
+        Debug.Log("check1");
+        if (isUseable)
+        {
+            StartCoroutine(UseTimer());
+            Use();
+            Debug.Log("check2");
+        }
+    }
+    public virtual void Use() { }
+
+
+
+    public void Thrown()
+    {
+        transform.SetParent(null);
+        SetState(ItemState.Available);
+        thrown = true;
+    }
+    public void Dropped()
+    {
+        transform.SetParent(null);
+        SetState(ItemState.Available);
+
+        rb.isKinematic = false;
+
+        Vector3 randomDirection = new Vector3(
+            Random.Range(-.1f, .1f),
+            Random.Range(0.25f, .5f),
+            Random.Range(-.1f, .1f)
+        );
+        rb.AddForce(randomDirection * 5f, ForceMode.Impulse);
+
+        Vector3 randomTorque = new Vector3(
+            Random.Range(-20f, 20f),
+            Random.Range(-20f, 20f),
+            Random.Range(-20f, 20f)
+        );
+        rb.AddTorque(randomTorque, ForceMode.Impulse);
     }
 
     void OnCollisionEnter(Collision collision)
@@ -82,39 +152,9 @@ public class Item : MonoBehaviour
 
             if (collision.gameObject.CompareTag("Enemy"))
             {
-                collision.gameObject.GetComponent<Enemy>()?.Hit(50);
+                collision.gameObject.GetComponent<Enemy>()?.Hit(5);
             }
         }
-    }
-
-    public void Thrown()
-    {
-        transform.SetParent(null);
-        SetState();
-        thrown = true;
-    }
-
-    public void Dropped()
-    {
-        transform.SetParent(null);
-        SetState();
-
-
-        rb.isKinematic = false;
-
-        Vector3 randomDirection = new Vector3(
-            Random.Range(-.1f, .1f),
-            Random.Range(0.25f, .5f),
-            Random.Range(-.1f, .1f)
-        );
-        rb.AddForce(randomDirection * 5f, ForceMode.Impulse);
-
-        Vector3 randomTorque = new Vector3(
-            Random.Range(-20f, 20f),
-            Random.Range(-20f, 20f),
-            Random.Range(-20f, 20f)
-        );
-        rb.AddTorque(randomTorque, ForceMode.Impulse);
     }
 
     public void CollidersOn()
@@ -143,31 +183,4 @@ public class Item : MonoBehaviour
         if (TryGetComponent(out CapsuleCollider capsuleCollider))
             capsuleCollider.enabled = false;
     }
-
-
-    // HIGHLIGHT ITEM
-    void OnMouseEnter()
-    {
-        isHovering = true;
-    }
-    void OnMouseExit()
-    {
-        isHovering = false;
-    }
-    public void DefaultMat()
-    {
-        if (rend != null)
-        {
-            rend.material = def;
-        }
-    }
-    public void GlowMat()
-    {
-        if (rend != null)
-        {
-            rend.material = glow;
-        }
-    }
-
-    public virtual void Use() { }
 }

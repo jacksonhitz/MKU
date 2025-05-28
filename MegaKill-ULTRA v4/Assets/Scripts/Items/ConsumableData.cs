@@ -4,7 +4,6 @@ using UnityEngine;
 public class ConsumableData : ItemData
 {
     public float charge;
-    public float cooldown;
     public float heal;
     public float trip;
 }

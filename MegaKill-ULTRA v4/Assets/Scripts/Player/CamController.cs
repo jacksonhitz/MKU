@@ -6,7 +6,6 @@ using UnityEngine.Rendering.Universal;
 
 public class CamController : MonoBehaviour
 {
-    Transform player;
     Camera cam;
 
     [HideInInspector] public float sens = 500f;
@@ -20,7 +19,7 @@ public class CamController : MonoBehaviour
     ColorAdjustments colorGrading;
     ChannelMixer channelMixer;
 
-    float chromSpd = 0.5f;
+    float chromSpd = 0.25f;
     float satSpd = 5f;
     float mixerSpd;
     float hueSpd;
@@ -39,7 +38,7 @@ public class CamController : MonoBehaviour
     float swayIntensity = 0.01f;
 
     public Material camMat;
-    float currentLerp = 0.1f;
+    float currentLerp = 0;
     float currentFrequency = 0;
     float currentAmplitude = 0;
 
@@ -49,12 +48,12 @@ public class CamController : MonoBehaviour
     float targetSpeedY;
     float lerpSpeed = 0.001f;
 
-    PlayerController playerController;
+    PlayerController player;
 
     void Awake()
     {
         cam = GetComponent<Camera>();
-        playerController = FindObjectOfType<PlayerController>();
+        player = FindObjectOfType<PlayerController>();
     }
 
     void Start()
@@ -68,6 +67,7 @@ public class CamController : MonoBehaviour
         phase = 2;
         SetEffects();
         SetClr();
+        ResetShader();
         StartCoroutine(FadeIn(2f));
     }
 
@@ -111,10 +111,7 @@ public class CamController : MonoBehaviour
 
     void Update()
     {
-        if (StateManager.State == StateManager.GameState.DEAD)
-        {
-            TransitionOn();
-        }
+        if (StateManager.State == StateManager.GameState.TRANSITION) TransitionOn();
         else
         {
             MoveCheck();
@@ -157,18 +154,13 @@ public class CamController : MonoBehaviour
 
     void TransitionOn()
     {
-        currentAmplitude += 1f;
-        currentFrequency += 1f;
-        currentLerp += 0.1f;
+        currentAmplitude += .1f;
+        currentFrequency += .1f;
+        currentLerp += 0.001f;
 
         camMat.SetFloat("_Frequency", currentFrequency);
         camMat.SetFloat("_Amplitude", currentFrequency);
         camMat.SetFloat("_Lerp", currentLerp);
-    }
-
-    void TransitionOff()
-    {
-        ResetShader();
     }
 
     void ResetShader()
@@ -191,15 +183,13 @@ public class CamController : MonoBehaviour
 
     void UpdateShader()
     {
-        float cap = 4f * phase;
-
-        if (currentAmplitude < cap)
+        if (currentAmplitude < phase)
         {
-            currentAmplitude += 0.002f;
+            currentAmplitude += 0.0001f;
         }
-        if (currentFrequency < cap * 2)
+        if (currentFrequency < phase * 5)
         {
-            currentFrequency += 0.002f;
+            currentFrequency += 0.0001f;
         }
 
         camMat.SetFloat("_Lerp", currentLerp);
@@ -287,7 +277,7 @@ public class CamController : MonoBehaviour
         yRotation += mouseX;
 
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        playerController.transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
+        player.transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
     }
 
     void UpdatePost()
@@ -308,16 +298,16 @@ public class CamController : MonoBehaviour
         ClrHue();
         ClrMixer();
 
-        currentLerp = 0.15f;
+        currentLerp = 0.25f;
 
         if (dynamicVolume.weight < 5)
         {
-            dynamicVolume.weight += 0.0001f;
+            dynamicVolume.weight += 0.00001f;
         }
 
-        fovSpd = 0.1f * dynamicVolume.weight;
-        mixerSpd = 10f * dynamicVolume.weight;
-        hueSpd = dynamicVolume.weight;
+        fovSpd = 0.05f * dynamicVolume.weight;
+        mixerSpd = 5f * dynamicVolume.weight;
+        hueSpd = dynamicVolume.weight / 5;
     }
 
     void ClrHue()

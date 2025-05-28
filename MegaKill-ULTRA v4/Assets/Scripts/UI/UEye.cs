@@ -39,13 +39,16 @@ public class UEye : MonoBehaviour
 
     void OnEnable()
     {
-        StateManager.OnStateChanged += StateChange;
+        StateManager.OnStateChanged += OnStateChanged;
+        StateManager.OnSilentChanged += OnStateChanged;
     }
+
     void OnDisable()
     {
-        StateManager.OnStateChanged -= StateChange;
+        StateManager.OnStateChanged -= OnStateChanged;
+        StateManager.OnSilentChanged -= OnStateChanged;
     }
-    void StateChange(StateManager.GameState state)
+    void OnStateChanged(StateManager.GameState state)
     {
         Debug.Log("state changed");
         if (StateManager.IsActive())
@@ -88,6 +91,7 @@ public class UEye : MonoBehaviour
     {
         Texture previousEye = currentEye.texture;
         currentEye.texture = eyeHurtTexture;
+        //number.SetActive(false)
         yield return new WaitForSeconds(0.2f);
         currentEye.texture = previousEye;
 
@@ -95,6 +99,7 @@ public class UEye : MonoBehaviour
         {
             currentEye.texture = GetEye();
             eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
+           
         }
         else
         {
@@ -106,9 +111,10 @@ public class UEye : MonoBehaviour
     {
         Texture previousEye = currentEye.texture;
         currentEye.texture = eyeHealTexture;
+        //number.SetActive(false)
         yield return new WaitForSeconds(0.2f);
         currentEye.texture = previousEye;
-        currentEye.texture = GetEye();
+        currentEye.texture = GetEye(); //cut maybe
 
         eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
     }
@@ -132,7 +138,8 @@ public class UEye : MonoBehaviour
 
             yield return new WaitForSeconds(0.2f);
         }
-        currentEye.texture = GetEye();
+        currentEye.texture = GetEye(); //cut maybe
+        
 
         eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
     }
@@ -143,6 +150,7 @@ public class UEye : MonoBehaviour
         {
             useAlternateTexture = !useAlternateTexture;
             currentEye.texture = GetEye();
+            //number.SetActive(true) or enable
             yield return new WaitForSeconds(eyeIdleAnimationDuration);
         }
     }

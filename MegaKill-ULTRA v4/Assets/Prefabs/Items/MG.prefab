@@ -150,21 +150,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c857eb6be1076430e8581e4a48c02cdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  def: {fileID: 2100000, guid: 0ca4ac07e799e460c9f2b45714316bb3, type: 2}
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  rb: {fileID: 0}
-  soundManager: {fileID: 0}
-  playerController: {fileID: 0}
-  popUp: {fileID: 0}
   isHovering: 0
+  isInteractable: 0
+  type: 0
+  rb: {fileID: 0}
+  popUp: {fileID: 0}
   thrown: 0
+  itemData: {fileID: 0}
+  holder: {fileID: 0}
   currentState: 0
   data: {fileID: 11400000, guid: 51b89b4d4116e4992a08ceba141b5f8a, type: 2}
   firePoint: {fileID: 3090975949641924395}
-  canFire: 1
   bullets: 0
-  tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
-  tracerDuration: 0
+  muzzleFlash: {fileID: 1387694499487188958}
 --- !u!64 &-1718197032171698968
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -294,6 +293,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4badc72dfe5f435c839b4d6e9bf6e22, type: 3}
+--- !u!198 &1387694499487188958 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6847902066312781993, guid: b4badc72dfe5f435c839b4d6e9bf6e22, type: 3}
+  m_PrefabInstance: {fileID: 5497406879888713591}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6214276945032095583 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1907060701819011112, guid: b4badc72dfe5f435c839b4d6e9bf6e22, type: 3}

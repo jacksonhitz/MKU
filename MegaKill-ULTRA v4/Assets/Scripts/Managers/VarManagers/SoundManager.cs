@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; private set; }
     
-        [Header("Audio Sources")]
+    [Header("Audio Sources")]
     public AudioSource music;
-    public AudioSource sfx;        // For 2D non-spatial sounds
+    public AudioSource sfx;        
     public AudioSource dialogue;
     
     [Header("3D Sound Settings")]
@@ -45,15 +46,15 @@ public class SoundManager : MonoBehaviour
     public AudioClip heartbeat;
     public AudioClip playerDeath;
     public AudioClip pillEmpty;
-    public AudioClip giveDrug;
+    public AudioClip talk;
 
     public AudioClip[] gulpSounds;
 
-    public void Gulp()
+    public void Gulped()
     {
         if (gulpSounds != null && gulpSounds.Length > 0)
         {
-            int randomIndex = UnityEngine.Random.Range(0, gulpSounds.Length);
+            int randomIndex = Random.Range(0, gulpSounds.Length);
         
             PlaySfx(gulpSounds[randomIndex]);
         }
@@ -65,11 +66,11 @@ public class SoundManager : MonoBehaviour
 
     public AudioClip[] punchSounds;
 
-    public void Punch()
+    public void Punched()
     {
         if (punchSounds != null && punchSounds.Length > 0)
         {
-            int randomIndex = UnityEngine.Random.Range(0, punchSounds.Length);
+            int randomIndex = Random.Range(0, punchSounds.Length);
             PlaySfx(punchSounds[randomIndex]);
         }
         else if (punch != null)
@@ -85,8 +86,8 @@ public class SoundManager : MonoBehaviour
     [Header("3D SFX")]
     public AudioClip revShot;
     public AudioClip revEmpty;
-    public AudioClip shotShot;
-    public AudioClip shotEmpty;
+    public AudioClip sgShot;
+    public AudioClip sgEmpty;
     public AudioClip mgShot;
     public AudioClip mgEmpty;
     public AudioClip batSwing;
@@ -113,13 +114,7 @@ public class SoundManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
         tracks = new List<AudioClip> { witch, acid, could, dj, all, hott, threes, life, real, four };
         lines = new List<AudioClip> { line1, line2, line3, line4, line5, line6, line7 };
@@ -133,8 +128,7 @@ public class SoundManager : MonoBehaviour
 
     void Start()
     {
-        Title();
-        StateChange(StateManager.State);
+        StateChange(StateManager.STATE);
     }
 
     void OnEnable()
@@ -147,14 +141,17 @@ public class SoundManager : MonoBehaviour
     }
     void StateChange(StateManager.GameState state)
     {
+        string currentScene = SceneManager.GetActiveScene().name;
+        if (currentScene != state.ToString()) return;
+
         switch (state)
         {
             case StateManager.GameState.TITLE: Title(); break;
-            case StateManager.GameState.INTRO: Intro(); break;
             case StateManager.GameState.TUTORIAL: Tutorial(); break;
+            case StateManager.GameState.REHEARSAL: Rehearsal(); break;
             case StateManager.GameState.TANGO: Tango(); break;
             case StateManager.GameState.PAUSED: Paused(); break;
-            case StateManager.GameState.FIGHT: Fight(); break;
+            case StateManager.GameState.TANGO2: Fight(); break;
         }
     }
 
@@ -163,15 +160,16 @@ public class SoundManager : MonoBehaviour
         music.clip = title;
         music.Play();
     }
-    void Intro()
-    {
-        music.Stop();
-        dialogue.Play();
-    }
     void Tutorial()
     {
         dialogue.Stop();
         music.clip = hott;
+        music.Play();
+    }
+    void Rehearsal()
+    {
+        dialogue.Stop();
+        music.clip = could;
         music.Play();
     }
     void Tango()
@@ -186,6 +184,12 @@ public class SoundManager : MonoBehaviour
         music.clip = acid;
         music.Play();
     }
+    public void Dead()
+    {
+        dialogue.Stop();
+        music.clip = playerDeath;
+        music.Play();
+    }
 
 
     public void Paused()
@@ -195,7 +199,6 @@ public class SoundManager : MonoBehaviour
         sfxPlaying = sfx.isPlaying;
         dialoguePlaying = dialogue.isPlaying;
         
-        music.Pause();
         sfx.Pause();
         dialogue.Pause();
         
@@ -290,6 +293,8 @@ public class SoundManager : MonoBehaviour
     //public void PlaySpatialEnemyHit(Vector3 position) => PlaySpatialSound(enemyHit, position);
     //public void PlaySpatialEnemyStun(Vector3 position) => PlaySpatialSound(enemyStun, position);
 
+
+    /*
     public void RevShot() => PlaySpatialSound(revShot, Camera.main.transform.position);
     public void RevEmpty() => PlaySpatialSound(revEmpty, Camera.main.transform.position);
     public void ShotShot() => PlaySpatialSound(shotShot, Camera.main.transform.position);
@@ -304,28 +309,29 @@ public class SoundManager : MonoBehaviour
     public void EnemyDeath() => PlaySpatialSound(enemyDeath, Camera.main.transform.position);
     public void EnemyHit() => PlaySpatialSound(enemyHit, Camera.main.transform.position);
     public void EnemyStun() => PlaySpatialSound(enemyStun, Camera.main.transform.position);
+    */
     
 
     // 2D
     public void Heartbeat() => PlaySfx(heartbeat);
     public void PlayerDeath() => PlaySfx(playerDeath);
     public void PillEmpty() => PlaySfx(pillEmpty);
-    public void GiveDrug() => PlaySfx(giveDrug);
+    public void Talk() => PlaySfx(talk);
 
-    /*
+
     public void RevShot() => PlaySfx(revShot);
     public void RevEmpty() => PlaySfx(revEmpty);
-    public void ShotShot() => PlaySfx(shotShot);
-    public void ShotEmpty() => PlaySfx(shotEmpty);
+    public void SGShot() => PlaySfx(sgShot);
+    public void SGEmpty() => PlaySfx(sgEmpty);
     public void MGShot() => PlaySfx(mgShot);
     public void MGEmpty() => PlaySfx(mgEmpty);
     public void BatSwing() => PlaySfx(batSwing);
-    public void Punch() => PlaySfx(punch);
+    public void Punch() { }  //BROKEN
     public void Toss() => PlaySfx(toss);
     public void TossHit() => PlaySfx(tossHit);
     public void PlayerHit() => PlaySfx(playerHit);
-    public void Gulp() => PlaySfx(gulp);
-    */
+    public void Gulp() { }    //BROKEN
+
 
     void PlaySfx(AudioClip clip)
     {
