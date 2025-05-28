@@ -47,6 +47,6 @@ public class MG : Gun
     void FireBasic()
     {
         Recoil();
-        data.muzzleFlash?.Play();
+        muzzleFlash.Play();
     }
 }
