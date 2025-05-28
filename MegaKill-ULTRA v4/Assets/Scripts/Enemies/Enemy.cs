@@ -3,7 +3,7 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Enemy : MonoBehaviour, IHitable, IInteractable
+public class Enemy : MonoBehaviour, IHitable
 {
     public enum EnemyState { Active, Wander, Brawl, Static, Pathing }
     public EnemyState currentState;
@@ -371,16 +371,6 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
-        }
-    }
-
-    public void Interact()
-    {
-        if (friendly)
-        {
-            festival.Dosed(this);
-            SoundManager.Instance.Talk();
-            friendly = false;
         }
     }
 
