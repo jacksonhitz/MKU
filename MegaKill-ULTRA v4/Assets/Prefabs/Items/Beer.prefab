@@ -171,13 +171,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d62dc33965b4530afc963c943a9cea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rend: {fileID: 0}
   def: {fileID: -6478536213147159724, guid: 99c4f208c447d4fed9bfba9f56d6a4e3, type: 3}
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  rb: {fileID: 0}
-  soundManager: {fileID: 0}
-  playerController: {fileID: 0}
-  popUp: {fileID: 0}
   isHovering: 0
+  isInteractable: 1
+  type: 1
+  rb: {fileID: 0}
+  popUp: {fileID: 0}
   thrown: 0
+  itemData: {fileID: 0}
+  holder: {fileID: 0}
   currentState: 0
   data: {fileID: 11400000, guid: 3686a5ff459184a15a9b31dd0e1a1646, type: 2}
