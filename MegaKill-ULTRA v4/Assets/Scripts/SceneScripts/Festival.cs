@@ -1,7 +1,8 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Festival : MonoBehaviour
+public class Festival : ScenesManager
 {
     EnemyManager enemyManager;
     SoundManager soundManager;
@@ -13,19 +14,25 @@ public class Festival : MonoBehaviour
 
     bool started;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         enemyManager = FindObjectOfType<EnemyManager>();
         soundManager = FindAnyObjectByType<SoundManager>();
         interacts = FindObjectOfType<InteractionManager>();
         dialogue = FindObjectOfType<Dialogue>();
         popUp = FindObjectOfType<PopUp>();
+
+        if (SceneManager.GetActiveScene().name != "TANGO")
+            StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO, 0f));
+        else
+            StateManager.LoadSilent(StateManager.GameState.TANGO);
     }
 
-    void Start()
+    protected override void Start()
     {
-        interacts?.Collect();
-        StateManager.LoadState(StateManager.GameState.TANGO);
+        base.Start();
 
         dialogue.TypeText("F TO HAND OUT MKU");
     }
@@ -87,7 +94,7 @@ public class Festival : MonoBehaviour
         yield return new WaitForSeconds(1f);
         dialogue.Off();
 
-        StateManager.LoadState(StateManager.GameState.TANGO2);
+        StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO2, 0f));
         enemyManager.Brawl();
     }
 }

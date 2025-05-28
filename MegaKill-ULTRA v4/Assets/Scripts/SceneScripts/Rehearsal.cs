@@ -1,18 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Rehearsal : MonoBehaviour
+public class Rehearsal : ScenesManager
 {
-    InteractionManager interacts;
+    protected override void Awake()
+    {
+        base.Awake();
 
-    void Awake()
-    {
-        interacts = FindObjectOfType<InteractionManager>();
-    }
-    void Start()
-    {
-        interacts?.Collect();
-        StateManager.LoadState(StateManager.GameState.REHEARSAL);
+        if (SceneManager.GetActiveScene().name != "REHEARSAL")
+            StartCoroutine(StateManager.LoadState(StateManager.GameState.REHEARSAL, 0f));
+        else
+            StateManager.LoadSilent(StateManager.GameState.REHEARSAL);
     }
 }

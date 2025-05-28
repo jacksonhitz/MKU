@@ -11,8 +11,6 @@ public class Interactable : MonoBehaviour, IInteractable
 
     [HideInInspector] protected SoundManager sound;
 
-
-
     public bool isHovering;
     public bool isInteractable;
 
@@ -27,8 +25,12 @@ public class Interactable : MonoBehaviour, IInteractable
 
     public virtual void Interact()
     {
-        if (type == Type.Door) rend.enabled = false;
-        else if (type == Type.Extract && StateManager.State == StateManager.GameState.TANGO2) StateManager.NextState();
+        if (type == Type.Door)
+        {
+
+
+        }
+        else if (type == Type.Extract && StateManager.State == StateManager.GameState.TANGO2) StateManager.NextState(this);
     }
 
     public virtual void Awake()

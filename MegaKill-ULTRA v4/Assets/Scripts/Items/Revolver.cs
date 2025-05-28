@@ -10,11 +10,15 @@ public class Revolver : Gun
         Vector3 dir; 
         if (currentState == ItemState.Player)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            dir = ray.direction;
             if (bullets > 0)
             {
                 bullets--;
+
+                Vector3 spread = new Vector3(Random.Range(-data.spreadAngle, data.spreadAngle), Random.Range(-data.spreadAngle, data.spreadAngle), 0f);
+                Quaternion rotation = Quaternion.Euler(Camera.main.transform.eulerAngles + spread);
+                Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
+                dir = ray.direction;
+
                 FireBasic();
                 FireRay(dir);
 

@@ -75,13 +75,13 @@ public class SettingsUI : MonoBehaviour
 
     public void Exit()
     {
-        StateManager.LoadState(StateManager.GameState.TITLE);
+        StartCoroutine(StateManager.LoadState(StateManager.GameState.TITLE, 2f));
         EventSystem.current.SetSelectedGameObject(null);
     }
 
     public void Restart()
     {
-        StateManager.LoadState(StateManager.PREVIOUS);
+        StartCoroutine(StateManager.LoadState(StateManager.PREVIOUS, 2f));
         EventSystem.current.SetSelectedGameObject(null);
     }
 

@@ -91,6 +91,7 @@ public class UEye : MonoBehaviour
     {
         Texture previousEye = currentEye.texture;
         currentEye.texture = eyeHurtTexture;
+        //number.SetActive(false)
         yield return new WaitForSeconds(0.2f);
         currentEye.texture = previousEye;
 
@@ -98,6 +99,7 @@ public class UEye : MonoBehaviour
         {
             currentEye.texture = GetEye();
             eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
+           
         }
         else
         {
@@ -109,9 +111,10 @@ public class UEye : MonoBehaviour
     {
         Texture previousEye = currentEye.texture;
         currentEye.texture = eyeHealTexture;
+        //number.SetActive(false)
         yield return new WaitForSeconds(0.2f);
         currentEye.texture = previousEye;
-        currentEye.texture = GetEye();
+        currentEye.texture = GetEye(); //cut maybe
 
         eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
     }
@@ -135,7 +138,8 @@ public class UEye : MonoBehaviour
 
             yield return new WaitForSeconds(0.2f);
         }
-        currentEye.texture = GetEye();
+        currentEye.texture = GetEye(); //cut maybe
+        
 
         eyeIdleCoroutine = StartCoroutine(IdleEyeAnimation());
     }
@@ -146,6 +150,7 @@ public class UEye : MonoBehaviour
         {
             useAlternateTexture = !useAlternateTexture;
             currentEye.texture = GetEye();
+            //number.SetActive(true)
             yield return new WaitForSeconds(eyeIdleAnimationDuration);
         }
     }

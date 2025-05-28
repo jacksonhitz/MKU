@@ -20,28 +20,19 @@ public class PlayerHealth : MonoBehaviour, IHitable
 
     public void Heal(float heal)
     {
-        if (StateManager.State != StateManager.GameState.DEAD)
-        {
-            health = Mathf.Min(health + heal, maxHealth);
-            uEye.UpdateHealth(health);
-        }
+        health = Mathf.Min(health + heal, maxHealth);
+        uEye.UpdateHealth(health);
     }
 
     public void Hit(float dmg)
     {
         health -= dmg;
         uEye.UpdateHealth(health);
+
         if (!isDead && health <= 0)
         {
             isDead = true;
-            StateManager.LoadState(StateManager.GameState.DEAD);
-            Invoke("Restart", 3f);
+            StartCoroutine(StateManager.LoadState(StateManager.PREVIOUS, 3f));
         }
-    }
-
-    void Restart()
-    {
-        Debug.Log("resatrt called");
-        StateManager.LoadState(StateManager.PREVIOUS);
     }
 }

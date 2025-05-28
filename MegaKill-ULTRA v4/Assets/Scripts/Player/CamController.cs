@@ -6,7 +6,6 @@ using UnityEngine.Rendering.Universal;
 
 public class CamController : MonoBehaviour
 {
-    Transform player;
     Camera cam;
 
     [HideInInspector] public float sens = 500f;
@@ -20,7 +19,7 @@ public class CamController : MonoBehaviour
     ColorAdjustments colorGrading;
     ChannelMixer channelMixer;
 
-    float chromSpd = 0.5f;
+    float chromSpd = 0.25f;
     float satSpd = 5f;
     float mixerSpd;
     float hueSpd;
@@ -49,12 +48,12 @@ public class CamController : MonoBehaviour
     float targetSpeedY;
     float lerpSpeed = 0.001f;
 
-    PlayerController playerController;
+    PlayerController player;
 
     void Awake()
     {
         cam = GetComponent<Camera>();
-        playerController = FindObjectOfType<PlayerController>();
+        player = FindObjectOfType<PlayerController>();
     }
 
     void Start()
@@ -65,7 +64,7 @@ public class CamController : MonoBehaviour
 
     void Reset()
     {
-        phase = 2;
+        phase = 1;
         SetEffects();
         SetClr();
         ResetShader();
@@ -112,10 +111,7 @@ public class CamController : MonoBehaviour
 
     void Update()
     {
-        if (StateManager.State == StateManager.GameState.DEAD)
-        {
-            TransitionOn();
-        }
+        if (StateManager.State == StateManager.GameState.TRANSITION) TransitionOn();
         else
         {
             MoveCheck();
@@ -281,7 +277,7 @@ public class CamController : MonoBehaviour
         yRotation += mouseX;
 
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        playerController.transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
+        player.transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
     }
 
     void UpdatePost()

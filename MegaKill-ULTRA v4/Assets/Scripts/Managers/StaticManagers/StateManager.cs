@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,8 +19,7 @@ public static class StateManager
         SPEARHEAD,
 
         PAUSED,
-        DEAD,
-        OUTRO,
+        TRANSITION
     }
 
     static GameState state;
@@ -27,6 +27,8 @@ public static class StateManager
 
     public static event Action<GameState> OnStateChanged;
     public static event Action<GameState> OnSilentChanged;
+    public static event Action OnSceneTransition;
+
     public static GameState PREVIOUS => previous;
     public static GameState STATE => state;
 
@@ -40,7 +42,6 @@ public static class StateManager
         GameState.SABLE,
         GameState.SPEARHEAD
     };
-    static readonly HashSet<GameState> Order = new(StateOrder);
 
     static readonly HashSet<GameState> Scene = new()
     {
@@ -66,9 +67,8 @@ public static class StateManager
     static readonly HashSet<GameState> Passive = new()
     {
         GameState.TITLE,
-        GameState.OUTRO,
         GameState.PAUSED,
-        GameState.DEAD,
+        GameState.TRANSITION,
     };
 
     public static GameState State
@@ -90,33 +90,32 @@ public static class StateManager
     public static bool IsPassive() => GroupCheck(Passive);
     public static bool IsScene() => GroupCheck(Scene);
 
-    public static void LoadState(GameState newState)
+    public static IEnumerator LoadState(GameState newState, float delay)
     {
         if (State != newState)
         {
-            Debug.Log("state changed");
-            State = newState;
             if (Scene.Contains(newState))
             {
+                State = GameState.TRANSITION;
+                yield return new WaitForSeconds(delay);
                 SceneManager.LoadScene(newState.ToString());
                 Debug.Log("Loading Scene " + newState);
+                State = newState;
             }
+            else State = newState;
         }
-        
     }
     public static void LoadSilent(GameState newState)
     {
-        previous = state;
+        previous = state;   
         state = newState;
         OnSilentChanged?.Invoke(state);
-
     }
 
-
-    public static void NextState()
+    public static void NextState(MonoBehaviour caller)
     {
         int currentIndex = StateOrder.IndexOf(state);
         int nextIndex = (currentIndex + 1) % StateOrder.Count;
-        LoadState(StateOrder[nextIndex]);
+        caller.StartCoroutine(LoadState(StateOrder[nextIndex], 2f));
     }
 }

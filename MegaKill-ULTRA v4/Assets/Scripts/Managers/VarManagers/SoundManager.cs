@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SoundManager : MonoBehaviour
 {
@@ -140,6 +141,9 @@ public class SoundManager : MonoBehaviour
     }
     void StateChange(StateManager.GameState state)
     {
+        string currentScene = SceneManager.GetActiveScene().name;
+        if (currentScene != state.ToString()) return;
+
         switch (state)
         {
             case StateManager.GameState.TITLE: Title(); break;
@@ -148,8 +152,7 @@ public class SoundManager : MonoBehaviour
             case StateManager.GameState.TANGO: Tango(); break;
             case StateManager.GameState.PAUSED: Paused(); break;
             case StateManager.GameState.TANGO2: Fight(); break;
-            case StateManager.GameState.DEAD: Dead(); break;
-        }   
+        }
     }
 
     void Title()
@@ -181,7 +184,7 @@ public class SoundManager : MonoBehaviour
         music.clip = acid;
         music.Play();
     }
-    void Dead()
+    public void Dead()
     {
         dialogue.Stop();
         music.clip = playerDeath;

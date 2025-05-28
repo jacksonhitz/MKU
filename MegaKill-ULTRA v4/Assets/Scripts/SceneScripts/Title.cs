@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Title : MonoBehaviour
+public class Title : ScenesManager
 {
-    void Start()
+    protected override void Awake()
     {
-        StateManager.LoadState(StateManager.GameState.TITLE);
+        if (SceneManager.GetActiveScene().name != "TITLE")
+            StartCoroutine(StateManager.LoadState(StateManager.GameState.TITLE, 0f));
+        else
+            StateManager.LoadSilent(StateManager.GameState.TITLE);
+
+        base.Awake();
     }
 }

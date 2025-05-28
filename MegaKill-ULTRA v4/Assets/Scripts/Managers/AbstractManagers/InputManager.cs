@@ -15,18 +15,17 @@ public abstract class InputManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            StateManager.NextState();
+            StateManager.NextState(this);
         }
 
-        if (Input.GetKeyDown(KeyCode.B)) StateManager.LoadState(StateManager.GameState.TANGO2);
-        
+        if (Input.GetKeyDown(KeyCode.B)) StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO2, 0f));
+
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-
             Debug.Log("called pause");
             if (StateManager.State != StateManager.GameState.PAUSED)
-                StateManager.LoadState(StateManager.GameState.PAUSED);
+                StartCoroutine(StateManager.LoadState(StateManager.GameState.PAUSED, 0f));
             else
             {
                 StateManager.LoadSilent(StateManager.PREVIOUS);

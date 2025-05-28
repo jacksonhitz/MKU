@@ -4,8 +4,9 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
-public class Tutorial : MonoBehaviour
+public class Tutorial : ScenesManager
 {
     InteractionManager interacts;
 
@@ -38,15 +39,16 @@ public class Tutorial : MonoBehaviour
     public bool itemHeldL = false;
     public bool itemHeldR = false;
 
-    void Awake()
+    protected override void Awake()
     {
-        interacts = FindObjectOfType<InteractionManager>();
+        base.Awake();
+
+        if (SceneManager.GetActiveScene().name != "TUTORIAL")
+            StartCoroutine(StateManager.LoadState(StateManager.GameState.TUTORIAL, 0f));
+        else
+            StateManager.LoadSilent(StateManager.GameState.TUTORIAL);
     }
-    void Start()
-    {
-        interacts?.Collect();
-        StateManager.LoadState(StateManager.GameState.TUTORIAL);
-    }
+    
 
     void Update()
     {
@@ -305,7 +307,7 @@ public class Tutorial : MonoBehaviour
         //Check if both are done - end tutorial if so
         if (completion[1] && completion[3])
         {
-            StateManager.NextState();
+            StateManager.NextState(this);
 
             /*
             TutorialStateManager.State = TutorialStateManager.TutorialState.Interact;
@@ -346,7 +348,7 @@ public class Tutorial : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             //Change to last scene
-            StateManager.LoadState(StateManager.GameState.TANGO);
+            StateManager.LoadState(StateManager.GameState.TANGO, 3f);
         }
     }
 }

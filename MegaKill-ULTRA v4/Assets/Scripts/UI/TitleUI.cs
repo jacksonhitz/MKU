@@ -30,24 +30,23 @@ public class TitleUI : MonoBehaviour
 
     public void InstructionButton()
     {
-        StateManager.LoadState(StateManager.GameState.TUTORIAL);
+        StartCoroutine(StateManager.LoadState(StateManager.GameState.TUTORIAL, 2f));
     }
     public void RehearsalButton()
     {
-        StateManager.LoadState(StateManager.GameState.REHEARSAL);
+        StartCoroutine(StateManager.LoadState(StateManager.GameState.REHEARSAL, 2f));
     }
     public void TangoButton()
     {
-        StateManager.LoadState(StateManager.GameState.TANGO);
+        StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO, 2f));
     }
-
     public void SableButton()
     {
-        StateManager.LoadState(StateManager.GameState.SABLE);
+        StartCoroutine(StateManager.LoadState(StateManager.GameState.SABLE, 2f));
     }
     public void SpearheadButton()
     {
-        StateManager.LoadState(StateManager.GameState.SPEARHEAD);
+        StartCoroutine(StateManager.LoadState(StateManager.GameState.SPEARHEAD, 2f));
     }
     public void OptionsButton()
     {

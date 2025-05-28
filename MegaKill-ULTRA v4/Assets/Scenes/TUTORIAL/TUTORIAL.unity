@@ -4828,6 +4828,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 258cf17c123d54d648e654997cd79c63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lvlType: 0
   instruction: {fileID: 1653209500}
   controls:
   - {fileID: 2115728107}
@@ -5799,6 +5800,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 363118724}
     m_Modifications:
+    - target: {fileID: -7321689714658733052, guid: d84955aeb38a0364b936947007fe9e0e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1988385602071326424, guid: d84955aeb38a0364b936947007fe9e0e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5842,6 +5847,10 @@ PrefabInstance:
     - target: {fileID: 2061511161156845301, guid: d84955aeb38a0364b936947007fe9e0e, type: 3}
       propertyPath: m_Name
       value: EnemyManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061511161156845301, guid: d84955aeb38a0364b936947007fe9e0e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
