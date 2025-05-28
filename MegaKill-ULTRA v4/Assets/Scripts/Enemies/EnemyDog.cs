@@ -11,7 +11,7 @@ public class EnemyDog : Enemy
         attackRate = 2f;
         dmg = 10f;
     }
-    protected override void CallAttack()
+    protected override void CallAttack(GameObject target)
     {
         StartCoroutine(Attack());
     }
@@ -19,7 +19,7 @@ public class EnemyDog : Enemy
     {
         animator.SetTrigger("Atk");
         soundManager.EnemySFX(sfx, attackClip);
-        player.health.Hit(dmg);
+        player.Hit(dmg);
         soundManager.EnemySFX(sfx, attackClip);
 
         yield break;

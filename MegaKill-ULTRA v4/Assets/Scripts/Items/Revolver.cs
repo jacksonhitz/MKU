@@ -1,54 +1,34 @@
 using System.Collections;
 using UnityEngine;
 
+
 public class Revolver : Gun
 {
-    float targetAdjust = 0.25f;
-
-    public override void Use()
-    {
-        Vector3 dir; 
-        if (currentState == ItemState.Player)
+   public override void Use()
+   {
+        if (!canFire) return;
+        if (bullets > 0)
         {
-            if (bullets > 0)
-            {
-                bullets--;
+            Debug.Log("FUCK OFF");
 
-                Vector3 spread = new Vector3(Random.Range(-data.spreadAngle, data.spreadAngle), Random.Range(-data.spreadAngle, data.spreadAngle), 0f);
-                Quaternion rotation = Quaternion.Euler(Camera.main.transform.eulerAngles + spread);
-                Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
-                dir = ray.direction;
+            StartCoroutine(FireCooldown());
+            Recoil();
+            soundManager.RevShot();
+            data.muzzleFlash.Play();
 
-                FireBasic();
-                FireRay(dir);
+            bullets--;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Hitscan(ray);
 
-                SoundManager.Instance.RevShot();
-            }
-            else
-            {
-                popUp?.UpdatePopUp("EMPTY");
-                SoundManager.Instance.RevEmpty();
-            }
+            Debug.Log("shot fired");
         }
-        else if (currentState == ItemState.Enemy && holder is Enemy enemy)
+        else
         {
-            Vector3 target = enemy.target.transform.position;
-            target.y += targetAdjust;
-            dir = (target - firePoint.position).normalized;
-
-            enemy.CallUse();
-
-            FireBasic();
-            FireBullet(dir);
-
-            //sound?.EnemySFX(enemy.sfx, enemy.attackClip);
-        }
-    }
-
-    void FireBasic()
-    {
-        Recoil();
-        muzzleFlash.Play();
-    }
-
+            popUp.UpdatePopUp("EMPTY");
+            soundManager.RevEmpty();
+        } 
+   }
 }
+
+
+

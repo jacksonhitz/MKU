@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,45 +7,34 @@ public static class StateManager
 {
     public enum GameState
     {
-        TESTING,
         TITLE,
+        INTRO,
 
         TUTORIAL,
-        REHEARSAL,
         TANGO,
-        TANGO2,
         SABLE,
         SPEARHEAD,
+        LAUNCH,
+
+        FIGHT,
+        TESTING,
 
         PAUSED,
-        TRANSITION
+        DEAD,
+        OUTRO,
     }
 
     static GameState state;
     static GameState previous;
 
     public static event Action<GameState> OnStateChanged;
-    public static event Action<GameState> OnSilentChanged;
-
     public static GameState PREVIOUS => previous;
-    public static GameState STATE => state;
-
-    static readonly List<GameState> StateOrder = new()
-    {
-        GameState.TITLE,
-        GameState.TUTORIAL,
-        GameState.REHEARSAL,
-        GameState.TANGO,
-        GameState.TANGO2,
-        GameState.SABLE,
-        GameState.SPEARHEAD
-    };
 
     static readonly HashSet<GameState> Scene = new()
     {
         GameState.TITLE,
         GameState.TUTORIAL,
-        GameState.REHEARSAL,
+        GameState.LAUNCH,
         GameState.TANGO,
         GameState.SABLE,
         GameState.SPEARHEAD,
@@ -55,19 +43,21 @@ public static class StateManager
     static readonly HashSet<GameState> Active = new()
     {
         GameState.TUTORIAL,
-        GameState.REHEARSAL,
+        GameState.LAUNCH,
         GameState.TANGO,
-        GameState.TANGO2,
         GameState.SABLE,
         GameState.SPEARHEAD,
+        GameState.FIGHT,
         GameState.TESTING
     };
 
     static readonly HashSet<GameState> Passive = new()
     {
         GameState.TITLE,
+        GameState.INTRO,
+        GameState.OUTRO,
         GameState.PAUSED,
-        GameState.TRANSITION,
+        GameState.DEAD,
     };
 
     public static GameState State
@@ -83,38 +73,43 @@ public static class StateManager
         }
     }
 
+    public static void SilentState(GameState newState)
+    {
+        previous = state;
+        state = newState;
+    }
+
     public static bool GroupCheck(HashSet<GameState> group) => group.Contains(state);
 
     public static bool IsActive() => GroupCheck(Active);
     public static bool IsPassive() => GroupCheck(Passive);
     public static bool IsScene() => GroupCheck(Scene);
 
-    public static IEnumerator LoadState(GameState newState, float delay)
+    public static void LoadState(GameState newState)
     {
-        if (State != newState)
+        if (State != newState && Scene.Contains(newState))
         {
-            if (Scene.Contains(newState))
+            void OnSceneLoaded(Scene scene, LoadSceneMode mode)
             {
-                State = GameState.TRANSITION;
-                yield return new WaitForSeconds(delay);
-                SceneManager.LoadScene(newState.ToString());
-                Debug.Log("Loading Scene " + newState);
                 State = newState;
+                SceneManager.sceneLoaded -= OnSceneLoaded;
             }
-            else State = newState;
+
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.LoadScene(newState.ToString());
+
+            Debug.Log("Loading " + newState);
+        }
+        else
+        {
+            State = newState;
         }
     }
-    public static void LoadSilent(GameState newState)
+    public static void NextState()
     {
-        previous = state;   
-        state = newState;
-        OnSilentChanged?.Invoke(state);
-    }
-
-    public static void NextState(MonoBehaviour caller)
-    {
-        int currentIndex = StateOrder.IndexOf(state);
-        int nextIndex = (currentIndex + 1) % StateOrder.Count;
-        caller.StartCoroutine(LoadState(StateOrder[nextIndex], 2f));
+        GameState[] values = (GameState[])Enum.GetValues(typeof(GameState));
+        int currentIndex = Array.IndexOf(values, state);
+        int nextIndex = (currentIndex + 1) % values.Length;
+        LoadState(values[nextIndex]);
     }
 }

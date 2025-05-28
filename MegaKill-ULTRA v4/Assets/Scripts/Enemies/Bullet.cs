@@ -6,12 +6,13 @@ public class Bullet : MonoBehaviour
     [HideInInspector] public Vector3 dir;
     [HideInInspector] public float vel;
     [HideInInspector] public float dmg;
-
+    BulletTime bulletTime;
     Rigidbody rb;
     int nullLayer;
 
     void Awake()
     {
+        bulletTime = FindAnyObjectByType<BulletTime>();
         rb = GetComponent<Rigidbody>();
         nullLayer = LayerMask.NameToLayer("Null");
     }
@@ -19,13 +20,21 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         Destroy(gameObject, lifeTime);
+        Debug.Log("bulletSpawned");
 
         Physics.IgnoreLayerCollision(gameObject.layer, nullLayer, true);
     }
 
     void FixedUpdate()
     {
-        rb.velocity = dir * vel;
+        if (bulletTime != null && bulletTime.isSlow)
+        {
+            rb.velocity = dir * (vel * 0.25f);
+        }
+        else
+        {
+            rb.velocity = dir * vel;
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -34,8 +43,11 @@ public class Bullet : MonoBehaviour
         
         if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerController player = collision.gameObject.GetComponentInParent<PlayerController>();
-            player?.health.Hit(dmg);
+            PlayerController playerController = collision.gameObject.GetComponentInParent<PlayerController>();
+            if (playerController != null)
+            {
+                playerController.Hit(dmg);
+            }
         }
         Destroy(gameObject);
     }

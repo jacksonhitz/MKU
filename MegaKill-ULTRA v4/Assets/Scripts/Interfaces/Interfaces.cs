@@ -2,12 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IHitable
+public interface IHit
 {
     void Hit(float dmg);
-}
-
-public interface IInteractable
-{
-    void Interact();
 }

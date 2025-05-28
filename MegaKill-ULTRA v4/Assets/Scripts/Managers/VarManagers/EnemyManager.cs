@@ -4,44 +4,18 @@ using System.Collections.Generic;
 
 public class EnemyManager : MonoBehaviour
 {
-    public static event System.Action<Enemy> OnDeath;
-
-    //Instance tracking/singleton management
-    private static EnemyManager _instance;
-    public static EnemyManager Instance
-    {
-        get
-        {
-            if (_instance is null) Debug.LogError("Enemy Manager is NULL");
-            return _instance;
-        }
-    }
-
-    [SerializeField] GameObject hands;
+    [SerializeField] GameObject hands; 
     [SerializeField] GameObject enemyHolder;
     public List<Enemy> enemies;
-    float spawnInterval = 20f;
+    float spawnInterval = 20f; 
     PlayerController player;
 
     void Awake()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-        }
-        player = FindObjectOfType<PlayerController>();
-        enemies = new List<Enemy>();
-    }
-    void Start()
-    {
-        Active();
-    }
+        player = FindAnyObjectByType<PlayerController>();
 
-
+        enemies = new List<Enemy>(); 
+    }
 
     void OnEnable()
     {
@@ -53,16 +27,26 @@ public class EnemyManager : MonoBehaviour
     }
     void StateChange(StateManager.GameState state)
     {
-        Active();
+        switch (state)
+        {
+            case StateManager.GameState.TITLE: break;
+            case StateManager.GameState.INTRO: break;
+            case StateManager.GameState.TUTORIAL: break;
+            case StateManager.GameState.FIGHT: Fight(); break;
+            case StateManager.GameState.PAUSED: break;
+            case StateManager.GameState.OUTRO: break;
+            case StateManager.GameState.TESTING: Fight(); break;
+        }
     }
 
-    void Active()
+    void Fight()
     {
+        Debug.Log("called enemies");
         enemyHolder.SetActive(true);
         CallHands();
         CollectEnemies();
     }
-    void CollectEnemies()
+    public void CollectEnemies()
     {
         enemies.Clear(); 
         enemies.AddRange(FindObjectsOfType<Enemy>()); 
@@ -108,14 +92,11 @@ public class EnemyManager : MonoBehaviour
     public void Kill(Enemy enemy)
     {
         enemies.Remove(enemy);
-        OnDeath?.Invoke(enemy);
-        Destroy(enemy.gameObject);
     }
-
 
     public void CallHands()
     {
-       // StartCoroutine(SpawnHands());
+        //StartCoroutine(SpawnHands());
     }
 
     IEnumerator SpawnHands()
@@ -124,9 +105,15 @@ public class EnemyManager : MonoBehaviour
         {
             yield return new WaitForSeconds(spawnInterval);
 
-            Vector3 spawnPos = player.transform.position;
-            spawnPos.y -= 1f;
-            Instantiate(hands, spawnPos, Quaternion.identity);
+            if (!player.rooted)
+            {
+                //ui.PopUp("LOOK DOWN");
+                
+                player.rooted = true;
+                Vector3 spawnPos = player.transform.position;
+                spawnPos.y -= 1f;
+                Instantiate(hands, spawnPos, Quaternion.identity);
+            }
         }
     }
 }

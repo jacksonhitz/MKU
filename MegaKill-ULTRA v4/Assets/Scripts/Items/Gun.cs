@@ -6,85 +6,78 @@ public class Gun : Item
     public GunData data;
     public Transform firePoint;
 
+    public bool canFire = true;
+
     public float bullets;
 
-    public ParticleSystem muzzleFlash;
-
     Vector3 rot = Vector3.zero;
+    Vector3 originalRot;
+
+    [SerializeField] TrailRenderer tracerPrefab;
+    [SerializeField] float tracerDuration;
 
     public override void Start()
     {
         base.Start();
+
+        originalRot = transform.localEulerAngles;
         bullets = data.maxBullets;
-        itemData = data;
     }
+
 
     void Update()
     {
         if (rb.isKinematic)
         {
             rot = Vector3.Lerp(rot, Vector3.zero, data.recoilSpd * Time.deltaTime);
-            rot = data.rot;
+            transform.localEulerAngles = originalRot + rot;
         }
     }
+
     public void Recoil()
     {
         rot += new Vector3(-data.recoilMag, 0, 0f);
     }
 
-    // === PLAYER ===
-    public void FireRay(Vector3 dir)
+    public void Hitscan(Ray ray)
     {
-        Ray ray = new Ray(firePoint.position, dir);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000f))
+        if (Physics.Raycast(ray, out RaycastHit hit, playerController.range))
         {
             if (hit.transform.CompareTag("Enemy"))
             {
                 Enemy enemy = hit.transform.GetComponentInParent<Enemy>();
-                enemy?.Hit(10f);
+                if (enemy != null)
+                {
+                    enemy.Hit(100);
+                }
             }
-
-            StartCoroutine(HandleTracer(hit.point, true));
+            TrailRenderer tracer = Instantiate(tracerPrefab, firePoint.position, Quaternion.identity);
+            StartCoroutine(HandleTracer(tracer, hit.point));
         }
     }
 
-    // === ENEMY ===
-    public void FireBullet(Vector3 dir)
+    public IEnumerator FireCooldown()
     {
-        GameObject bulletObj = Instantiate(data.bulletPrefab, firePoint.position, Quaternion.LookRotation(dir));
-        Bullet bullet = bulletObj.GetComponent<Bullet>();
-        bullet.dir = dir;
-        bullet.vel = data.vel;
-        bullet.dmg = data.dmg;
-        
-        StartCoroutine(HandleTracer(dir, false));
+        canFire = false;
+        yield return new WaitForSeconds(data.fireRate);
+        canFire = true;
     }
 
-    
 
-    IEnumerator HandleTracer(Vector3 dir, bool ray)
+    IEnumerator HandleTracer(TrailRenderer tracer, Vector3 hitPoint)
     {
-        TrailRenderer tracer = Instantiate(data.tracerPrefab, firePoint.position, Quaternion.identity);
-
+        tracer.transform.position = firePoint.position;
         float elapsedTime = 0f;
-        if (ray)
+        while (elapsedTime < tracerDuration)
         {
-            while (elapsedTime < data.tracerDuration)
-            {
-                tracer.transform.position = Vector3.Lerp(firePoint.position, dir, elapsedTime / data.tracerDuration);
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
+            tracer.transform.position = Vector3.Lerp(firePoint.position, hitPoint, elapsedTime / tracerDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
-        else
-        {
-            while (elapsedTime < tracer.time)
-            {
-                tracer.transform.position += dir.normalized * data.vel * Time.deltaTime;
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-        }
+        yield return new WaitForSeconds(tracer.time);
         Destroy(tracer.gameObject);
     }
 }
+
+
+

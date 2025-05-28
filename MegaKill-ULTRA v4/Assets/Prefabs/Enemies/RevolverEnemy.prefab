@@ -662,7 +662,7 @@ GameObject:
   - component: {fileID: -4228770082463823867}
   - component: {fileID: 8098752566100314580}
   - component: {fileID: 5884394538128816031}
-  - component: {fileID: 1113170551574883083}
+  - component: {fileID: 6717097535632569182}
   m_Layer: 12
   m_Name: RevolverEnemy
   m_TagString: Enemy
@@ -831,7 +831,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1113170551574883083
+--- !u!114 &6717097535632569182
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -840,17 +840,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 4209133741286685928}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e84a82a301b94549ad682350be9e9ff, type: 3}
+  m_Script: {fileID: 11500000, guid: d662706eb9d474b2a826f5eabcc88758, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
   friendly: 0
-  attackClip: {fileID: 0}
-  deadClip: {fileID: 0}
-  hitClip: {fileID: 0}
-  stunClip: {fileID: 0}
-  deathEffect: {fileID: 0}
-  item: {fileID: 3637294264480402648, guid: 802cefe5936ce4703a57437d09d7bfaa, type: 3}
+  attackClip: {fileID: 8300000, guid: 70529ed9b0dcb6445820e497f133702e, type: 3}
+  deadClip: {fileID: 8300000, guid: f0cc4e588be2cf3429eb7c42af516337, type: 3}
+  hitClip: {fileID: 8300000, guid: d76e15cf2d007ce4eb1945e4e673ef2e, type: 3}
+  stunClip: {fileID: 8300000, guid: fdfbdb32cff849d498eb0d57abce11c7, type: 3}
+  deathEffect: {fileID: 8853266473761700966, guid: b1da43f1588a840748c686b0733ad393, type: 3}
   agent: {fileID: 0}
   player: {fileID: 0}
   gameManager: {fileID: 0}
@@ -858,14 +857,14 @@ MonoBehaviour:
   enemyManager: {fileID: 0}
   animator: {fileID: 0}
   sfx: {fileID: 0}
-  pathingPoints: []
-  isStaticPathing: 0
-  attackRate: 0
-  attackRange: 0
   dosed: 0
   los: 0
   isDead: 0
-  target: {fileID: 0}
+  currentBrawlTarget: {fileID: 0}
+  bulletPrefab: {fileID: 1119319840285959126, guid: d147d45e6f7774ded8a27310e81aec32, type: 3}
+  firePoint: {fileID: 0}
+  tracerPrefab: {fileID: 5541546196371580284, guid: 2d93439b40d9148d79800a701ba720c5, type: 3}
+  muzzleFlash: {fileID: 1108541828592311128, guid: 59c3828bc449f4d719a36a840c96041c, type: 3}
 --- !u!1 &4220073659832579908
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,7 +941,7 @@ GameObject:
   - component: {fileID: 3900091088200280294}
   - component: {fileID: 59742549101180192}
   m_Layer: 12
-  m_Name: Shoot
+  m_Name: mku_shotgun_recoil
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -975,7 +974,7 @@ Animator:
   m_GameObject: {fileID: 4419219268666159708}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 101696f8133094e789bcfc41c6ec6003, type: 2}
+  m_Controller: {fileID: 9100000, guid: ba518ec7ebfad4e948e3ae11fc82b7ba, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1817,18 +1816,6 @@ PrefabInstance:
     - target: {fileID: 3422949439349276065, guid: 802cefe5936ce4703a57437d09d7bfaa, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -189.015
-      objectReference: {fileID: 0}
-    - target: {fileID: 3637294264480402648, guid: 802cefe5936ce4703a57437d09d7bfaa, type: 3}
-      propertyPath: type
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3637294264480402648, guid: 802cefe5936ce4703a57437d09d7bfaa, type: 3}
-      propertyPath: itemData
-      value: 
-      objectReference: {fileID: 11400000, guid: 95ae3dc694b2b4556a7628e53481a39a, type: 2}
-    - target: {fileID: 3637294264480402648, guid: 802cefe5936ce4703a57437d09d7bfaa, type: 3}
-      propertyPath: currentState
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

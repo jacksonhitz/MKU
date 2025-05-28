@@ -4,31 +4,37 @@ public class Consumable : Item
 {
     [SerializeField] ConsumableData data;
 
+    float cooldown = -0.15f;
     float charge;
 
     public override void Start()
     {
         base.Start();
-        itemData = data;
         charge = data.charge;
+
     }
 
     public override void Use()
     {
-        base.Use();
-        if (charge > 0 && holder is PlayerController player)
+        if (charge > 0)
         {
             charge--;
-            player.health.Heal(data.heal);
+            playerController.Heal(data.heal);
             //trip
+            cooldown = Time.time;
 
-            SoundManager.Instance.Gulp();
+            soundManager.Gulp();
             popUp.UpdatePopUp("HEALTH UP");
         }
         else
         {
-            popUp.UpdatePopUp("EMPTY");
-            SoundManager.Instance.PillEmpty();
+
+            if (Time.time - cooldown >= 0.5f)
+            {
+                popUp.UpdatePopUp("EMPTY");
+                soundManager.PillEmpty();
+                cooldown = Time.time;
+            }
         }
     }
 }

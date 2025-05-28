@@ -102,8 +102,7 @@ public class Dialogue : MonoBehaviour
 
         if (StateManager.IsPassive())
         {
-            StateManager.NextState(this);
-            Debug.Log("nextState");
+            StateManager.NextState();
         }
     }
 }

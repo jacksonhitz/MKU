@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 public class SettingsUI : MonoBehaviour
 {
@@ -15,16 +14,16 @@ public class SettingsUI : MonoBehaviour
 
     void Start()
     {
-        menu.enabled = false;
+        if (menu != null) menu.enabled = false;
 
         // Initialize values from manager
-        sfxSlider.value = SettingsManager.Instance.sFXVolume;
-        musicSlider.value = SettingsManager.Instance.musicVolume;
-        sensSlider.value = SettingsManager.Instance.sensitivity;
+        sfxSlider.value = SettingsManager.Instance.SFXVolume;
+        musicSlider.value = SettingsManager.Instance.MusicVolume;
+        sensSlider.value = SettingsManager.Instance.Sensitivity;
 
-        sfxInput.text = SettingsManager.Instance.sFXVolume.ToString("F0");
-        musicInput.text = SettingsManager.Instance.musicVolume.ToString("F0");
-        sensInput.text = SettingsManager.Instance.sensitivity.ToString("F0");
+        sfxInput.text = SettingsManager.Instance.SFXVolume.ToString("F0");
+        musicInput.text = SettingsManager.Instance.MusicVolume.ToString("F0");
+        sensInput.text = SettingsManager.Instance.Sensitivity.ToString("F0");
 
         // Setup input validation
         sfxInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
@@ -43,46 +42,37 @@ public class SettingsUI : MonoBehaviour
 
     void OnEnable()
     {
-        StateManager.OnStateChanged += StateChange;
-        StateManager.OnSilentChanged += StateChange;
+        StateManager.OnStateChanged += OnStateChanged;
     }
+
     void OnDisable()
     {
-        StateManager.OnStateChanged -= StateChange;
-        StateManager.OnSilentChanged -= StateChange;
+        StateManager.OnStateChanged -= OnStateChanged;
     }
-    void StateChange(StateManager.GameState state)
-    {
-        Debug.Log("state called");
 
+    void OnStateChanged(StateManager.GameState state)
+    {
         if (state == StateManager.GameState.PAUSED)
         {
             menu.enabled = true;
-            Debug.Log("menu enabled");
-        }
-        else
-        {
-            menu.enabled = false;
-            Debug.Log("menu disabled");
         }
     }
 
-    public void Resume()
+    public void Unpaused()
     {
-        StateManager.LoadSilent(StateManager.PREVIOUS);
-        EventSystem.current.SetSelectedGameObject(null);
+        menu.enabled = false;
+        StateManager.LoadState(StateManager.PREVIOUS);
     }
 
     public void Exit()
     {
-        StartCoroutine(StateManager.LoadState(StateManager.GameState.TITLE, 2f));
-        EventSystem.current.SetSelectedGameObject(null);
+        Application.Quit();
     }
 
     public void Restart()
     {
-        StartCoroutine(StateManager.LoadState(StateManager.PREVIOUS, 2f));
-        EventSystem.current.SetSelectedGameObject(null);
+        menu.enabled = false;
+        StateManager.LoadState(StateManager.State);
     }
 
     void OnSFXSliderChanged(float value)
@@ -110,7 +100,7 @@ public class SettingsUI : MonoBehaviour
             SettingsManager.Instance.SetSFXVolume(v);
             sfxSlider.value = v;
         }
-        sfxInput.text = SettingsManager.Instance.sFXVolume.ToString("F0");
+        sfxInput.text = SettingsManager.Instance.SFXVolume.ToString("F0");
     }
 
     void OnMusicInputChanged(string value)
@@ -120,7 +110,7 @@ public class SettingsUI : MonoBehaviour
             SettingsManager.Instance.SetMusicVolume(v);
             musicSlider.value = v;
         }
-        musicInput.text = SettingsManager.Instance.musicVolume.ToString("F0");
+        musicInput.text = SettingsManager.Instance.MusicVolume.ToString("F0");
     }
 
     void OnSensitivityInputChanged(string value)
@@ -130,6 +120,6 @@ public class SettingsUI : MonoBehaviour
             SettingsManager.Instance.SetSensitivity(v);
             sensSlider.value = v;
         }
-        sensInput.text = SettingsManager.Instance.sensitivity.ToString("F0");
+        sensInput.text = SettingsManager.Instance.Sensitivity.ToString("F0");
     }
 }

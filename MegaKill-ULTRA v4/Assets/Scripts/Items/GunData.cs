@@ -1,27 +1,19 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Gun", menuName = "Items/Gun")]
-public class GunData : WeaponData
+public class GunData : ItemData
 {
-    //MAKE A WEAPONDATA THAT GUNDATA INHIERTS FROM FOR MELEE FUCKER
-
-    [Header("Universal")]
+    public float dmg;
+    public float fireRate;
     public float maxBullets;
     public float recoilMag;
     public float recoilSpd;
-    public float vel;
 
-    [Header("Enemy")]
-    public GameObject bulletPrefab;
+    public ParticleSystem muzzleFlash;
 
-    [Header("MG/SG")]
+    //mg-sg
     public float spreadAngle;
 
-    [Header("SG")]
+    //sg
     public float pellets;
-
-    [Header("VFX")]
-    public ParticleSystem muzzleFlash;
-    public TrailRenderer tracerPrefab;
-    public float tracerDuration;
 }

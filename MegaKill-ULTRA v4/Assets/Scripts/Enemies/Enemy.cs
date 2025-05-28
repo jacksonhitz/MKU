@@ -3,9 +3,9 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Enemy : MonoBehaviour, IHitable
+public abstract class Enemy : MonoBehaviour, IHit
 {
-    public enum EnemyState { Active, Wander, Brawl, Static, Pathing }
+    public enum EnemyState { Wander, Active, Brawl, Static, Pathing }
     public EnemyState currentState;
     public bool friendly;
 
@@ -17,9 +17,6 @@ public class Enemy : MonoBehaviour, IHitable
 
     [Header("VFX")]
     public GameObject deathEffect;
-
-    [Header("Items")]
-    public Item item;
 
     [Header("Brawl Settings")]
     float playerPriorityChance = 0.5f;
@@ -46,8 +43,8 @@ public class Enemy : MonoBehaviour, IHitable
 
     // PUBLIC VAR
     protected float dmg;
-    [SerializeField] protected float attackRate;
-    [SerializeField] protected float attackRange;
+    protected float attackRate;
+    protected float attackRange;
     protected float detectionRange = 100f;
     protected bool isAttacking;
     protected bool detectedPlayer;
@@ -61,15 +58,15 @@ public class Enemy : MonoBehaviour, IHitable
     bool isStunned;
     bool hasSpawnedDeathEffect = false;
 
-    float maxHealth = 10f;
+    float maxHealth = 100f;
     float health;
 
     Vector3 wanderDestination;
+    float wanderTimer;
 
-    public GameObject target;
+    public GameObject currentBrawlTarget;
     float brawlTargetTimer;
 
-   
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -82,11 +79,7 @@ public class Enemy : MonoBehaviour, IHitable
         enemyManager = FindObjectOfType<EnemyManager>();
 
         health = maxHealth;
-
-        DefaultValues();
     }
-
-    protected virtual void Start() { }
 
     protected virtual void Update()
     {
@@ -129,56 +122,6 @@ public class Enemy : MonoBehaviour, IHitable
             los = false;
         }
     }
-    public IEnumerator AttackCheck()
-    {
-        if (!isAttacking)
-        {
-            animator.SetBool("isAttacking", true);
-            isAttacking = true;
-
-            ItemCheck();
-
-            Enemy targetEnemy = target.GetComponent<Enemy>();
-            if (targetEnemy != null && !targetEnemy.isDead)
-            {
-                targetEnemy.currentState = EnemyState.Brawl;
-            }
-
-            yield return new WaitForSeconds(attackRate);
-            isAttacking = false;
-            animator.SetBool("isAttacking", false);
-        }
-    }
-
-
-    //ITEMS
-    public virtual void SetItem(Item newItem)
-    {
-        item = newItem;
-        attackRate = item.itemData.rate;
-        if (item.itemData is GunData gunData)
-        {
-            attackRange = gunData.range;
-        }
-    }
-    void ItemCheck()
-    {
-        if (item != null) item.UseCheck();
-        else CallAttack();
-    }
-    public virtual void CallUse() { }
-    protected virtual void CallAttack() { }
-    protected virtual void DefaultValues() { }
-    protected virtual void DropItem()
-    {
-        if (item != null) item.Dropped();
-        DefaultValues();
-    }
-
-
-
-
-
 
     void WanderBehavior()
     {
@@ -211,15 +154,13 @@ public class Enemy : MonoBehaviour, IHitable
 
     void ActiveBehavior()
     {
-        friendly = false;
+        if (friendly) return;
 
-        target = player.gameObject;
-
-        if (los && Vector3.Distance(transform.position, player.transform.position) <= attackRange)
+        if (los && Vector3.Distance(transform.position, player.transform.position) < attackRange)
         {
             agent.ResetPath();
             LookTowards(player.transform.position);
-            StartCoroutine(AttackCheck());
+            StartCoroutine(AttackCheck(player.gameObject));
         }
         else if (detectedPlayer && Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
         {
@@ -234,31 +175,33 @@ public class Enemy : MonoBehaviour, IHitable
 
     void BrawlBehavior()
     {
-        agent.speed = 30f; 
+        agent.speed = 30f; // Faster speed when brawling
 
         brawlTargetTimer -= Time.deltaTime;
 
-        if (target == null || (target.CompareTag("Enemy") && target.GetComponent<Enemy>().isDead) || brawlTargetTimer <= 0f)
+        if (currentBrawlTarget == null ||
+            (currentBrawlTarget.CompareTag("Enemy") && currentBrawlTarget.GetComponent<Enemy>().isDead) ||
+            brawlTargetTimer <= 0f)
         {
-            target = ChooseBrawlTarget();
+            currentBrawlTarget = ChooseBrawlTarget();
             brawlTargetTimer = Random.Range(4f, 6f);
         }
 
-        if (target != null)
+        if (currentBrawlTarget != null)
         {
-            Debug.DrawLine(transform.position, target.transform.position, Color.red);
+            Debug.DrawLine(transform.position, currentBrawlTarget.transform.position, Color.red);
 
-            float distance = Vector3.Distance(transform.position, target.transform.position);
+            float distance = Vector3.Distance(transform.position, currentBrawlTarget.transform.position);
 
             if (distance < attackRange)
             {
                 agent.ResetPath();
-                LookTowards(target.transform.position);
-                StartCoroutine(AttackCheck());
+                LookTowards(currentBrawlTarget.transform.position);
+                StartCoroutine(AttackCheck(currentBrawlTarget));
             }
             else
             {
-                Vector3 spreadPosition = GetSpreadPosition(target.transform.position);
+                Vector3 spreadPosition = GetSpreadPosition(currentBrawlTarget.transform.position);
                 agent.SetDestination(spreadPosition);
                 LookTowards(spreadPosition);
             }
@@ -314,7 +257,7 @@ public class Enemy : MonoBehaviour, IHitable
             foreach (Enemy other in enemyManager.enemies)
             {
                 if (other == this || other.isDead) continue;
-                if (other.target == enemy.gameObject)
+                if (other.currentBrawlTarget == enemy.gameObject)
                     currentAttackers++;
             }
 
@@ -336,7 +279,34 @@ public class Enemy : MonoBehaviour, IHitable
     }
 
 
-    
+    public IEnumerator AttackCheck(GameObject target)
+    {
+        if (!isAttacking)
+        {
+            Debug.Log($"{gameObject.name} is ATTACKING {target.name}");
+
+            animator.SetBool("isAttacking", true);
+            isAttacking = true;
+
+            CallAttack(target);
+
+            Enemy targetEnemy = target.GetComponent<Enemy>();
+            if (targetEnemy != null && !targetEnemy.isDead)
+            {
+                targetEnemy.currentState = EnemyState.Brawl;
+            }
+
+            yield return new WaitForSeconds(attackRate);
+            isAttacking = false;
+            animator.SetBool("isAttacking", false);
+        }
+        else
+        {
+            Debug.Log($"{gameObject.name} tried to attack but was already attacking");
+
+        }
+        //yield break;
+    }
 
     void PathingBehavior()
     {
@@ -372,7 +342,7 @@ public class Enemy : MonoBehaviour, IHitable
 
     public void Hit(float dmg)
     {
-        soundManager?.EnemySFX(sfx, hitClip);
+        soundManager.EnemySFX(sfx, hitClip);
         //soundManager.EnemyHit(transform.position);
 
         health -= dmg;
@@ -383,12 +353,11 @@ public class Enemy : MonoBehaviour, IHitable
         }
         else
         {
-            if (health == 5)
+            if (health == 50)
             {
                 StopAllCoroutines();
                 StartCoroutine(Stun());
-                currentState = EnemyState.Active;
-                soundManager?.EnemySFX(sfx, stunClip);
+                soundManager.EnemySFX(sfx, stunClip);
             }
         }
     }
@@ -416,7 +385,7 @@ public class Enemy : MonoBehaviour, IHitable
 
         isDead = true;
         StopAllCoroutines();
-        enemyManager?.Kill(this);
+        enemyManager.Kill(this);
         DropItem();
 
         if (!hasSpawnedDeathEffect && deathEffect != null)
@@ -434,5 +403,7 @@ public class Enemy : MonoBehaviour, IHitable
     //    currentBrawlTarget = ChooseBrawlTarget();
     //}
 
-
+    protected abstract void CallAttack(GameObject target);
+    protected abstract void Start();
+    protected abstract void DropItem();
 }

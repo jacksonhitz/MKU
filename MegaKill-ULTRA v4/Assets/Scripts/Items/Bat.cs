@@ -34,9 +34,9 @@ public class Bat : MonoBehaviour
     IEnumerator Swing()
     {
         isSwinging = true;
-      //  player.SwingBat();
+        player.SwingBat();
         yield return new WaitForSeconds(0.3f);
-      //  player.combat.Melee(player.combat.batRange);
+        player.Melee(player.batRange);
         soundManager.BatSwing();
         yield return new WaitForSeconds(0.5f);
         isSwinging = false;

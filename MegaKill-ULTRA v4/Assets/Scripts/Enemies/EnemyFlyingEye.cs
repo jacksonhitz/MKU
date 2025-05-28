@@ -8,6 +8,7 @@ public class EnemyFlyingEye : Enemy
     public GameObject bulletPrefab;
     public Transform firePoint;
 
+    Item item;
     Rigidbody rb;
 
     Vector3 rot = Vector3.zero;
@@ -27,7 +28,7 @@ public class EnemyFlyingEye : Enemy
         dmg = 20f;
     }
 
-    protected override void CallAttack()
+    protected override void CallAttack(GameObject target)
     {
         StartCoroutine(Attack());
     }
