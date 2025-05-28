@@ -298,7 +298,7 @@ public class CamController : MonoBehaviour
         ClrHue();
         ClrMixer();
 
-        currentLerp = 0.25f;
+        currentLerp = 0.1f;
 
         if (dynamicVolume.weight < 5)
         {

@@ -17,6 +17,8 @@ public class Tango : ScenesManager
     {
         base.Awake();
 
+        Instance = this;
+
         dialogue = FindObjectOfType<Dialogue>();
         popUp = FindObjectOfType<PopUp>();
 
@@ -42,8 +44,10 @@ public class Tango : ScenesManager
 
         popUp.UpdatePopUp("MKU DISTRIBUTED");
         enemy.friendly = false;
+        enemy.dosed = true;
         dosedCount++;
         Debug.Log("dosed");
+
         if (dosedCount > 10 && !started)
         {
             StartCoroutine(Countdown());
@@ -85,6 +89,7 @@ public class Tango : ScenesManager
         dialogue.Off();
 
         StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO2, 0f));
+        SoundManager.Instance.Tango2();
         InteractionManager.Instance.ExtractOn();
         EnemyManager.Instance.Brawl();
 

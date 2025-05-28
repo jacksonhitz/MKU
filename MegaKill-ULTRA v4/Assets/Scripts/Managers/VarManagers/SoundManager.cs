@@ -151,7 +151,6 @@ public class SoundManager : MonoBehaviour
             case StateManager.GameState.REHEARSAL: Rehearsal(); break;
             case StateManager.GameState.TANGO: Tango(); break;
             case StateManager.GameState.PAUSED: Paused(); break;
-            case StateManager.GameState.TANGO2: Fight(); break;
         }
     }
 
@@ -178,11 +177,12 @@ public class SoundManager : MonoBehaviour
         music.clip = witch;
         music.Play();
     }
-    void Fight()
+    public void Tango2()
     {
         dialogue.Stop();
         music.clip = acid;
         music.Play();
+        Debug.Log("playing acid");
     }
     public void Dead()
     {

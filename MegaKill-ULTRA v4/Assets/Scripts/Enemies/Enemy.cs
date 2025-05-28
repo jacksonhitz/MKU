@@ -69,6 +69,8 @@ public class Enemy : MonoBehaviour, IHitable
     public GameObject target;
     float brawlTargetTimer;
 
+    Interactable interactable;
+
    
     void Awake()
     {
@@ -212,6 +214,8 @@ public class Enemy : MonoBehaviour, IHitable
     void ActiveBehavior()
     {
         friendly = false;
+        interactable = GetComponent<Interactable>();
+        if (interactable != null) interactable.isInteractable = false;
 
         target = player.gameObject;
 

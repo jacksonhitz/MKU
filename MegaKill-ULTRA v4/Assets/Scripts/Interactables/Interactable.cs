@@ -33,7 +33,6 @@ public class Interactable : MonoBehaviour, IInteractable
             else if (type == Type.Enemy)
             {
                 EnemyPunch enemy = GetComponent<EnemyPunch>();
-                Debug.Log("talked to" + enemy);
                 Tango.Instance.Dosed(enemy);
                 SoundManager.Instance.Talk();
             }
@@ -65,11 +64,12 @@ public class Interactable : MonoBehaviour, IInteractable
 
     public void DefaultMat()
     {
-        rend.material = def;
+        if (this != null) rend.material = def;
+
     }
 
     public void GlowMat()
     {
-        rend.material = glow;
+        if (this != null) rend.material = glow;
     }
 }
