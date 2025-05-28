@@ -38,7 +38,7 @@ public class CamController : MonoBehaviour
     float swayIntensity = 0.01f;
 
     public Material camMat;
-    float currentLerp = 0.1f;
+    float currentLerp = 0;
     float currentFrequency = 0;
     float currentAmplitude = 0;
 
@@ -64,7 +64,7 @@ public class CamController : MonoBehaviour
 
     void Reset()
     {
-        phase = 1;
+        phase = 2;
         SetEffects();
         SetClr();
         ResetShader();
@@ -185,11 +185,11 @@ public class CamController : MonoBehaviour
     {
         if (currentAmplitude < phase)
         {
-            currentAmplitude += 0.0005f;
+            currentAmplitude += 0.0001f;
         }
         if (currentFrequency < phase * 5)
         {
-            currentFrequency += 0.0005f;
+            currentFrequency += 0.0001f;
         }
 
         camMat.SetFloat("_Lerp", currentLerp);
@@ -298,16 +298,16 @@ public class CamController : MonoBehaviour
         ClrHue();
         ClrMixer();
 
-        currentLerp = 0.15f;
+        currentLerp = 0.25f;
 
         if (dynamicVolume.weight < 5)
         {
-            dynamicVolume.weight += 0.0001f;
+            dynamicVolume.weight += 0.00001f;
         }
 
-        fovSpd = 0.1f * dynamicVolume.weight;
-        mixerSpd = 10f * dynamicVolume.weight;
-        hueSpd = dynamicVolume.weight;
+        fovSpd = 0.05f * dynamicVolume.weight;
+        mixerSpd = 5f * dynamicVolume.weight;
+        hueSpd = dynamicVolume.weight / 5;
     }
 
     void ClrHue()
