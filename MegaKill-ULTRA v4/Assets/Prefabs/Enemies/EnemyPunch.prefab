@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6102538799900707159}
   - component: {fileID: 6938135149580061703}
   - component: {fileID: 1315694431143931435}
+  - component: {fileID: 2464842197439210765}
   m_Layer: 12
   m_Name: EnemyPunch
   m_TagString: Enemy
@@ -216,6 +217,24 @@ MonoBehaviour:
   los: 0
   isDead: 0
   target: {fileID: 0}
+--- !u!114 &2464842197439210765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9212990541556629421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b73a03c8d0b9441e5b41a178c9e0cfed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rend: {fileID: 0}
+  def: {fileID: 0}
+  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
+  isHovering: 0
+  isInteractable: 1
+  type: 3
 --- !u!1001 &7063125119559584725
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -907,9 +926,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -6615942463076616880, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5263238581337300950}
-    - targetCorrespondingSourceObject: {fileID: -6615942463076616880, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6712740804856082794}
   m_SourcePrefab: {fileID: 100100000, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
 --- !u!1 &5055908224773521029 stripped
 GameObject:
@@ -937,22 +953,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 17.86831, y: 25.154333, z: 4.92333}
   m_Center: {x: 0.0000022351742, y: 11.559778, z: -0.13536851}
---- !u!114 &6712740804856082794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5055908224773521029}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b73a03c8d0b9441e5b41a178c9e0cfed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  isHovering: 0
-  isInteractable: 0
-  type: 3
 --- !u!4 &7318344595752987710 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}

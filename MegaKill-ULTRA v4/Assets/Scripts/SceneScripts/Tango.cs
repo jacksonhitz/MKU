@@ -2,9 +2,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Festival : ScenesManager
+public class Tango : ScenesManager
 {
-    EnemyManager enemyManager;
+    public static Tango Instance { get; private set; }
+
     Dialogue dialogue;
     PopUp popUp;
 
@@ -16,7 +17,6 @@ public class Festival : ScenesManager
     {
         base.Awake();
 
-        enemyManager = FindObjectOfType<EnemyManager>();
         dialogue = FindObjectOfType<Dialogue>();
         popUp = FindObjectOfType<PopUp>();
 
@@ -25,13 +25,13 @@ public class Festival : ScenesManager
         else
             StateManager.LoadSilent(StateManager.GameState.TANGO);
     }
-
     protected override void Start()
     {
         base.Start();
 
         dialogue.TypeText("F TO HAND OUT MKU");
     }
+
 
     public void Dosed(Enemy enemy)
     {
@@ -40,18 +40,13 @@ public class Festival : ScenesManager
             dialogue.Off();
         }
 
-        if (!enemy.dosed)
+        popUp.UpdatePopUp("MKU DISTRIBUTED");
+        enemy.friendly = false;
+        dosedCount++;
+        Debug.Log("dosed");
+        if (dosedCount > 10 && !started)
         {
-            popUp.UpdatePopUp("DRUGS DISTRIBUTED");
-
-            enemy.dosed = true;
-            enemy.friendly = false;
-            dosedCount++;
-            Debug.Log("dosed");
-            if (dosedCount > 10 && !started)
-            {
-                StartCoroutine(Countdown());
-            }
+            StartCoroutine(Countdown());
         }
     }
 
@@ -90,6 +85,9 @@ public class Festival : ScenesManager
         dialogue.Off();
 
         StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO2, 0f));
-        enemyManager.Brawl();
+        InteractionManager.Instance.ExtractOn();
+        EnemyManager.Instance.Brawl();
+
+        dialogue.TypeText("F ON ANY VAN TO EXTRACT");
     }
 }

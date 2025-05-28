@@ -20,7 +20,6 @@ public abstract class InputManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.B)) StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO2, 0f));
 
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Debug.Log("called pause");

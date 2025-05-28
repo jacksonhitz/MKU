@@ -31,6 +31,15 @@ public class InteractionManager : MonoBehaviour
         interactables.AddRange(FindObjectsOfType<Interactable>());
     }
 
+    public void ExtractOn()
+    {
+        foreach (Interactable interactable in interactables)
+        {
+            if (interactable.type == Interactable.Type.Extract) interactable.isInteractable = true;
+            else if (interactable.type == Interactable.Type.Enemy) interactable.isInteractable = false;
+        }
+    }
+
     public void HighlightAll()
     {
         foreach (Interactable interactable in interactables)

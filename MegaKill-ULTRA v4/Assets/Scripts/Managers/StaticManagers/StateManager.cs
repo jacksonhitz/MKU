@@ -27,7 +27,6 @@ public static class StateManager
 
     public static event Action<GameState> OnStateChanged;
     public static event Action<GameState> OnSilentChanged;
-    public static event Action OnSceneTransition;
 
     public static GameState PREVIOUS => previous;
     public static GameState STATE => state;

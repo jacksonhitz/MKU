@@ -33,8 +33,6 @@ public class Enemy : MonoBehaviour, IHitable
     [HideInInspector] public Animator animator;
     [HideInInspector] public AudioSource sfx;
 
-    Festival festival;
-
     [Header("Static Pathing Coordinates")]
     public PathingPoint[] pathingPoints;
     [SerializeField] bool isStaticPathing;
@@ -82,8 +80,6 @@ public class Enemy : MonoBehaviour, IHitable
         gameManager = FindObjectOfType<GameManager>();
         soundManager = FindObjectOfType<SoundManager>();
         enemyManager = FindObjectOfType<EnemyManager>();
-
-        festival = FindObjectOfType<Festival>();
 
         health = maxHealth;
 

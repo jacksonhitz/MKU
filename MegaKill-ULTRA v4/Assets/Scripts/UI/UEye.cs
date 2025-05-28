@@ -150,7 +150,7 @@ public class UEye : MonoBehaviour
         {
             useAlternateTexture = !useAlternateTexture;
             currentEye.texture = GetEye();
-            //number.SetActive(true)
+            //number.SetActive(true) or enable
             yield return new WaitForSeconds(eyeIdleAnimationDuration);
         }
     }
