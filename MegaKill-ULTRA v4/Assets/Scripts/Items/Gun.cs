@@ -8,6 +8,8 @@ public class Gun : Item
 
     public float bullets;
 
+    public ParticleSystem muzzleFlash;
+
     Vector3 rot = Vector3.zero;
 
     public override void Start()
