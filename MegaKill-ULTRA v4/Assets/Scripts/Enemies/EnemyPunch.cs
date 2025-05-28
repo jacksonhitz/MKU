@@ -3,27 +3,35 @@ using UnityEngine;
 
 public class EnemyPunch : Enemy
 {
-    
-    protected override void Start()
+    protected override void DefaultValues()
     {
-      //  attackRange = 6f;
-       // attackRate = 1f;
-       // dmg = 10f;
+        attackRange = 6f;
+        attackRate = 1f;
+        dmg = 10f;
     }
     protected override void CallAttack()
     {
-        StartCoroutine(Attack());
+        StartCoroutine(Punch());
     }
-
-    IEnumerator Attack()
+    public override void CallUse()
     {
-        animator.SetTrigger("Atk");
+        StartCoroutine(Shoot());
+    }
+    IEnumerator Punch()
+    {
+        animator.SetTrigger("Punch");
         yield return new WaitForSeconds(0.2f);
 
         IHitable iHit = target.GetComponent<IHitable>();
         iHit?.Hit(dmg);
 
         soundManager.EnemySFX(sfx, attackClip);
+        yield break;
+    }
+
+    IEnumerator Shoot()
+    {
+        animator.SetTrigger("Shoot");
         yield break;
     }
 }

@@ -5,10 +5,8 @@ using UnityEngine.SceneManagement;
 public class Festival : ScenesManager
 {
     EnemyManager enemyManager;
-    SoundManager soundManager;
     Dialogue dialogue;
     PopUp popUp;
-    InteractionManager interacts;
 
     int dosedCount;
 
@@ -19,8 +17,6 @@ public class Festival : ScenesManager
         base.Awake();
 
         enemyManager = FindObjectOfType<EnemyManager>();
-        soundManager = FindAnyObjectByType<SoundManager>();
-        interacts = FindObjectOfType<InteractionManager>();
         dialogue = FindObjectOfType<Dialogue>();
         popUp = FindObjectOfType<PopUp>();
 
@@ -47,7 +43,6 @@ public class Festival : ScenesManager
         if (!enemy.dosed)
         {
             popUp.UpdatePopUp("DRUGS DISTRIBUTED");
-            soundManager.GiveDrug();
 
             enemy.dosed = true;
             enemy.friendly = false;

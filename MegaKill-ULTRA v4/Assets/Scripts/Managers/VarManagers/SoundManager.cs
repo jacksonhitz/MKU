@@ -46,7 +46,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip heartbeat;
     public AudioClip playerDeath;
     public AudioClip pillEmpty;
-    public AudioClip giveDrug;
+    public AudioClip talk;
 
     public AudioClip[] gulpSounds;
 
@@ -86,8 +86,8 @@ public class SoundManager : MonoBehaviour
     [Header("3D SFX")]
     public AudioClip revShot;
     public AudioClip revEmpty;
-    public AudioClip shotShot;
-    public AudioClip shotEmpty;
+    public AudioClip sgShot;
+    public AudioClip sgEmpty;
     public AudioClip mgShot;
     public AudioClip mgEmpty;
     public AudioClip batSwing;
@@ -316,13 +316,13 @@ public class SoundManager : MonoBehaviour
     public void Heartbeat() => PlaySfx(heartbeat);
     public void PlayerDeath() => PlaySfx(playerDeath);
     public void PillEmpty() => PlaySfx(pillEmpty);
-    public void GiveDrug() => PlaySfx(giveDrug);
+    public void Talk() => PlaySfx(talk);
 
 
     public void RevShot() => PlaySfx(revShot);
     public void RevEmpty() => PlaySfx(revEmpty);
-    public void ShotShot() => PlaySfx(shotShot);
-    public void ShotEmpty() => PlaySfx(shotEmpty);
+    public void SGShot() => PlaySfx(sgShot);
+    public void SGEmpty() => PlaySfx(sgEmpty);
     public void MGShot() => PlaySfx(mgShot);
     public void MGEmpty() => PlaySfx(mgEmpty);
     public void BatSwing() => PlaySfx(batSwing);

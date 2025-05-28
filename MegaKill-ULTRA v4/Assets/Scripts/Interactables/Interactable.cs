@@ -3,8 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(Renderer))]
 public class Interactable : MonoBehaviour, IInteractable
 {
-    Renderer rend;
-    Material def;
+    public Renderer rend;
+    public Material def;
     [SerializeField] Material glow;
 
     PlayerController player;
@@ -37,7 +37,6 @@ public class Interactable : MonoBehaviour, IInteractable
     {
         rend = GetComponent<Renderer>();
         def = rend.materials[0];
-        sound = SoundManager.Instance;
     }
 
     void OnMouseEnter()

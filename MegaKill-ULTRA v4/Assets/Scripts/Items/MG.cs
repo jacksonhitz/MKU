@@ -20,12 +20,12 @@ public class MG : Gun
                 FireBasic();
                 FireRay(dir);
 
-                sound?.MGShot();
+                SoundManager.Instance.MGShot();
             }
             else
             {
                 popUp?.UpdatePopUp("EMPTY");
-                sound?.ShotEmpty();
+                SoundManager.Instance.SGEmpty();
             }
         }
         else if (currentState == ItemState.Enemy && holder is Enemy enemy)
@@ -36,6 +36,8 @@ public class MG : Gun
             Vector3 target = enemy.target.transform.position;
             target.y += targetAdjust;
             dir = rotation * (target - firePoint.position).normalized;
+
+            enemy.CallUse();
 
             FireBasic();
             FireBullet(dir);

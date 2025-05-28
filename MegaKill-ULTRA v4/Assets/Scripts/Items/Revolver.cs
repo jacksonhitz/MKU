@@ -22,7 +22,7 @@ public class Revolver : Gun
                 FireBasic();
                 FireRay(dir);
 
-                sound?.RevShot();
+                SoundManager.Instance.RevShot();
             }
             else
             {
@@ -35,6 +35,8 @@ public class Revolver : Gun
             Vector3 target = enemy.target.transform.position;
             target.y += targetAdjust;
             dir = (target - firePoint.position).normalized;
+
+            enemy.CallUse();
 
             FireBasic();
             FireBullet(dir);

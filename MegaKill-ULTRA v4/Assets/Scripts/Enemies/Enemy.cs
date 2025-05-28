@@ -86,6 +86,8 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
         festival = FindObjectOfType<Festival>();
 
         health = maxHealth;
+
+        DefaultValues();
     }
 
     protected virtual void Start() { }
@@ -168,14 +170,13 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
         if (item != null) item.UseCheck();
         else CallAttack();
     }
+    public virtual void CallUse() { }
     protected virtual void CallAttack() { }
+    protected virtual void DefaultValues() { }
     protected virtual void DropItem()
     {
-        if (item != null)
-        {
-            item.Dropped();
-            // CLEAR RATE/RANGE
-        }
+        if (item != null) item.Dropped();
+        DefaultValues();
     }
 
 
@@ -214,7 +215,7 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
 
     void ActiveBehavior()
     {
-        if (friendly) return;
+        friendly = false;
 
         target = player.gameObject;
 
@@ -378,6 +379,7 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
         if (friendly)
         {
             festival.Dosed(this);
+            SoundManager.Instance.Talk();
             friendly = false;
         }
     }
@@ -399,6 +401,7 @@ public class Enemy : MonoBehaviour, IHitable, IInteractable
             {
                 StopAllCoroutines();
                 StartCoroutine(Stun());
+                currentState = EnemyState.Active;
                 soundManager?.EnemySFX(sfx, stunClip);
             }
         }

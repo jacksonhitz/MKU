@@ -23,13 +23,13 @@ public class Shotgun : Gun
                     FireBasic();
                     FireRay(dir);
 
-                    sound?.ShotShot();
+                    SoundManager.Instance.SGShot();
                 }
             }
             else
             {
                 popUp?.UpdatePopUp("EMPTY");
-                sound?.ShotEmpty();
+                SoundManager.Instance.SGEmpty();
             }
         }
         else if (currentState == ItemState.Enemy && holder is Enemy enemy)
@@ -42,6 +42,8 @@ public class Shotgun : Gun
                 Vector3 target = enemy.target.transform.position;
                 target.y += targetAdjust;
                 dir = rotation * (target - firePoint.position).normalized;
+
+                enemy.CallUse();
 
                 FireBasic();
                 FireBullet(dir);
