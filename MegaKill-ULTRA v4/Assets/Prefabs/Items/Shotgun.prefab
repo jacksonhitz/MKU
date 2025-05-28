@@ -293,10 +293,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30dbf7e3d6b0b41ec8ce1ee9ba038f0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rend: {fileID: 0}
+  def: {fileID: 0}
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
   isHovering: 0
   isInteractable: 0
-  type: 0
+  type: 1
   rb: {fileID: 0}
   popUp: {fileID: 0}
   thrown: 0
