@@ -42,7 +42,7 @@ public class Revolver : Gun
     void FireBasic()
     {
         Recoil();
-        data.muzzleFlash?.Play();
+        muzzleFlash.Play();
     }
 
 }
