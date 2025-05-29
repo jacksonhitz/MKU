@@ -2,6 +2,13 @@ using UnityEngine;
 
 public abstract class InputManager : MonoBehaviour
 {
+    public static InputManager Instance { get; private set; }
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
     void Update()
     {
         UpdateBase();

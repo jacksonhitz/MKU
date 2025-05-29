@@ -22,19 +22,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b7b9c4af16204cb8880116892f07a83, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -55.9021
+      value: -138.09833
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b7b9c4af16204cb8880116892f07a83, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -109.53797
+      value: 7.630616
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b7b9c4af16204cb8880116892f07a83, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 28.12497
+      value: 9.185913
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b7b9c4af16204cb8880116892f07a83, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.30262288
+      value: 0.98842055
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b7b9c4af16204cb8880116892f07a83, type: 3}
       propertyPath: m_LocalRotation.x
@@ -42,7 +42,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b7b9c4af16204cb8880116892f07a83, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.9531104
+      value: 0.15173973
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b7b9c4af16204cb8880116892f07a83, type: 3}
       propertyPath: m_LocalRotation.z
@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b7b9c4af16204cb8880116892f07a83, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 215.23
+      value: 17.456
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0b7b9c4af16204cb8880116892f07a83, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73a03c8d0b9441e5b41a178c9e0cfed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mats: []
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
   isHovering: 0
   isInteractable: 0

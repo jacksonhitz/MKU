@@ -5,10 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Spearhead : ScenesManager
 {
-    protected override void Awake()
+    void Awake()
     {
-        base.Awake();
-
         if (SceneManager.GetActiveScene().name != "SPEARHEAD")
             StartCoroutine(StateManager.LoadState(StateManager.GameState.SPEARHEAD, 0f));
         else

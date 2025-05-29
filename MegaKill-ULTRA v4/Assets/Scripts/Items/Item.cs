@@ -21,16 +21,15 @@ public abstract class Item : Interactable
     }
     public ItemState currentState;
 
-    public override void Awake()
+    protected override void Awake()
     {
         base.Awake();
         rb = GetComponent<Rigidbody>();
         popUp = FindObjectOfType<PopUp>();
     }
-
-
-    public virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         FindState();
         isUseable = true;
     }

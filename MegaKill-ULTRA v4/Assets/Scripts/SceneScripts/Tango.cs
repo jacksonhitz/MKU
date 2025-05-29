@@ -13,10 +13,8 @@ public class Tango : ScenesManager
 
     bool started;
 
-    protected override void Awake()
+    void Awake()
     {
-        base.Awake();
-
         Instance = this;
 
         dialogue = FindObjectOfType<Dialogue>();
@@ -43,7 +41,6 @@ public class Tango : ScenesManager
         }
 
         popUp.UpdatePopUp("MKU DISTRIBUTED");
-        enemy.friendly = false;
         enemy.dosed = true;
         dosedCount++;
         Debug.Log("dosed");
