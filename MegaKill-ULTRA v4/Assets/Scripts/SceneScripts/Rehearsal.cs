@@ -5,10 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Rehearsal : ScenesManager
 {
-    protected override void Awake()
+    void Awake()
     {
-        base.Awake();
-
         if (SceneManager.GetActiveScene().name != "REHEARSAL")
             StartCoroutine(StateManager.LoadState(StateManager.GameState.REHEARSAL, 0f));
         else

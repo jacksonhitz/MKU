@@ -6,7 +6,7 @@ public class Consumable : Item
 
     float charge;
 
-    public override void Start()
+    protected override void Start()
     {
         base.Start();
         itemData = data;

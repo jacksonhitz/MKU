@@ -23,13 +23,13 @@ public class Shotgun : Gun
                     FireBasic();
                     FireRay(dir);
 
-                    SoundManager.Instance.SGShot();
+                    sound.SGShot();
                 }
             }
             else
             {
                 popUp?.UpdatePopUp("EMPTY");
-                SoundManager.Instance.SGEmpty();
+                sound.SGEmpty();
             }
         }
         else if (currentState == ItemState.Enemy && holder is Enemy enemy)
@@ -48,7 +48,7 @@ public class Shotgun : Gun
                 FireBasic();
                 FireBullet(dir);
 
-                //sound?.EnemySFX(enemy.sfx, enemy.attackClip);
+                sound.EnemySFX(enemy.sfx, enemy.attackClip);
             }
         }
     }

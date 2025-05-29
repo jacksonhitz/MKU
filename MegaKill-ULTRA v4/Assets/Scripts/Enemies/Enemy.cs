@@ -3,11 +3,10 @@ using UnityEngine.AI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Enemy : MonoBehaviour, IHitable
+public class Enemy : Interactable, IHitable
 {
     public enum EnemyState { Active, Wander, Brawl, Static, Pathing }
     public EnemyState currentState;
-    public bool friendly;
 
     [Header("SFX")]
     public AudioClip attackClip;
@@ -26,9 +25,6 @@ public class Enemy : MonoBehaviour, IHitable
 
     // REFERENCES
     [HideInInspector] public NavMeshAgent agent;
-    [HideInInspector] public PlayerController player;
-    [HideInInspector] public GameManager gameManager;
-    [HideInInspector] public SoundManager soundManager;
     [HideInInspector] public EnemyManager enemyManager;
     [HideInInspector] public Animator animator;
     [HideInInspector] public AudioSource sfx;
@@ -69,26 +65,18 @@ public class Enemy : MonoBehaviour, IHitable
     public GameObject target;
     float brawlTargetTimer;
 
-    Interactable interactable;
-
    
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         agent = GetComponent<NavMeshAgent>();
         sfx = GetComponent<AudioSource>();
-
         animator = GetComponentInChildren<Animator>();
-        player = FindObjectOfType<PlayerController>();
-        gameManager = FindObjectOfType<GameManager>();
-        soundManager = FindObjectOfType<SoundManager>();
-        enemyManager = FindObjectOfType<EnemyManager>();
 
         health = maxHealth;
 
         DefaultValues();
     }
-
-    protected virtual void Start() { }
 
     protected virtual void Update()
     {
@@ -213,9 +201,7 @@ public class Enemy : MonoBehaviour, IHitable
 
     void ActiveBehavior()
     {
-        friendly = false;
-        interactable = GetComponent<Interactable>();
-        if (interactable != null) interactable.isInteractable = false;
+        isInteractable = false;
 
         target = player.gameObject;
 
@@ -376,8 +362,8 @@ public class Enemy : MonoBehaviour, IHitable
 
     public void Hit(float dmg)
     {
-        soundManager?.EnemySFX(sfx, hitClip);
-        //soundManager.EnemyHit(transform.position);
+        SoundManager.Instance.EnemySFX(sfx, hitClip);
+     //   SoundManager.Instance.EnemyHit(transform.position);
 
         health -= dmg;
         Debug.Log("health: " + health);
@@ -392,7 +378,7 @@ public class Enemy : MonoBehaviour, IHitable
                 StopAllCoroutines();
                 StartCoroutine(Stun());
                 currentState = EnemyState.Active;
-                soundManager?.EnemySFX(sfx, stunClip);
+                SoundManager.Instance.EnemySFX(sfx, stunClip);
             }
         }
     }

@@ -5,17 +5,12 @@ using TMPro;
 
 public class TitleUI : MonoBehaviour
 {
-    Title title;
     [SerializeField] Dialogue introText;
     [SerializeField] Dialogue tangoText;
     [SerializeField] GameObject titleScreen;
 
     [SerializeField] GameObject settingsScreen;
 
-    void Awake()
-    {
-        title = FindObjectOfType<Title>();
-    }
     public void StartButton()
     {
         introText.Play();

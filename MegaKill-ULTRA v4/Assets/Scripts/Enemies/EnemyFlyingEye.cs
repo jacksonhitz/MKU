@@ -55,7 +55,7 @@ public class EnemyFlyingEye : Enemy
     IEnumerator Attack()
     {
         animator.SetTrigger("Atk");
-        soundManager.EnemySFX(sfx, attackClip);
+        SoundManager.Instance.EnemySFX(sfx, attackClip);
 
         Vector3 targetPos = player.transform.position;
         targetPos.y += targetAdjust;

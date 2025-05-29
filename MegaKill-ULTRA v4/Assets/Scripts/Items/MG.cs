@@ -20,12 +20,12 @@ public class MG : Gun
                 FireBasic();
                 FireRay(dir);
 
-                SoundManager.Instance.MGShot();
+                sound.MGShot();
             }
             else
             {
                 popUp?.UpdatePopUp("EMPTY");
-                SoundManager.Instance.SGEmpty();
+                sound.SGEmpty();
             }
         }
         else if (currentState == ItemState.Enemy && holder is Enemy enemy)
@@ -42,7 +42,7 @@ public class MG : Gun
             FireBasic();
             FireBullet(dir);
 
-            //sound?.EnemySFX(enemy.sfx, enemy.attackClip);
+            sound.EnemySFX(enemy.sfx, enemy.attackClip);
         }
     }
 

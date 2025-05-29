@@ -1,14 +1,18 @@
 using UnityEngine;
-using System;
 
 public class Interactable : MonoBehaviour, IInteractable
 {
-    public Renderer rend;
-    public Material def;
+    [SerializeField] Material[] mats;
     [SerializeField] Material glow;
 
+    Material mat;
+    Renderer rend;
+    
     public bool isHovering;
     public bool isInteractable;
+
+    protected PlayerController player;
+    protected SoundManager sound;
 
     public enum Type
     {
@@ -39,12 +43,32 @@ public class Interactable : MonoBehaviour, IInteractable
         }
         
     }
+    protected virtual void Awake()
+    {
 
-    public virtual void Awake()
+        GetMat();
+    }
+    protected virtual void Start()
+    {
+        player = PlayerController.Instance;
+        sound = SoundManager.Instance;
+    }
+    
+    void GetMat()
     {
         rend = GetComponent<Renderer>();
         if (rend == null) rend = GetComponentInChildren<Renderer>();
-        def = rend.materials[0];
+
+
+        if (mats.Length > 0)
+        {
+            mat = mats[Random.Range(0, mats.Length)];
+            rend.material = mat;
+        }
+        else mat = rend.material;
+
+        Debug.Log("rend" + rend);
+        Debug.Log("mat" + mat);
     }
 
     void OnMouseEnter()
@@ -64,7 +88,7 @@ public class Interactable : MonoBehaviour, IInteractable
 
     public void DefaultMat()
     {
-        if (this != null) rend.material = def;
+        if (this != null) rend.material = mat;
 
     }
 

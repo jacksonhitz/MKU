@@ -8,15 +8,9 @@ public abstract class ScenesManager : MonoBehaviour
     public enum WinCon { Elim, Extract, Target }
     public WinCon lvlType;
 
-    InteractionManager interacts;
-
-    protected virtual void Awake()
-    {
-        interacts = FindObjectOfType<InteractionManager>();
-    }
     protected virtual void Start()
     {
-        interacts?.Collect();
+        InteractionManager.Instance.Collect();
     }
 
     void OnEnable()

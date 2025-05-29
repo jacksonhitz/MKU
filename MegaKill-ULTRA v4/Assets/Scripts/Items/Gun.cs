@@ -12,7 +12,7 @@ public class Gun : Item
 
     Vector3 rot = Vector3.zero;
 
-    public override void Start()
+    protected override void Start()
     {
         base.Start();
         bullets = data.maxBullets;

@@ -5,10 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Russia : ScenesManager
 {
-    protected override void Awake()
+    void Awake()
     {
-        base.Awake();
-
         if (SceneManager.GetActiveScene().name != "SABLE")
             StartCoroutine(StateManager.LoadState(StateManager.GameState.SABLE, 0f));
         else

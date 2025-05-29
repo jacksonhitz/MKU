@@ -18,9 +18,9 @@ public class EnemyDog : Enemy
     IEnumerator Attack()
     {
         animator.SetTrigger("Atk");
-        soundManager.EnemySFX(sfx, attackClip);
+        SoundManager.Instance.EnemySFX(sfx, attackClip);
         player.health.Hit(dmg);
-        soundManager.EnemySFX(sfx, attackClip);
+        SoundManager.Instance.EnemySFX(sfx, attackClip);
 
         yield break;
     }

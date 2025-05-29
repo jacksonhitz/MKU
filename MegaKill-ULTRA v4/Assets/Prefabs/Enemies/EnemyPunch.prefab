@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6102538799900707159}
   - component: {fileID: 6938135149580061703}
   - component: {fileID: 1315694431143931435}
-  - component: {fileID: 2464842197439210765}
   m_Layer: 12
   m_Name: EnemyPunch
   m_TagString: Enemy
@@ -194,8 +193,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e84a82a301b94549ad682350be9e9ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mats:
+  - {fileID: 2100000, guid: 0ec4bc2f3b999423cb7b0caf9dd1039d, type: 2}
+  - {fileID: 2100000, guid: 36f847e3d36c74101ba19468d5f2dfdd, type: 2}
+  - {fileID: 2100000, guid: 766c4a02eec4b4c848d85f971b08ad49, type: 2}
+  - {fileID: 2100000, guid: 2b9d950d35f714b798dc53732eed9623, type: 2}
+  - {fileID: 2100000, guid: f8bf20952d3264f639e6a603f203fdef, type: 2}
+  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
+  isHovering: 0
+  isInteractable: 1
+  type: 3
   currentState: 1
-  friendly: 1
   attackClip: {fileID: 8300000, guid: 15cd710ae65e1d940a5e678425349139, type: 3}
   deadClip: {fileID: 8300000, guid: f0cc4e588be2cf3429eb7c42af516337, type: 3}
   hitClip: {fileID: 8300000, guid: d76e15cf2d007ce4eb1945e4e673ef2e, type: 3}
@@ -204,8 +212,6 @@ MonoBehaviour:
   item: {fileID: 0}
   agent: {fileID: 0}
   player: {fileID: 0}
-  gameManager: {fileID: 0}
-  soundManager: {fileID: 0}
   enemyManager: {fileID: 0}
   animator: {fileID: 0}
   sfx: {fileID: 0}
@@ -217,24 +223,6 @@ MonoBehaviour:
   los: 0
   isDead: 0
   target: {fileID: 0}
---- !u!114 &2464842197439210765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9212990541556629421}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b73a03c8d0b9441e5b41a178c9e0cfed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rend: {fileID: 0}
-  def: {fileID: 0}
-  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  isHovering: 0
-  isInteractable: 1
-  type: 3
 --- !u!1001 &7063125119559584725
 PrefabInstance:
   m_ObjectHideFlags: 0
