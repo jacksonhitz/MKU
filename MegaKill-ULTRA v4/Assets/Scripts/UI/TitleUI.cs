@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+
 public class TitleUI : MonoBehaviour
 {
     Title title;
@@ -10,7 +11,9 @@ public class TitleUI : MonoBehaviour
     [SerializeField] Dialogue tangoText;
     [SerializeField] GameObject titleScreen;
 
+
     [SerializeField] GameObject settingsScreen;
+
 
     void Awake()
     {
@@ -22,11 +25,14 @@ public class TitleUI : MonoBehaviour
         titleScreen.SetActive(false);
     }
 
+
     //Not sure if this will be used as it's simple to connect to them through the Unity UI
     public void ChaptersButton()
     {
 
+
     }
+
 
     public void InstructionButton()
     {
@@ -58,9 +64,13 @@ public class TitleUI : MonoBehaviour
         Application.Quit();
     }
 
+
     public void TangoFile()
     {
         tangoText.Play();
         titleScreen.SetActive(false);
     }
 }
+
+
+
