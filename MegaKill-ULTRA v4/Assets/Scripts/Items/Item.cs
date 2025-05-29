@@ -114,6 +114,8 @@ public abstract class Item : Interactable
         transform.SetParent(null);
         SetState(ItemState.Available);
 
+        isInteractable = true;
+
         rb.isKinematic = false;
 
         Vector3 randomDirection = new Vector3(
