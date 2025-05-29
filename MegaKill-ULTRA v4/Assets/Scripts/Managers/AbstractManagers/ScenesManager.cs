@@ -10,7 +10,7 @@ public abstract class ScenesManager : MonoBehaviour
 
     protected virtual void Start()
     {
-        InteractionManager.Instance.Collect();
+        InteractionManager.Instance?.Collect();
     }
 
     void OnEnable()

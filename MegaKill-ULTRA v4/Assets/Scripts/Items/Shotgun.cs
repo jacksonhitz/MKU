@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public class Shotgun : Gun
@@ -7,15 +6,21 @@ public class Shotgun : Gun
 
     public override void Use()
     {
-        Vector3 dir;
         if (currentState == ItemState.Player)
         {
             if (bullets > 0)
             {
                 bullets--;
-                for (float i = 0; i < data.pellets; i++)
+
+                for (int i = 0; i < data.pellets; i++)
                 {
-                    Vector3 spread = new Vector3(Random.Range(-data.spreadAngle, data.spreadAngle), Random.Range(-data.spreadAngle, data.spreadAngle), 0f);
+                    Vector3 dir = Camera.main.transform.forward; 
+
+                    Vector3 spread = new Vector3(
+                        Random.Range(-data.spreadAngle, data.spreadAngle),
+                        Random.Range(-data.spreadAngle, data.spreadAngle),
+                        0f
+                    );
                     Quaternion rotation = Quaternion.Euler(Camera.main.transform.eulerAngles + spread);
                     Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
                     dir = ray.direction;
@@ -33,15 +38,20 @@ public class Shotgun : Gun
             }
         }
         else if (currentState == ItemState.Enemy && holder is Enemy enemy)
-            {
-            for (float i = 0; i < data.pellets; i++)
-            {
-                Vector3 spread = new Vector3(Random.Range(-data.spreadAngle, data.spreadAngle), Random.Range(-data.spreadAngle, data.spreadAngle), 0f);
-                Quaternion rotation = Quaternion.Euler(spread);
+        {
+            Vector3 target = enemy.target.transform.position;
+            target.y += targetAdjust;
 
-                Vector3 target = enemy.target.transform.position;
-                target.y += targetAdjust;
-                dir = rotation * (target - firePoint.position).normalized;
+            for (int i = 0; i < data.pellets; i++)
+            {
+                // Apply random spread
+                Vector3 spread = new Vector3(
+                    Random.Range(-data.spreadAngle, data.spreadAngle),
+                    Random.Range(-data.spreadAngle, data.spreadAngle),
+                    0f
+                );
+                Quaternion rotation = Quaternion.Euler(spread);
+                Vector3 dir = rotation * (target - firePoint.position).normalized;
 
                 enemy.CallUse();
 

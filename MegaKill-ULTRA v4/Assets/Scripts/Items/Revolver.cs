@@ -7,17 +7,17 @@ public class Revolver : Gun
 
     public override void Use()
     {
-        Vector3 dir; 
+        Vector3 dir = Camera.main.transform.forward; 
+
         if (currentState == ItemState.Player)
         {
             if (bullets > 0)
             {
                 bullets--;
 
-                Vector3 spread = new Vector3(Random.Range(-data.spreadAngle, data.spreadAngle), Random.Range(-data.spreadAngle, data.spreadAngle), 0f);
-                Quaternion rotation = Quaternion.Euler(Camera.main.transform.eulerAngles + spread);
-                Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
-                dir = ray.direction;
+                Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
+                if (Physics.Raycast(ray, out RaycastHit hitInfo, 1000f))
+                    dir = (hitInfo.point - firePoint.position).normalized;
 
                 FireBasic();
                 FireRay(dir);
@@ -44,6 +44,7 @@ public class Revolver : Gun
             sound.EnemySFX(enemy.sfx, enemy.attackClip);
         }
     }
+
 
     void FireBasic()
     {

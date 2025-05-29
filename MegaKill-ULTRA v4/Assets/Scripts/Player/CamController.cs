@@ -67,15 +67,14 @@ public class CamController : MonoBehaviour
         phase = 2;
         SetEffects();
         SetClr();
-        ResetShader();
         StartCoroutine(FadeIn(2f));
     }
 
     void SetEffects()
     {
-        currentLerp = 0f;
-        currentFrequency = 0f;
-        currentAmplitude = 0f;
+        currentLerp = 0.15f;
+        currentFrequency = 5f;
+        currentAmplitude = 1f;
 
         camMat.SetFloat("_Lerp", currentLerp);
         camMat.SetFloat("_Frequency", currentFrequency);
@@ -161,24 +160,6 @@ public class CamController : MonoBehaviour
         camMat.SetFloat("_Frequency", currentFrequency);
         camMat.SetFloat("_Amplitude", currentFrequency);
         camMat.SetFloat("_Lerp", currentLerp);
-    }
-
-    void ResetShader()
-    {
-        currentLerp = 0f;
-        currentFrequency = 0.15f;
-        currentAmplitude = 0f;
-
-        camMat.SetFloat("_Lerp", currentLerp);
-        camMat.SetFloat("_Frequency", currentFrequency);
-        camMat.SetFloat("_Amplitude", currentAmplitude);
-    }
-
-    public void Focus()
-    {
-        currentAmplitude -= 4f;
-        currentFrequency -= 4f;
-        phase--;
     }
 
     void UpdateShader()
@@ -297,8 +278,6 @@ public class CamController : MonoBehaviour
 
         ClrHue();
         ClrMixer();
-
-        currentLerp = 0.15f;
 
         if (dynamicVolume.weight < 5)
         {
