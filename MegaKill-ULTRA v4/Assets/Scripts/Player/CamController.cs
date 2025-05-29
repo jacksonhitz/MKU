@@ -185,11 +185,11 @@ public class CamController : MonoBehaviour
     {
         if (currentAmplitude < phase)
         {
-            currentAmplitude += 0.0001f;
+            currentAmplitude += 0.001f;
         }
         if (currentFrequency < phase * 5)
         {
-            currentFrequency += 0.0001f;
+            currentFrequency += 0.001f;
         }
 
         camMat.SetFloat("_Lerp", currentLerp);
@@ -298,7 +298,7 @@ public class CamController : MonoBehaviour
         ClrHue();
         ClrMixer();
 
-        currentLerp = 0.1f;
+        currentLerp = 0.15f;
 
         if (dynamicVolume.weight < 5)
         {
