@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d82afadbc24149799f62b4efe2e6bc9, type: 3}
-  m_Name: Hot
+  m_Name: Could
   m_EditorClassIdentifier: 
   soundType: 0
-  clips: []
-  volume: 0
+  clips:
+  - {fileID: 8300000, guid: eb87ad65436f54efe8e52f3eafdd6832, type: 3}
+  volume: 1

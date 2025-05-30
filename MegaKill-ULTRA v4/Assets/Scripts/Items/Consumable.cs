@@ -22,13 +22,13 @@ public class Consumable : Item
             player.health.Heal(data.heal);
             //trip
 
-            SoundManager.Instance.Gulp();
+            sound.Play("Gulp");
             popUp.UpdatePopUp("HEALTH UP");
         }
         else
         {
             popUp.UpdatePopUp("EMPTY");
-            SoundManager.Instance.PillEmpty();
+            sound.Play("Gulp");
         }
     }
 }

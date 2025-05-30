@@ -1,4 +1,4 @@
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundManager : MonoBehaviour
@@ -6,24 +6,56 @@ public class SoundManager : MonoBehaviour
     public static SoundManager Instance { get; private set; }
 
     [Header("Audio Sources")]
-    [SerializeField] AudioSource musicSource;
-    [SerializeField] AudioSource sfxSource;
-    [SerializeField] AudioSource dialogueSource;
+    public AudioSource music;
+    public AudioSource sfx;
+    public AudioSource dialogue;
 
     [Header("3D Settings")]
     [SerializeField] float minDistance = 5f;
     [SerializeField] float maxDistance = 30f;
     [SerializeField] AnimationCurve falloffCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
 
-    public float sfxVolume;
-    public float musicVolume;
+    Dictionary<string, SoundData> soundLookup = new();
 
     void Awake()
     {
         Instance = this;
+
+        SoundData[] loadedSounds = Resources.LoadAll<SoundData>("Sounds");
+        foreach (var sound in loadedSounds)
+        {
+            if (!soundLookup.ContainsKey(sound.name))
+                soundLookup.Add(sound.name, sound);
+        }
     }
 
-    //2d sounds
+    public SoundData GetSound(string soundName)
+    {
+        if (soundLookup.TryGetValue(soundName, out SoundData sound))
+            return sound;
+
+        Debug.LogWarning($"Sound '{soundName}' not found.");
+        return null;
+    }
+
+    //2D Grabber
+    public void Play(string soundName)
+    {
+        SoundData sound = GetSound(soundName);
+        if (sound != null)
+            Play(sound);
+    }
+
+    //3D Grabber
+    public void Play(string soundName, Vector3 pos)
+    {
+        SoundData sound = GetSound(soundName);
+        if (sound != null)
+            Play(sound, pos);
+    }
+
+
+    //2D Player
     public void Play(SoundData sound)
     {
         AudioClip clip = sound.clips[Random.Range(0, sound.clips.Length)];
@@ -31,23 +63,25 @@ public class SoundManager : MonoBehaviour
         switch (sound.soundType)
         {
             case SoundData.SoundType.Music:
-                musicSource.clip = clip;
-                musicSource.volume = sound.volume * musicVolume;
-                musicSource.Play();
+                music.clip = clip;
+                music.volume = sound.volume * music.volume;
+                music.Play();
                 break;
             case SoundData.SoundType.Sfx:
-                sfxSource.PlayOneShot(clip, sound.volume * sfxVolume);
+                sfx.clip = clip;
+                sfx.volume = sound.volume * sfx.volume;
+                sfx.Play();
                 break;
             case SoundData.SoundType.Dialogue:
-                dialogueSource.clip = clip;
-                dialogueSource.volume = sound.volume * sfxVolume;
-                dialogueSource.Play();
+                dialogue.clip = clip;
+                dialogue.volume = sound.volume * sfx.volume;
+                dialogue.Play();
                 break;
         }
     }
 
 
-    //for spatial sounds like enemy effects
+    //3D Player
     public void Play(SoundData sound, Vector3 pos)
     {
         AudioClip clip = sound.clips[Random.Range(0, sound.clips.Length)];
@@ -62,40 +96,9 @@ public class SoundManager : MonoBehaviour
         audioSource.SetCustomCurve(AudioSourceCurveType.CustomRolloff, falloffCurve);
         audioSource.minDistance = minDistance;
         audioSource.maxDistance = maxDistance;
-        audioSource.volume = sound.volume * sfxVolume;
+        audioSource.volume = sound.volume * sfx.volume;
 
         audioSource.Play();
         Destroy(audioHolder, clip.length + 0.1f);
-    }
-
-    IEnumerator FadeIn(AudioSource source, float duration)
-    {
-        source.volume = 0f;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            source.volume = Mathf.Lerp(0f, 1f, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        source.volume = 1f;
-    }
-
-    IEnumerator FadeOut(AudioSource source, float duration)
-    {
-        float startVolume = source.volume;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            source.volume = Mathf.Lerp(startVolume, 0f, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        source.volume = 0f;
-        source.Stop();
     }
 }

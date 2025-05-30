@@ -13,6 +13,6 @@ public class EnemyDied : MonoBehaviour
 
     void Start()
     {
-        SoundManager.Instance.EnemySFX(sfx, deadClip);
+       // SoundManager.Instance.EnemySFX(sfx, deadClip);
     }
 }

@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d82afadbc24149799f62b4efe2e6bc9, type: 3}
-  m_Name: Interact
+  m_Name: Witch
   m_EditorClassIdentifier: 
-  soundType: 1
-  clips: []
-  volume: 0
+  soundType: 0
+  clips:
+  - {fileID: 8300000, guid: 52d834045e39f429cba68368723737f3, type: 3}
+  volume: 1
