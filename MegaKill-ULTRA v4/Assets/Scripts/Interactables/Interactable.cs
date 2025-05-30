@@ -38,14 +38,13 @@ public class Interactable : MonoBehaviour, IInteractable
             {
                 EnemyPunch enemy = GetComponent<EnemyPunch>();
                 Tango.Instance.Dosed(enemy);
-                SoundManager.Instance.Talk();
+                sound.Play("Interact");
             }
         }
         
     }
     protected virtual void Awake()
     {
-
         GetMat();
     }
     protected virtual void Start()

@@ -12,11 +12,12 @@ public class Dialogue : MonoBehaviour
     int index = -1;
     bool customTyping = false;
 
-    SoundManager soundManager;
+    SoundManager sound;
 
-    void Awake()
+    
+    void Start()
     {
-        soundManager = FindObjectOfType<SoundManager>();
+        sound = SoundManager.Instance;
     }
 
     void Update()
@@ -59,7 +60,7 @@ public class Dialogue : MonoBehaviour
         textComponent.text = string.Empty;
         yield return new WaitForSeconds(0.1f);
 
-        soundManager?.NewLine();
+        sound.Play("Line");
 
         foreach (char c in text.ToCharArray())
         {
@@ -69,7 +70,7 @@ public class Dialogue : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        soundManager?.StopLine();
+      //  sound.Play("Line");
 
         if (customTyping)
         {

@@ -11,7 +11,7 @@ public class SoundData : ScriptableObject
     }
     public SoundType soundType;
 
-    public AudioClip clip;
+    public AudioClip[] clips;
     public float volume;
 }
 

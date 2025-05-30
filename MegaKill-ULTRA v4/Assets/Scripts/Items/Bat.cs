@@ -37,7 +37,7 @@ public class Bat : MonoBehaviour
       //  player.SwingBat();
         yield return new WaitForSeconds(0.3f);
       //  player.combat.Melee(player.combat.batRange);
-        soundManager.BatSwing();
+       // soundManager.BatSwing();
         yield return new WaitForSeconds(0.5f);
         isSwinging = false;
     }

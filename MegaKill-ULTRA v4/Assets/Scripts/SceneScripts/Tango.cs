@@ -8,6 +8,7 @@ public class Tango : ScenesManager
 
     Dialogue dialogue;
     PopUp popUp;
+    SoundManager sound;
 
     int dosedCount;
 
@@ -20,10 +21,14 @@ public class Tango : ScenesManager
         dialogue = FindObjectOfType<Dialogue>();
         popUp = FindObjectOfType<PopUp>();
 
+        sound = SoundManager.Instance;
+
         if (SceneManager.GetActiveScene().name != "TANGO")
+        {
+            sound.Play("Witch");
             StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO, 0f));
-        else
-            StateManager.LoadSilent(StateManager.GameState.TANGO);
+        }
+        else StateManager.LoadSilent(StateManager.GameState.TANGO);
     }
     protected override void Start()
     {
@@ -86,7 +91,7 @@ public class Tango : ScenesManager
         dialogue.Off();
 
         StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO2, 0f));
-        SoundManager.Instance.Tango2();
+        sound.Play("Acid");
         InteractionManager.Instance.ExtractOn();
         EnemyManager.Instance.Brawl();
 
