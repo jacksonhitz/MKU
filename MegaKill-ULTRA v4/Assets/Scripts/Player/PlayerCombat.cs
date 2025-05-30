@@ -53,7 +53,7 @@ public class PlayerCombat : MonoBehaviour
     IEnumerator PunchOn(Renderer punch)
     {
         yield return new WaitForSeconds(0.2f);
-        controller.sound?.Punch();
+        controller.sound?.Play("Punch");
         punch.enabled = true;
         punchRange.enabled = true;
         Melee(punchRange);

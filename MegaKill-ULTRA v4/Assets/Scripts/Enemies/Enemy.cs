@@ -362,8 +362,7 @@ public class Enemy : Interactable, IHitable
 
     public void Hit(float dmg)
     {
-        SoundManager.Instance.EnemySFX(sfx, hitClip);
-     //   SoundManager.Instance.EnemyHit(transform.position);
+        sound.Play("EnemyHit", transform.position);
 
         health -= dmg;
         Debug.Log("health: " + health);
@@ -378,7 +377,7 @@ public class Enemy : Interactable, IHitable
                 StopAllCoroutines();
                 StartCoroutine(Stun());
                 currentState = EnemyState.Active;
-                SoundManager.Instance.EnemySFX(sfx, stunClip);
+                sound.Play("EnemyStun", transform.position);
             }
         }
     }

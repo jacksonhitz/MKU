@@ -22,12 +22,12 @@ public class Revolver : Gun
                 FireBasic();
                 FireRay(dir);
 
-                sound.RevShot();
+                sound.Play("RevShot");
             }
             else
             {
                 popUp?.UpdatePopUp("EMPTY");
-                sound.RevEmpty();
+                sound.Play("RevShot");
             }
         }
         else if (currentState == ItemState.Enemy && holder is Enemy enemy)
@@ -41,7 +41,7 @@ public class Revolver : Gun
             FireBasic();
             FireBullet(dir);
 
-            sound.EnemySFX(enemy.sfx, enemy.attackClip);
+            sound.Play("RevShot", enemy.transform.position);
         }
     }
 

@@ -7,9 +7,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 
 public class Tutorial : ScenesManager
-{
-    InteractionManager interacts;
-
+{ 
     //Main instruction text
     [SerializeField]
     private TMP_Text instruction;
@@ -42,11 +40,12 @@ public class Tutorial : ScenesManager
     void Awake()
     {
         if (SceneManager.GetActiveScene().name != "TUTORIAL")
+        {
+            SoundManager.Instance.Play("Hot");
             StartCoroutine(StateManager.LoadState(StateManager.GameState.TUTORIAL, 0f));
-        else
-            StateManager.LoadSilent(StateManager.GameState.TUTORIAL);
+        }
+        else StateManager.LoadSilent(StateManager.GameState.TUTORIAL);
     }
-    
 
     void Update()
     {
