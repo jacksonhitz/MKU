@@ -7,9 +7,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 
 public class Tutorial : ScenesManager
-{
-    InteractionManager interacts;
-
+{ 
     //Main instruction text
     [SerializeField]
     private TMP_Text instruction;
