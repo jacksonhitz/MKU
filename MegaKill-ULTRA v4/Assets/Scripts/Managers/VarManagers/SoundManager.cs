@@ -32,8 +32,9 @@ public class SoundManager : MonoBehaviour
     public SoundData GetSound(string soundName)
     {
         if (soundLookup.TryGetValue(soundName, out SoundData sound))
-            return sound;
-
+        {
+            if (sound.clips.Length != 0) return sound;
+        }
         Debug.LogWarning($"Sound '{soundName}' not found.");
         return null;
     }
