@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028353, g: 0.22571383, b: 0.30692253, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3443,7 +3443,7 @@ TerrainCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 2
   m_TerrainData: {fileID: 15600000, guid: 7e9d57413dbbe314680b22b387a42464, type: 2}
@@ -17987,8 +17987,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 598466853}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0.37435102, z: -0, w: 0.9272871}
+  m_LocalPosition: {x: -204.09195, y: 145, z: 47.566}
   m_LocalScale: {x: 0.4, y: 0.35, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18039,7 +18039,7 @@ Transform:
   - {fileID: 967225263}
   - {fileID: 1919385673}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -43.968, z: 0}
 --- !u!1 &632673960
 GameObject:
   m_ObjectHideFlags: 0
@@ -64121,6 +64121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75e508e15e91c440b982b791acd661c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lvlType: 0
 --- !u!43 &1749197574
 Mesh:
   m_ObjectHideFlags: 0
@@ -65152,7 +65153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5028932264311322238, guid: 74efeb2ea6b0f499b879e3bce9313719, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 613
       objectReference: {fileID: 0}
     - target: {fileID: 5028932264311322238, guid: 74efeb2ea6b0f499b879e3bce9313719, type: 3}
       propertyPath: m_LocalPosition.y
@@ -65160,7 +65161,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5028932264311322238, guid: 74efeb2ea6b0f499b879e3bce9313719, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -604
       objectReference: {fileID: 0}
     - target: {fileID: 5028932264311322238, guid: 74efeb2ea6b0f499b879e3bce9313719, type: 3}
       propertyPath: m_LocalRotation.w
