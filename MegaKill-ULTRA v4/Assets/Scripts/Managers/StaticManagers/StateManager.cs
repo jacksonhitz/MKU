@@ -91,18 +91,15 @@ public static class StateManager
 
     public static IEnumerator LoadState(GameState newState, float delay)
     {
-        if (State != newState)
+        if (Scene.Contains(newState))
         {
-            if (Scene.Contains(newState))
-            {
-                State = GameState.TRANSITION;
-                yield return new WaitForSeconds(delay);
-                SceneManager.LoadScene(newState.ToString());
-                Debug.Log("Loading Scene " + newState);
-                State = newState;
-            }
-            else State = newState;
+            State = GameState.TRANSITION;
+            yield return new WaitForSeconds(delay);
+            SceneManager.LoadScene(newState.ToString());
+            Debug.Log("Loading Scene " + newState);
+            State = newState;
         }
+        else State = newState;
     }
     public static void LoadSilent(GameState newState)
     {

@@ -40,11 +40,14 @@ public class Tutorial : ScenesManager
     void Awake()
     {
         if (SceneManager.GetActiveScene().name != "TUTORIAL")
-        {
-            SoundManager.Instance.Play("Hot");
             StartCoroutine(StateManager.LoadState(StateManager.GameState.TUTORIAL, 0f));
-        }
-        else StateManager.LoadSilent(StateManager.GameState.TUTORIAL);
+        else
+            StateManager.LoadSilent(StateManager.GameState.TUTORIAL);
+    }
+    protected override void Start()
+    {
+        base.Start();
+        SoundManager.Instance.Play("Hot");
     }
 
     void Update()

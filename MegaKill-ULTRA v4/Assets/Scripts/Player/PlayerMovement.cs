@@ -21,11 +21,6 @@ public class PlayerMovement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
     }
 
-    void Update()
-    {
-        
-    }
-
     public void Move(Vector2 moveDir, bool jump)
     {
         isGrounded = StateManager.State == StateManager.GameState.TESTING ||

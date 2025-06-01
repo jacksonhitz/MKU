@@ -8,10 +8,14 @@ public class Title : ScenesManager
     void Awake()
     {
         if (SceneManager.GetActiveScene().name != "TITLE")
-        {
-            SoundManager.Instance.Play("Title");
             StartCoroutine(StateManager.LoadState(StateManager.GameState.TITLE, 0f));
-        }
-        else StateManager.LoadSilent(StateManager.GameState.TITLE);
+        else
+            StateManager.LoadSilent(StateManager.GameState.TITLE);
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        SoundManager.Instance.Play("Title");
     }
 }

@@ -8,10 +8,13 @@ public class Rehearsal : ScenesManager
     void Awake()
     {
         if (SceneManager.GetActiveScene().name != "REHEARSAL")
-        {
-            SoundManager.Instance.Play("Could");
             StartCoroutine(StateManager.LoadState(StateManager.GameState.REHEARSAL, 0f));
-        }
-        else StateManager.LoadSilent(StateManager.GameState.REHEARSAL);
+        else
+            StateManager.LoadSilent(StateManager.GameState.REHEARSAL);
+    }
+    protected override void Start()
+    {
+        base.Start();
+        SoundManager.Instance.Play("Could");
     }
 }

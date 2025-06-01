@@ -20,7 +20,6 @@ public class CamController : MonoBehaviour
     ChannelMixer channelMixer;
 
     float chromSpd = 0.25f;
-    float satSpd = 5f;
     float mixerSpd;
     float hueSpd;
     float fovSpd;

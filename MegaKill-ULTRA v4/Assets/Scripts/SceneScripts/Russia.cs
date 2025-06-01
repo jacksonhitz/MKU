@@ -8,10 +8,13 @@ public class Russia : ScenesManager
     void Awake()
     {
         if (SceneManager.GetActiveScene().name != "SABLE")
-        {
-            SoundManager.Instance?.Play("4L");
             StartCoroutine(StateManager.LoadState(StateManager.GameState.SABLE, 0f));
-        }
-        else StateManager.LoadSilent(StateManager.GameState.SABLE);
+        else
+            StateManager.LoadSilent(StateManager.GameState.SABLE);
+    }
+    protected override void Start()
+    {
+        base.Start();
+        SoundManager.Instance.Play("4L");
     }
 }

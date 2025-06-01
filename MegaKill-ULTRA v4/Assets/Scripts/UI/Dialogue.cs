@@ -4,6 +4,8 @@ using TMPro;
 
 public class Dialogue : MonoBehaviour
 {
+    public static Tango Instance { get; private set; }
+
     public TextMeshProUGUI textComponent;
 
     public string[] lines;

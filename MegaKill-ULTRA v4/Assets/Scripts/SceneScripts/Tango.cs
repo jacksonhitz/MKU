@@ -21,18 +21,16 @@ public class Tango : ScenesManager
         dialogue = FindObjectOfType<Dialogue>();
         popUp = FindObjectOfType<PopUp>();
 
-        sound = SoundManager.Instance;
-
         if (SceneManager.GetActiveScene().name != "TANGO")
-        {
-            sound.Play("Witch");
             StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO, 0f));
-        }
-        else StateManager.LoadSilent(StateManager.GameState.TANGO);
+        else
+            StateManager.LoadSilent(StateManager.GameState.TANGO);
     }
     protected override void Start()
     {
         base.Start();
+        sound = SoundManager.Instance;
+        sound.Play("Witch");
 
         dialogue.TypeText("F TO HAND OUT MKU");
     }
