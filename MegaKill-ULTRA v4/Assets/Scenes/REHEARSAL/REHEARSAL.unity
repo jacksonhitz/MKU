@@ -8635,10 +8635,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RevolverEnemy (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: 257557d0fa43648328dfb6a2466c735a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8848,10 +8844,6 @@ PrefabInstance:
     - target: {fileID: 4209133741286685928, guid: 34550ab8c08f77c4898cee30d4df7d3b, type: 3}
       propertyPath: m_Name
       value: MGEnemyNew (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: 34550ab8c08f77c4898cee30d4df7d3b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9915,10 +9907,6 @@ PrefabInstance:
     - target: {fileID: 4209133741286685928, guid: 257557d0fa43648328dfb6a2466c735a, type: 3}
       propertyPath: m_Name
       value: RevolverEnemy (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: 257557d0fa43648328dfb6a2466c735a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13557,10 +13545,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RevolverEnemy (5)
       objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: 257557d0fa43648328dfb6a2466c735a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -13679,10 +13663,6 @@ PrefabInstance:
     - target: {fileID: 4209133741286685928, guid: 34550ab8c08f77c4898cee30d4df7d3b, type: 3}
       propertyPath: m_Name
       value: MGEnemyNew
-      objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: 34550ab8c08f77c4898cee30d4df7d3b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14513,10 +14493,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShotgunEnemy
       objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: efe223c84f13e4c95b204b7237f2c3b0, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14639,10 +14615,6 @@ PrefabInstance:
     - target: {fileID: 4209133741286685928, guid: efe223c84f13e4c95b204b7237f2c3b0, type: 3}
       propertyPath: m_Name
       value: ShotgunEnemy (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: efe223c84f13e4c95b204b7237f2c3b0, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14825,34 +14797,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75c0d23f0af634504b80de341645d702, type: 3}
---- !u!1 &685280468 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5055908224773521029, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-  m_PrefabInstance: {fileID: 1820091735}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &685280472
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 685280468}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.03
-  m_Height: 0.23236366
-  m_Direction: 2
-  m_Center: {x: -0.00000045245346, y: -0.00043560975, z: 0.10854561}
 --- !u!1 &687204214
 GameObject:
   m_ObjectHideFlags: 0
@@ -19230,10 +19174,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RevolverEnemy (3)
       objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: 257557d0fa43648328dfb6a2466c735a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20073,10 +20013,6 @@ PrefabInstance:
     - target: {fileID: 4209133741286685928, guid: efe223c84f13e4c95b204b7237f2c3b0, type: 3}
       propertyPath: m_Name
       value: ShotgunEnemy (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: efe223c84f13e4c95b204b7237f2c3b0, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -26856,10 +26792,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RevolverEnemy (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: 257557d0fa43648328dfb6a2466c735a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -28755,10 +28687,6 @@ PrefabInstance:
     - target: {fileID: 4209133741286685928, guid: 257557d0fa43648328dfb6a2466c735a, type: 3}
       propertyPath: m_Name
       value: RevolverEnemy (7)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: 257557d0fa43648328dfb6a2466c735a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -36678,10 +36606,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RevolverEnemy
       objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: 257557d0fa43648328dfb6a2466c735a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -36922,10 +36846,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RevolverEnemy (8)
       objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: 257557d0fa43648328dfb6a2466c735a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -37098,10 +37018,6 @@ PrefabInstance:
     - target: {fileID: 4209133741286685928, guid: efe223c84f13e4c95b204b7237f2c3b0, type: 3}
       propertyPath: m_Name
       value: ShotgunEnemy (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: efe223c84f13e4c95b204b7237f2c3b0, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -40979,178 +40895,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1309227560351582320, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0.22086084
-      objectReference: {fileID: 0}
-    - target: {fileID: 1309227560351582320, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.00000022803286
-      objectReference: {fileID: 0}
-    - target: {fileID: 1309227560351582320, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.0000007086662
-      objectReference: {fileID: 0}
-    - target: {fileID: 1315694431143931435, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: friendly
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1315694431143931435, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
       propertyPath: currentState
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2464842197439210765, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
+    - target: {fileID: 1315694431143931435, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
       propertyPath: isInteractable
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3131283871427913696, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 12.116409
-      objectReference: {fileID: 0}
-    - target: {fileID: 3131283871427913696, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 17.847172
-      objectReference: {fileID: 0}
-    - target: {fileID: 3131283871427913696, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 16.383432
-      objectReference: {fileID: 0}
-    - target: {fileID: 3315575401474273756, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -16.92613
-      objectReference: {fileID: 0}
-    - target: {fileID: 3315575401474273756, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.0000138191945
-      objectReference: {fileID: 0}
-    - target: {fileID: 3315575401474273756, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0.0000036431768
-      objectReference: {fileID: 0}
-    - target: {fileID: 4435613495018183992, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 20.280178
-      objectReference: {fileID: 0}
-    - target: {fileID: 4435613495018183992, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 167.65776
-      objectReference: {fileID: 0}
-    - target: {fileID: 4435613495018183992, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: -177.03574
-      objectReference: {fileID: 0}
-    - target: {fileID: 5155973740547048162, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 17.38014
-      objectReference: {fileID: 0}
-    - target: {fileID: 5155973740547048162, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.34160757
-      objectReference: {fileID: 0}
-    - target: {fileID: 5155973740547048162, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 1.0567863
-      objectReference: {fileID: 0}
-    - target: {fileID: 5565850039418480706, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_Speed
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 5902801596005441395, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 71.57736
-      objectReference: {fileID: 0}
-    - target: {fileID: 5902801596005441395, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 60.09855
-      objectReference: {fileID: 0}
-    - target: {fileID: 5902801596005441395, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 59.174644
-      objectReference: {fileID: 0}
-    - target: {fileID: 6569642690910310274, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 7.55662
-      objectReference: {fileID: 0}
-    - target: {fileID: 6569642690910310274, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90.946815
-      objectReference: {fileID: 0}
-    - target: {fileID: 6569642690910310274, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: -129.92915
-      objectReference: {fileID: 0}
-    - target: {fileID: 6748422658863992141, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 17.067234
-      objectReference: {fileID: 0}
-    - target: {fileID: 6748422658863992141, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -8.470902
-      objectReference: {fileID: 0}
-    - target: {fileID: 6748422658863992141, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 3.52667
-      objectReference: {fileID: 0}
-    - target: {fileID: 7432419838467999273, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -16.966457
-      objectReference: {fileID: 0}
-    - target: {fileID: 7432419838467999273, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -161.71921
-      objectReference: {fileID: 0}
-    - target: {fileID: 7432419838467999273, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 162.19421
-      objectReference: {fileID: 0}
-    - target: {fileID: 7929371935230342749, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 35.191402
-      objectReference: {fileID: 0}
-    - target: {fileID: 7929371935230342749, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.9360419
-      objectReference: {fileID: 0}
-    - target: {fileID: 7929371935230342749, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: -2.3820415
-      objectReference: {fileID: 0}
-    - target: {fileID: 8140649438689432648, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 18.422989
-      objectReference: {fileID: 0}
-    - target: {fileID: 8140649438689432648, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.0000033495858
-      objectReference: {fileID: 0}
-    - target: {fileID: 8140649438689432648, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.000007948538
-      objectReference: {fileID: 0}
-    - target: {fileID: 9212733447475251606, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 21.560452
-      objectReference: {fileID: 0}
-    - target: {fileID: 9212733447475251606, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 69.45664
-      objectReference: {fileID: 0}
-    - target: {fileID: 9212733447475251606, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 102.70659
       objectReference: {fileID: 0}
     - target: {fileID: 9212990541556629421, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
       propertyPath: m_Name
       value: EnemyPunch
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5263238581337300950, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5055908224773521029, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 685280472}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
 --- !u!4 &1820091736 stripped
 Transform:
@@ -49635,10 +49395,6 @@ PrefabInstance:
     - target: {fileID: 4209133741286685928, guid: 257557d0fa43648328dfb6a2466c735a, type: 3}
       propertyPath: m_Name
       value: RevolverEnemy (6)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4209133741286685928, guid: 257557d0fa43648328dfb6a2466c735a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -146,7 +146,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6719245597448002910, guid: 1856a80665d584fb5b5ba1ac5deb8a89, type: 3}
+  - {fileID: 2100000, guid: 0ec4bc2f3b999423cb7b0caf9dd1039d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -171,7 +171,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: -8545447256379345787, guid: f2a7661b6c2384997b1bfe7e16495225, type: 3}
+  m_Mesh: {fileID: 355170680091915004, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
   m_Bones:
   - {fileID: 178707241755138987}
   - {fileID: 9048674818236101892}
@@ -843,8 +843,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e84a82a301b94549ad682350be9e9ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mats: []
+  glow: {fileID: 0}
+  isHovering: 0
+  isInteractable: 0
+  type: 0
   currentState: 0
-  friendly: 0
   attackClip: {fileID: 0}
   deadClip: {fileID: 0}
   hitClip: {fileID: 0}
@@ -852,9 +856,6 @@ MonoBehaviour:
   deathEffect: {fileID: 0}
   item: {fileID: 5973065824214018743}
   agent: {fileID: 0}
-  player: {fileID: 0}
-  gameManager: {fileID: 0}
-  soundManager: {fileID: 0}
   enemyManager: {fileID: 0}
   animator: {fileID: 0}
   sfx: {fileID: 0}
