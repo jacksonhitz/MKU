@@ -193,8 +193,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e84a82a301b94549ad682350be9e9ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mats: []
+  glow: {fileID: 0}
+  isHovering: 0
+  isInteractable: 0
+  type: 0
   currentState: 0
-  friendly: 0
   attackClip: {fileID: 0}
   deadClip: {fileID: 0}
   hitClip: {fileID: 0}
@@ -202,9 +206,6 @@ MonoBehaviour:
   deathEffect: {fileID: 0}
   item: {fileID: 0}
   agent: {fileID: 0}
-  player: {fileID: 0}
-  gameManager: {fileID: 0}
-  soundManager: {fileID: 0}
   enemyManager: {fileID: 0}
   animator: {fileID: 0}
   sfx: {fileID: 0}
@@ -533,9 +534,17 @@ PrefabInstance:
       value: 47.39209
       objectReference: {fileID: 0}
     - target: {fileID: -1206874426333947015, guid: b1ecf98e0687042f59256b5b65fbe09d, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 355170680091915004, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
+    - target: {fileID: -1206874426333947015, guid: b1ecf98e0687042f59256b5b65fbe09d, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -1206874426333947015, guid: b1ecf98e0687042f59256b5b65fbe09d, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0ec4bc2f3b999423cb7b0caf9dd1039d, type: 2}
     - target: {fileID: -1139958982533413979, guid: b1ecf98e0687042f59256b5b65fbe09d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 4.193303
