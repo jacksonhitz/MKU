@@ -58,8 +58,8 @@ public class SoundManager : MonoBehaviour
     public void Play(string soundName, Vector3 pos)
     {
         SoundData sound = GetSound(soundName);
-        if (sound != null)
-            Play(sound, pos);
+       // if (sound != null)
+           // Play(sound, pos);
     }
 
 
@@ -96,6 +96,7 @@ public class SoundManager : MonoBehaviour
     public void Play(SoundData sound, Vector3 pos)
     {
         AudioClip clip = sound.clips[Random.Range(0, sound.clips.Length)];
+        if (clip = null) return;
 
         GameObject audioHolder = new GameObject("Holding: " + clip.name);
         audioHolder.transform.position = pos;

@@ -25,25 +25,23 @@ public class Gun : Item
 
     void Update()
     {
-        if (currentState == ItemState.Player)
+        if (currentState == ItemState.Player || currentState == ItemState.Enemy)
         {
             recoilRot = Vector3.Lerp(recoilRot, Vector3.zero, data.recoilSpd * Time.deltaTime);
             transform.localRotation = Quaternion.Euler(recoilRot) * ogRot;
+            firePoint.localRotation = Quaternion.Inverse(Quaternion.Euler(recoilRot));
         }
     }
 
-    IEnumerator Recoil()
+
+    void Recoil()
     {
-        firePoint.parent = hand;
         recoilRot += new Vector3(-data.recoilMag, Random.Range(-data.recoilMag * 0.5f, data.recoilMag * 0.5f), 0f);
-        while (recoilRot.magnitude > 0.01f)
-            yield return null;
-        firePoint.parent = transform;
     }
 
     public void FireVFX()
     {
-        StartCoroutine(Recoil());
+        Recoil();
         muzzleFlash.Play();
     }
 
