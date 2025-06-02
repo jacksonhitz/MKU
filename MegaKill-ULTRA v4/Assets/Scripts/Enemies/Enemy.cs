@@ -25,7 +25,6 @@ public class Enemy : Interactable, IHitable
 
     // REFERENCES
     [HideInInspector] public NavMeshAgent agent;
-    [HideInInspector] public EnemyManager enemyManager;
     [HideInInspector] public Animator animator;
     [HideInInspector] public AudioSource sfx;
 
@@ -69,6 +68,7 @@ public class Enemy : Interactable, IHitable
     protected override void Awake()
     {
         base.Awake();
+
         agent = GetComponent<NavMeshAgent>();
         sfx = GetComponent<AudioSource>();
         animator = GetComponentInChildren<Animator>();
@@ -292,7 +292,7 @@ public class Enemy : Interactable, IHitable
         }
 
         // Look for other enemies to fight
-        foreach (Enemy enemy in enemyManager.enemies)
+        foreach (Enemy enemy in enemies.enemies)
         {
             if (enemy == this || enemy.isDead) continue;
 
@@ -301,7 +301,7 @@ public class Enemy : Interactable, IHitable
 
             // Limit dogpiling: max 3 attackers per target
             int currentAttackers = 0;
-            foreach (Enemy other in enemyManager.enemies)
+            foreach (Enemy other in enemies.enemies)
             {
                 if (other == this || other.isDead) continue;
                 if (other.target == enemy.gameObject)
@@ -404,8 +404,8 @@ public class Enemy : Interactable, IHitable
         if (isDead) return;
 
         isDead = true;
+        enemies.Kill(this);
         StopAllCoroutines();
-        enemyManager?.Kill(this);
         DropItem();
 
         if (!hasSpawnedDeathEffect && deathEffect != null)
@@ -413,8 +413,6 @@ public class Enemy : Interactable, IHitable
             Instantiate(deathEffect, transform.position, Quaternion.identity);
             hasSpawnedDeathEffect = true;
         }
-
-        Destroy(gameObject);
     }
 
     //public IEnumerator StartBrawlAggression()

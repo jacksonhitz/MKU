@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class EnemyManager : MonoBehaviour
 {
-    public static event System.Action<Enemy> OnEnemyDeath;
     public static EnemyManager Instance { get; private set; }
 
     [SerializeField] GameObject hands;
@@ -60,7 +59,6 @@ public class EnemyManager : MonoBehaviour
             {
                 enemy.currentState = Enemy.EnemyState.Brawl;
                 //enemy.StartCoroutine(enemy.StartBrawlAggression());
-
             }
         }
 
@@ -92,7 +90,7 @@ public class EnemyManager : MonoBehaviour
     public void Kill(Enemy enemy)
     {
         enemies.Remove(enemy);
-        OnEnemyDeath.Invoke(enemy);
+        ScenesManager.Instance.ElimCheck();
         Destroy(enemy.gameObject);
     }
 

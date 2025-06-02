@@ -13,6 +13,7 @@ public class Interactable : MonoBehaviour, IInteractable
 
     protected PlayerController player;
     protected SoundManager sound;
+    protected EnemyManager enemies;
 
     public enum Type
     {
@@ -51,6 +52,7 @@ public class Interactable : MonoBehaviour, IInteractable
     {
         player = PlayerController.Instance;
         sound = SoundManager.Instance;
+        enemies = EnemyManager.Instance;
     }
     
     void GetMat()
