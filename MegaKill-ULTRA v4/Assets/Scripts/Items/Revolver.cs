@@ -19,7 +19,7 @@ public class Revolver : Gun
                 if (Physics.Raycast(ray, out RaycastHit hitInfo, 1000f))
                     dir = (hitInfo.point - firePoint.position).normalized;
 
-                FireBasic();
+                FireVFX();
                 FireRay(dir);
 
                 sound.Play("RevShot");
@@ -38,18 +38,11 @@ public class Revolver : Gun
 
             enemy.CallUse();
 
-            FireBasic();
+            FireVFX();
             FireBullet(dir);
 
             sound.Play("RevShot", enemy.transform.position);
         }
-    }
-
-
-    void FireBasic()
-    {
-        Recoil();
-        muzzleFlash.Play();
     }
 
 }

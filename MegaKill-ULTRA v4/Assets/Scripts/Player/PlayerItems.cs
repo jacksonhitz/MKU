@@ -58,7 +58,7 @@ public class PlayerItems : MonoBehaviour
         if (hand == controller.left) leftItem = item;
         else rightItem = item;
         item.transform.SetParent(hand);
-        item.Grabbed();
+        item.Grabbed(hand);
 
         item.transform.localPosition = item.itemData.pos;
         item.transform.localRotation = Quaternion.Euler(item.itemData.rot);

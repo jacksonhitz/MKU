@@ -30,13 +30,15 @@ public class PlayerController : MonoBehaviour
     {
         Instance = this;
 
-        cam = Camera.main;
-        sound = SoundManager.Instance;
-
         combat = GetComponent<PlayerCombat>();
         movement = GetComponent<PlayerMovement>();
         interact = GetComponent<PlayerInteract>();
         items = GetComponent<PlayerItems>();
         health = GetComponent<PlayerHealth>();
+    }
+    void Start()
+    {
+        cam = Camera.main;
+        sound = SoundManager.Instance;
     }
 }

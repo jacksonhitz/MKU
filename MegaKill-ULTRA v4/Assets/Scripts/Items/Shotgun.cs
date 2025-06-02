@@ -25,7 +25,7 @@ public class Shotgun : Gun
                     Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
                     dir = ray.direction;
 
-                    FireBasic();
+                    FireVFX();
                     FireRay(dir);
 
                     sound.Play("SGShot");
@@ -55,17 +55,11 @@ public class Shotgun : Gun
 
                 enemy.CallUse();
 
-                FireBasic();
+                FireVFX();
                 FireBullet(dir);
 
                 sound.Play("SGShot", enemy.transform.position);
             }
         }
-    }
-
-    void FireBasic()
-    {
-        Recoil();
-        muzzleFlash.Play();
     }
 }

@@ -6,6 +6,9 @@ using UnityEngine.Rendering.Universal;
 
 public class CamController : MonoBehaviour
 {
+    //PING PONG SHADER YOU FUCKER
+
+
     Camera cam;
 
     [HideInInspector] public float sens = 500f;
