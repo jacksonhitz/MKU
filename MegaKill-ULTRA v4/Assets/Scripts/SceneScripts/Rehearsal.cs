@@ -7,6 +7,8 @@ public class Rehearsal : ScenesManager
 {
     void Awake()
     {
+        Instance = this;
+
         if (SceneManager.GetActiveScene().name != "REHEARSAL")
             StartCoroutine(StateManager.LoadState(StateManager.GameState.REHEARSAL, 0f));
         else
