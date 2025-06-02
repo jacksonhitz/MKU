@@ -4,15 +4,17 @@ using UnityEngine;
 public class Gun : Item
 {
     public GunData data;
-    public Transform firePoint;
-    
-
-    public float bullets;
 
     public ParticleSystem muzzleFlash;
 
+    public Transform firePoint;
+
+    Vector3 firePos;
     Vector3 recoilRot;
     Quaternion ogRot;
+
+    public float bullets;
+
 
     protected override void Start()
     {
@@ -21,23 +23,39 @@ public class Gun : Item
         itemData = data;
 
         ogRot = Quaternion.Euler(data.rot);
+        firePos = firePoint.transform.position;
     }
+
+    float recoilTimer;
+    Vector3 recoilStartRot;
 
     void Update()
     {
         if (currentState == ItemState.Player || currentState == ItemState.Enemy)
         {
-            recoilRot = Vector3.Lerp(recoilRot, Vector3.zero, data.recoilSpd * Time.deltaTime);
+            if (recoilTimer > 0)
+            {
+                float t = 1f - (recoilTimer / data.recoilSpd);
+                recoilRot = Vector3.Lerp(recoilStartRot, Vector3.zero, t);
+                recoilTimer -= Time.deltaTime;
+            }
+            else
+            {
+                recoilRot = Vector3.zero;
+                firePos = firePoint.transform.position;
+            }
+
             transform.localRotation = Quaternion.Euler(recoilRot) * ogRot;
-            firePoint.localRotation = Quaternion.Inverse(Quaternion.Euler(recoilRot));
         }
     }
 
-
     void Recoil()
     {
-        recoilRot += new Vector3(-data.recoilMag, Random.Range(-data.recoilMag * 0.5f, data.recoilMag * 0.5f), 0f);
+        recoilStartRot = recoilRot + new Vector3(-data.recoilMag, Random.Range(-data.recoilMag * 0.5f, data.recoilMag * 0.5f), 0f);
+        recoilRot = recoilStartRot;
+        recoilTimer = data.recoilSpd;
     }
+
 
     public void FireVFX()
     {
@@ -47,7 +65,7 @@ public class Gun : Item
 
     public void FireRay(Vector3 dir)
     {
-        Ray ray = new Ray(firePoint.position, dir);
+        Ray ray = new Ray(firePos, dir);
         if (Physics.Raycast(ray, out RaycastHit hit, 1000f))
         {
             if (hit.transform.CompareTag("Enemy"))
@@ -62,7 +80,7 @@ public class Gun : Item
 
     public void FireBullet(Vector3 dir)
     {
-        GameObject bulletObj = Instantiate(data.bulletPrefab, firePoint.position, Quaternion.LookRotation(dir));
+        GameObject bulletObj = Instantiate(data.bulletPrefab, firePos, Quaternion.LookRotation(dir));
         Bullet bullet = bulletObj.GetComponent<Bullet>();
         bullet.dir = dir;
         bullet.vel = data.vel;
@@ -73,14 +91,14 @@ public class Gun : Item
 
     IEnumerator HandleTracer(Vector3 dir, bool ray)
     {
-        TrailRenderer tracer = Instantiate(data.tracerPrefab, firePoint.position, Quaternion.identity);
+        TrailRenderer tracer = Instantiate(data.tracerPrefab, firePos, Quaternion.identity);
 
         float elapsedTime = 0f;
         if (ray)
         {
             while (elapsedTime < data.tracerDuration)
             {
-                tracer.transform.position = Vector3.Lerp(firePoint.position, dir, elapsedTime / data.tracerDuration);
+                tracer.transform.position = Vector3.Lerp(firePos, dir, elapsedTime / data.tracerDuration);
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }

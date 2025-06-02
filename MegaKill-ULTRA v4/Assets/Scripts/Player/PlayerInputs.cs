@@ -16,9 +16,9 @@ public class PlayerInputs : InputManager
         if (StateManager.IsActive())
         {
             if (Input.GetKey(KeyCode.Tab))
-                interacts?.HighlightAll();
+                interacts.isHighlightAll = true;
             else
-                interacts?.HighlightOne();
+                interacts.isHighlightAll = false;
         }
     }
 

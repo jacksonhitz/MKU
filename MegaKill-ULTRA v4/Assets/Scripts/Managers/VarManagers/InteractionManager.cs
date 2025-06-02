@@ -7,7 +7,9 @@ public class InteractionManager : MonoBehaviour
     public static InteractionManager Instance { get; private set; }
 
     [SerializeField] List<Item> items;
-    [SerializeField] List<Interactable> interactables;
+    public List<Interactable> interactables;
+
+    public bool isHighlightAll;
 
     void Awake()
     {
@@ -37,28 +39,6 @@ public class InteractionManager : MonoBehaviour
         {
             if (interactable.type == Interactable.Type.Extract) interactable.isInteractable = true;
             else if (interactable.type == Interactable.Type.Enemy) interactable.isInteractable = false;
-        }
-    }
-
-    public void HighlightAll()
-    {
-        foreach (Interactable interactable in interactables)
-        {
-            interactable.GlowMat();
-        }
-    }
-    public void HighlightOne()
-    {
-        foreach (Interactable interactable in interactables)
-        {
-            if (interactable.isHovering && interactable.isInteractable)
-            {
-                interactable.GlowMat();
-            }
-            else
-            {
-                interactable.DefaultMat();
-            }
         }
     }
 }

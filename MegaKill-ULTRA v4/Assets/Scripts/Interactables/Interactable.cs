@@ -2,10 +2,8 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour, IInteractable
 {
-    [SerializeField] Material[] mats;
     [SerializeField] Material glow;
-
-    Material mat;
+    Material def;
     Renderer rend;
     
     public bool isHovering;
@@ -14,6 +12,7 @@ public class Interactable : MonoBehaviour, IInteractable
     protected PlayerController player;
     protected SoundManager sound;
     protected EnemyManager enemies;
+    protected InteractionManager interacts;
 
     public enum Type
     {
@@ -31,6 +30,8 @@ public class Interactable : MonoBehaviour, IInteractable
             isInteractable = false;
             if (type == Type.Door)
             {
+
+
 
 
             }
@@ -53,48 +54,35 @@ public class Interactable : MonoBehaviour, IInteractable
         player = PlayerController.Instance;
         sound = SoundManager.Instance;
         enemies = EnemyManager.Instance;
+        interacts = InteractionManager.Instance;
     }
-    
+
+    void Update()
+    {
+        if (isHovering || interacts.isHighlightAll)
+            rend.material = glow;
+        else
+            rend.material = def;
+
+    }
+
+
+    //ATTENTION FUTURE ME: THIS WILL BREAK IF A MODEL IS USING MULTIPLE SEPERATE MATS FOR A SINGLE TEXTURE
     void GetMat()
     {
         rend = GetComponent<Renderer>();
-        if (rend == null) rend = GetComponentInChildren<Renderer>();
+        if (rend == null) rend = GetComponentInChildren<SkinnedMeshRenderer>();
+        if (rend == null) rend = GetComponentInChildren<MeshRenderer>();
 
-
+        var mats = rend.materials;
         if (mats.Length > 0)
         {
-            mat = mats[Random.Range(0, mats.Length)];
-            rend.material = mat;
+            def = mats[Random.Range(0, mats.Length)];
+            rend.material = def;
         }
-        else mat = rend.material;
 
-        Debug.Log("rend" + rend);
-        Debug.Log("mat" + mat);
+        Debug.Log("rend: " + rend);
+        Debug.Log("mat: " + def);
     }
 
-    void OnMouseEnter()
-    {
-        if (isInteractable)
-        {
-            isHovering = true;
-            GlowMat();
-        }
-    }
-
-    void OnMouseExit()
-    {
-        isHovering = false;
-        DefaultMat();
-    }
-
-    public void DefaultMat()
-    {
-        if (this != null) rend.material = mat;
-
-    }
-
-    public void GlowMat()
-    {
-        if (this != null) rend.material = glow;
-    }
 }

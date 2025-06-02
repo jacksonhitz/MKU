@@ -8,12 +8,6 @@ public class Enemy : Interactable, IHitable
     public enum EnemyState { Active, Wander, Brawl, Static, Pathing }
     public EnemyState currentState;
 
-    [Header("SFX")]
-    public AudioClip attackClip;
-    public AudioClip deadClip;
-    public AudioClip hitClip;
-    public AudioClip stunClip;
-
     [Header("VFX")]
     public GameObject deathEffect;
 
