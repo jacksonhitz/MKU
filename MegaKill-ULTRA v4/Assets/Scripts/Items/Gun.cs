@@ -42,6 +42,7 @@ public class Gun : Item
             {
                 Enemy enemy = hit.transform.GetComponentInParent<Enemy>();
                 enemy?.Hit(10f);
+                ScoreManager.Instance?.AddGunScore();
             }
             StartCoroutine(HandleTracer(hit.point, true));
         }

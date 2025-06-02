@@ -76,6 +76,8 @@ public class PlayerCombat : MonoBehaviour
                 IHitable iHit = hit.GetComponentInParent<IHitable>();
                 iHit?.Hit(5f);
                // break;
+               ScoreManager.Instance?.AddMeleeScore();
+
             }
         }
     }

@@ -154,6 +154,8 @@ public abstract class Item : Interactable
             if (collision.gameObject.CompareTag("Enemy"))
             {
                 collision.gameObject.GetComponent<Enemy>()?.Hit(5);
+                //add score here/style points
+                ScoreManager.Instance?.AddThrowScore();
             }
         }
     }
