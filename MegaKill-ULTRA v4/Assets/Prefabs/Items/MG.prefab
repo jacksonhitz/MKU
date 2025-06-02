@@ -150,11 +150,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c857eb6be1076430e8581e4a48c02cdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rend: {fileID: 0}
-  def: {fileID: 0}
+  mats: []
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
   isHovering: 0
-  isInteractable: 0
+  isInteractable: 1
   type: 1
   rb: {fileID: 0}
   popUp: {fileID: 0}

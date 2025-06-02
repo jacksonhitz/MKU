@@ -5,34 +5,48 @@ public class Gun : Item
 {
     public GunData data;
     public Transform firePoint;
+    
 
     public float bullets;
 
     public ParticleSystem muzzleFlash;
 
-    Vector3 rot = Vector3.zero;
+    Vector3 recoilRot;
+    Quaternion ogRot;
 
     protected override void Start()
     {
         base.Start();
         bullets = data.maxBullets;
         itemData = data;
+
+        ogRot = Quaternion.Euler(data.rot);
     }
 
     void Update()
     {
-        if (rb.isKinematic)
+        if (currentState == ItemState.Player)
         {
-            rot = Vector3.Lerp(rot, Vector3.zero, data.recoilSpd * Time.deltaTime);
-            rot = data.rot;
+            recoilRot = Vector3.Lerp(recoilRot, Vector3.zero, data.recoilSpd * Time.deltaTime);
+            transform.localRotation = Quaternion.Euler(recoilRot) * ogRot;
         }
     }
-    public void Recoil()
+
+    IEnumerator Recoil()
     {
-        rot += new Vector3(-data.recoilMag, 0, 0f);
+        firePoint.parent = hand;
+        recoilRot += new Vector3(-data.recoilMag, Random.Range(-data.recoilMag * 0.5f, data.recoilMag * 0.5f), 0f);
+        while (recoilRot.magnitude > 0.01f)
+            yield return null;
+        firePoint.parent = transform;
     }
 
-    // === PLAYER ===
+    public void FireVFX()
+    {
+        StartCoroutine(Recoil());
+        muzzleFlash.Play();
+    }
+
     public void FireRay(Vector3 dir)
     {
         Ray ray = new Ray(firePoint.position, dir);
@@ -48,7 +62,6 @@ public class Gun : Item
         }
     }
 
-    // === ENEMY ===
     public void FireBullet(Vector3 dir)
     {
         GameObject bulletObj = Instantiate(data.bulletPrefab, firePoint.position, Quaternion.LookRotation(dir));
@@ -56,11 +69,9 @@ public class Gun : Item
         bullet.dir = dir;
         bullet.vel = data.vel;
         bullet.dmg = data.dmg;
-        
+
         StartCoroutine(HandleTracer(dir, false));
     }
-
-    
 
     IEnumerator HandleTracer(Vector3 dir, bool ray)
     {

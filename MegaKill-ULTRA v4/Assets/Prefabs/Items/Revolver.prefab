@@ -180,12 +180,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8429d99b4afdf45a4a3e9d413f78737f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rend: {fileID: 0}
-  def: {fileID: 0}
+  mats: []
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
   isHovering: 0
-  isInteractable: 0
-  type: 0
+  isInteractable: 1
+  type: 1
   rb: {fileID: 0}
   popUp: {fileID: 0}
   thrown: 0
@@ -280,8 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b73a03c8d0b9441e5b41a178c9e0cfed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rend: {fileID: 0}
-  def: {fileID: 0}
+  mats: []
   glow: {fileID: 0}
   isHovering: 0
   isInteractable: 0

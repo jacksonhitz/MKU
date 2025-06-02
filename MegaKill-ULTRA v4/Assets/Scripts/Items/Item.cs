@@ -10,6 +10,7 @@ public abstract class Item : Interactable
 
     public ItemData itemData;
     public MonoBehaviour holder;
+    protected Transform hand;
 
     bool isUseable;
 
@@ -30,12 +31,12 @@ public abstract class Item : Interactable
     protected override void Start()
     {
         base.Start();
-        FindState();
+        GetState();
         isUseable = true;
     }
 
     //STATE MANAGING (Set State should probably be rewritten in a dict or something to match states with scripts) 
-    public void FindState()
+    public void GetState()
     {
         if (transform.parent != null)
         {
@@ -75,9 +76,10 @@ public abstract class Item : Interactable
                 break;
         }
     }
-    public void Grabbed()
+    public void Grabbed(Transform newHand)
     {
-        FindState();
+        GetState();
+        hand = newHand;
     }
 
 

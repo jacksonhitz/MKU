@@ -15,14 +15,14 @@ public abstract class ScenesManager : MonoBehaviour
 
     void OnEnable()
     {
-        if (lvlType == WinCon.Elim) EnemyManager.OnDeath += ElimCheck;
+        if (lvlType == WinCon.Elim) EnemyManager.OnEnemyDeath += ElimCheck;
 
         StateManager.OnStateChanged += StateChange;
     }
 
     void OnDisable()
     {
-        if (lvlType == WinCon.Elim) EnemyManager.OnDeath -= ElimCheck;
+        if (lvlType == WinCon.Elim) EnemyManager.OnEnemyDeath -= ElimCheck;
         StateManager.OnStateChanged -= StateChange;
     }
     void StateChange(StateManager.GameState state)
@@ -32,6 +32,7 @@ public abstract class ScenesManager : MonoBehaviour
     void ElimCheck(Enemy enemy)
     {
         if (EnemyManager.Instance.enemies.Count == 0) Next();
+        Debug.Log("enemy killed");
     }
 
     public void Next()

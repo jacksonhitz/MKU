@@ -4,18 +4,8 @@ using System.Collections.Generic;
 
 public class EnemyManager : MonoBehaviour
 {
-    public static event System.Action<Enemy> OnDeath;
-
-    //Instance tracking/singleton management
-    private static EnemyManager _instance;
-    public static EnemyManager Instance
-    {
-        get
-        {
-            if (_instance is null) Debug.LogError("Enemy Manager is NULL");
-            return _instance;
-        }
-    }
+    public static event System.Action<Enemy> OnEnemyDeath;
+    public static EnemyManager Instance { get; private set; }
 
     [SerializeField] GameObject hands;
     [SerializeField] GameObject enemyHolder;
@@ -25,14 +15,8 @@ public class EnemyManager : MonoBehaviour
 
     void Awake()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-        }
+        Instance = this;
+
         player = FindObjectOfType<PlayerController>();
         enemies = new List<Enemy>();
     }
@@ -108,7 +92,7 @@ public class EnemyManager : MonoBehaviour
     public void Kill(Enemy enemy)
     {
         enemies.Remove(enemy);
-        OnDeath?.Invoke(enemy);
+        OnEnemyDeath.Invoke(enemy);
         Destroy(enemy.gameObject);
     }
 

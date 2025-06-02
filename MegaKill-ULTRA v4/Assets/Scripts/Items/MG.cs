@@ -23,7 +23,7 @@ public class MG : Gun
                 Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
                 dir = ray.direction;
 
-                FireBasic();
+                FireVFX();
                 FireRay(dir);
 
                 sound.Play("MGShot");
@@ -49,16 +49,10 @@ public class MG : Gun
 
             enemy.CallUse();
 
-            FireBasic();
+            FireVFX();
             FireBullet(dir);
 
             sound.Play("MGShot", enemy.transform.position);
         }
-    }
-
-    void FireBasic()
-    {
-        Recoil();
-        muzzleFlash.Play();
     }
 }
