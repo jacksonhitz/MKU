@@ -18,8 +18,8 @@ MonoBehaviour:
     placementData:
       rotationRandomness: {x: 45, y: 45, z: 45}
       rotationOffset: {x: 270, y: 0, z: 0}
-      scaleRandomnessMin: 300
-      scaleRandomnessMax: 600
+      scaleRandomnessMin: 783.9
+      scaleRandomnessMax: 1022.3
       normalAligned: 0
       randomFlipX: 0
       randomFlipY: 0
@@ -27,10 +27,10 @@ MonoBehaviour:
   - prefab: {fileID: 7980256793533960580, guid: 4183e639df4dfaa4fb1601113c5ffb4a, type: 3}
     category: 0
     placementData:
-      rotationRandomness: {x: 90, y: 0, z: 0}
+      rotationRandomness: {x: 0.57, y: 0.99, z: 0.6}
       rotationOffset: {x: 0, y: 0, z: 0}
-      scaleRandomnessMin: 1
-      scaleRandomnessMax: 1
+      scaleRandomnessMin: 1.44
+      scaleRandomnessMax: 1.85
       normalAligned: 0
       randomFlipX: 0
       randomFlipY: 0
@@ -124,6 +124,17 @@ MonoBehaviour:
       randomFlipY: 0
       randomFlipZ: 0
   - prefab: {fileID: 9212990541556629421, guid: da70ee7aad8ef41a2b97a92f3463e111, type: 3}
+    category: 0
+    placementData:
+      rotationRandomness: {x: 0, y: 0, z: 0}
+      rotationOffset: {x: 0, y: 0, z: 0}
+      scaleRandomnessMin: 4
+      scaleRandomnessMax: 4
+      normalAligned: 0
+      randomFlipX: 0
+      randomFlipY: 0
+      randomFlipZ: 0
+  - prefab: {fileID: 958063993354006427, guid: d5f662fa4c19cac47a97bd93511cd4aa, type: 3}
     category: 0
     placementData:
       rotationRandomness: {x: 0, y: 0, z: 0}
