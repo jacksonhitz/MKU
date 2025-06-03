@@ -14,9 +14,10 @@ public class DialogueManager : MonoBehaviour
         Debug.Log("Loaded Dialogues: " + lines.Length);
     }
 
-    public DialogueData GetRandomLine(int trip)
+    public void PlayRandomLine()
     {
-        var matching = System.Array.FindAll(lines, d => d.trip == trip);
-        return matching[Random.Range(0, matching.Length)];
+        var matching = System.Array.FindAll(lines, d => d.trip == TripManager.Instance.trip);
+        string line = matching[Random.Range(0, matching.Length)].line;
+        Dialogue.Instance.TypeText(line);
     }
 }

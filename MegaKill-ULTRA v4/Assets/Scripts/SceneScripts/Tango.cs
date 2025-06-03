@@ -42,6 +42,8 @@ public class Tango : ScenesManager
         if (dosedCount == 0)
             dialogue.Off();
 
+        DialogueManager.Instance.PlayRandomLine();
+
         popUp.UpdatePopUp("MKU DISTRIBUTED");
         dosedCount++;
         Debug.Log("dosed");

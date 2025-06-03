@@ -25,7 +25,11 @@ public abstract class InputManager : MonoBehaviour
             StateManager.NextState(this);
         }
 
-        if (Input.GetKeyDown(KeyCode.B)) StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO2, 0f));
+        if (Input.GetKeyDown(KeyCode.B))
+            StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO2, 0f));
+
+        if (Input.GetKeyDown(KeyCode.Space))
+            ScenesManager.Instance.isLvlOn = true;
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {

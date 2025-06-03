@@ -18,7 +18,7 @@ public abstract class ScenesManager : MonoBehaviour, IInteractable
     }
     protected virtual void Start()
     {
-
+        TripManager.Instance.trip = 1;
     }
 
 

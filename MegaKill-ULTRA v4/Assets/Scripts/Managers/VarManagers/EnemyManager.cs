@@ -58,7 +58,6 @@ public class EnemyManager : MonoBehaviour
             if (enemy.dosed)
             {
                 enemy.currentState = Enemy.EnemyState.Brawl;
-                //enemy.StartCoroutine(enemy.StartBrawlAggression());
             }
         }
 
