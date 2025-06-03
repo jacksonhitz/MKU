@@ -1,44 +1,20 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.EventSystems;
 
 public class SettingsUI : MonoBehaviour
 {
     [SerializeField] Canvas menu;
-    [SerializeField] Slider sfxSlider;
-    [SerializeField] Slider musicSlider;
-    [SerializeField] Slider sensSlider;
-    [SerializeField] TMP_InputField sfxInput;
-    [SerializeField] TMP_InputField musicInput;
-    [SerializeField] TMP_InputField sensInput;
+    [SerializeField] Slider sfxSlider, musicSlider, sensSlider;
+    [SerializeField] TMP_InputField sfxInput, musicInput, sensInput;
 
     void Start()
     {
         menu.enabled = false;
-
-        // Initialize values from manager
-        sfxSlider.value = SettingsManager.Instance.sFXVolume;
-        musicSlider.value = SettingsManager.Instance.musicVolume;
-        sensSlider.value = SettingsManager.Instance.sensitivity;
-
-        sfxInput.text = SettingsManager.Instance.sFXVolume.ToString("F0");
-        musicInput.text = SettingsManager.Instance.musicVolume.ToString("F0");
-        sensInput.text = SettingsManager.Instance.sensitivity.ToString("F0");
-
-        // Setup input validation
-        sfxInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
-        musicInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
-        sensInput.characterValidation = TMP_InputField.CharacterValidation.Integer;
-
-        // Listeners
-        sfxSlider.onValueChanged.AddListener(OnSFXSliderChanged);
-        musicSlider.onValueChanged.AddListener(OnMusicSliderChanged);
-        sensSlider.onValueChanged.AddListener(OnSensitivitySliderChanged);
-
-        sfxInput.onEndEdit.AddListener(OnSFXInputChanged);
-        musicInput.onEndEdit.AddListener(OnMusicInputChanged);
-        sensInput.onEndEdit.AddListener(OnSensitivityInputChanged);
+        Init(sfxSlider, sfxInput, SettingsManager.Instance.SFXVolume, SettingsManager.Instance.SetSFXVolume);
+        Init(musicSlider, musicInput, SettingsManager.Instance.MusicVolume, SettingsManager.Instance.SetMusicVolume);
+        Init(sensSlider, sensInput, SettingsManager.Instance.Sensitivity, SettingsManager.Instance.SetSensitivity);
     }
 
     void OnEnable()
@@ -46,90 +22,40 @@ public class SettingsUI : MonoBehaviour
         StateManager.OnStateChanged += StateChange;
         StateManager.OnSilentChanged += StateChange;
     }
+
     void OnDisable()
     {
         StateManager.OnStateChanged -= StateChange;
         StateManager.OnSilentChanged -= StateChange;
     }
-    void StateChange(StateManager.GameState state)
-    {
-        Debug.Log("state called");
 
-        if (state == StateManager.GameState.PAUSED)
-        {
-            menu.enabled = true;
-            Debug.Log("menu enabled");
-        }
-        else
-        {
-            menu.enabled = false;
-            Debug.Log("menu disabled");
-        }
-    }
+    void StateChange(StateManager.GameState state) => menu.enabled = (state == StateManager.GameState.PAUSED);
 
-    public void Resume()
+    public void Resume() => Close(StateManager.PREVIOUS);
+    public void Exit() => StartCoroutine(StateManager.LoadState(StateManager.GameState.TITLE, 2f));
+    public void Restart() => StartCoroutine(StateManager.LoadState(StateManager.PREVIOUS, 2f));
+
+    void Close(StateManager.GameState target)
     {
-        StateManager.LoadSilent(StateManager.PREVIOUS);
+        StateManager.LoadSilent(target);
         EventSystem.current.SetSelectedGameObject(null);
     }
 
-    public void Exit()
+    void Init(Slider slider, TMP_InputField input, float initial, System.Action<float> apply)
     {
-        StartCoroutine(StateManager.LoadState(StateManager.GameState.TITLE, 2f));
-        EventSystem.current.SetSelectedGameObject(null);
-    }
+        slider.value = initial;
+        input.text = Mathf.RoundToInt(initial).ToString();
+        input.characterValidation = TMP_InputField.CharacterValidation.Integer;
 
-    public void Restart()
-    {
-        StartCoroutine(StateManager.LoadState(StateManager.PREVIOUS, 2f));
-        EventSystem.current.SetSelectedGameObject(null);
-    }
+        slider.onValueChanged.AddListener(v => {
+            apply(v);
+            input.text = Mathf.RoundToInt(v).ToString();
+        });
 
-    void OnSFXSliderChanged(float value)
-    {
-        SettingsManager.Instance.SetSFXVolume(value);
-        sfxInput.text = value.ToString("F0");
-    }
-
-    void OnMusicSliderChanged(float value)
-    {
-        SettingsManager.Instance.SetMusicVolume(value);
-        musicInput.text = value.ToString("F0");
-    }
-
-    void OnSensitivitySliderChanged(float value)
-    {
-        SettingsManager.Instance.SetSensitivity(value);
-        sensInput.text = value.ToString("F0");
-    }
-
-    void OnSFXInputChanged(string value)
-    {
-        if (float.TryParse(value, out float v))
-        {
-            SettingsManager.Instance.SetSFXVolume(v);
-            sfxSlider.value = v;
-        }
-        sfxInput.text = SettingsManager.Instance.sFXVolume.ToString("F0");
-    }
-
-    void OnMusicInputChanged(string value)
-    {
-        if (float.TryParse(value, out float v))
-        {
-            SettingsManager.Instance.SetMusicVolume(v);
-            musicSlider.value = v;
-        }
-        musicInput.text = SettingsManager.Instance.musicVolume.ToString("F0");
-    }
-
-    void OnSensitivityInputChanged(string value)
-    {
-        if (float.TryParse(value, out float v))
-        {
-            SettingsManager.Instance.SetSensitivity(v);
-            sensSlider.value = v;
-        }
-        sensInput.text = SettingsManager.Instance.sensitivity.ToString("F0");
+        input.onEndEdit.AddListener(text => {
+            if (float.TryParse(text, out float val)) apply(val);
+            slider.value = initial = slider.value; 
+            input.text = Mathf.RoundToInt(slider.value).ToString();
+        });
     }
 }

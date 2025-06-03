@@ -25,7 +25,11 @@ public class PlayerInteract : MonoBehaviour
             hovered = hit.collider.GetComponentInParent<Interactable>();
 
         foreach (Interactable interactable in InteractionManager.Instance.interactables)
-            interactable.isHovering = (interactable == hovered);
+        {
+            if (interactable != null)
+                interactable.isHovering = (interactable == hovered);
+        }
+            
     }
 
     public void Interact()
