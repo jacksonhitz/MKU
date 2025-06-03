@@ -2,12 +2,10 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour, IInteractable
 {
-    
-
     [SerializeField] Material glow;
     Material def;
     Renderer rend;
-    
+
     public bool isHovering;
     public bool isInteractable;
 
@@ -25,8 +23,6 @@ public class Interactable : MonoBehaviour, IInteractable
     }
     public Type type;
 
-
-    //THIS ENTIRE SYSTEM IS STUPID AND FUCKED BUT I DONT HAVE TIME TO FIX IT. MAKE INTERACT A GLOBAL INTERFACE W A LISTENER SYSTEM FUTURE ME
     public virtual void Interact()
     {
         if (isInteractable)
@@ -41,17 +37,17 @@ public class Interactable : MonoBehaviour, IInteractable
             {
                 EnemyPunch enemy = GetComponent<EnemyPunch>();
                 enemy.dosed = true;
-                ScenesManager.Instance.Interact(); //???????? FUCK
-
+                ScenesManager.Instance.Interact();
                 sound.Play("Interact");
             }
         }
-        
     }
+
     protected virtual void Awake()
     {
         GetMat();
     }
+
     protected virtual void Start()
     {
         player = PlayerController.Instance;
@@ -62,30 +58,29 @@ public class Interactable : MonoBehaviour, IInteractable
 
     void Update()
     {
-        if (isHovering || interacts.isHighlightAll)
-            rend.material = glow;
-        else
-            rend.material = def;
+        if (rend == null) return;
 
+        if (isHovering || interacts.isHighlightAll)
+        {
+            if (rend.material != glow)
+                rend.material = glow;
+        }
+        else
+        {
+            if (rend.material != def)
+                rend.material = def;
+        }
     }
 
-
-    //ATTENTION FUTURE ME: THIS WILL BREAK IF A MODEL IS USING MULTIPLE SEPERATE MATS FOR A SINGLE TEXTURE
     void GetMat()
     {
         rend = GetComponent<Renderer>();
         if (rend == null) rend = GetComponentInChildren<SkinnedMeshRenderer>();
         if (rend == null) rend = GetComponentInChildren<MeshRenderer>();
 
-        var mats = rend.materials;
-        if (mats.Length > 0)
-        {
-            def = mats[Random.Range(0, mats.Length)];
-            rend.material = def;
-        }
+        def = rend.material;
 
         Debug.Log("rend: " + rend);
         Debug.Log("mat: " + def);
     }
-
 }
