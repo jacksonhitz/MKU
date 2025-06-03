@@ -22,14 +22,13 @@ public class PlayerInteract : MonoBehaviour
 
         Interactable hovered = null;
         if (Physics.Raycast(ray, out RaycastHit hit, 30f))
-            hovered = hit.collider.GetComponentInParent<Interactable>();
+            hovered = FindInteractable(hit.collider);
 
         foreach (Interactable interactable in InteractionManager.Instance.interactables)
         {
             if (interactable != null)
                 interactable.isHovering = (interactable == hovered);
         }
-            
     }
 
     public void Interact()
@@ -37,9 +36,21 @@ public class PlayerInteract : MonoBehaviour
         Ray ray = controller.cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
         if (Physics.Raycast(ray, out RaycastHit hit, 30f))
         {
-            Interactable interactable = hit.collider.GetComponentInParent<Interactable>();
+            Interactable interactable = FindInteractable(hit.collider);
             if (interactable != null)
                 interactable.Interact();
         }
+    }
+
+    Interactable FindInteractable(Collider col)
+    {
+        Interactable interactable = col.GetComponentInParent<Interactable>();
+        if (interactable == null)
+            interactable = col.GetComponent<Interactable>();
+        if (interactable == null)
+            interactable = col.GetComponentInChildren<Interactable>();
+        if (interactable == null)
+            interactable = col.transform.root.GetComponentInChildren<Interactable>();
+        return interactable;
     }
 }

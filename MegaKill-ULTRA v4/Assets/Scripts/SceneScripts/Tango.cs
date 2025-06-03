@@ -4,18 +4,17 @@ using UnityEngine.SceneManagement;
 
 public class Tango : ScenesManager
 {
-    public static Tango Instance { get; private set; }
-
     Dialogue dialogue;
     PopUp popUp;
     SoundManager sound;
 
     int dosedCount;
-
     bool started;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         Instance = this;
 
         dialogue = FindObjectOfType<Dialogue>();
@@ -26,32 +25,29 @@ public class Tango : ScenesManager
         else
             StateManager.LoadSilent(StateManager.GameState.TANGO);
     }
+
     protected override void Start()
     {
         base.Start();
+
         sound = SoundManager.Instance;
         sound.Play("Witch");
 
         dialogue.TypeText("F TO HAND OUT MKU");
     }
 
-
-    public void Dosed(Enemy enemy)
+    //DOSED WITH MKU
+    public override void Interact()
     {
         if (dosedCount == 0)
-        {
             dialogue.Off();
-        }
 
         popUp.UpdatePopUp("MKU DISTRIBUTED");
-        enemy.dosed = true;
         dosedCount++;
         Debug.Log("dosed");
 
         if (dosedCount > 10 && !started)
-        {
             StartCoroutine(Countdown());
-        }
     }
 
     IEnumerator Countdown()

@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class Title : ScenesManager
 {
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        Instance = this;
         if (SceneManager.GetActiveScene().name != "TITLE")
             StartCoroutine(StateManager.LoadState(StateManager.GameState.TITLE, 0f));
         else

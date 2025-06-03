@@ -1,17 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 public class CamController : MonoBehaviour
 {
-    //PING PONG SHADER YOU FUCKER
-
-
     Camera cam;
 
-    [HideInInspector] public float sens = 500f;
     float xRotation;
     float yRotation;
 
@@ -126,7 +121,6 @@ public class CamController : MonoBehaviour
         if (StateManager.IsActive())
         {
             MoveCam();
-
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -150,7 +144,7 @@ public class CamController : MonoBehaviour
 
     public void UpPhase()
     {
-        //phase++;
+        // phase++;
     }
 
     void TransitionOn()
@@ -251,6 +245,8 @@ public class CamController : MonoBehaviour
 
     void MoveCam()
     {
+        float sens = SettingsManager.Instance != null ? SettingsManager.Instance.Sensitivity : 500f;
+
         float mouseX = Input.GetAxis("Mouse X") * Time.deltaTime * (sens / 2f) / Time.timeScale;
         float mouseY = Input.GetAxis("Mouse Y") * Time.deltaTime * (sens / 2f) / Time.timeScale;
 
