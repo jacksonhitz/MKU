@@ -33,7 +33,7 @@ public class Tango : ScenesManager
         sound = SoundManager.Instance;
         sound.Play("Witch");
 
-        dialogue.TypeText("F TO HAND OUT MKU");
+        dialogue.TypeText("F TO HAND OUT MKU", 0f);
     }
 
     //DOSED WITH MKU
@@ -52,37 +52,38 @@ public class Tango : ScenesManager
             StartCoroutine(Countdown());
     }
 
+    //YO WHAT THE HELL WAS I THINKING WHEN I MADE THIS BULLSHIT
     IEnumerator Countdown()
     {
         started = true;
 
-        dialogue.TypeText("LADIES AND GENTLEMEN! THE GROOVES WILL START IN 1 MINUTE, MAKE YOUR WAY TO THE MAIN STAGE!");
+        dialogue.TypeText("LADIES AND GENTLEMEN! THE GROOVES WILL START IN 1 MINUTE, MAKE YOUR WAY TO THE MAIN STAGE!", 0f);
         yield return new WaitForSeconds(10f);
         dialogue.Off();
         yield return new WaitForSeconds(20f);
-        dialogue.TypeText("30 SECONDS!");
+        dialogue.TypeText("30 SECONDS!", 0f);
         yield return new WaitForSeconds(10f);
         dialogue.Off();
         yield return new WaitForSeconds(10f);
-        dialogue.TypeText("10!");
+        dialogue.TypeText("10!", 0f);
         yield return new WaitForSeconds(1f);
-        dialogue.TypeText("9!");
+        dialogue.TypeText("9!", 0f);
         yield return new WaitForSeconds(1f);
-        dialogue.TypeText("8!");
+        dialogue.TypeText("8!", 0f);
         yield return new WaitForSeconds(1f);
-        dialogue.TypeText("7!");
+        dialogue.TypeText("7!", 0f);
         yield return new WaitForSeconds(1f);
-        dialogue.TypeText("6!");
+        dialogue.TypeText("6!", 0f);
         yield return new WaitForSeconds(1f);
-        dialogue.TypeText("5!");
+        dialogue.TypeText("5!", 0f);
         yield return new WaitForSeconds(1f);
-        dialogue.TypeText("4!");
+        dialogue.TypeText("4!", 0f);
         yield return new WaitForSeconds(1f);
-        dialogue.TypeText("3!");
+        dialogue.TypeText("3!", 0f);
         yield return new WaitForSeconds(1f);
-        dialogue.TypeText("2!");
+        dialogue.TypeText("2!", 0f);
         yield return new WaitForSeconds(1f);
-        dialogue.TypeText("1!");
+        dialogue.TypeText("1!", 0f);
         yield return new WaitForSeconds(1f);
         dialogue.Off();
 
@@ -91,6 +92,6 @@ public class Tango : ScenesManager
         InteractionManager.Instance.ExtractOn();
         EnemyManager.Instance.Brawl();
 
-        dialogue.TypeText("F ON ANY VAN TO EXTRACT");
+        dialogue.TypeText("F ON ANY VAN TO EXTRACT", 0f);
     }
 }

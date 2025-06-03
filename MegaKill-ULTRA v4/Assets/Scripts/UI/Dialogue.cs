@@ -49,7 +49,7 @@ public class Dialogue : MonoBehaviour
         }
         else
         {
-            StartCoroutine(Done());
+            Invoke("Done", 2f);
         }
     }
 
@@ -81,11 +81,14 @@ public class Dialogue : MonoBehaviour
         }
     }
 
-    public void TypeText(string customText)
+    public void TypeText(string customText, float timer)
     {
         StopAllCoroutines();
         customTyping = true;
         StartCoroutine(TypeLine(customText));
+
+        if (timer != 0)
+            Invoke("Done", timer);
     }
 
     public void Off()
@@ -94,10 +97,8 @@ public class Dialogue : MonoBehaviour
         textComponent.text = string.Empty;
     }
 
-    IEnumerator Done()
+    void Done()
     {
-        yield return new WaitForSeconds(2f);
-
         textComponent.text = string.Empty;
 
         if (StateManager.IsPassive())
