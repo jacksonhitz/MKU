@@ -65,10 +65,15 @@ public class Enemy : Interactable, IHitable
             case EnemyState.Wander: WanderBehavior(); break;
             case EnemyState.Active: ActiveBehavior(); break;
             case EnemyState.Brawl: BrawlBehavior(); break;
-            case EnemyState.Static: StaticBehavior(); break;
+            case EnemyState.Static: StaticBehaviour(); break;
             case EnemyState.Pathing: PathingBehavior(); break;
         }
         animator.SetBool("Run", agent.velocity.magnitude > 0.1f);
+    }
+
+    void StaticBehaviour()
+    {
+
     }
 
     public void LOS()
@@ -222,10 +227,7 @@ public class Enemy : Interactable, IHitable
         return validTargets.Count > 0 ? validTargets[Random.Range(0, validTargets.Count)] : (playerInRange ? player.gameObject : null);
     }
 
-    void StaticBehaviour()
-    {
-        
-    }
+   
 
     void PathingBehavior()
     {
