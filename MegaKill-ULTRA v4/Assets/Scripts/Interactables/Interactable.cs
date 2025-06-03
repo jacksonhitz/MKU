@@ -6,8 +6,11 @@ public class Interactable : MonoBehaviour, IInteractable
     [SerializeField] Material def;
     [SerializeField] Renderer rend;
 
+    [SerializeField] Material[] mats;
+
     public bool isHovering;
     public bool isInteractable;
+    public bool isRandomTex;
 
     protected PlayerController player;
     protected SoundManager sound;
@@ -45,8 +48,10 @@ public class Interactable : MonoBehaviour, IInteractable
 
     protected virtual void Awake()
     {
-        rend = GetRenderer();
-        if (rend != null) def = rend.material;
+        if (rend == null)
+            rend = GetRenderer();
+        if (def == null)
+            def = rend.material;
     }
 
     protected virtual void Start()
@@ -59,10 +64,13 @@ public class Interactable : MonoBehaviour, IInteractable
 
     void LateUpdate()
     {
-        if (isHovering || interacts.isHighlightAll)
-            rend.material = glow;
-        else
-            rend.material = def;
+        if (ScenesManager.Instance.isLvlOn)
+        {
+            if (isHovering || interacts.isHighlightAll)
+                rend.material = glow;
+            else
+                rend.material = def;
+        }
     }
 
     Renderer GetRenderer()

@@ -27,7 +27,7 @@ public class Revolver : Gun
             else
             {
                 popUp?.UpdatePopUp("EMPTY");
-                sound.Play("RevShot");
+                sound.Play("RevEmpty");
             }
         }
         else if (currentState == ItemState.Enemy && holder is Enemy enemy)

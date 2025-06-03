@@ -194,8 +194,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
+  def: {fileID: 2100000, guid: 0ec4bc2f3b999423cb7b0caf9dd1039d, type: 2}
+  rend: {fileID: 1448348968429504183}
+  mats: []
   isHovering: 0
   isInteractable: 1
+  isRandomTex: 0
   type: 3
   currentState: 1
   deathEffect: {fileID: 8853266473761700966, guid: b1da43f1588a840748c686b0733ad393, type: 3}
@@ -829,7 +833,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8510909844913884514, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8510909844913884514, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
       propertyPath: m_Materials.Array.data[1]
@@ -925,15 +929,20 @@ PrefabInstance:
       addedObject: {fileID: 1736389728026928784}
     - targetCorrespondingSourceObject: {fileID: -6615942463076616880, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7973846229475188353}
+      addedObject: {fileID: 2638953213380528714}
   m_SourcePrefab: {fileID: 100100000, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
+--- !u!137 &1448348968429504183 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8510909844913884514, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
+  m_PrefabInstance: {fileID: 7063125119559584725}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5055908224773521029 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6615942463076616880, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
   m_PrefabInstance: {fileID: 7063125119559584725}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &7973846229475188353
-CapsuleCollider:
+--- !u!64 &2638953213380528714
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -950,11 +959,10 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.03
-  m_Height: 0.23236366
-  m_Direction: 2
-  m_Center: {x: -0.00000045245346, y: -0.00043560975, z: 0.10854561}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 355170680091915004, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
 --- !u!4 &7318344595752987710 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}

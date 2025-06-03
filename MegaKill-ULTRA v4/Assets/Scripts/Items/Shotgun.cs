@@ -34,7 +34,7 @@ public class Shotgun : Gun
             else
             {
                 popUp?.UpdatePopUp("EMPTY");
-                sound.Play("SGShot");
+                sound.Play("SGEmpty");
             }
         }
         else if (currentState == ItemState.Enemy && holder is Enemy enemy)
@@ -44,7 +44,6 @@ public class Shotgun : Gun
 
             for (int i = 0; i < data.pellets; i++)
             {
-                // Apply random spread
                 Vector3 spread = new Vector3(
                     Random.Range(-data.spreadAngle, data.spreadAngle),
                     Random.Range(-data.spreadAngle, data.spreadAngle),

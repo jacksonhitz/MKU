@@ -14,14 +14,11 @@ public class Dialogue : MonoBehaviour
     int index = -1;
     bool customTyping = false;
 
-    SoundManager sound;
 
-    
-    void Start()
+    void Awake()
     {
-        sound = SoundManager.Instance;
+        Instance = this;
     }
-
     void Update()
     {
       //  if (Input.GetKeyDown(KeyCode.Space) && !started)
@@ -62,7 +59,7 @@ public class Dialogue : MonoBehaviour
         textComponent.text = string.Empty;
         yield return new WaitForSeconds(0.1f);
 
-        sound.Play("Line");
+        SoundManager.Instance.Play("Line");
 
         foreach (char c in text.ToCharArray())
         {
@@ -72,7 +69,7 @@ public class Dialogue : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        sound.Stop();
+        SoundManager.Instance.Stop();
 
         if (customTyping)
         {
