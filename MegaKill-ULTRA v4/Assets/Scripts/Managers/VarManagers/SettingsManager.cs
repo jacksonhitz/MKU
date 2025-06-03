@@ -20,12 +20,25 @@ public class SettingsManager : MonoBehaviour
             Debug.LogError("SettingsData asset not found at Resources/Settings/Settings");
     }
 
+    void Start()
+    {
+        SetSettings();
+    }
+
+    void SetSettings()
+    {
+        SetMusicVolume(settings.musicVolume);
+        SetSFXVolume(settings.sFXVolume);
+        SetSensitivity(settings.sensitivity);
+    }
+
     public void SetMusicVolume(float value)
     {
         value = Mathf.Clamp(value, 0, 100);
         settings.musicVolume = value;
 
-        SoundManager.Instance.music.volume = value / 300f;
+        if (SoundManager.Instance != null && SoundManager.Instance.music != null)
+            SoundManager.Instance.music.volume = value / 300f;
     }
 
     public void SetSFXVolume(float value)
@@ -33,8 +46,14 @@ public class SettingsManager : MonoBehaviour
         value = Mathf.Clamp(value, 0, 100);
         settings.sFXVolume = value;
 
-        SoundManager.Instance.sfx.volume = value / 100f;
-        SoundManager.Instance.dialogue.volume = value / 100f;
+        if (SoundManager.Instance != null)
+        {
+            if (SoundManager.Instance.sfx != null)
+                SoundManager.Instance.sfx.volume = value / 100f;
+
+            if (SoundManager.Instance.dialogue != null)
+                SoundManager.Instance.dialogue.volume = value / 100f;
+        }
     }
 
     public void SetSensitivity(float value)

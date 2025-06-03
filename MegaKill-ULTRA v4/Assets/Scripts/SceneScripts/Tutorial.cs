@@ -37,8 +37,11 @@ public class Tutorial : ScenesManager
     public bool itemHeldL = false;
     public bool itemHeldR = false;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        Instance = this;
+
         if (SceneManager.GetActiveScene().name != "TUTORIAL")
             StartCoroutine(StateManager.LoadState(StateManager.GameState.TUTORIAL, 0f));
         else

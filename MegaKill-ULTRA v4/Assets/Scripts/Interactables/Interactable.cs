@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour, IInteractable
 {
+    
+
     [SerializeField] Material glow;
     Material def;
     Renderer rend;
@@ -23,6 +25,8 @@ public class Interactable : MonoBehaviour, IInteractable
     }
     public Type type;
 
+
+    //THIS ENTIRE SYSTEM IS STUPID AND FUCKED BUT I DONT HAVE TIME TO FIX IT. MAKE INTERACT A GLOBAL INTERFACE W A LISTENER SYSTEM FUTURE ME
     public virtual void Interact()
     {
         if (isInteractable)
@@ -31,15 +35,14 @@ public class Interactable : MonoBehaviour, IInteractable
             if (type == Type.Door)
             {
 
-
-
-
             }
             else if (type == Type.Extract) StateManager.NextState(this);
             else if (type == Type.Enemy)
             {
                 EnemyPunch enemy = GetComponent<EnemyPunch>();
-                Tango.Instance.Dosed(enemy);
+                enemy.dosed = true;
+                ScenesManager.Instance.Interact(); //???????? FUCK
+
                 sound.Play("Interact");
             }
         }
