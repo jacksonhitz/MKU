@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class SettingsManager : MonoBehaviour
 {
+
+    //CALL AWAKE/START SHIT EXTERNALLY SO THAT MANAGERS WITHOUT VAR CAN BE STATIC/ABSTRACT
+
     public static SettingsManager Instance { get; set; }
 
     SettingsData settings;

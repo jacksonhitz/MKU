@@ -4,7 +4,7 @@ using TMPro;
 
 public class Dialogue : MonoBehaviour
 {
-    public static Tango Instance { get; private set; }
+    public static Dialogue Instance { get; set; }
 
     public TextMeshProUGUI textComponent;
 
@@ -72,7 +72,7 @@ public class Dialogue : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-      //  sound.Play("Line");
+        sound.Stop();
 
         if (customTyping)
         {
