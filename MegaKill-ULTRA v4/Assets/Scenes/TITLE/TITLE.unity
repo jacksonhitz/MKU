@@ -169,6 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lvlType: 0
+  isLvlOn: 0
 --- !u!1001 &46094804
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1129,7 +1130,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &483912770
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3246,7 +3247,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1265737978
 Transform:
   m_ObjectHideFlags: 0
