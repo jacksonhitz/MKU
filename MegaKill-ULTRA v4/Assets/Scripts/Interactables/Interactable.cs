@@ -3,8 +3,8 @@ using UnityEngine;
 public class Interactable : MonoBehaviour, IInteractable
 {
     [SerializeField] Material glow;
-    Material def;
-    Renderer rend;
+    [SerializeField] Material def;
+    [SerializeField] Renderer rend;
 
     public bool isHovering;
     public bool isInteractable;
@@ -45,7 +45,8 @@ public class Interactable : MonoBehaviour, IInteractable
 
     protected virtual void Awake()
     {
-        GetMat();
+        rend = GetRenderer();
+        if (rend != null) def = rend.material;
     }
 
     protected virtual void Start()
@@ -56,31 +57,20 @@ public class Interactable : MonoBehaviour, IInteractable
         interacts = InteractionManager.Instance;
     }
 
-    void Update()
+    void LateUpdate()
     {
-        if (rend == null) return;
-
         if (isHovering || interacts.isHighlightAll)
-        {
-            if (rend.material != glow)
-                rend.material = glow;
-        }
+            rend.material = glow;
         else
-        {
-            if (rend.material != def)
-                rend.material = def;
-        }
+            rend.material = def;
     }
 
-    void GetMat()
+    Renderer GetRenderer()
     {
-        rend = GetComponent<Renderer>();
-        if (rend == null) rend = GetComponentInChildren<SkinnedMeshRenderer>();
-        if (rend == null) rend = GetComponentInChildren<MeshRenderer>();
-
-        def = rend.material;
-
-        Debug.Log("rend: " + rend);
-        Debug.Log("mat: " + def);
+        Renderer renderer = GetComponentInParent<Renderer>();
+        if (renderer == null) renderer = GetComponent<Renderer>();
+        if (renderer == null) renderer = GetComponentInChildren<Renderer>();
+        if (renderer == null) renderer = transform.root.GetComponentInChildren<Renderer>();
+        return renderer;
     }
 }
