@@ -22,19 +22,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b19035a3825f736408cbf24039f519b2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -86.32
+      value: -88.38837
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b19035a3825f736408cbf24039f519b2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -118.8
+      value: -118.64
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b19035a3825f736408cbf24039f519b2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 30.7
+      value: -40.817
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b19035a3825f736408cbf24039f519b2, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.37892538
+      value: -0.42139053
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b19035a3825f736408cbf24039f519b2, type: 3}
       propertyPath: m_LocalRotation.x
@@ -42,7 +42,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b19035a3825f736408cbf24039f519b2, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.92542726
+      value: -0.9068793
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b19035a3825f736408cbf24039f519b2, type: 3}
       propertyPath: m_LocalRotation.z
@@ -54,20 +54,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b19035a3825f736408cbf24039f519b2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -135.466
+      value: -229.845
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: b19035a3825f736408cbf24039f519b2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: b19035a3825f736408cbf24039f519b2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -5568371526223589888, guid: b19035a3825f736408cbf24039f519b2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b19035a3825f736408cbf24039f519b2, type: 3}
       propertyPath: m_Name
       value: Tent
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: b19035a3825f736408cbf24039f519b2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b19035a3825f736408cbf24039f519b2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2772593083490814085}
     - targetCorrespondingSourceObject: {fileID: -8391222552659086748, guid: b19035a3825f736408cbf24039f519b2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9171461668438710499}
@@ -99,3 +114,29 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5495902117074765545, guid: b19035a3825f736408cbf24039f519b2, type: 3}
+--- !u!1 &3936863884736437111 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b19035a3825f736408cbf24039f519b2, type: 3}
+  m_PrefabInstance: {fileID: 4207458306509940262}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &2772593083490814085
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3936863884736437111}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 9.529753, y: 6.916541, z: 9.445082}
+  m_Center: {x: 0.0923164, y: 2.9582705, z: 0.1093006}
