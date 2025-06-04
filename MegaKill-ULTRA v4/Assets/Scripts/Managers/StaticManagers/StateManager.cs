@@ -142,6 +142,6 @@ public static class StateManager
     {
         int currentIndex = Order.IndexOf(state);
         int nextIndex = (currentIndex + 1) % Order.Count;
-        caller.StartCoroutine(LoadState(Order[nextIndex], 2f));
+        TripManager.Instance.StartCoroutine(LoadState(Order[nextIndex], 2f)); //TEMP FIX THIS IS FUCKED
     }
 }
