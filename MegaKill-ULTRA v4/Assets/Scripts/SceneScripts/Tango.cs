@@ -18,6 +18,12 @@ public class Tango : ScenesManager
             StateManager.StartLvl();
     }
 
+    protected override void Update()
+    {
+        base.Update();
+
+    }
+
     void OnEnable()
     {
         StateManager.OnStateChanged += StateChange;
@@ -90,7 +96,8 @@ public class Tango : ScenesManager
         yield return new WaitForSeconds(1f);
         dialogue.Off();
 
-        StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO2, 0f));
+        StateManager.State = StateManager.GameState.TANGO2;
+
         SoundManager.Instance.Play("Acid");
         InteractionManager.Instance.ExtractOn();
         EnemyManager.Instance.Brawl();
