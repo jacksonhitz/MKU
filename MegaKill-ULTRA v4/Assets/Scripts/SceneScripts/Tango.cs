@@ -11,10 +11,8 @@ public class Tango : ScenesManager
     int dosedCount;
     bool started;
 
-    protected override void Awake()
+    void Awake()
     {
-        base.Awake();
-
         Instance = this;
 
         dialogue = FindObjectOfType<Dialogue>();
@@ -26,10 +24,8 @@ public class Tango : ScenesManager
             StateManager.LoadSilent(StateManager.GameState.TANGO);
     }
 
-    protected override void Start()
+    void Start()
     {
-        base.Start();
-
         sound = SoundManager.Instance;
         sound.Play("Witch");
 

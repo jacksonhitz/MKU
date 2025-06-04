@@ -89,10 +89,11 @@ public class EnemyManager : MonoBehaviour
     public void Kill(Enemy enemy)
     {
         enemies.Remove(enemy);
-        ScenesManager.Instance.ElimCheck();
         Destroy(enemy.gameObject);
-    }
 
+        if (ScenesManager.Instance.lvlType == ScenesManager.WinCon.Elim && enemies.Count == 0)
+            StateManager.LoadState(StateManager.GameState.SCORE, 3f);
+    }
 
     public void CallHands()
     {

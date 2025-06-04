@@ -26,11 +26,11 @@ public static class StateManager
 
     static GameState state;
     static GameState previous;
-    static GameState scene;
+    static GameState lvl;
 
     public static GameState PREVIOUS => previous;
     public static GameState STATE => state;
-    public static GameState SCENE => scene;
+    public static GameState LVL => lvl;
 
     public static event Action<GameState> OnStateChanged;
     public static event Action<GameState> OnSilentChanged;
@@ -101,12 +101,23 @@ public static class StateManager
         {
             State = GameState.TRANSITION;
             yield return new WaitForSeconds(delay);
+
             SceneManager.LoadScene(newState.ToString());
-            Debug.Log("Loading Scene " + newState);
-            State = newState;
+
+            if (Active.Contains(newState))
+            {
+                State = GameState.FILE;
+                lvl = newState;
+                yield break;
+            }
+            
         }
-        else State = newState;
+        State = newState;
     }
+
+    public static void StartLvl() => State = lvl;
+
+
     public static void LoadSilent(GameState newState)
     {
         previous = state;   

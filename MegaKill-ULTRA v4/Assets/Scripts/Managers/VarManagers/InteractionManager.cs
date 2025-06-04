@@ -20,8 +20,20 @@ public class InteractionManager : MonoBehaviour
     {
         items = new List<Item>();
         interactables = new List<Interactable>();
+    }
 
-        Collect();
+    void OnEnable()
+    {
+        StateManager.OnStateChanged += OnStateChanged;
+    }
+    void OnDisable()
+    {
+        StateManager.OnStateChanged -= OnStateChanged;
+    }
+    void OnStateChanged(StateManager.GameState state)
+    {
+        if (StateManager.IsActive())
+            Collect();
     }
 
     public void Collect()
@@ -32,6 +44,8 @@ public class InteractionManager : MonoBehaviour
         interactables.Clear();
         interactables.AddRange(FindObjectsOfType<Interactable>());
     }
+
+
 
     public void ExtractOn()
     {

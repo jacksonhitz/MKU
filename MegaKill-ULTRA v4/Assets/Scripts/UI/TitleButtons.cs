@@ -98,13 +98,6 @@ public class TitleButtons : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         TriggerHoverExit();
     }
    
-    void OnDestroy()
-    {
-        if (triggerArea != null)
-        {
-            DestroyImmediate(triggerArea);
-        }
-    }
 }
 
 

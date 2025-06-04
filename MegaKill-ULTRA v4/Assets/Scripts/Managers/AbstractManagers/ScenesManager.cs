@@ -10,38 +10,5 @@ public abstract class ScenesManager : MonoBehaviour, IInteractable
     public enum WinCon { Elim, Extract, Target }
     public WinCon lvlType;
 
-    public bool isLvlOn;
-
-    protected virtual void Awake()
-    {
-        isLvlOn = false;
-    }
-    protected virtual void Start()
-    {
-        TripManager.Instance.trip = 1;
-    }
-
-
-    protected virtual void LvlOn()
-    {
-        if (!isLvlOn)
-        {
-            isLvlOn = true;
-            InteractionManager.Instance?.Collect();
-            Debug.Log("Scene: " + Instance);
-        }
-    }
-
-    public void ElimCheck()
-    {
-        if (EnemyManager.Instance?.enemies.Count == 0) Next();
-        Debug.Log("enemy killed");
-    }
-
-    public void Next()
-    {
-        StateManager.NextState(this);
-    }
-
     public virtual void Interact() { }
 }

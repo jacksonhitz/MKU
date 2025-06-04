@@ -101,10 +101,9 @@ public class Dialogue : MonoBehaviour
     {
         textComponent.text = string.Empty;
 
-        if (StateManager.IsPassive())
-        {
+        if (StateManager.State == StateManager.GameState.FILE)
+            StateManager.StartLvl();
+        else if (StateManager.IsPassive())
             StateManager.NextState(this);
-            Debug.Log("nextState");
-        }
     }
 }

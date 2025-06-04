@@ -10,4 +10,9 @@ public class TripManager : MonoBehaviour
     {
         Instance = this;
     }
+
+    void Start()
+    {
+        trip = 1;
+    }
 }

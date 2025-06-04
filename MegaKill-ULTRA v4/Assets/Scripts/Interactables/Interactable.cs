@@ -64,7 +64,7 @@ public class Interactable : MonoBehaviour, IInteractable
 
     void LateUpdate()
     {
-        if (ScenesManager.Instance.isLvlOn)
+        if (StateManager.IsActive())
         {
             if (isHovering || interacts.isHighlightAll)
                 rend.material = glow;

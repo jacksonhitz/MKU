@@ -37,9 +37,8 @@ public class Tutorial : ScenesManager
     public bool itemHeldL = false;
     public bool itemHeldR = false;
 
-    protected override void Awake()
+    void Awake()
     {
-        base.Awake();
         Instance = this;
 
         if (SceneManager.GetActiveScene().name != "TUTORIAL")
@@ -47,9 +46,8 @@ public class Tutorial : ScenesManager
         else
             StateManager.LoadSilent(StateManager.GameState.TUTORIAL);
     }
-    protected override void Start()
+    void Start()
     {
-        base.Start();
         SoundManager.Instance.Play("Hot");
     }
 
