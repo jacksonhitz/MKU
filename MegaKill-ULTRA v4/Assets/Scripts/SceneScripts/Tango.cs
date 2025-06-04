@@ -24,6 +24,11 @@ public class Tango : ScenesManager
 
     }
 
+    void Start() //STUPID AND BAD
+    {
+        StateChange(StateManager.State);
+    }
+
     void OnEnable()
     {
         StateManager.OnStateChanged += StateChange;

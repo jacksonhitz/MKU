@@ -61,7 +61,7 @@ public class CamController : MonoBehaviour
 
     void Reset()
     {
-        phase = 2;
+        phase = 1;
         SetEffects();
         SetClr();
         StartCoroutine(FadeIn(2f));
@@ -120,7 +120,7 @@ public class CamController : MonoBehaviour
 
     void MoveCheck()
     {
-        if (StateManager.IsActive())
+        if (StateManager.IsActive() && Time.timeScale == 1)
         {
             MoveCam();
             Cursor.lockState = CursorLockMode.Locked;

@@ -133,7 +133,7 @@ public static class StateManager
                 lvl = newState;
             }
         }
-        else if (Passive.Contains(newState))
+        else 
             State = newState;
     }
     public static void StartLvl() => State = lvl;
