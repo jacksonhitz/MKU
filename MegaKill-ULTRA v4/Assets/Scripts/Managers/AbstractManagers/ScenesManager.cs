@@ -22,10 +22,10 @@ public abstract class ScenesManager : MonoBehaviour, IInteractable
     {
         if (StateManager.IsPassive())
         {
-            lvl.SetActive(false);
+            lvl?.SetActive(false);
         }
         if (StateManager.IsActive())
-            lvl.SetActive(true);
+            lvl?.SetActive(true);
             InteractionManager.Instance.Collect(); // this is here bc the listerner is broken
     }
 }

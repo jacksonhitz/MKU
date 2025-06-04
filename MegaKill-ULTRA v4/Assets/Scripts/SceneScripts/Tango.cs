@@ -14,6 +14,8 @@ public class Tango : ScenesManager
     {
         base.Awake();
         StateManager.lvl = StateManager.GameState.TANGO;
+        if (StateManager.State != StateManager.GameState.FILE)
+            StateManager.StartLvl();
     }
 
     void OnEnable()
