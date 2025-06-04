@@ -4,9 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class Tango : ScenesManager
 {
-    Dialogue dialogue;
-    PopUp popUp;
-    SoundManager sound;
+    [SerializeField] Dialogue dialogue;
+    [SerializeField] PopUp popUp;
 
     int dosedCount;
     bool started;
@@ -15,10 +14,28 @@ public class Tango : ScenesManager
     {
         base.Awake();
         StateManager.lvl = StateManager.GameState.TANGO;
-        if (StateManager.State != StateManager.GameState.FILE)
-            StateManager.StartLvl();
     }
 
+    void OnEnable()
+    {
+        StateManager.OnStateChanged += StateChange;
+    }
+    void OnDisable()
+    {
+        StateManager.OnStateChanged -= StateChange;
+    }
+    void StateChange(StateManager.GameState state)
+    {
+        switch (state)
+        {
+            case StateManager.GameState.TANGO: StartLvl(); break;
+        }
+    }
+
+    void StartLvl()
+    {
+        dialogue.TypeText("F TO GIVE DRUGS", 0f);
+    }
 
     //DOSED WITH MKU
     public override void Interact()
@@ -72,7 +89,7 @@ public class Tango : ScenesManager
         dialogue.Off();
 
         StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO2, 0f));
-        sound.Play("Acid");
+        SoundManager.Instance.Play("Acid");
         InteractionManager.Instance.ExtractOn();
         EnemyManager.Instance.Brawl();
 

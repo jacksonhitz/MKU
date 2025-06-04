@@ -26,6 +26,8 @@ public class PlayerInputs : InputManager
     {
         if (StateManager.IsActive())
         {
+            Debug.Log("MOVING");
+
             // MOVE/JUMP
             Vector2 moveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             bool jump = Input.GetKeyDown(KeyCode.Space);

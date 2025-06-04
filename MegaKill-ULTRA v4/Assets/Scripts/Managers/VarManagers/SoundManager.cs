@@ -40,7 +40,6 @@ public class SoundManager : MonoBehaviour
     {
         switch (state)
         {
-            case StateManager.GameState.TITLE: Play("Title"); break;
             case StateManager.GameState.TUTORIAL: Play("Hot"); break;
             case StateManager.GameState.REHEARSAL: Play("Could"); break;
             case StateManager.GameState.TANGO: Play("Witch"); break;

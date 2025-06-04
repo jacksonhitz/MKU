@@ -7,7 +7,12 @@ public class Title : ScenesManager
 {
     protected override void Awake()
     {
-            StateManager.State = StateManager.GameState.TITLE;
+        StateManager.State = StateManager.GameState.TITLE;
+        
+    }
+    void Start()
+    {
+        SoundManager.Instance.Play("Title");
     }
     protected override void Update() { }
 }

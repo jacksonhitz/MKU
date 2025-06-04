@@ -38,8 +38,7 @@ public class InteractionManager : MonoBehaviour
         {
             Collect();
             Debug.Log("COLLECTING");
-        }
-            
+        } 
     }
 
     public void Collect()

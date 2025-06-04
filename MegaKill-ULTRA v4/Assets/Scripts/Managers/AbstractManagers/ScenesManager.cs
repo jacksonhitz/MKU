@@ -26,6 +26,6 @@ public abstract class ScenesManager : MonoBehaviour, IInteractable
         }
         if (StateManager.IsActive())
             lvl.SetActive(true);
-            InteractionManager.Instance.Collect(); //listerner broken
+            InteractionManager.Instance.Collect(); // this is here bc the listerner is broken
     }
 }
