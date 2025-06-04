@@ -33,6 +33,7 @@ public class PlayerHealth : MonoBehaviour, IHitable
         {
             isDead = true;
             StartCoroutine(StateManager.LoadState(StateManager.PREVIOUS, 3f));
+            SoundManager.Instance.Play("PlayerDeath");
         }
     }
 }

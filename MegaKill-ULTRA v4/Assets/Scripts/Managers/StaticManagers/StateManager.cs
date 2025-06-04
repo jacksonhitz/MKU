@@ -19,19 +19,23 @@ public static class StateManager
         SPEARHEAD,
 
         PAUSED,
-        TRANSITION
+        TRANSITION,
+        FILE,
+        SCORE
     }
 
     static GameState state;
     static GameState previous;
+    static GameState scene;
+
+    public static GameState PREVIOUS => previous;
+    public static GameState STATE => state;
+    public static GameState SCENE => scene;
 
     public static event Action<GameState> OnStateChanged;
     public static event Action<GameState> OnSilentChanged;
 
-    public static GameState PREVIOUS => previous;
-    public static GameState STATE => state;
-
-    static readonly List<GameState> StateOrder = new()
+    static readonly List<GameState> Order = new()
     {
         GameState.TITLE,
         GameState.TUTORIAL,
@@ -66,8 +70,10 @@ public static class StateManager
     static readonly HashSet<GameState> Passive = new()
     {
         GameState.TITLE,
+        GameState.FILE,
         GameState.PAUSED,
         GameState.TRANSITION,
+        GameState.SCORE
     };
 
     public static GameState State
@@ -110,8 +116,8 @@ public static class StateManager
 
     public static void NextState(MonoBehaviour caller)
     {
-        int currentIndex = StateOrder.IndexOf(state);
-        int nextIndex = (currentIndex + 1) % StateOrder.Count;
-        caller.StartCoroutine(LoadState(StateOrder[nextIndex], 2f));
+        int currentIndex = Order.IndexOf(state);
+        int nextIndex = (currentIndex + 1) % Order.Count;
+        caller.StartCoroutine(LoadState(Order[nextIndex], 2f));
     }
 }

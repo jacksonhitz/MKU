@@ -68,7 +68,17 @@ public class Enemy : Interactable, IHitable
             case EnemyState.Static: StaticBehaviour(); break;
             case EnemyState.Pathing: PathingBehavior(); break;
         }
-        animator.SetBool("Run", agent.velocity.magnitude > 0.1f);
+
+        //terrible 
+        if (agent.speed == 10)
+        {
+            animator.SetBool("Walk", agent.velocity.sqrMagnitude > 0.1f);
+        }
+        else if (agent.speed == 30)
+        {
+            animator.SetBool("Run", agent.velocity.sqrMagnitude > 0.1f);
+        }
+       
     }
 
     void StaticBehaviour()

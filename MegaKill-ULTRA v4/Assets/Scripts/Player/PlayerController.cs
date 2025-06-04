@@ -36,9 +36,4 @@ public class PlayerController : MonoBehaviour
         items = GetComponent<PlayerItems>();
         health = GetComponent<PlayerHealth>();
     }
-    void Start()
-    {
-        cam = Camera.main;
-        sound = SoundManager.Instance;
-    }
 }

@@ -5,8 +5,7 @@ public class Gun : Item
 {
     public GunData data;
 
-    public ParticleSystem muzzleFlash;
-
+    public GameObject muzzleFlash;
     public Transform firePoint;
 
     Vector3 firePos;
@@ -14,7 +13,6 @@ public class Gun : Item
     Quaternion ogRot;
 
     public float bullets;
-
 
     protected override void Start()
     {
@@ -29,9 +27,11 @@ public class Gun : Item
     float recoilTimer;
     Vector3 recoilStartRot;
 
+
+    //this is stupid and bad
     void Update()
     {
-        if (currentState == ItemState.Player || currentState == ItemState.Enemy)
+        if (currentState == ItemState.Player)
         {
             if (recoilTimer > 0)
             {
@@ -44,23 +44,26 @@ public class Gun : Item
                 recoilRot = Vector3.zero;
                 firePos = firePoint.transform.position;
             }
-
             transform.localRotation = Quaternion.Euler(recoilRot) * ogRot;
+        }
+        else 
+        {
+            recoilRot = Vector3.zero;
+            firePos = firePoint.transform.position;
         }
     }
 
-    void Recoil()
+    public void FireRecoil()
     {
         recoilStartRot = recoilRot + new Vector3(-data.recoilMag, Random.Range(-data.recoilMag * 0.5f, data.recoilMag * 0.5f), 0f);
         recoilRot = recoilStartRot;
         recoilTimer = data.recoilSpd;
     }
 
-
     public void FireVFX()
     {
-        Recoil();
-        muzzleFlash.Play();
+        GameObject obj = Instantiate(muzzleFlash, firePos, firePoint.rotation);
+        Destroy(obj, .2f);
     }
 
     public void FireRay(Vector3 dir)

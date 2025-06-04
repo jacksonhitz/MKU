@@ -20,6 +20,7 @@ public class Revolver : Gun
                     dir = (hitInfo.point - firePoint.position).normalized;
 
                 FireVFX();
+                FireRecoil();
                 FireRay(dir);
 
                 sound.Play("RevShot");

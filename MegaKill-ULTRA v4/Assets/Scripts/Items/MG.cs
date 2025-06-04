@@ -24,6 +24,7 @@ public class MG : Gun
                 dir = ray.direction;
 
                 FireVFX();
+                FireRecoil();
                 FireRay(dir);
 
                 sound.Play("MGShot");

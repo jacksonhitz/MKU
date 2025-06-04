@@ -26,6 +26,7 @@ public class Shotgun : Gun
                     dir = ray.direction;
 
                     FireVFX();
+                    FireRecoil();
                     FireRay(dir);
 
                     sound.Play("SGShot");
