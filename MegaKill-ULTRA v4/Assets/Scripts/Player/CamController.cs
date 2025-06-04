@@ -110,9 +110,13 @@ public class CamController : MonoBehaviour
         if (StateManager.State == StateManager.GameState.TRANSITION) TransitionOn();
         else
         {
-            MoveCheck();
             UpdateShader();
             UpdatePost();
+        }
+
+        if (StateManager.IsActive())
+        {
+            MoveCheck();
         }
     }
 

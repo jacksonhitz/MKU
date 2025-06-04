@@ -12,7 +12,6 @@ public class Crosshair : MonoBehaviour
 
     void Start()
     {
-         Off();
          OnStateChanged(StateManager.State);
     }
     void OnEnable()

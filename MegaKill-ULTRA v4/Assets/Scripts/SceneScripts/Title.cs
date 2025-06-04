@@ -5,15 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class Title : ScenesManager
 {
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
-
-            StateManager.LoadSilent(StateManager.GameState.TITLE);
+            StateManager.State = StateManager.GameState.TITLE;
     }
-
-    void Start()
-    {
-        SoundManager.Instance.Play("Title");
-    }
+    protected override void Update() { }
 }

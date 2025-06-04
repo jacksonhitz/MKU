@@ -10,5 +10,21 @@ public abstract class ScenesManager : MonoBehaviour, IInteractable
     public enum WinCon { Elim, Extract, Target }
     public WinCon lvlType;
 
+    protected GameObject lvl;
+
     public virtual void Interact() { }
+    protected virtual void Awake()
+    {
+        Instance = this;
+        lvl = transform.GetChild(0).gameObject;
+    }
+    protected virtual void Update()
+    {
+        if (StateManager.IsPassive())
+        {
+            lvl.SetActive(false);
+        }
+        if (StateManager.IsActive())
+            lvl.SetActive(true);
+    }
 }

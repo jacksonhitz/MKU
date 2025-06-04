@@ -46,7 +46,6 @@ public class InteractionManager : MonoBehaviour
     }
 
 
-
     public void ExtractOn()
     {
         foreach (Interactable interactable in interactables)

@@ -6,7 +6,6 @@ public class PlayerHealth : MonoBehaviour, IHitable
     [SerializeField] float health;
     float maxHealth = 100;
     UEye uEye;
-    bool isDead;
 
     void Awake()
     {
@@ -29,10 +28,9 @@ public class PlayerHealth : MonoBehaviour, IHitable
         health -= dmg;
         uEye.UpdateHealth(health);
 
-        if (!isDead && health <= 0)
+        if (StateManager.IsActive() && health <= 0)
         {
-            isDead = true;
-            StartCoroutine(StateManager.LoadState(StateManager.PREVIOUS, 3f));
+            StartCoroutine(StateManager.LoadState(StateManager.lvl, 3f));
             SoundManager.Instance.Play("PlayerDeath");
         }
     }

@@ -28,6 +28,27 @@ public class SoundManager : MonoBehaviour
                 soundLookup.Add(sound.name, sound);
         }
     }
+    void OnEnable()
+    {
+        StateManager.OnStateChanged += StateChange;
+    }
+    void OnDisable()
+    {
+        StateManager.OnStateChanged -= StateChange;
+    }
+    void StateChange(StateManager.GameState state)
+    {
+        switch (state)
+        {
+            case StateManager.GameState.TITLE: Play("Title"); break;
+            case StateManager.GameState.TUTORIAL: Play("Hot"); break;
+            case StateManager.GameState.REHEARSAL: Play("Could"); break;
+            case StateManager.GameState.TANGO: Play("Witch"); break;
+            case StateManager.GameState.TANGO2: Play("Acid"); break;
+            case StateManager.GameState.SABLE: Play("4L"); break;
+            case StateManager.GameState.SPEARHEAD: Play("DJ"); break;
+        }
+    }
 
     public SoundData GetSound(string soundName)
     {

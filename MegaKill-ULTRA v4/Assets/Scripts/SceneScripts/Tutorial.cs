@@ -37,21 +37,22 @@ public class Tutorial : ScenesManager
     public bool itemHeldL = false;
     public bool itemHeldR = false;
 
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
-
-        if (SceneManager.GetActiveScene().name != "TUTORIAL")
-            StartCoroutine(StateManager.LoadState(StateManager.GameState.TUTORIAL, 0f));
-        else
-            StateManager.LoadSilent(StateManager.GameState.TUTORIAL);
-    }
-    void Start()
-    {
-        SoundManager.Instance.Play("Hot");
+        base.Awake();
+        StateManager.lvl = StateManager.GameState.TUTORIAL;
+        if (StateManager.State != StateManager.GameState.FILE)
+            StateManager.StartLvl();
     }
 
-    void Update()
+    protected override void Update()
+    {
+        base.Update();
+        if (StateManager.IsActive())
+            EnumLogic();
+    }
+
+    void EnumLogic()
     {
         switch (TutorialStateManager.State)
         {
@@ -96,6 +97,7 @@ public class Tutorial : ScenesManager
         {
             itemHeldR = false;
         }
+
     }
 
     void WASD()
@@ -329,7 +331,7 @@ public class Tutorial : ScenesManager
         }
     }
 
-    void Interact()
+    public override void Interact()
     {
         //F to interact (with door)
         if (Input.GetKeyDown(KeyCode.F))

@@ -36,7 +36,8 @@ public class EnemyManager : MonoBehaviour
     }
     void StateChange(StateManager.GameState state)
     {
-        Active();
+        if (StateManager.IsActive())
+            Active();
     }
 
     void Active()
@@ -92,7 +93,7 @@ public class EnemyManager : MonoBehaviour
         Destroy(enemy.gameObject);
 
         if (ScenesManager.Instance.lvlType == ScenesManager.WinCon.Elim && enemies.Count == 0)
-            StateManager.LoadState(StateManager.GameState.SCORE, 3f);
+            StartCoroutine(StateManager.LoadState(StateManager.GameState.SCORE, 2f));
     }
 
     public void CallHands()

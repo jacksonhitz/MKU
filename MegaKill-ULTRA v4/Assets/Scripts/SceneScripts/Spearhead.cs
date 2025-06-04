@@ -5,13 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class Spearhead : ScenesManager
 {
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
-        if (SceneManager.GetActiveScene().name != "SPEARHEAD")
-            StartCoroutine(StateManager.LoadState(StateManager.GameState.SPEARHEAD, 0f));
-        else
-            StateManager.LoadSilent(StateManager.GameState.SPEARHEAD);
+        base.Awake();
+        StateManager.lvl = StateManager.GameState.SPEARHEAD;
+        if (StateManager.State != StateManager.GameState.FILE)
+            StateManager.StartLvl();
     }
     void Start()
     {

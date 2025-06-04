@@ -31,13 +31,13 @@ public class SettingsUI : MonoBehaviour
 
     void StateChange(StateManager.GameState state) => menu.enabled = (state == StateManager.GameState.PAUSED);
 
-    public void Resume() => Close(StateManager.PREVIOUS);
+    public void Resume() => Close(StateManager.previous);
     public void Exit() => StartCoroutine(StateManager.LoadState(StateManager.GameState.TITLE, 2f));
-    public void Restart() => StartCoroutine(StateManager.LoadState(StateManager.PREVIOUS, 2f));
+    public void Restart() => StartCoroutine(StateManager.LoadState(StateManager.previous, 2f));
 
     void Close(StateManager.GameState target)
     {
-        StateManager.LoadSilent(target);
+        StateManager.SilentState = target;
         EventSystem.current.SetSelectedGameObject(null);
     }
 

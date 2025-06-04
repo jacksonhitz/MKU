@@ -37,6 +37,11 @@ public class UEye : MonoBehaviour
     bool useAlternateTexture = false;
     float eyeIdleAnimationDuration = 1.5f;
 
+    void Start()
+    {
+        OnStateChanged(StateManager.State);
+    }
+
     void OnEnable()
     {
         StateManager.OnStateChanged += OnStateChanged;

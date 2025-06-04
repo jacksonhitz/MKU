@@ -24,9 +24,9 @@ public static class StateManager
         SCORE
     }
 
-    static GameState state;
-    static GameState previous;
-    static GameState lvl;
+    public static GameState state;
+    public static GameState previous;
+    public static GameState lvl;
 
     public static GameState PREVIOUS => previous;
     public static GameState STATE => state;
@@ -54,6 +54,17 @@ public static class StateManager
         GameState.TANGO,
         GameState.SABLE,
         GameState.SPEARHEAD,
+    };
+
+    static readonly HashSet<GameState> Transition = new()
+    {
+        GameState.TITLE,
+        GameState.TUTORIAL,
+        GameState.REHEARSAL,
+        GameState.TANGO,
+        GameState.SABLE,
+        GameState.SPEARHEAD,
+        GameState.SCORE
     };
 
     static readonly HashSet<GameState> Active = new()
@@ -88,6 +99,19 @@ public static class StateManager
             Debug.Log($"State changed to {state}");
         }
     }
+    public static GameState SilentState
+    {
+        get => state;
+        set
+        {
+            previous = state;
+            state = value;
+
+            OnSilentChanged?.Invoke(state);
+            Debug.Log($"State changed to {state}");
+
+        }
+    }
 
     public static bool GroupCheck(HashSet<GameState> group) => group.Contains(state);
 
@@ -95,35 +119,32 @@ public static class StateManager
     public static bool IsPassive() => GroupCheck(Passive);
     public static bool IsScene() => GroupCheck(Scene);
 
+
+    //this is the worst fucking thing ive ever made
     public static IEnumerator LoadState(GameState newState, float delay)
     {
-        if (Scene.Contains(newState))
+        if (Transition.Contains(newState))
         {
             State = GameState.TRANSITION;
             yield return new WaitForSeconds(delay);
-
+        }
+        if (Scene.Contains(newState))
+        {
             SceneManager.LoadScene(newState.ToString());
 
-            if (Active.Contains(newState))
+            if (Active.Contains(newState) && lvl != newState)
             {
                 State = GameState.FILE;
                 lvl = newState;
-                yield break;
             }
-            
+            else
+                State = newState;
         }
-        State = newState;
+        else if (Passive.Contains(newState))
+            State = newState;
     }
 
     public static void StartLvl() => State = lvl;
-
-
-    public static void LoadSilent(GameState newState)
-    {
-        previous = state;   
-        state = newState;
-        OnSilentChanged?.Invoke(state);
-    }
 
     public static void NextState(MonoBehaviour caller)
     {

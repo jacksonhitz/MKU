@@ -5,16 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class Rehearsal : ScenesManager
 {
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
-        if (SceneManager.GetActiveScene().name != "REHEARSAL")
-            StartCoroutine(StateManager.LoadState(StateManager.GameState.REHEARSAL, 0f));
-        else
-            StateManager.LoadSilent(StateManager.GameState.REHEARSAL);
-    }
-    void Start()
-    {
-        SoundManager.Instance.Play("Could");
+        base.Awake();
+        StateManager.lvl = StateManager.GameState.REHEARSAL;
+        if (StateManager.State != StateManager.GameState.FILE)
+            StateManager.StartLvl();
     }
 }

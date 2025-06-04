@@ -11,26 +11,14 @@ public class Tango : ScenesManager
     int dosedCount;
     bool started;
 
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
-
-        dialogue = FindObjectOfType<Dialogue>();
-        popUp = FindObjectOfType<PopUp>();
-
-        if (SceneManager.GetActiveScene().name != "TANGO")
-            StartCoroutine(StateManager.LoadState(StateManager.GameState.TANGO, 0f));
-        else
-            StateManager.LoadSilent(StateManager.GameState.TANGO);
+        base.Awake();
+        StateManager.lvl = StateManager.GameState.TANGO;
+        if (StateManager.State != StateManager.GameState.FILE)
+            StateManager.StartLvl();
     }
 
-    void Start()
-    {
-        sound = SoundManager.Instance;
-        sound.Play("Witch");
-
-        dialogue.TypeText("F TO HAND OUT MKU", 0f);
-    }
 
     //DOSED WITH MKU
     public override void Interact()

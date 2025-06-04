@@ -169,7 +169,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lvlType: 0
-  isLvlOn: 0
 --- !u!1001 &46094804
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4153,6 +4152,10 @@ PrefabInstance:
     - target: {fileID: 6132767271739246602, guid: 74efeb2ea6b0f499b879e3bce9313719, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6250727738591025436, guid: 74efeb2ea6b0f499b879e3bce9313719, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7685249188622465863, guid: 74efeb2ea6b0f499b879e3bce9313719, type: 3}
       propertyPath: m_IsActive

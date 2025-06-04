@@ -5,16 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class Russia : ScenesManager
 {
-    void Awake()
+    protected override void Awake()
     {
-        Instance = this;
-        if (SceneManager.GetActiveScene().name != "SABLE")
-            StartCoroutine(StateManager.LoadState(StateManager.GameState.SABLE, 0f));
-        else
-            StateManager.LoadSilent(StateManager.GameState.SABLE);
-    }
-    void Start()
-    {
-        SoundManager.Instance.Play("4L");
+        base.Awake();
+        StateManager.lvl = StateManager.GameState.SABLE;
+        if (StateManager.State != StateManager.GameState.FILE)
+            StateManager.StartLvl();
     }
 }

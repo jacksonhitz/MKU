@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundMask;
 
     public bool isGrounded;
-    public bool rooted;
+    public bool isRooted;
 
     float verticalVelocity;
     CharacterController characterController;
@@ -23,8 +23,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move(Vector2 moveDir, bool jump)
     {
-        isGrounded = StateManager.State == StateManager.GameState.TESTING ||
-                     Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         Vector3 movement = transform.right * moveDir.x + transform.forward * moveDir.y;
 
@@ -33,10 +32,10 @@ public class PlayerMovement : MonoBehaviour
         else
             verticalVelocity += gravity * Time.deltaTime;
 
-        if (jump && isGrounded && !rooted)
+        if (jump && isGrounded && !isRooted)
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
 
-        if (!rooted)
+        if (!isRooted)
         {
             Vector3 finalMove = (movement * runSpd) + Vector3.up * verticalVelocity;
             characterController.Move(finalMove * Time.deltaTime);
