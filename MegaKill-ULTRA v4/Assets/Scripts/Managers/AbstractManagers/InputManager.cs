@@ -27,8 +27,10 @@ public abstract class InputManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
             if (StateManager.State == StateManager.GameState.FILE)
+            {
                 StateManager.State = StateManager.lvl;
-
+            }
+ 
         if (Input.GetKeyDown(KeyCode.B))
             StateManager.State = StateManager.GameState.TANGO2;
 

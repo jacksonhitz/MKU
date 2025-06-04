@@ -32,8 +32,14 @@ public class InteractionManager : MonoBehaviour
     }
     void OnStateChanged(StateManager.GameState state)
     {
+        Debug.Log("INTERACT CALLED");
+
         if (StateManager.IsActive())
+        {
             Collect();
+            Debug.Log("COLLECTING");
+        }
+            
     }
 
     public void Collect()
