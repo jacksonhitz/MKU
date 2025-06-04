@@ -23,8 +23,8 @@ public class SettingsUI : MonoBehaviour
     }
 
     public void Resume() => SettingsManager.Instance.Resume();
-    public void Exit() => StartCoroutine(StateManager.LoadState(StateManager.GameState.TITLE, 2f));
-    public void Restart() => StartCoroutine(StateManager.LoadState(StateManager.STATE, 2f));
+    public void Exit() => SettingsManager.Instance.Exit();
+    public void Restart() => SettingsManager.Instance.Restart();
 
     void Init(Slider slider, TMP_InputField input, float initial, System.Action<float> apply)
     {
