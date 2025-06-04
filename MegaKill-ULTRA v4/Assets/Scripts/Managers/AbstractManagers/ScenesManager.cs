@@ -16,7 +16,8 @@ public abstract class ScenesManager : MonoBehaviour, IInteractable
     protected virtual void Awake()
     {
         Instance = this;
-        lvl = transform.GetChild(0).gameObject;
+        if (lvl != null)
+            lvl = transform.GetChild(0).gameObject;
     }
     protected virtual void Update()
     {
@@ -25,7 +26,9 @@ public abstract class ScenesManager : MonoBehaviour, IInteractable
             lvl?.SetActive(false);
         }
         if (StateManager.IsActive())
+        {
             lvl?.SetActive(true);
             InteractionManager.Instance.Collect(); // this is here bc the listerner is broken
+        }
     }
 }
