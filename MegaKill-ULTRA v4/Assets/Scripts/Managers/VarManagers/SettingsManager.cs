@@ -9,6 +9,8 @@ public class SettingsManager : MonoBehaviour
 
     SettingsData settings;
 
+    [SerializeField] GameObject menu;
+
     public float MusicVolume => settings.musicVolume;
     public float SFXVolume => settings.sFXVolume;
     public float Sensitivity => settings.sensitivity;
@@ -28,11 +30,33 @@ public class SettingsManager : MonoBehaviour
         SetSettings();
     }
 
+    public void Pause()
+    {
+        Time.timeScale = 0;
+        menu.SetActive(true);
+    }
+    public void Resume()
+    {
+        Time.timeScale = 1;
+        menu.SetActive(false);
+    }
+    public void Exit()
+    {
+        Time.timeScale = 1;
+        StartCoroutine(StateManager.LoadState(StateManager.GameState.TITLE, 2f));
+    }
+    public void Restart()
+    {
+        StartCoroutine(StateManager.LoadState(StateManager.STATE, 2f));
+    }
+
     void SetSettings()
     {
         SetMusicVolume(settings.musicVolume);
         SetSFXVolume(settings.sFXVolume);
         SetSensitivity(settings.sensitivity);
+
+        Resume();
     }
 
     public void SetMusicVolume(float value)

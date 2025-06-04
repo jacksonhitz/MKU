@@ -8,9 +8,7 @@ public static class StateManager
 {
     public enum GameState
     {
-        TESTING,
         TITLE,
-
         TUTORIAL,
         REHEARSAL,
         TANGO,
@@ -18,7 +16,6 @@ public static class StateManager
         SABLE,
         SPEARHEAD,
 
-        PAUSED,
         TRANSITION,
         FILE,
         SCORE
@@ -75,14 +72,12 @@ public static class StateManager
         GameState.TANGO2,
         GameState.SABLE,
         GameState.SPEARHEAD,
-        GameState.TESTING
     };
 
     static readonly HashSet<GameState> Passive = new()
     {
         GameState.TITLE,
         GameState.FILE,
-        GameState.PAUSED,
         GameState.TRANSITION,
         GameState.SCORE
     };
@@ -137,13 +132,10 @@ public static class StateManager
                 State = GameState.FILE;
                 lvl = newState;
             }
-            else
-                State = newState;
         }
         else if (Passive.Contains(newState))
             State = newState;
     }
-
     public static void StartLvl() => State = lvl;
 
     public static void NextState(MonoBehaviour caller)

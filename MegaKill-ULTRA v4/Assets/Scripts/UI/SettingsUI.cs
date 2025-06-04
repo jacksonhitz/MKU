@@ -5,41 +5,26 @@ using UnityEngine.EventSystems;
 
 public class SettingsUI : MonoBehaviour
 {
-    [SerializeField] Canvas menu;
+    public static SettingsUI Instance { get; set; }
+
     [SerializeField] Slider sfxSlider, musicSlider, sensSlider;
     [SerializeField] TMP_InputField sfxInput, musicInput, sensInput;
 
+    void Awake()
+    {
+        Instance = this;
+    }
+
     void Start()
     {
-        menu.enabled = false;
         Init(sfxSlider, sfxInput, SettingsManager.Instance.SFXVolume, SettingsManager.Instance.SetSFXVolume);
         Init(musicSlider, musicInput, SettingsManager.Instance.MusicVolume, SettingsManager.Instance.SetMusicVolume);
         Init(sensSlider, sensInput, SettingsManager.Instance.Sensitivity, SettingsManager.Instance.SetSensitivity);
     }
 
-    void OnEnable()
-    {
-        StateManager.OnStateChanged += StateChange;
-        StateManager.OnSilentChanged += StateChange;
-    }
-
-    void OnDisable()
-    {
-        StateManager.OnStateChanged -= StateChange;
-        StateManager.OnSilentChanged -= StateChange;
-    }
-
-    void StateChange(StateManager.GameState state) => menu.enabled = (state == StateManager.GameState.PAUSED);
-
-    public void Resume() => Close(StateManager.previous);
+    public void Resume() => SettingsManager.Instance.Resume();
     public void Exit() => StartCoroutine(StateManager.LoadState(StateManager.GameState.TITLE, 2f));
-    public void Restart() => StartCoroutine(StateManager.LoadState(StateManager.previous, 2f));
-
-    void Close(StateManager.GameState target)
-    {
-        StateManager.SilentState = target;
-        EventSystem.current.SetSelectedGameObject(null);
-    }
+    public void Restart() => StartCoroutine(StateManager.LoadState(StateManager.STATE, 2f));
 
     void Init(Slider slider, TMP_InputField input, float initial, System.Action<float> apply)
     {

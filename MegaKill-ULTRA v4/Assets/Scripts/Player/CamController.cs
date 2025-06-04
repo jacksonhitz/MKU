@@ -99,10 +99,8 @@ public class CamController : MonoBehaviour
 
     void StateChange(StateManager.GameState state)
     {
-        switch (state)
-        {
-            case StateManager.GameState.TUTORIAL: StartCoroutine(Blink()); break;
-        }
+        if (StateManager.IsActive())
+            StartCoroutine(Blink());
     }
 
     void Update()
@@ -114,7 +112,7 @@ public class CamController : MonoBehaviour
             UpdatePost();
         }
 
-        if (StateManager.IsActive())
+        if (StateManager.IsActive() && Time.timeScale == 1)
         {
             MoveCheck();
         }
@@ -137,6 +135,7 @@ public class CamController : MonoBehaviour
 
     IEnumerator Blink()
     {
+        yield return null;
         CallFadeOut();
         yield return new WaitForSeconds(0.5f);
         CallFadeIn();

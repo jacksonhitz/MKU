@@ -27,20 +27,20 @@ public abstract class InputManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
             if (StateManager.State == StateManager.GameState.FILE)
-            {
-                StateManager.State = StateManager.lvl;
-            }
- 
+                StartCoroutine(StateManager.LoadState(StateManager.lvl, 2f));
+
+
         if (Input.GetKeyDown(KeyCode.B))
             StateManager.State = StateManager.GameState.TANGO2;
+        if (Input.GetKeyDown(KeyCode.Z))
+            StartCoroutine(StateManager.LoadState(StateManager.GameState.SCORE, 2f));
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("called pause");
-            if (StateManager.State != StateManager.GameState.PAUSED)
-                StateManager.State = StateManager.GameState.PAUSED;
+            if (Time.timeScale == 1)
+                SettingsManager.Instance.Pause();
             else
-                StateManager.SilentState = StateManager.previous;
+                SettingsManager.Instance.Resume();
         }
     }
 
