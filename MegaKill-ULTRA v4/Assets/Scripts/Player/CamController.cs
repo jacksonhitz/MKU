@@ -61,7 +61,7 @@ public class CamController : MonoBehaviour
 
     void Reset()
     {
-        phase = 1;
+        phase = 2;
         SetEffects();
         SetClr();
         StartCoroutine(FadeIn(2f));
@@ -70,6 +70,8 @@ public class CamController : MonoBehaviour
     void SetEffects()
     {
         currentLerp = 0.15f;
+
+        //PHASE 1 BY DEFAULT
         currentFrequency = 5f;
         currentAmplitude = 1f;
 
@@ -112,10 +114,7 @@ public class CamController : MonoBehaviour
             UpdatePost();
         }
 
-        if (StateManager.IsActive() && Time.timeScale == 1)
-        {
-            MoveCheck();
-        }
+        MoveCheck();
     }
 
     void MoveCheck()
@@ -165,11 +164,11 @@ public class CamController : MonoBehaviour
     {
         if (currentAmplitude < phase)
         {
-            currentAmplitude += 0.001f;
+            currentAmplitude += 0.0001f;
         }
         if (currentFrequency < phase * 5)
         {
-            currentFrequency += 0.001f;
+            currentFrequency += 0.0001f;
         }
 
         camMat.SetFloat("_Lerp", currentLerp);
