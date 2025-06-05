@@ -194,14 +194,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  def: {fileID: 2100000, guid: 0ec4bc2f3b999423cb7b0caf9dd1039d, type: 2}
+  def: {fileID: 0}
   rend: {fileID: 1448348968429504183}
-  mats: []
+  mats:
+  - {fileID: 2100000, guid: 0ec4bc2f3b999423cb7b0caf9dd1039d, type: 2}
+  - {fileID: 2100000, guid: 36f847e3d36c74101ba19468d5f2dfdd, type: 2}
+  - {fileID: 2100000, guid: 766c4a02eec4b4c848d85f971b08ad49, type: 2}
+  - {fileID: 2100000, guid: 2b9d950d35f714b798dc53732eed9623, type: 2}
+  - {fileID: 2100000, guid: f8bf20952d3264f639e6a603f203fdef, type: 2}
   isHovering: 0
   isInteractable: 1
-  isRandomTex: 0
+  isRandomTex: 1
   type: 3
-  currentState: 1
+  currentState: 0
   deathEffect: {fileID: 8853266473761700966, guid: b1da43f1588a840748c686b0733ad393, type: 3}
   item: {fileID: 0}
   agent: {fileID: 0}
@@ -223,6 +228,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 900177251695419386}
     m_Modifications:
+    - target: {fileID: -5861409178561632961, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4819223349682164798, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: -4819223349682164798, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: -1206874426333947015, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1206874426333947015, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 6719245597448002910, guid: 1856a80665d584fb5b5ba1ac5deb8a89, type: 3}
     - target: {fileID: -8881470526164718381, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
       propertyPath: m_Layer
       value: 12
@@ -851,26 +876,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -1.5684681
       objectReference: {fileID: 0}
-    - target: {fileID: -5861409178561632961, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4819223349682164798, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: -4819223349682164798, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
-      propertyPath: m_TagString
-      value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: -1206874426333947015, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -1206874426333947015, guid: 716703cdf58a44b13882d094ba69c090, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 6719245597448002910, guid: 1856a80665d584fb5b5ba1ac5deb8a89, type: 3}
     - target: {fileID: -7436160436691761726, guid: 2c25b0c6cde864284a44d510910a494b, type: 3}
       propertyPath: m_Layer
       value: 12

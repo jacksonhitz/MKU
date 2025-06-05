@@ -50,8 +50,15 @@ public class Interactable : MonoBehaviour, IInteractable
     {
         if (rend == null)
             rend = GetRenderer();
-        if (def == null)
+
+        if (isRandomTex && mats != null && mats.Length > 0)
+        {
+            def = mats[Random.Range(0, mats.Length)];
+        }
+        else if (def == null)
+        {
             def = rend.material;
+        }
     }
 
     protected virtual void Start()
