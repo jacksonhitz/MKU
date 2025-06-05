@@ -112,7 +112,10 @@ public class CamController : MonoBehaviour
             UpdatePost();
         }
 
-        MoveCheck();
+        if (StateManager.IsActive() && Time.timeScale == 1)
+        {
+            MoveCheck();
+        }
     }
 
     void MoveCheck()
