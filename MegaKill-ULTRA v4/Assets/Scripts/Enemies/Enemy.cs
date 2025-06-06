@@ -69,8 +69,11 @@ public class Enemy : Interactable, IHitable
             case EnemyState.Pathing: PathingBehavior(); break;
         }
 
-        float speed = agent.velocity.magnitude;
-        animator.SetFloat("Spd", speed);
+        if (agent != null)
+        {
+            float speed = agent.velocity.magnitude;
+            animator.SetFloat("Spd", speed);
+        }
     }
 
     void StaticBehaviour()
@@ -150,24 +153,32 @@ public class Enemy : Interactable, IHitable
 
     void ActiveBehavior()
     {
-
         if (player == null) return;
+
         isInteractable = false;
         target = player.gameObject;
 
         float distance = Vector3.Distance(transform.position, player.transform.position);
         if (los && distance <= attackRange)
         {
-            agent.ResetPath();
+            if (agent != null)
+                agent.ResetPath();
+
             LookTowards(player.transform.position);
             StartCoroutine(AttackCheck());
         }
         else if (detectedPlayer && distance <= detectionRange)
         {
-            agent.SetDestination(player.transform.position);
+            if (agent != null)
+                agent.SetDestination(player.transform.position);
+
             LookTowards(player.transform.position);
         }
-        else agent.ResetPath();
+        else
+        {
+            if (agent != null)
+                agent.ResetPath();
+        }
     }
 
     void BrawlBehavior()
@@ -279,12 +290,14 @@ public class Enemy : Interactable, IHitable
     {
         isStunned = true;
         animator.SetBool("Stun", true);
-        agent.ResetPath();
+        if (agent != null)
+            agent.ResetPath();
         los = false;
         yield return new WaitForSeconds(stunDuration);
         isStunned = false;
         animator.SetBool("Stun", false);
-        agent.isStopped = false;
+        if (agent != null)
+            agent.isStopped = false;
         yield return new WaitForSeconds(attackRate);
         isAttacking = false;
     }

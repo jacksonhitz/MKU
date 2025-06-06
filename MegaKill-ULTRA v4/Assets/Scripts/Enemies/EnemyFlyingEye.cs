@@ -11,16 +11,17 @@ public class EnemyFlyingEye : Enemy
     Rigidbody rb;
 
     Vector3 rot = Vector3.zero;
-    float moveSpeed = 5f;
-    float hoverHeight = 2f;
+    float moveSpeed = 9f;
+    float hoverHeight = 3f;
     float hoverSmoothness = 8f;
-    float bulletSpd = 10f;
-    float targetAdjust = 0.25f;
+    float bulletSpd = 18f;
+    float targetAdjust = 0.3f;
     
     protected override void DropItem() {}
 
     protected override void Start()
     {
+        base.Start(); // important!
         rb = GetComponent<Rigidbody>();
         attackRange = 25f;
         attackRate = 5f;
@@ -31,13 +32,28 @@ public class EnemyFlyingEye : Enemy
     {
         StartCoroutine(Attack());
     }
+    protected override void Update()
+    {
+        if (isDead) return;
+        LOS();
+        Pathfind();
+
+        // Optional: animate speed using Rigidbody velocity
+        if (animator != null)
+        {
+            float speed = rb.velocity.magnitude;
+            animator.SetFloat("Spd", speed);
+        }
+    }
 
     void Pathfind()
     {
-        if (los && Vector3.Distance(transform.position, player.transform.position) < attackRange)
+        if (los && Vector3.Distance(transform.position, player.transform.position) <= attackRange)
         {
-             //startCoroutine(AttackCheck());
+            target = player.gameObject;
             LookTowards(player.transform.position);
+            StartCoroutine(AttackCheck());
+
         }
         else if (detectedPlayer && Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
         {
@@ -54,6 +70,7 @@ public class EnemyFlyingEye : Enemy
 
     IEnumerator Attack()
     {
+        Debug.Log("EnemyFlyingEye Attack");
         animator.SetTrigger("Atk");
        // SoundManager.Instance.EnemySFX(sfx, attackClip);
 
