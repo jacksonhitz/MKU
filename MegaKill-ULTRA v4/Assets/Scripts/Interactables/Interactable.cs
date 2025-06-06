@@ -28,21 +28,19 @@ public class Interactable : MonoBehaviour, IInteractable
 
     public virtual void Interact()
     {
-        if (isInteractable)
+        if (!isInteractable) return;
+        isInteractable = false;
+        if (type == Type.Door)
         {
-            isInteractable = false;
-            if (type == Type.Door)
-            {
-                gameObject.SetActive(false);
-            }
-            else if (type == Type.Extract) StateManager.NextState(this);
-            else if (type == Type.Enemy)
-            {
-                EnemyPunch enemy = GetComponent<EnemyPunch>();
-                enemy.dosed = true;
-                ScenesManager.Instance.Interact();
-                sound.Play("Interact");
-            }
+            gameObject.SetActive(false);
+        }
+        else if (type == Type.Extract) StateManager.NextState(this);
+        else if (type == Type.Enemy)
+        {
+            EnemyPunch enemy = GetComponent<EnemyPunch>();
+            enemy.dosed = true;
+            ScenesManager.Instance.Interact();
+            sound.Play("Interact");
         }
     }
 
@@ -76,13 +74,11 @@ public class Interactable : MonoBehaviour, IInteractable
 
     void LateUpdate()
     {
-        if (StateManager.IsActive())
-        {
-            if (isHovering || interacts.isHighlightAll)
-                rend.material = glow;
-            else
-                rend.material = def;
-        }
+        if (!StateManager.IsActive()) return;
+        if (isHovering || interacts.isHighlightAll)
+            rend.material = glow;
+        else
+            rend.material = def;
     }
 
     Renderer GetRenderer()

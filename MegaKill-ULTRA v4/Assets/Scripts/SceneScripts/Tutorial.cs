@@ -60,8 +60,6 @@ public class Tutorial : ScenesManager
         {
             EnumLogic();
         }
-        else
-            Debug.LogError("State Manager Is Not Active, Is Instead: " + StateManager.State);
     }
 
     void EnumLogic()

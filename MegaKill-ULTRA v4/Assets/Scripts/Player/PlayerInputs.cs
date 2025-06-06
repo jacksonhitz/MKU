@@ -13,52 +13,46 @@ public class PlayerInputs : InputManager
 
     protected override void UpdateItems()
     {
-        if (StateManager.IsActive())
-        {
-            if (Input.GetKey(KeyCode.Tab))
-                interacts.isHighlightAll = true;
-            else
-                interacts.isHighlightAll = false;
-        }
+        if (!StateManager.IsActive()) return;
+
+        interacts.isHighlightAll = Input.GetKey(KeyCode.Tab);
     }
 
     protected override void UpdatePlayer()
     {
-        if (StateManager.IsActive())
+        if (!StateManager.IsActive()) return;
+        Debug.Log("MOVING");
+
+        // MOVE/JUMP
+        Vector2 moveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        bool jump = Input.GetKeyDown(KeyCode.Space);
+
+        controller.movement.Move(moveDir, jump);
+
+        //INTERACT
+        if (Input.GetKeyDown(KeyCode.F))
+            controller.interact?.Interact();
+
+
+        // USE/SHOOT
+        if (Input.GetMouseButton(0))
         {
-            Debug.Log("MOVING");
-
-            // MOVE/JUMP
-            Vector2 moveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            bool jump = Input.GetKeyDown(KeyCode.Space);
-
-            controller.movement.Move(moveDir, jump);
-
-            //INTERACT
-            if (Input.GetKeyDown(KeyCode.F))
-                controller.interact?.Interact();
-
-
-            // USE/SHOOT
-            if (Input.GetMouseButton(0))
-            {
-                if (Input.GetKey(KeyCode.LeftControl))
-                    controller.items?.UseRight();
-                else
-                    controller.items?.UseLeft();
-            }
-            else if (Input.GetMouseButton(1))
-            {
+            if (Input.GetKey(KeyCode.LeftControl))
                 controller.items?.UseRight();
-            }
-
-            // LEFT/RIGHT
-            if (Input.GetKeyDown(KeyCode.Q))
-                controller.items?.Left();
-
-            if (Input.GetKeyDown(KeyCode.E))
-                controller.items?.Right();
+            else
+                controller.items?.UseLeft();
         }
+        else if (Input.GetMouseButton(1))
+        {
+            controller.items?.UseRight();
+        }
+
+        // LEFT/RIGHT
+        if (Input.GetKeyDown(KeyCode.Q))
+            controller.items?.Left();
+
+        if (Input.GetKeyDown(KeyCode.E))
+            controller.items?.Right();
     }
 }
 
