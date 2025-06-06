@@ -8,6 +8,7 @@ public class Title : ScenesManager
     protected override void Awake()
     {
         StateManager.State = StateManager.GameState.TITLE;
+        Instance = this;
         
     }
     void Start()
