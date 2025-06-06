@@ -304,14 +304,9 @@ public class Enemy : Interactable, IHitable
             agent.ResetPath();
         los = false;
 
-        //TERRIBLE
-        if (item != null) item.gameObject.SetActive(false);
-
         yield return new WaitForSeconds(stunDuration);
         isStunned = false;
         animator.SetBool("Stun", false);
-
-        if (item != null) item.gameObject.SetActive(true);
 
         if (agent != null)
             agent.isStopped = false;
