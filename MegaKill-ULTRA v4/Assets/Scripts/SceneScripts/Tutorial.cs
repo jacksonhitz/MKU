@@ -5,9 +5,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class Tutorial : ScenesManager
-{ 
+{
     //Main instruction text
     [SerializeField]
     private TMP_Text instruction;
@@ -33,27 +34,41 @@ public class Tutorial : ScenesManager
     [SerializeField]
     private Transform rightHand;
 
-    //For "Throw" specifically
+    //For Pickup/Throw
     public bool itemHeldL = false;
     public bool itemHeldR = false;
 
+    [SerializeField]
+    private bool isTrigger = false;
+
     protected override void Awake()
     {
+        if (isTrigger) return;
         base.Awake();
         StateManager.lvl = StateManager.GameState.TUTORIAL;
         if (StateManager.State != StateManager.GameState.FILE)
+        {
             StateManager.StartLvl();
+        }
     }
 
     protected override void Update()
     {
+        if (isTrigger) return;
         base.Update();
         if (StateManager.IsActive())
+        {
             EnumLogic();
+        }
     }
 
     void EnumLogic()
     {
+        if (!instruction.gameObject.activeSelf)
+        {
+            instruction.gameObject.SetActive(true);
+        }
+
         switch (TutorialStateManager.State)
         {
             case TutorialStateManager.TutorialState.WASD:
@@ -65,10 +80,12 @@ public class Tutorial : ScenesManager
             case TutorialStateManager.TutorialState.Punch:
                 Punch();
                 break;
-            case TutorialStateManager.TutorialState.Items:
-                Items();
-                break;
+            // case TutorialStateManager.TutorialState.Items:
+            //     Items();
+            //     break;
             case TutorialStateManager.TutorialState.Pickup:
+                itemHeldL = leftHand.childCount > 0;
+                itemHeldR = rightHand.childCount > 0;
                 Pickup();
                 break;
             case TutorialStateManager.TutorialState.Use:
@@ -76,28 +93,13 @@ public class Tutorial : ScenesManager
                 break;
             case TutorialStateManager.TutorialState.Throw:
                 Throw();
+                itemHeldL = leftHand.childCount > 0;
+                itemHeldR = rightHand.childCount > 0;
                 break;
             case TutorialStateManager.TutorialState.Interact:
                 Interact();
                 break;
         }
-        if (leftHand.childCount > 0)
-        {
-            itemHeldL = true;
-        }
-        else
-        {
-            itemHeldL = false;
-        }
-        if (rightHand.childCount > 0)
-        {
-            itemHeldR = true;
-        }
-        else
-        {
-            itemHeldR = false;
-        }
-
     }
 
     void WASD()
@@ -180,7 +182,8 @@ public class Tutorial : ScenesManager
         }
 
         //Check if both are done
-        if (completion[1] && completion[3]) {
+        if (completion[1] && completion[3])
+        {
             TutorialStateManager.State = TutorialStateManager.TutorialState.Pickup;
             completion[1] = completion[3] = false;
             //Set on-screen text/color/visibility, as well as world space canvas?
@@ -198,12 +201,12 @@ public class Tutorial : ScenesManager
     void Pickup()
     {
         // q/e to pickup to left/right hand
-        if (Input.GetKeyDown(KeyCode.Q) && !completion[1])
+        if (Input.GetKeyDown(KeyCode.Q) && !completion[1] && itemHeldL)
         {
             controls[1].color = done;
             completion[1] = true;
         }
-        if (Input.GetKeyDown(KeyCode.E) && !completion[3])
+        if (Input.GetKeyDown(KeyCode.E) && !completion[3] && itemHeldR)
         {
             controls[3].color = done;
             completion[3] = true;
@@ -212,19 +215,7 @@ public class Tutorial : ScenesManager
         //Check if both are done
         if (completion[1] && completion[3])
         {
-            // TutorialStateManager.State = TutorialStateManager.TutorialState.Items;
             completion[1] = completion[3] = false;
-            //Set on-screen text/color/visibility
-            // instruction.text = "HIGHLIGHT";
-            // controls[2].gameObject.SetActive(true);
-            // controls[2].color = todo;
-            // controls[2].text = "TAB";
-            // controls[0].color = todo;
-            // controls[0].gameObject.SetActive(false);
-            // controls[1].gameObject.SetActive(false);
-            // controls[3].gameObject.SetActive(false);
-
-            // Debug.Log("Changed state to Items");
             TutorialStateManager.State = TutorialStateManager.TutorialState.Use;
             instruction.text = "USE";
             controls[0].gameObject.SetActive(true);
@@ -241,36 +232,36 @@ public class Tutorial : ScenesManager
             Debug.Log("Changed state to Use");
         }
     }
-    void Items()
-    {
-        // tab to see items
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            TutorialStateManager.State = TutorialStateManager.TutorialState.Use;
-            instruction.text = "USE";
-            controls[0].gameObject.SetActive(true);
-            controls[0].color = header;
-            controls[0].text = "CLICK";
-            controls[1].gameObject.SetActive(true);
-            controls[1].color = todo;
-            controls[1].text = "LEFT";
-            controls[2].gameObject.SetActive(false);
-            controls[3].gameObject.SetActive(true);
-            controls[3].color = todo;
-            controls[3].text = "RIGHT";
+    // void Items()
+    // {
+    //     // tab to see items
+    //     if (Input.GetKeyDown(KeyCode.Tab))
+    //     {
+    //         TutorialStateManager.State = TutorialStateManager.TutorialState.Use;
+    //         instruction.text = "USE";
+    //         controls[0].gameObject.SetActive(true);
+    //         controls[0].color = header;
+    //         controls[0].text = "CLICK";
+    //         controls[1].gameObject.SetActive(true);
+    //         controls[1].color = todo;
+    //         controls[1].text = "LEFT";
+    //         controls[2].gameObject.SetActive(false);
+    //         controls[3].gameObject.SetActive(true);
+    //         controls[3].color = todo;
+    //         controls[3].text = "RIGHT";
 
-            Debug.Log("Changed state to Use");
-        }
-    }
+    //         Debug.Log("Changed state to Use");
+    //     }
+    // }
     void Use()
     {
         // left/right click to use left/right item
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !completion[1] && leftHand.childCount > 0)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !completion[1] && itemHeldL)
         {
             controls[1].color = done;
             completion[1] = true;
         }
-        if (Input.GetKeyDown(KeyCode.Mouse1) && !completion[3] && rightHand.childCount > 0)
+        if (Input.GetKeyDown(KeyCode.Mouse1) && !completion[3] && itemHeldR)
         {
             controls[3].color = done;
             completion[3] = true;
@@ -310,9 +301,7 @@ public class Tutorial : ScenesManager
         //Check if both are done - end tutorial if so
         if (completion[1] && completion[3])
         {
-            StateManager.NextState(this);
-
-            /*
+            // StateManager.NextState(this);
             TutorialStateManager.State = TutorialStateManager.TutorialState.Interact;
             completion[1] = completion[3] = false;
             //Set on-screen text/color/visibility
@@ -326,7 +315,6 @@ public class Tutorial : ScenesManager
             controls[3].gameObject.SetActive(false);
 
             Debug.Log("Changed state to Interact");
-            */
 
         }
     }
@@ -354,7 +342,16 @@ public class Tutorial : ScenesManager
             StateManager.LoadState(StateManager.GameState.TANGO, 3f);
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name == "Player")
+        {
+            StateManager.NextState(this);
+        }
+    }
 }
+
 
 //Tutorial-specific state machine
 public static class TutorialStateManager
@@ -364,7 +361,7 @@ public static class TutorialStateManager
         WASD,
         Jump,
         Punch,
-        Items,
+        // Items,
         Pickup,
         Use,
         Throw,
@@ -384,7 +381,7 @@ public static class TutorialStateManager
         TutorialState.WASD,
         TutorialState.Jump,
         TutorialState.Punch,
-        TutorialState.Items,
+        // TutorialState.Items,
         TutorialState.Pickup,
         TutorialState.Use,
         TutorialState.Throw,
