@@ -124,9 +124,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 87a8e7eb509be4f03a8761610bb25f09, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6265874228215998533}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 87a8e7eb509be4f03a8761610bb25f09, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 8117321300030424192}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 87a8e7eb509be4f03a8761610bb25f09, type: 3}
       insertIndex: -1
@@ -140,34 +137,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 87a8e7eb509be4f03a8761610bb25f09, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7155627066794943302}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 87a8e7eb509be4f03a8761610bb25f09, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7421692448199873457}
   m_SourcePrefab: {fileID: 100100000, guid: 87a8e7eb509be4f03a8761610bb25f09, type: 3}
 --- !u!1 &333684634189961878 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 87a8e7eb509be4f03a8761610bb25f09, type: 3}
   m_PrefabInstance: {fileID: 603506237667747783}
   m_PrefabAsset: {fileID: 0}
---- !u!195 &6265874228215998533
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 333684634189961878}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!82 &8117321300030424192
 AudioSource:
   m_ObjectHideFlags: 0
@@ -306,7 +284,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -327,7 +305,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   glow: {fileID: 0}
-  isHovering: 0
+  def: {fileID: 0}
+  rend: {fileID: 0}
+  mats: []
+  isHovering: 1
   isInteractable: 0
   isRandomTex: 0
   type: 3
@@ -368,6 +349,28 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!195 &7421692448199873457
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 333684634189961878}
+  m_Enabled: 1
+  m_AgentTypeID: -1372625422
+  m_Radius: 0.19
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 0.49
+  m_BaseOffset: 5.75
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!4 &1146919016109326380 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 87a8e7eb509be4f03a8761610bb25f09, type: 3}

@@ -76,6 +76,10 @@ public class Interactable : MonoBehaviour, IInteractable
 
     void LateUpdate()
     {
+
+        if (!StateManager.IsActive() || interacts == null || rend == null)
+            return;
+
         if (StateManager.IsActive())
         {
             if (isHovering || interacts.isHighlightAll)
