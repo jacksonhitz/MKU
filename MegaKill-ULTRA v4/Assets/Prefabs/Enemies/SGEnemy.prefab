@@ -696,8 +696,8 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 7
-  m_Acceleration: 8
+  m_Speed: 30
+  m_Acceleration: 40
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
@@ -843,20 +843,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e84a82a301b94549ad682350be9e9ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mats: []
   glow: {fileID: 0}
+  def: {fileID: 0}
+  rend: {fileID: 0}
+  mats: []
   isHovering: 0
   isInteractable: 0
-  type: 0
+  isRandomTex: 0
+  type: 3
   currentState: 0
-  attackClip: {fileID: 0}
-  deadClip: {fileID: 0}
-  hitClip: {fileID: 0}
-  stunClip: {fileID: 0}
-  deathEffect: {fileID: 0}
+  deathEffect: {fileID: 8853266473761700966, guid: b1da43f1588a840748c686b0733ad393, type: 3}
   item: {fileID: 0}
   agent: {fileID: 0}
-  enemyManager: {fileID: 0}
   animator: {fileID: 0}
   sfx: {fileID: 0}
   pathingPoints: []
@@ -864,6 +862,7 @@ MonoBehaviour:
   attackRate: 0
   attackRange: 10
   dosed: 0
+  isStatic: 0
   los: 0
   isDead: 0
   target: {fileID: 0}

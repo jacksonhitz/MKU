@@ -72,6 +72,9 @@ public class Enemy : Interactable, IHitable
             case EnemyState.Pathing: PathingBehavior(); break;
         }
 
+        if (item != null) animator.SetBool("Gun", true);
+        else animator.SetBool("Gun", false);
+
         if (agent != null)
         {
             float speed = agent.velocity.magnitude;

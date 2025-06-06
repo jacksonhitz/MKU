@@ -25,7 +25,7 @@ public class EnemyPunch : Enemy
         IHitable iHit = target.GetComponent<IHitable>();
         iHit?.Hit(dmg);
 
-        sound.Play("Punch");
+        sound.Play("Punch", transform.position);
         yield break;
     }
 
