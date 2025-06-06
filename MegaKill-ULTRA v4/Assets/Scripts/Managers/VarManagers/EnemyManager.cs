@@ -9,7 +9,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] GameObject hands;
     [SerializeField] GameObject enemyHolder;
     public List<Enemy> enemies;
-    float spawnInterval = 20f;
+    float spawnInterval = 5f;
     PlayerController player;
 
     void Awake()
