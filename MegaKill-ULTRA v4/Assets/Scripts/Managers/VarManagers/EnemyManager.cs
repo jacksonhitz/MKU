@@ -34,10 +34,36 @@ public class EnemyManager : MonoBehaviour
     {
         StateManager.OnStateChanged -= StateChange;
     }
+
+    //FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU
+    List<Enemy> staticEnemies = new List<Enemy>();
     void StateChange(StateManager.GameState state)
     {
         if (StateManager.IsActive())
             Active();
+        else return;
+
+        foreach (Enemy enemy in enemies)
+        {
+            if (enemy.currentState == Enemy.EnemyState.Static)
+            {
+                staticEnemies.Add(enemy);
+            }
+        }
+
+        // Shuffle the list (Fisher-Yates shuffle)
+        for (int i = staticEnemies.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (staticEnemies[i], staticEnemies[j]) = (staticEnemies[j], staticEnemies[i]);
+        }
+
+        // Set isDance = true for half of them
+        int halfCount = staticEnemies.Count / 4;
+        for (int i = 0; i < halfCount; i++)
+        {
+            staticEnemies[i].isDance = true;
+        }
     }
 
     void Active()

@@ -33,6 +33,7 @@ public class Enemy : Interactable, IHitable
 
     public bool dosed;
     public bool isStatic;
+    public bool isDance;
 
     float stunDuration = 2f;
     [HideInInspector] public bool los;
@@ -60,7 +61,7 @@ public class Enemy : Interactable, IHitable
     protected virtual void Update()
     {
 
-        if (StateManager.IsPassive()) return;
+        if (StateManager.IsPassive() || isStunned) return;
 
         LOS();
         switch (currentState)
@@ -84,7 +85,8 @@ public class Enemy : Interactable, IHitable
 
     void StaticBehaviour()
     {
-
+        if (isDance)
+            animator.SetTrigger("Dance");
     }
 
     public void LOS()
