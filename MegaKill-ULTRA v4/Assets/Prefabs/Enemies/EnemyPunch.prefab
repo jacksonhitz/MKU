@@ -217,6 +217,8 @@ MonoBehaviour:
   attackRate: 0
   attackRange: 0
   dosed: 0
+  isStatic: 0
+  isDance: 0
   los: 0
   isDead: 0
   target: {fileID: 0}
@@ -840,6 +842,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8510909844913884514, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0ec4bc2f3b999423cb7b0caf9dd1039d, type: 2}
     - target: {fileID: 8510909844913884514, guid: 90aa1ff9c2d85c340a9378b9b4670746, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 

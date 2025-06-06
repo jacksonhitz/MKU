@@ -47,23 +47,18 @@ public class EnemyManager : MonoBehaviour
         {
             if (enemy.currentState == Enemy.EnemyState.Static)
             {
-                staticEnemies.Add(enemy);
+                int rand = Random.Range(0, 3);
+                if (rand == 0)
+                    StartCoroutine(DanceTimer(enemy));
             }
         }
+    }
 
-        // Shuffle the list (Fisher-Yates shuffle)
-        for (int i = staticEnemies.Count - 1; i > 0; i--)
-        {
-            int j = Random.Range(0, i + 1);
-            (staticEnemies[i], staticEnemies[j]) = (staticEnemies[j], staticEnemies[i]);
-        }
-
-        // Set isDance = true for half of them
-        int halfCount = staticEnemies.Count / 4;
-        for (int i = 0; i < halfCount; i++)
-        {
-            staticEnemies[i].isDance = true;
-        }
+    IEnumerator DanceTimer(Enemy enemy)
+    {
+        int delay = Random.Range(0, 10);
+        yield return new WaitForSeconds(delay);
+        enemy.isDance = true;
     }
 
     void Active()
