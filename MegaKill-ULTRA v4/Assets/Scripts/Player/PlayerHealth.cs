@@ -28,7 +28,7 @@ public class PlayerHealth : MonoBehaviour, IHitable
         health -= dmg;
         uEye.UpdateHealth(health);
 
-        if (StateManager.IsActive() && health <= 0)
+        if (StateManager.IsActive() && health <= 0 && StateManager.State != StateManager.GameState.TRANSITION)
         {
             StartCoroutine(StateManager.LoadState(StateManager.lvl, 3f));
             SoundManager.Instance.Play("PlayerDeath");
