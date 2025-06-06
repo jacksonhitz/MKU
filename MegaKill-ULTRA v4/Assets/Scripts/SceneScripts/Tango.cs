@@ -104,7 +104,7 @@ public class Tango : ScenesManager
 
         StateManager.State = StateManager.GameState.TANGO2;
 
-        SoundManager.Instance.Play("Acid");
+        SoundManager.Instance.Play("Magic");
         InteractionManager.Instance.ExtractOn();
         EnemyManager.Instance.Brawl();
 
