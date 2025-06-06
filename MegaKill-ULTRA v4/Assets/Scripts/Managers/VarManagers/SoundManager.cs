@@ -41,9 +41,9 @@ public class SoundManager : MonoBehaviour
         switch (state)
         {
             case StateManager.GameState.TUTORIAL: Play("Hot"); break;
-            case StateManager.GameState.REHEARSAL: Play("Could"); break;
+            case StateManager.GameState.REHEARSAL: Play("Acid"); break;
             case StateManager.GameState.TANGO: Play("Witch"); break;
-            case StateManager.GameState.TANGO2: Play("Acid"); break;
+            case StateManager.GameState.TANGO2: Play("Magic"); break;
             case StateManager.GameState.SABLE: Play("4L"); break;
             case StateManager.GameState.SPEARHEAD: Play("DJ"); break;
         }
