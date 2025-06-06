@@ -104,6 +104,6 @@ public class Dialogue : MonoBehaviour
         if (StateManager.State == StateManager.GameState.FILE)
             StateManager.StartLvl();
         else if (StateManager.IsPassive())
-            StateManager.NextState(this);
+            StateManager.LoadNext();
     }
 }

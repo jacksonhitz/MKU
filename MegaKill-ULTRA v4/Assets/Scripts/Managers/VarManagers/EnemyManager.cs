@@ -80,10 +80,6 @@ public class EnemyManager : MonoBehaviour
             nonDosedEnemies[i] = nonDosedEnemies[randomIndex];
             nonDosedEnemies[randomIndex] = temp;
         }
-        //for (int i = 0; i < numToConvert; i++)
-        //{
-        //    nonDosedEnemies[i].currentState = Enemy.EnemyState.Brawl;
-        //}
     }
 
 
@@ -92,8 +88,8 @@ public class EnemyManager : MonoBehaviour
         enemies.Remove(enemy);
         Destroy(enemy.gameObject);
 
-        if (ScenesManager.Instance.lvlType == ScenesManager.WinCon.Elim && enemies.Count == 0)
-            StartCoroutine(StateManager.LoadState(StateManager.GameState.SCORE, 2f));
+        if (enemies.Count == 0)
+            ScenesManager.Instance.ElimCheck();
     }
 
     public void CallHands()

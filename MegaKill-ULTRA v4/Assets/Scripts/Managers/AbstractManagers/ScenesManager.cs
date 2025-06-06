@@ -16,19 +16,22 @@ public abstract class ScenesManager : MonoBehaviour, IInteractable
     protected virtual void Awake()
     {
         Instance = this;
-        if (lvl != null)
-            lvl = transform.GetChild(0).gameObject;
+        lvl = transform.GetChild(0).gameObject;
     }
     protected virtual void Update()
     {
-        if (StateManager.IsPassive())
-        {
-            lvl?.SetActive(false);
-        }
-        if (StateManager.IsActive())
-        {
-            lvl?.SetActive(true);
-          //  InteractionManager.Instance.Collect(); // this is here bc the listerner is broken
-        }
+        if (StateManager.State == StateManager.GameState.FILE) lvl?.SetActive(false);
+        else lvl?.SetActive(true);
     }
+
+    public void ElimCheck()
+    {
+        if (lvlType == WinCon.Elim) LoadScore();
+    }
+
+    public void LoadScore()
+    {
+        StartCoroutine(StateManager.LoadState(StateManager.GameState.SCORE, 2f));
+    }
+
 }

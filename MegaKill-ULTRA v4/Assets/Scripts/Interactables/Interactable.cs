@@ -35,7 +35,7 @@ public class Interactable : MonoBehaviour, IInteractable
             {
 
             }
-            else if (type == Type.Extract) StateManager.NextState(this);
+            else if (type == Type.Extract) StateManager.LoadNext();
             else if (type == Type.Enemy)
             {
                 EnemyPunch enemy = GetComponent<EnemyPunch>();

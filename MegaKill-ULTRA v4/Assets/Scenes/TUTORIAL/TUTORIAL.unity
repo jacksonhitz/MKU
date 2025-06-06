@@ -565,7 +565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 853e0034b10085c42bf87bb2c41583a8, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 928899863961192223, guid: 853e0034b10085c42bf87bb2c41583a8, type: 3}
       propertyPath: m_Layer
@@ -2091,11 +2091,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -5665606454198902055, guid: 853e0034b10085c42bf87bb2c41583a8, type: 3}
       propertyPath: m_Name
-      value: Door (Real)
+      value: Door (BAD FUCK YOU)
       objectReference: {fileID: 0}
     - target: {fileID: -5665606454198902055, guid: 853e0034b10085c42bf87bb2c41583a8, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -5665606454198902055, guid: 853e0034b10085c42bf87bb2c41583a8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -5419055465000167676, guid: 853e0034b10085c42bf87bb2c41583a8, type: 3}
       propertyPath: m_Layer
@@ -2264,6 +2268,10 @@ PrefabInstance:
     - target: {fileID: 2929469979568376571, guid: 853e0034b10085c42bf87bb2c41583a8, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929469979568376571, guid: 853e0034b10085c42bf87bb2c41583a8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2929469979568376571, guid: 853e0034b10085c42bf87bb2c41583a8, type: 3}
       propertyPath: m_TagString
@@ -3821,6 +3829,7 @@ Transform:
   m_Children:
   - {fileID: 1675975097}
   - {fileID: 103807101}
+  - {fileID: 800861694}
   - {fileID: 1516504774}
   - {fileID: 1932424180}
   - {fileID: 1888852486}
@@ -3910,6 +3919,134 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2107905968436537792, guid: f1a601e8eddc64c308b3c7f88d2ef8f1, type: 3}
   m_PrefabInstance: {fileID: 794833849}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &800861693
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 800861694}
+  - component: {fileID: 800861698}
+  - component: {fileID: 800861697}
+  - component: {fileID: 800861696}
+  - component: {fileID: 800861695}
+  m_Layer: 3
+  m_Name: Door (Real) (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &800861694
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800861693}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 4.9785213, y: -4.0442038, z: 186.07262}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 750986515}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &800861695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800861693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b73a03c8d0b9441e5b41a178c9e0cfed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
+  def: {fileID: 0}
+  rend: {fileID: 0}
+  mats: []
+  isHovering: 0
+  isInteractable: 1
+  isRandomTex: 0
+  type: 0
+--- !u!64 &800861696
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800861693}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8800733098611368949, guid: 853e0034b10085c42bf87bb2c41583a8, type: 3}
+--- !u!23 &800861697
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800861693}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 27ea95515e53e90488151d0d0bca43bd, type: 2}
+  - {fileID: 2100000, guid: 8c28901da47fe004f8633ebb127f6d1f, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &800861698
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800861693}
+  m_Mesh: {fileID: -8800733098611368949, guid: 853e0034b10085c42bf87bb2c41583a8, type: 3}
 --- !u!1 &809046022 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7170883559473872895, guid: 853e0034b10085c42bf87bb2c41583a8, type: 3}
@@ -5836,6 +5973,10 @@ PrefabInstance:
     - target: {fileID: 9212990541556629421, guid: 16dceebffe5b840fa9073cbe53cbd8c3, type: 3}
       propertyPath: m_Name
       value: EnemyPunch 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9212990541556629421, guid: 16dceebffe5b840fa9073cbe53cbd8c3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

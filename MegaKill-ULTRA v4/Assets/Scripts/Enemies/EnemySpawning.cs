@@ -38,6 +38,8 @@ public class EnemySpawning : MonoBehaviour
 
     void Update()
     {
+        if (StateManager.State != StateManager.GameState.TANGO2) return;
+
         currentEnemyCount = CountEnemies();
         if (spawnsCompleted >= numberOfSpawns || currentEnemyCount >= maxEnemiesAtOnce) return;
 
