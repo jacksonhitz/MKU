@@ -108,7 +108,7 @@ public class EnemyManager : MonoBehaviour
             yield return new WaitForSeconds(spawnInterval);
 
             Vector3 spawnPos = player.transform.position;
-            spawnPos.y -= 1f;
+            spawnPos.y -= 4f;
             Instantiate(hands, spawnPos, Quaternion.identity);
         }
     }

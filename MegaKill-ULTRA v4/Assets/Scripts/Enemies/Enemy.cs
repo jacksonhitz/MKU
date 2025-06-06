@@ -80,6 +80,8 @@ public class Enemy : Interactable, IHitable
 
     public void LOS()
     {
+        if (player == null) return;
+
         Vector3 direction = (player.transform.position - transform.position).normalized;
         RaycastHit hit;
         LayerMask layerMask = LayerMask.GetMask("Ground", "Player");
@@ -148,6 +150,8 @@ public class Enemy : Interactable, IHitable
 
     void ActiveBehavior()
     {
+
+        if (player == null) return;
         isInteractable = false;
         target = player.gameObject;
 

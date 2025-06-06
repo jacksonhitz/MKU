@@ -11,6 +11,7 @@ public class EnemyHands : Enemy
 
     Transform[] children;
     Dictionary<Transform, (Vector3 range, float speed)> movementData;
+    private PlayerMovement rootedPlayer;
 
     protected override void DropItem(){}
     protected override void CallAttack(){}
@@ -43,5 +44,25 @@ public class EnemyHands : Enemy
         float delay = Random.Range(minDelay, maxDelay);
         yield return new WaitForSeconds(delay);
         animator.Play("grab");
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            PlayerMovement playerMovement = other.GetComponent<PlayerMovement>();
+            if (playerMovement != null)
+            {
+                playerMovement.isRooted = true;
+                rootedPlayer = playerMovement;
+            }
+        }
+    }
+    void OnDestroy()
+    {
+        if (rootedPlayer != null)
+        {
+            rootedPlayer.isRooted = false;
+        }
     }
 }
