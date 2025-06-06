@@ -25,7 +25,7 @@ public class FileUI : MonoBehaviour
     }
     void StateChange(StateManager.GameState state)
     {
-        if (StateManager.State == StateManager.GameState.FILE || StateManager.State == StateManager.GameState.TRANSITION)
+        if (StateManager.State == StateManager.GameState.FILE || StateManager.previous == StateManager.GameState.FILE)
             file.enabled = true;
         else
             file.enabled = false;

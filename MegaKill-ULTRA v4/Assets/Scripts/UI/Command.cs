@@ -5,14 +5,12 @@ using TMPro;
 
 public class Command : MonoBehaviour
 {
-    GameObject obj;
     TextMeshProUGUI text;
-    Vector3 originalPosition;
+    Vector3 ogPos;
 
     void Awake()
     {
-        obj = this.gameObject;
-        originalPosition = obj.transform.localPosition;
+        ogPos = transform.localPosition;
 
         text = GetComponent<TextMeshProUGUI>();
     }
@@ -33,13 +31,10 @@ public class Command : MonoBehaviour
     }
     void OnStateChanged(StateManager.GameState state)
     {
-        if (StateManager.State == StateManager.GameState.TANGO2)
+        switch (state)
         {
-            On();
-        }
-        else
-        {
-            Off();
+            case StateManager.GameState.REHEARSAL: On(); break;
+            case StateManager.GameState.TANGO2: On(); break;
         }
     }
 
@@ -52,7 +47,7 @@ public class Command : MonoBehaviour
     void Off()
     {
         text.enabled = false;
-        obj.transform.localPosition = originalPosition;
+        transform.localPosition = ogPos;
     }
 
     IEnumerator Jitter()
@@ -70,7 +65,7 @@ public class Command : MonoBehaviour
                 Random.Range(-jitterAmount, jitterAmount),
                 Random.Range(-jitterAmount, jitterAmount)
             );
-            obj.transform.localPosition = originalPosition + randomOffset;
+            transform.localPosition = ogPos + randomOffset;
 
             flashTimer += Time.deltaTime;
             if (flashTimer >= flashInterval)
@@ -84,7 +79,7 @@ public class Command : MonoBehaviour
             yield return null;
         }
 
-        obj.transform.localPosition = originalPosition;
+        transform.localPosition = ogPos;
         text.enabled = true;
         Off();
     }

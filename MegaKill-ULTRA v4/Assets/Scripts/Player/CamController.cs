@@ -64,7 +64,6 @@ public class CamController : MonoBehaviour
         phase = 2;
         SetEffects();
         SetClr();
-        StartCoroutine(FadeIn(2f));
     }
 
     void SetEffects()
@@ -91,18 +90,21 @@ public class CamController : MonoBehaviour
 
     void OnEnable()
     {
-        StateManager.OnStateChanged += StateChange;
+        StateManager.OnStateChanged += OnStateChanged;
     }
-
     void OnDisable()
     {
-        StateManager.OnStateChanged -= StateChange;
+        StateManager.OnStateChanged -= OnStateChanged;
     }
-
-    void StateChange(StateManager.GameState state)
+    void OnStateChanged(StateManager.GameState state)
     {
-        if (StateManager.IsActive())
+        if (StateManager.IsActive() && StateManager.IsScene())
             StartCoroutine(Blink());
+
+        switch (state)
+        {
+            case StateManager.GameState.SCORE: Reset(); break;
+        }
     }
 
     void Update()
@@ -136,11 +138,11 @@ public class CamController : MonoBehaviour
     {
         yield return null;
         CallFadeOut();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         CallFadeIn();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         CallFadeOut();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         CallFadeIn();
     }
 
@@ -190,12 +192,12 @@ public class CamController : MonoBehaviour
 
     public void CallFadeIn()
     {
-        StartCoroutine(FadeIn(0.5f));
+        StartCoroutine(FadeIn(0.2f));
     }
 
     public void CallFadeOut()
     {
-        StartCoroutine(FadeOut(0.5f));
+        StartCoroutine(FadeOut(0.2f));
     }
 
     IEnumerator FadeIn(float duration)

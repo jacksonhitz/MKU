@@ -123,9 +123,17 @@ public static class StateManager
             State = GameState.TRANSITION;
             yield return new WaitForSeconds(delay);
         }
+
+        if (newState == GameState.SCORE)
+        {
+            State = newState;
+            yield break;
+        }
+
         if (Scene.Contains(newState))
         {
             SceneManager.LoadScene(newState.ToString());
+            Debug.Log("Loading Scene: " + newState);
 
             if (Active.Contains(newState) && lvl != newState)
             {

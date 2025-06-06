@@ -25,7 +25,7 @@ public class ScoreUI : MonoBehaviour
     }
     void StateChange(StateManager.GameState state)
     {
-        if (StateManager.State == StateManager.GameState.SCORE || StateManager.State == StateManager.GameState.TRANSITION)
+        if (StateManager.State == StateManager.GameState.SCORE || StateManager.previous == StateManager.GameState.SCORE)
             image.enabled = true;
         else
             image.enabled = false;

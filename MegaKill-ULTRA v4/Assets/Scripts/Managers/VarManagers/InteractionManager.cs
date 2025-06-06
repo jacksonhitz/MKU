@@ -20,6 +20,8 @@ public class InteractionManager : MonoBehaviour
     {
         items = new List<Item>();
         interactables = new List<Interactable>();
+
+        OnStateChanged(StateManager.State);
     }
 
     void OnEnable()
