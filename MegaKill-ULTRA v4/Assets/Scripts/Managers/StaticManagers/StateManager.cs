@@ -124,12 +124,6 @@ public static class StateManager
             yield return new WaitForSeconds(delay);
         }
 
-        if (newState == GameState.SCORE)
-        {
-            State = newState;
-            yield break;
-        }
-
         if (Scene.Contains(newState))
         {
             SceneManager.LoadScene(newState.ToString());

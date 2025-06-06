@@ -26,8 +26,11 @@ public abstract class InputManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
+        {
             if (StateManager.State == StateManager.GameState.FILE) StartCoroutine(StateManager.LoadState(StateManager.lvl, 2f));
             if (StateManager.State == StateManager.GameState.SCORE) StateManager.LoadNext();
+        }
+            
 
 
         if (Input.GetKeyDown(KeyCode.B))

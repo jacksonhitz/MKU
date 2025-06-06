@@ -42,6 +42,7 @@ public class Tango : ScenesManager
         switch (state)
         {
             case StateManager.GameState.TANGO: StartLvl(); break;
+            case StateManager.GameState.SCORE: NewsDialogue(); break;
         }
     }
 
@@ -108,5 +109,10 @@ public class Tango : ScenesManager
         EnemyManager.Instance.Brawl();
 
         dialogue.TypeText("F ON ANY VAN TO EXTRACT", 0f);
+    }
+
+    void NewsDialogue()
+    {
+        dialogue.TypeText("We are just now receiving reports from the authorities that an underground USSR base has been discovered operating out of the abandoned downtown subway system - that's right folks, Reds here on American soil...  ", 2f);
     }
 }
