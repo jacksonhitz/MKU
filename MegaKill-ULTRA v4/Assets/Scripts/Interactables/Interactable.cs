@@ -33,7 +33,7 @@ public class Interactable : MonoBehaviour, IInteractable
             isInteractable = false;
             if (type == Type.Door)
             {
-
+                gameObject.SetActive(false);
             }
             else if (type == Type.Extract) StateManager.NextState(this);
             else if (type == Type.Enemy)

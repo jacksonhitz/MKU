@@ -43,7 +43,7 @@ public class EnemyManager : MonoBehaviour
     void Active()
     {
         enemyHolder.SetActive(true);
-        CallHands();
+        // CallHands();
         CollectEnemies();
     }
     void CollectEnemies()
