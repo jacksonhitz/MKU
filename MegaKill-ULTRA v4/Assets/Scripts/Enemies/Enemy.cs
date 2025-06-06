@@ -32,6 +32,7 @@ public class Enemy : Interactable, IHitable
     protected bool detectedPlayer;
 
     public bool dosed;
+    public bool isStatic;
 
     float stunDuration = 2f;
     [HideInInspector] public bool los;
@@ -58,7 +59,9 @@ public class Enemy : Interactable, IHitable
 
     protected virtual void Update()
     {
-        if (isDead || isStunned) return;
+
+        if (StateManager.IsPassive()) return;
+
         LOS();
         switch (currentState)
         {
@@ -281,7 +284,9 @@ public class Enemy : Interactable, IHitable
         {
             StopAllCoroutines();
             StartCoroutine(Stun());
-            currentState = EnemyState.Active;
+
+            if (!isStatic)
+                currentState = EnemyState.Active;
             sound.Play("EnemyStun", transform.position);
         }
     }

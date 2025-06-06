@@ -38,12 +38,9 @@ public class Tutorial : ScenesManager
     public bool itemHeldL = false;
     public bool itemHeldR = false;
 
-    [SerializeField]
-    private bool isTrigger = false;
 
     protected override void Awake()
     {
-        if (isTrigger) return;
         base.Awake();
         StateManager.lvl = StateManager.GameState.TUTORIAL;
         if (StateManager.State != StateManager.GameState.FILE)
@@ -54,7 +51,6 @@ public class Tutorial : ScenesManager
 
     protected override void Update()
     {
-        if (isTrigger) return;
         base.Update();
         if (StateManager.IsActive())
         {
@@ -321,33 +317,21 @@ public class Tutorial : ScenesManager
 
     public override void Interact()
     {
-        //F to interact (with door)
         if (Input.GetKeyDown(KeyCode.F))
         {
             TutorialStateManager.State = TutorialStateManager.TutorialState.Fight;
-            //Set on-screen text/color/visibility
-            instruction.text = "FIGHT";
+            instruction.text = "";
             controls[2].gameObject.SetActive(false);
 
-            Debug.Log("Changed state to Punch");
+            StateManager.LoadNext();
         }
     }
 
-    void Fight()
-    {
-        //Interact with the backdoor to exit the scene
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            //Change to last scene
-            StateManager.LoadState(StateManager.GameState.TANGO, 3f);
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.name == "Player")
         {
-            StateManager.NextState(this);
+            StateManager.LoadNext();
         }
     }
 }

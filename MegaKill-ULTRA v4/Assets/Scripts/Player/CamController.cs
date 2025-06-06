@@ -61,18 +61,18 @@ public class CamController : MonoBehaviour
 
     void Reset()
     {
-        phase = 2;
+        phase = 5;
         SetEffects();
         SetClr();
     }
 
     void SetEffects()
     {
-        currentLerp = 0.15f;
+        currentLerp = 0.1f;
 
         //PHASE 1 BY DEFAULT
-        currentFrequency = 5f;
-        currentAmplitude = 1f;
+        currentFrequency = 10f;
+        currentAmplitude = 2f;
 
         camMat.SetFloat("_Lerp", currentLerp);
         camMat.SetFloat("_Frequency", currentFrequency);

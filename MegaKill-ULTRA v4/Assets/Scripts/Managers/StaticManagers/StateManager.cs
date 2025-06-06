@@ -132,12 +132,9 @@ public static class StateManager
 
         if (Scene.Contains(newState))
         {
+            SceneManager.LoadScene(newState.ToString());
             Debug.Log("Loading Scene: " + newState);
-            var loadingOperation = SceneManager.LoadSceneAsync(newState.ToString(), LoadSceneMode.Single);
-            while (!loadingOperation?.isDone ?? true) 
-            {
-                yield return null;
-            }
+
             if (Active.Contains(newState) && lvl != newState)
             {
                 State = GameState.FILE;
@@ -149,10 +146,10 @@ public static class StateManager
     }
     public static void StartLvl() => State = lvl;
 
-    public static void NextState(MonoBehaviour caller)
+    public static void LoadNext()
     {
         int currentIndex = Order.IndexOf(state);
         int nextIndex = (currentIndex + 1) % Order.Count;
-        SettingsManager.Instance.StartCoroutine(LoadState(Order[nextIndex], 2f)); //TEMP FIX THIS IS FUCKED
+        ScenesManager.Instance.StartCoroutine(LoadState(Order[nextIndex], 2f)); //TEMP FIX THIS IS FUCKED
     }
 }
