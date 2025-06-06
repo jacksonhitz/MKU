@@ -12,9 +12,6 @@ public class TitleUI : MonoBehaviour
     [SerializeField] GameObject titleScreen;
 
 
-    [SerializeField] GameObject settingsScreen;
-
-
     void Awake()
     {
         title = FindObjectOfType<Title>();
@@ -56,7 +53,7 @@ public class TitleUI : MonoBehaviour
     }
     public void OptionsButton()
     {
-        settingsScreen.SetActive(true);
+        SettingsManager.Instance.Pause();
     }
     public void ExitButton()
     {
