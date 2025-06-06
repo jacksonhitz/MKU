@@ -252,12 +252,12 @@ public class Tutorial : ScenesManager
     void Use()
     {
         // left/right click to use left/right item
-        if (Input.GetKeyDown(KeyCode.Mouse0) && !completion[1] && itemHeldL)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !completion[1])
         {
             controls[1].color = done;
             completion[1] = true;
         }
-        if (Input.GetKeyDown(KeyCode.Mouse1) && !completion[3] && itemHeldR)
+        if (Input.GetKeyDown(KeyCode.Mouse1) && !completion[3])
         {
             controls[3].color = done;
             completion[3] = true;
