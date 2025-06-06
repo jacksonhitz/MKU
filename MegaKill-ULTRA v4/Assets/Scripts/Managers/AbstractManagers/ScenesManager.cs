@@ -20,7 +20,7 @@ public abstract class ScenesManager : MonoBehaviour, IInteractable
     }
     protected virtual void Update()
     {
-        if (StateManager.State == StateManager.GameState.FILE) lvl?.SetActive(false);
+        if (StateManager.State == StateManager.GameState.FILE || StateManager.State == StateManager.GameState.SCORE) lvl?.SetActive(false);
         else lvl?.SetActive(true);
     }
 

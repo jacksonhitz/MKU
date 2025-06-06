@@ -46,7 +46,9 @@ public class SoundManager : MonoBehaviour
             case StateManager.GameState.TANGO2: Play("Magic"); break;
             case StateManager.GameState.SABLE: Play("4L"); break;
             case StateManager.GameState.SPEARHEAD: Play("DJ"); break;
+            case StateManager.GameState.SCORE: MusicOff(); break;
         }
+
     }
 
     public SoundData GetSound(string soundName)
@@ -57,6 +59,11 @@ public class SoundManager : MonoBehaviour
         }
         Debug.LogWarning($"Sound '{soundName}' not found.");
         return null;
+    }
+
+    public void MusicOff()
+    {
+        music.Stop();
     }
 
     public void Stop()

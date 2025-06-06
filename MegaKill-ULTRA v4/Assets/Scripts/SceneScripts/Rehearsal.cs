@@ -31,6 +31,7 @@ public class Rehearsal : ScenesManager
 
     void NewsDialogue()
     {
-        Dialogue.Instance.TypeText("We are just now receiving reports from the authorities that an underground USSR base has been discovered operating out of the abandoned downtown subway system - that's right folks, Reds here on American soil...  ", 0f);
+        Info.Instance.TypeText("We are just now receiving reports from the authorities that an underground USSR base has been discovered operating out of the abandoned downtown subway system - that's right folks, Reds here on American soil...  ", 0f);
+        Dialogue.Instance.TypeText("PRESS SPACE TO CONTINUE", 0f);
     }
 }
