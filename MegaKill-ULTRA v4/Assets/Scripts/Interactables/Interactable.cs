@@ -51,6 +51,11 @@ public class Interactable : MonoBehaviour, IInteractable
         if (rend == null)
             rend = GetRenderer();
 
+        player = PlayerController.Instance;
+        sound = SoundManager.Instance;
+        enemies = EnemyManager.Instance;
+        interacts = InteractionManager.Instance;
+
         if (isRandomTex && mats != null && mats.Length > 0)
         {
             def = mats[Random.Range(0, mats.Length)];

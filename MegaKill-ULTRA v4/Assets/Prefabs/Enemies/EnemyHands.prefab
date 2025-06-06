@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8508436427312884498}
   - component: {fileID: 8767783621623279780}
   - component: {fileID: 3246744514774471786}
+  - component: {fileID: 1338871884741591772}
   m_Layer: 12
   m_Name: EnemyHands
   m_TagString: Enemy
@@ -28,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 2915591076041330614}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.015, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -54,20 +55,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 746a7cd0b8cc84901854f9a4621f0ffe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackClip: {fileID: 0}
-  deadClip: {fileID: 8300000, guid: f0cc4e588be2cf3429eb7c42af516337, type: 3}
-  hitClip: {fileID: 8300000, guid: d76e15cf2d007ce4eb1945e4e673ef2e, type: 3}
-  stunClip: {fileID: 0}
+  glow: {fileID: 0}
+  def: {fileID: 0}
+  rend: {fileID: 0}
+  mats: []
+  isHovering: 0
+  isInteractable: 0
+  isRandomTex: 0
+  type: 0
+  currentState: 3
   deathEffect: {fileID: 8853266473761700966, guid: b1da43f1588a840748c686b0733ad393, type: 3}
+  item: {fileID: 0}
   agent: {fileID: 0}
-  player: {fileID: 0}
-  gameManager: {fileID: 0}
-  soundManager: {fileID: 0}
-  enemyManager: {fileID: 0}
   animator: {fileID: 0}
   sfx: {fileID: 0}
+  pathingPoints: []
+  isStaticPathing: 0
+  attackRate: 0
+  attackRange: 0
+  dosed: 0
   los: 0
   isDead: 0
+  target: {fileID: 0}
 --- !u!136 &8767783621623279780
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -187,6 +196,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!195 &1338871884741591772
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2915591076041330614}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 1.26
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 0
+  m_AutoBraking: 1
+  m_AutoRepath: 0
+  m_Height: 1.48
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &2264050648975743972
 PrefabInstance:
   m_ObjectHideFlags: 0
