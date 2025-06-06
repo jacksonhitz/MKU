@@ -47,6 +47,7 @@ public class SettingsManager : MonoBehaviour
     }
     public void Restart()
     {
+        Time.timeScale = 1;
         StartCoroutine(StateManager.LoadState(StateManager.STATE, 2f));
     }
 
