@@ -26,7 +26,7 @@ public abstract class ScenesManager : MonoBehaviour, IInteractable
 
     public void ElimCheck()
     {
-        if (lvlType == WinCon.Elim) LoadScore();
+        if (lvlType == WinCon.Elim) StateManager.LoadNext(); //LoadScore();
     }
 
     public void LoadScore()
