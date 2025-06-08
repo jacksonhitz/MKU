@@ -110,29 +110,13 @@ public static class StateManager
     public static bool IsPassive() => GroupCheck(Passive);
     public static bool IsScene() => GroupCheck(Scene);
 
-
     //this is the worst fucking thing ive ever made
     public static IEnumerator LoadState(GameState newState, float delay)
     {
-        if (Transition.Contains(newState))
-        {
-            State = GameState.TRANSITION;
-            yield return new WaitForSeconds(delay);
-        }
+        if (Scene.Contains(newState)) SceneManager.LoadScene(newState.ToString());
+        State = newState;
 
-        if (Scene.Contains(newState))
-        {
-            SceneManager.LoadScene(newState.ToString());
-            Debug.Log("Loading Scene: " + newState);
-
-            if (Active.Contains(newState) && lvl != newState)
-            {
-                State = GameState.FILE;
-                lvl = newState;
-            }
-        }
-        else 
-            State = newState;
+        yield return null;
     }
     public static void StartLvl() => State = lvl;
 
