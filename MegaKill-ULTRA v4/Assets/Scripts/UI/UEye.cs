@@ -37,23 +37,20 @@ public class UEye : MonoBehaviour
     bool useAlternateTexture = false;
     float eyeIdleAnimationDuration = 1.5f;
 
-    void Start()
-    {
-        OnStateChanged(StateManager.State);
-    }
-
     void OnEnable()
     {
-        StateManager.OnStateChanged += OnStateChanged;
-        StateManager.OnSilentChanged += OnStateChanged;
+        StateManager.OnStateChanged += StateChange;
+        StateManager.OnSilentChanged += StateChange;
+
+        StateChange(StateManager.State);
     }
 
     void OnDisable()
     {
-        StateManager.OnStateChanged -= OnStateChanged;
-        StateManager.OnSilentChanged -= OnStateChanged;
+        StateManager.OnStateChanged -= StateChange;
+        StateManager.OnSilentChanged -= StateChange;
     }
-    void OnStateChanged(StateManager.GameState state)
+    void StateChange(StateManager.GameState state)
     {
         Debug.Log("state changed");
         if (StateManager.IsActive())

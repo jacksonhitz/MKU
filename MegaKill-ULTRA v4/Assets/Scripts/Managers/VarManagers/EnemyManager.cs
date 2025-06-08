@@ -29,6 +29,8 @@ public class EnemyManager : MonoBehaviour
     void OnEnable()
     {
         StateManager.OnStateChanged += StateChange;
+
+        StateChange(StateManager.State);
     }
     void OnDisable()
     {

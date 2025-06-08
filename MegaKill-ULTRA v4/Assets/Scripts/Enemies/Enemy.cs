@@ -60,7 +60,6 @@ public class Enemy : Interactable, IHitable
 
     protected virtual void Update()
     {
-
         if (StateManager.IsPassive() || isStunned) return;
 
         LOS();

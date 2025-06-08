@@ -25,10 +25,6 @@ public static class StateManager
     public static GameState previous;
     public static GameState lvl;
 
-    public static GameState PREVIOUS => previous;
-    public static GameState STATE => state;
-    public static GameState LVL => lvl;
-
     public static event Action<GameState> OnStateChanged;
     public static event Action<GameState> OnSilentChanged;
 

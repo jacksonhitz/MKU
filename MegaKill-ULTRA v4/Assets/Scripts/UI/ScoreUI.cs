@@ -13,16 +13,12 @@ public class ScoreUI : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
-    {
-        StateChange(StateManager.State);
-        
-    }
-
     void OnEnable()
     {
         StateManager.OnStateChanged += StateChange;
         StateManager.OnSilentChanged += StateChange;
+
+        StateChange(StateManager.State);
     }
     void OnDisable()
     {

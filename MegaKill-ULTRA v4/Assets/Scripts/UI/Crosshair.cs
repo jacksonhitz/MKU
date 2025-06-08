@@ -10,22 +10,20 @@ public class Crosshair : MonoBehaviour
         obj = transform.GetChild(0).gameObject;
     }
 
-    void Start()
-    {
-         OnStateChanged(StateManager.State);
-    }
     void OnEnable()
     {
-        StateManager.OnStateChanged += OnStateChanged;
-        StateManager.OnSilentChanged += OnStateChanged;
+        StateManager.OnStateChanged += StateChange;
+        StateManager.OnSilentChanged += StateChange;
+
+        StateChange(StateManager.State);
     }
 
     void OnDisable()
     {
-        StateManager.OnStateChanged -= OnStateChanged;
-        StateManager.OnSilentChanged -= OnStateChanged;
+        StateManager.OnStateChanged -= StateChange;
+        StateManager.OnSilentChanged -= StateChange;
     }
-    void OnStateChanged(StateManager.GameState state)
+    void StateChange(StateManager.GameState state)
     {
         if (StateManager.IsActive())
         {

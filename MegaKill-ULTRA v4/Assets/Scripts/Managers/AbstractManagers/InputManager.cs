@@ -21,9 +21,6 @@ public abstract class InputManager : MonoBehaviour
     void UpdateBase()
     {
         if (Input.GetKeyDown(KeyCode.Return)) StateManager.LoadNext();
-        {
-            
-        }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {

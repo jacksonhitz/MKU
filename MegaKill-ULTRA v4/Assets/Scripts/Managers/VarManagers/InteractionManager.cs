@@ -20,19 +20,19 @@ public class InteractionManager : MonoBehaviour
     {
         items = new List<Item>();
         interactables = new List<Interactable>();
-
-        OnStateChanged(StateManager.State);
     }
 
     void OnEnable()
     {
-        StateManager.OnStateChanged += OnStateChanged;
+        StateManager.OnStateChanged += StateChange;
+
+        StateChange(StateManager.State);
     }
     void OnDisable()
     {
-        StateManager.OnStateChanged -= OnStateChanged;
+        StateManager.OnStateChanged -= StateChange;
     }
-    void OnStateChanged(StateManager.GameState state)
+    void StateChange(StateManager.GameState state)
     {
         Debug.Log("INTERACT CALLED");
 

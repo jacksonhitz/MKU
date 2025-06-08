@@ -22,14 +22,16 @@ public class Command : MonoBehaviour
 
     void OnEnable()
     {
-        StateManager.OnStateChanged += OnStateChanged;
+        StateManager.OnStateChanged += StateChange;
+
+        StateChange(StateManager.State);
     }
 
     void OnDisable()
     {
-        StateManager.OnStateChanged -= OnStateChanged;
+        StateManager.OnStateChanged -= StateChange;
     }
-    void OnStateChanged(StateManager.GameState state)
+    void StateChange(StateManager.GameState state)
     {
         switch (state)
         {

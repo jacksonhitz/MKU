@@ -17,6 +17,8 @@ public class FileUI : MonoBehaviour
     {
         StateManager.OnStateChanged += StateChange;
         StateManager.OnSilentChanged += StateChange;
+
+        StateChange(StateManager.State);
     }
     void OnDisable()
     {
