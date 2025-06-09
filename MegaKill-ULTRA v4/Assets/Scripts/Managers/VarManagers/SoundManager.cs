@@ -31,6 +31,8 @@ public class SoundManager : MonoBehaviour
     void OnEnable()
     {
         StateManager.OnStateChanged += StateChange;
+
+        StateChange(StateManager.State);
     }
     void OnDisable()
     {
