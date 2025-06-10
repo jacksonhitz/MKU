@@ -113,10 +113,21 @@ public static class StateManager
     //this is the worst fucking thing ive ever made
     public static IEnumerator LoadState(GameState newState, float delay)
     {
-        if (Scene.Contains(newState)) SceneManager.LoadScene(newState.ToString());
-        State = newState;
+        if (Transition.Contains(newState))
+        {
+            State = GameState.TRANSITION;
+            yield return new WaitForSeconds(delay);
+        }
 
-        yield return null;
+        if (Scene.Contains(newState)) SceneManager.LoadScene(newState.ToString());
+
+        if (Active.Contains(newState) && lvl != newState)
+        {
+            State = GameState.FILE;
+            lvl = newState;
+        }
+        else State = newState;
+
     }
     public static void StartLvl() => State = lvl;
 
