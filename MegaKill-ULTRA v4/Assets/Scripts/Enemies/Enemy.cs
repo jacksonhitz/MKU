@@ -281,7 +281,6 @@ public class Enemy : Interactable, IHitable
 
     public void Hit(float dmg)
     {
-        sound.Play("EnemyHit", transform.position);
         health -= dmg;
         if (health <= 0) Dead();
         else if (health == 5)
@@ -293,6 +292,7 @@ public class Enemy : Interactable, IHitable
                 currentState = EnemyState.Active;
             sound.Play("EnemyStun", transform.position);
         }
+        sound.Play("EnemyHit", transform.position);
     }
 
     IEnumerator Stun()
