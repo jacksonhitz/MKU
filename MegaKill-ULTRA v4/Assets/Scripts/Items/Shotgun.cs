@@ -28,9 +28,8 @@ public class Shotgun : Gun
                     FireVFX();
                     FireRecoil();
                     FireRay(dir);
-
-                    sound.Play("SGShot");
                 }
+                sound.Play("SGShot");
             }
             else
             {
@@ -58,8 +57,9 @@ public class Shotgun : Gun
                 FireVFX();
                 FireBullet(dir);
 
-                sound.Play("SGShot", enemy.transform.position);
+                
             }
+            sound.Play("SGShot", enemy.transform.position);
         }
     }
 }

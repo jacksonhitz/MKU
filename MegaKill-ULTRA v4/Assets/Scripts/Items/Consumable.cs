@@ -28,7 +28,7 @@ public class Consumable : Item
         else
         {
             popUp.UpdatePopUp("EMPTY");
-            sound.Play("Gulp");
+            sound.Play("PillEmpty");
         }
     }
 }
