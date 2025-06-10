@@ -113,6 +113,8 @@ public class EnemyManager : MonoBehaviour
 
         if (enemies.Count == 0)
             ScenesManager.Instance.ElimCheck();
+
+        SoundManager.Instance.Play("EnemyDeath", enemy.transform.position);
     }
 
     public void CallHands()
