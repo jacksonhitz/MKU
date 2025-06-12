@@ -177,17 +177,20 @@ public class CamController : MonoBehaviour
         camMat.SetFloat("_Frequency", currentFrequency);
         camMat.SetFloat("_Amplitude", currentAmplitude);
 
-        float speedX = Mathf.Lerp(camMat.GetFloat("_SpeedX"), targetSpeedX, lerpSpeed);
-        float speedY = Mathf.Lerp(camMat.GetFloat("_SpeedY"), targetSpeedY, lerpSpeed);
+       // float speedX = Mathf.Lerp(camMat.GetFloat("_SpeedX"), targetSpeedX, lerpSpeed);
+       // float speedY = Mathf.Lerp(camMat.GetFloat("_SpeedY"), targetSpeedY, lerpSpeed);
 
-        camMat.SetFloat("_SpeedX", speedX);
-        camMat.SetFloat("_SpeedY", speedY);
+       // camMat.SetFloat("_SpeedX", speedX);
+       // camMat.SetFloat("_SpeedY", speedY);
     }
 
     void RandomizeSpeed()
     {
         targetSpeedX = Random.Range(-0.01f, 0.01f);
         targetSpeedY = Random.Range(-0.01f, 0.01f);
+
+        camMat.SetFloat("_SpeedX", targetSpeedX);
+        camMat.SetFloat("_SpeedY", targetSpeedY);
     }
 
     public void CallFadeIn()
