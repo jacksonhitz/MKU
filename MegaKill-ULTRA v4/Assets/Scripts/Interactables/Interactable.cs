@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour, IInteractable
 {
+
+    //CONVERT TO ABSTRACT AND REFACTOR
+
+
     [SerializeField] Material glow;
     [SerializeField] Material def;
     [SerializeField] Renderer rend;
@@ -26,7 +30,7 @@ public class Interactable : MonoBehaviour, IInteractable
     }
     public Type type;
 
-    //CONVERT TO ABSTRACT AND REFACTOR
+    
 
     public virtual void Interact()
     {
@@ -96,7 +100,6 @@ public class Interactable : MonoBehaviour, IInteractable
         Renderer renderer = GetComponentInParent<Renderer>();
         if (renderer == null) renderer = GetComponent<Renderer>();
         if (renderer == null) renderer = GetComponentInChildren<Renderer>();
-        if (renderer == null) renderer = transform.root.GetComponentInChildren<Renderer>();
         return renderer;
     }
 }
