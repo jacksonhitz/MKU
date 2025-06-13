@@ -19,6 +19,8 @@ public static class StateManager
         TRANSITION,
         FILE,
         SCORE
+
+            //pause
     }
 
     public static GameState state;

@@ -19,6 +19,8 @@ public class PlayerCombat : MonoBehaviour
 
     PlayerController controller;
 
+    //this script is stupid
+
     void Awake()
     {
         controller = GetComponent<PlayerController>();
@@ -75,9 +77,7 @@ public class PlayerCombat : MonoBehaviour
             {
                 IHitable iHit = hit.GetComponentInParent<IHitable>();
                 iHit?.Hit(5f);
-               // break;
-               ScoreManager.Instance?.AddMeleeScore();
-
+                ScoreManager.Instance?.AddMeleeScore();
             }
         }
     }

@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public abstract class ScenesManager : MonoBehaviour, IInteractable
 {
+    //SEPERATE SCENE MANAGEMENT FROM STATEMANAGER
+    //HANDLE SAME SCENE STATES (PAUSE, FILE, TRANSITION)
+    //SPECIFIC SCENES HANDLES WINCON
+
     public static ScenesManager Instance { get; set; }
 
     public enum WinCon { Elim, Extract, Target }

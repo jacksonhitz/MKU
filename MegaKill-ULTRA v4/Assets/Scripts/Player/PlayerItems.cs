@@ -43,7 +43,7 @@ public class PlayerItems : MonoBehaviour
 
     void GrabCheck(Transform hand)
     {
-        Ray ray = controller.cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
         if (Physics.Raycast(ray, out RaycastHit hit, 30f))
         {
             if (hit.collider.TryGetComponent(out Item item))
@@ -67,7 +67,7 @@ public class PlayerItems : MonoBehaviour
     public void Throw(Item item)
     {
         item.Thrown();
-        item.rb.AddForce(controller.cam.transform.forward * throwForce, ForceMode.Impulse);
+        item.rb.AddForce(Camera.main.transform.forward * throwForce, ForceMode.Impulse);
 
         if (item == leftItem) leftItem = null;
         else rightItem = null;

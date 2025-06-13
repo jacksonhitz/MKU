@@ -26,6 +26,8 @@ public class Interactable : MonoBehaviour, IInteractable
     }
     public Type type;
 
+    //CONVERT TO ABSTRACT AND REFACTOR
+
     public virtual void Interact()
     {
         if (isInteractable)
