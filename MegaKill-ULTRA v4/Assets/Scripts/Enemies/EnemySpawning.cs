@@ -12,16 +12,25 @@ public class EnemySpawning : MonoBehaviour
     }
 
     [Header("Enemy Settings")]
-    [SerializeField] private List<EnemySpawnEntry> enemySpawnEntries;
+    [SerializeField]
+    private List<EnemySpawnEntry> enemySpawnEntries;
 
     [Header("Spawning Settings")]
-    [SerializeField] private float spawnInterval = 5f;
-    [SerializeField] private int numberOfSpawns = 5;
-    [SerializeField] private int maxEnemiesAtOnce = 10000; //Set really high for a "don't care"
-    [SerializeField] private bool requireOutOfView = true;
+    [SerializeField]
+    private float spawnInterval = 5f;
+
+    [SerializeField]
+    private int numberOfSpawns = 5;
+
+    [SerializeField]
+    private int maxEnemiesAtOnce = 10000; //Set really high for a "don't care"
+
+    [SerializeField]
+    private bool requireOutOfView = true;
 
     [Header("Player Reference")]
-    [SerializeField] private Camera playerCamera;
+    [SerializeField]
+    private Camera playerCamera;
 
     private int spawnsCompleted = 0;
     private int currentEnemyCount = 0;
@@ -38,10 +47,11 @@ public class EnemySpawning : MonoBehaviour
 
     void Update()
     {
-        if (StateManager.State != StateManager.GameState.TANGO2) return;
+        // TODO: CHANGE THIS TO START AND END WHEN REQUESTED
 
         currentEnemyCount = CountEnemies();
-        if (spawnsCompleted >= numberOfSpawns || currentEnemyCount >= maxEnemiesAtOnce) return;
+        if (spawnsCompleted >= numberOfSpawns || currentEnemyCount >= maxEnemiesAtOnce)
+            return;
 
         spawnTimer -= Time.deltaTime;
         if (spawnTimer <= 0f)
@@ -78,10 +88,12 @@ public class EnemySpawning : MonoBehaviour
 
     private bool IsVisibleToCamera()
     {
-        if (playerCamera == null) return false;
+        if (playerCamera == null)
+            return false;
 
         Collider col = GetComponent<Collider>();
-        if (col == null) return false;
+        if (col == null)
+            return false;
 
         Plane[] planes = GeometryUtility.CalculateFrustumPlanes(playerCamera);
         return GeometryUtility.TestPlanesAABB(planes, col.bounds);

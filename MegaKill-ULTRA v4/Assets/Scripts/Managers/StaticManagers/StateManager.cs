@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 
 public static class StateManager
@@ -12,20 +15,24 @@ public static class StateManager
         TUTORIAL,
         REHEARSAL,
         TANGO,
-        TANGO2,
+
+        // TANGO2,
+        // TODO: make this scene code
         SABLE,
         SPEARHEAD,
-
-        TRANSITION,
-        FILE,
-        SCORE
-
-            //pause
     }
 
-    public static GameState state;
+    public enum SceneState
+    {
+        TRANSITION,
+        FILE,
+        PLAYING,
+        PAUSED,
+        SCORE,
+    }
+
+    private static GameState state;
     public static GameState previous;
-    public static GameState lvl;
 
     public static event Action<GameState> OnStateChanged;
     public static event Action<GameState> OnSilentChanged;
@@ -36,9 +43,9 @@ public static class StateManager
         GameState.TUTORIAL,
         GameState.REHEARSAL,
         GameState.TANGO,
-        GameState.TANGO2,
+        // GameState.TANGO2,
         GameState.SABLE,
-        GameState.SPEARHEAD
+        GameState.SPEARHEAD,
     };
 
     static readonly HashSet<GameState> Scene = new()
@@ -51,23 +58,13 @@ public static class StateManager
         GameState.SPEARHEAD,
     };
 
-    static readonly HashSet<GameState> Transition = new()
-    {
-        GameState.TITLE,
-        GameState.TUTORIAL,
-        GameState.REHEARSAL,
-        GameState.TANGO,
-        GameState.SABLE,
-        GameState.SPEARHEAD,
-        GameState.SCORE
-    };
-
+    // TODO: REMOVE COMMENTS
     static readonly HashSet<GameState> Active = new()
     {
         GameState.TUTORIAL,
         GameState.REHEARSAL,
         GameState.TANGO,
-        GameState.TANGO2,
+        // GameState.TANGO2,
         GameState.SABLE,
         GameState.SPEARHEAD,
     };
@@ -75,9 +72,9 @@ public static class StateManager
     static readonly HashSet<GameState> Passive = new()
     {
         GameState.TITLE,
-        GameState.FILE,
-        GameState.TRANSITION,
-        GameState.SCORE
+        // GameState.FILE,
+        // GameState.TRANSITION,
+        // GameState.SCORE
     };
 
     public static GameState State
@@ -92,51 +89,55 @@ public static class StateManager
             Debug.Log($"State changed to {state}");
         }
     }
-    public static GameState SilentState
-    {
-        get => state;
-        set
-        {
-            previous = state;
-            state = value;
 
-            OnSilentChanged?.Invoke(state);
-            Debug.Log($"State changed to {state}");
+    private static bool GroupCheck(HashSet<GameState> group) => group.Contains(state);
 
-        }
-    }
+    public static bool IsActive() =>
+        GroupCheck(Active) && SceneScript.Instance?.State is SceneState.PLAYING;
 
-    public static bool GroupCheck(HashSet<GameState> group) => group.Contains(state);
-
-    public static bool IsActive() => GroupCheck(Active);
     public static bool IsPassive() => GroupCheck(Passive);
+
     public static bool IsScene() => GroupCheck(Scene);
 
-    //this is the worst fucking thing ive ever made
-    public static IEnumerator LoadState(GameState newState, float delay)
+    public static bool IsTransition() => SceneScript.Instance?.State is SceneState.TRANSITION;
+
+    public static async UniTask LoadLevel(
+        GameState newState,
+        float delay,
+        CancellationToken cancellationToken
+    )
     {
-        if (Transition.Contains(newState))
+        if (SceneScript.Instance?.State is not SceneState.TRANSITION)
         {
-            State = GameState.TRANSITION;
-            yield return new WaitForSeconds(delay);
+            SceneScript.Instance?.EndLevel();
+            await UniTask.Delay(
+                TimeSpan.FromSeconds(delay),
+                DelayType.Realtime,
+                cancellationToken: cancellationToken
+            );
+        }
+        else
+        {
+            Debug.LogWarning("Trying to load state while already transitioning, ignoring request");
+            return;
         }
 
-        if (Scene.Contains(newState)) SceneManager.LoadScene(newState.ToString());
-
-        if (Active.Contains(newState) && lvl != newState)
+        if (Scene.Contains(newState))
         {
-            State = GameState.FILE;
-            lvl = newState;
+            await SceneManager.LoadSceneAsync(newState.ToString());
+            state = newState;
         }
-        else State = newState;
-
     }
-    public static void StartLvl() => State = lvl;
 
     public static void LoadNext()
     {
         int currentIndex = Order.IndexOf(state);
         int nextIndex = (currentIndex + 1) % Order.Count;
-        ScenesManager.Instance.StartCoroutine(LoadState(Order[nextIndex], 2f)); //TEMP FIX THIS IS FUCKED
+        _ = LoadLevel(Order[nextIndex], 2f, CancellationToken.None);
+    }
+
+    public static async UniTask RestartLevel(float delay, CancellationToken cancellationToken)
+    {
+        await LoadLevel(state, delay, cancellationToken);
     }
 }

@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class SettingsManager : MonoBehaviour
 {
-
     //CALL AWAKE/START SHIT EXTERNALLY SO THAT MANAGERS WITHOUT VAR CAN BE STATIC/ABSTRACT
 
     public static SettingsManager Instance { get; set; }
 
     SettingsData settings;
 
-    [SerializeField] GameObject menu;
+    [SerializeField]
+    GameObject menu;
 
     public float MusicVolume => settings.musicVolume;
     public float SFXVolume => settings.sFXVolume;
@@ -35,20 +35,23 @@ public class SettingsManager : MonoBehaviour
         Time.timeScale = 0;
         menu.SetActive(true);
     }
+
     public void Resume()
     {
         Time.timeScale = 1;
         menu.SetActive(false);
     }
+
     public void Exit()
     {
         Time.timeScale = 1;
-        StartCoroutine(StateManager.LoadState(StateManager.GameState.TITLE, 2f));
+        _ = StateManager.LoadLevel(StateManager.GameState.TITLE, 2f, destroyCancellationToken);
     }
+
     public void Restart()
     {
         Time.timeScale = 1;
-        StartCoroutine(StateManager.LoadState(StateManager.State, 2f));
+        _ = StateManager.RestartLevel(2f, destroyCancellationToken);
     }
 
     void SetSettings()

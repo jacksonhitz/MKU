@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class Command : MonoBehaviour
 {
@@ -31,12 +31,16 @@ public class Command : MonoBehaviour
     {
         StateManager.OnStateChanged -= StateChange;
     }
+
     void StateChange(StateManager.GameState state)
     {
+        // TODO: Remove this while keeping the effect
         switch (state)
         {
-            case StateManager.GameState.REHEARSAL: On(); break;
-            case StateManager.GameState.TANGO2: On(); break;
+            case StateManager.GameState.REHEARSAL:
+                On();
+                break;
+            // case StateManager.GameState.TANGO2: On(); break;
         }
     }
 
