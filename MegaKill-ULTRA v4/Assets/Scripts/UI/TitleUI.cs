@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ public class TitleUI : MonoBehaviour
     public void StartButton()
     {
         // TODO: Check to see if this needs to be awaited
-        _ = introText.Play();
+        _ = introText.Play().ContinueWith(() => title.StartGame());
         titleScreen.SetActive(false);
     }
 
