@@ -2,16 +2,25 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class CamController : MonoBehaviour
 {
+    private static readonly int Frequency = Shader.PropertyToID("_Frequency");
+    private static readonly int Amplitude = Shader.PropertyToID("_Amplitude");
+    private static readonly int Lerp = Shader.PropertyToID("_Lerp");
+    private static readonly int SpeedX = Shader.PropertyToID("_SpeedX");
+    private static readonly int SpeedY = Shader.PropertyToID("_SpeedY");
     Camera cam;
 
     float xRotation;
     float yRotation;
 
-    [SerializeField] Volume dynamicVolume;
-    [SerializeField] Volume staticVolume;
+    [SerializeField]
+    Volume dynamicVolume;
+
+    [SerializeField]
+    Volume staticVolume;
 
     ChromaticAberration chromaticAberration;
     ColorAdjustments colorGrading;
@@ -74,9 +83,9 @@ public class CamController : MonoBehaviour
         currentFrequency = 10f;
         currentAmplitude = 2f;
 
-        camMat.SetFloat("_Lerp", currentLerp);
-        camMat.SetFloat("_Frequency", currentFrequency);
-        camMat.SetFloat("_Amplitude", currentAmplitude);
+        camMat.SetFloat(Lerp, currentLerp);
+        camMat.SetFloat(Frequency, currentFrequency);
+        camMat.SetFloat(Amplitude, currentAmplitude);
 
         RandomizeSpeed();
 
@@ -92,24 +101,24 @@ public class CamController : MonoBehaviour
     {
         StateManager.OnStateChanged += OnStateChanged;
     }
+
     void OnDisable()
     {
         StateManager.OnStateChanged -= OnStateChanged;
     }
+
     void OnStateChanged(StateManager.GameState state)
     {
         if (StateManager.IsActive() && StateManager.IsScene())
             StartCoroutine(Blink());
 
-        switch (state)
-        {
-            case StateManager.GameState.SCORE: Reset(); break;
-        }
+        Reset();
     }
 
     void Update()
     {
-        if (StateManager.State == StateManager.GameState.TRANSITION) TransitionOn();
+        if (StateManager.IsTransition())
+            TransitionOn();
         else
         {
             UpdateShader();
@@ -121,7 +130,7 @@ public class CamController : MonoBehaviour
 
     void MoveCheck()
     {
-        if (StateManager.IsActive() && Time.timeScale == 1)
+        if (StateManager.IsActive() && Mathf.Approximately(Time.timeScale, 1))
         {
             MoveCam();
             Cursor.lockState = CursorLockMode.Locked;
@@ -157,9 +166,9 @@ public class CamController : MonoBehaviour
         currentFrequency += .1f;
         currentLerp += 0.001f;
 
-        camMat.SetFloat("_Frequency", currentFrequency);
-        camMat.SetFloat("_Amplitude", currentFrequency);
-        camMat.SetFloat("_Lerp", currentLerp);
+        camMat.SetFloat(Frequency, currentFrequency);
+        camMat.SetFloat(Amplitude, currentFrequency);
+        camMat.SetFloat(Lerp, currentLerp);
     }
 
     void UpdateShader()
@@ -173,15 +182,15 @@ public class CamController : MonoBehaviour
             currentFrequency += 0.0001f;
         }
 
-        camMat.SetFloat("_Lerp", currentLerp);
-        camMat.SetFloat("_Frequency", currentFrequency);
-        camMat.SetFloat("_Amplitude", currentAmplitude);
+        camMat.SetFloat(Lerp, currentLerp);
+        camMat.SetFloat(Frequency, currentFrequency);
+        camMat.SetFloat(Amplitude, currentAmplitude);
 
-       // float speedX = Mathf.Lerp(camMat.GetFloat("_SpeedX"), targetSpeedX, lerpSpeed);
-       // float speedY = Mathf.Lerp(camMat.GetFloat("_SpeedY"), targetSpeedY, lerpSpeed);
+        // float speedX = Mathf.Lerp(camMat.GetFloat("_SpeedX"), targetSpeedX, lerpSpeed);
+        // float speedY = Mathf.Lerp(camMat.GetFloat("_SpeedY"), targetSpeedY, lerpSpeed);
 
-       // camMat.SetFloat("_SpeedX", speedX);
-       // camMat.SetFloat("_SpeedY", speedY);
+        // camMat.SetFloat("_SpeedX", speedX);
+        // camMat.SetFloat("_SpeedY", speedY);
     }
 
     void RandomizeSpeed()
@@ -189,8 +198,8 @@ public class CamController : MonoBehaviour
         targetSpeedX = Random.Range(-0.01f, 0.01f);
         targetSpeedY = Random.Range(-0.01f, 0.01f);
 
-        camMat.SetFloat("_SpeedX", targetSpeedX);
-        camMat.SetFloat("_SpeedY", targetSpeedY);
+        camMat.SetFloat(SpeedX, targetSpeedX);
+        camMat.SetFloat(SpeedY, targetSpeedY);
     }
 
     public void CallFadeIn()
@@ -212,7 +221,11 @@ public class CamController : MonoBehaviour
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            colorGrading.postExposure.value = Mathf.Lerp(initialExposure, targetExposure, elapsed / duration);
+            colorGrading.postExposure.value = Mathf.Lerp(
+                initialExposure,
+                targetExposure,
+                elapsed / duration
+            );
             yield return null;
         }
 
@@ -228,7 +241,11 @@ public class CamController : MonoBehaviour
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            colorGrading.postExposure.value = Mathf.Lerp(initialExposure, targetExposure, elapsed / duration);
+            colorGrading.postExposure.value = Mathf.Lerp(
+                initialExposure,
+                targetExposure,
+                elapsed / duration
+            );
             yield return null;
         }
 
@@ -277,9 +294,12 @@ public class CamController : MonoBehaviour
         float swayAmountY = Mathf.Cos(Time.time * 2f) * swayIntensity * dynamicVolume.weight;
         transform.localPosition = originalPosition + new Vector3(swayAmountX, swayAmountY, 0);
 
-        float rotationSwayX = Mathf.Sin(Time.time * 1.5f) * swayIntensity * 0.5f * dynamicVolume.weight;
-        float rotationSwayY = Mathf.Cos(Time.time * 1.5f) * swayIntensity * 0.5f * dynamicVolume.weight;
-        transform.localRotation = Quaternion.Euler(rotationSwayX, rotationSwayY, 0) * Quaternion.Euler(xRotation, 0f, 0f);
+        float rotationSwayX =
+            Mathf.Sin(Time.time * 1.5f) * swayIntensity * 0.5f * dynamicVolume.weight;
+        float rotationSwayY =
+            Mathf.Cos(Time.time * 1.5f) * swayIntensity * 0.5f * dynamicVolume.weight;
+        transform.localRotation =
+            Quaternion.Euler(rotationSwayX, rotationSwayY, 0) * Quaternion.Euler(xRotation, 0f, 0f);
 
         ClrHue();
         ClrMixer();
@@ -296,14 +316,19 @@ public class CamController : MonoBehaviour
 
     void ClrHue()
     {
-        float hue = Mathf.PingPong(Time.time * hueSpd * (redRandom + greenRandom + blueRandom) / 3f, 360f);
+        float hue = Mathf.PingPong(
+            Time.time * hueSpd * (redRandom + greenRandom + blueRandom) / 3f,
+            360f
+        );
         colorGrading.hueShift.value = Mathf.Lerp(-180f, 180f, hue / 360f);
     }
 
     void ClrMixer()
     {
         channelMixer.redOutRedIn.value = redStart + Mathf.PingPong(Time.time * mixerSpd, redRandom);
-        channelMixer.greenOutGreenIn.value = greenStart + Mathf.PingPong(Time.time * mixerSpd, greenRandom);
-        channelMixer.blueOutBlueIn.value = blueStart + Mathf.PingPong(Time.time * mixerSpd, blueRandom);
+        channelMixer.greenOutGreenIn.value =
+            greenStart + Mathf.PingPong(Time.time * mixerSpd, greenRandom);
+        channelMixer.blueOutBlueIn.value =
+            blueStart + Mathf.PingPong(Time.time * mixerSpd, blueRandom);
     }
 }

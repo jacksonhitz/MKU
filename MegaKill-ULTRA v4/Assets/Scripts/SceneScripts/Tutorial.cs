@@ -1,17 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using System;
-using UnityEngine;
-using UnityEngine.UI;
+using System.Collections.Generic;
 using TMPro;
-using UnityEngine.SceneManagement;
-using UnityEngine.Events;
+using UnityEngine;
 
-public class Tutorial : ScenesManager
+public class Tutorial : SceneScript
 {
     //Main instruction text
     [SerializeField]
     private TMP_Text instruction;
+
     //Four text boxes mapping control name -> TMP_Text in counterclockwise order.
     //0 -> top, 1 -> left, 2 -> bottom, 3 -> right.
     [SerializeField]
@@ -23,14 +20,17 @@ public class Tutorial : ScenesManager
     //Reusable values
     [SerializeField]
     private Color32 todo;
+
     [SerializeField]
     private Color32 done;
+
     [SerializeField]
     private Color32 header;
 
     //Hands
     [SerializeField]
     private Transform leftHand;
+
     [SerializeField]
     private Transform rightHand;
 
@@ -38,24 +38,19 @@ public class Tutorial : ScenesManager
     public bool itemHeldL = false;
     public bool itemHeldR = false;
 
-
-    protected override void Awake()
+    private void Update()
     {
-        base.Awake();
-        StateManager.lvl = StateManager.GameState.TUTORIAL;
-        if (StateManager.State != StateManager.GameState.FILE)
-        {
-            StateManager.StartLvl();
-        }
-    }
-
-    protected override void Update()
-    {
-        base.Update();
         if (StateManager.IsActive())
         {
             EnumLogic();
         }
+    }
+
+    public override void StartLevel()
+    {
+        FileUI.Instance.Visible = false;
+        State = StateManager.SceneState.PLAYING;
+        lvl.SetActive(true);
     }
 
     void EnumLogic()
@@ -138,8 +133,8 @@ public class Tutorial : ScenesManager
 
             Debug.Log("Changed state to Jump");
         }
-
     }
+
     void Jump()
     {
         //space
@@ -163,6 +158,7 @@ public class Tutorial : ScenesManager
             Debug.Log("Changed state to Punch");
         }
     }
+
     void Punch()
     {
         // left/right click to punch
@@ -194,6 +190,7 @@ public class Tutorial : ScenesManager
             Debug.Log("Changed state to Pickup");
         }
     }
+
     void Pickup()
     {
         // q/e to pickup to left/right hand
@@ -228,6 +225,7 @@ public class Tutorial : ScenesManager
             Debug.Log("Changed state to Use");
         }
     }
+
     // void Items()
     // {
     //     // tab to see items
@@ -280,6 +278,7 @@ public class Tutorial : ScenesManager
             Debug.Log("Changed state to Throw");
         }
     }
+
     void Throw()
     {
         // q/e to throw left/right
@@ -311,7 +310,6 @@ public class Tutorial : ScenesManager
             controls[3].gameObject.SetActive(false);
 
             Debug.Log("Changed state to Interact");
-
         }
     }
 
@@ -336,7 +334,6 @@ public class Tutorial : ScenesManager
     }
 }
 
-
 //Tutorial-specific state machine
 public static class TutorialStateManager
 {
@@ -345,13 +342,14 @@ public static class TutorialStateManager
         WASD,
         Jump,
         Punch,
+
         // Items,
         Pickup,
         Use,
         Throw,
         Interact,
         Fight,
-        Done
+        Done,
     }
 
     private static TutorialState state;
@@ -385,10 +383,5 @@ public static class TutorialStateManager
             OnStateChanged?.Invoke(state);
             Debug.Log($"Tutorial state changed to {state}");
         }
-    }
-
-    public static bool GroupCheck(HashSet<TutorialState> group)
-    {
-        return group.Contains(state);
     }
 }

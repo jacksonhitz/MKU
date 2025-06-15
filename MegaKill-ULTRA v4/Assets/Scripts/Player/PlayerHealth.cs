@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour, IHitable
 {
-    [SerializeField] float health;
+    [SerializeField]
+    float health;
     float maxHealth = 100;
     UEye uEye;
 
@@ -28,10 +29,10 @@ public class PlayerHealth : MonoBehaviour, IHitable
         health -= dmg;
         uEye.UpdateHealth(health);
 
-        if (StateManager.IsActive() && health <= 0 && StateManager.State != StateManager.GameState.TRANSITION)
+        if (StateManager.IsActive() && health <= 0)
         {
-            StartCoroutine(StateManager.LoadState(StateManager.lvl, 3f));
             SoundManager.Instance.Play("PlayerDeath");
+            _ = StateManager.RestartLevel(3f, destroyCancellationToken);
         }
     }
 }

@@ -11,9 +11,14 @@ public class SoundManager : MonoBehaviour
     public AudioSource dialogue;
 
     [Header("3D Settings")]
-    [SerializeField] float minDistance = 5f;
-    [SerializeField] float maxDistance = 30f;
-    [SerializeField] AnimationCurve falloffCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+    [SerializeField]
+    float minDistance = 5f;
+
+    [SerializeField]
+    float maxDistance = 30f;
+
+    [SerializeField]
+    AnimationCurve falloffCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
 
     Dictionary<string, SoundData> soundLookup = new();
 
@@ -28,36 +33,40 @@ public class SoundManager : MonoBehaviour
                 soundLookup.Add(sound.name, sound);
         }
     }
+
     void OnEnable()
     {
         StateManager.OnStateChanged += StateChange;
 
         StateChange(StateManager.State);
     }
+
     void OnDisable()
     {
         StateManager.OnStateChanged -= StateChange;
     }
+
+    // TODO: MOVE THIS TO LEVEL SCRIPTS
     void StateChange(StateManager.GameState state)
     {
-        switch (state)
-        {
-            case StateManager.GameState.TUTORIAL: Play("Hot"); break;
-            case StateManager.GameState.REHEARSAL: Play("Acid"); break;
-            case StateManager.GameState.TANGO: Play("Witch"); break;
-            case StateManager.GameState.TANGO2: Play("Magic"); break;
-            case StateManager.GameState.SABLE: Play("4L"); break;
-            case StateManager.GameState.SPEARHEAD: Play("DJ"); break;
-            case StateManager.GameState.SCORE: MusicOff(); break;
-        }
-
+        // switch (state)
+        // {
+        //     case StateManager.GameState.TUTORIAL: Play("Hot"); break;
+        //     case StateManager.GameState.REHEARSAL: Play("Acid"); break;
+        //     case StateManager.GameState.TANGO: Play("Witch"); break;
+        //     case StateManager.GameState.TANGO2: Play("Magic"); break;
+        //     case StateManager.GameState.SABLE: Play("4L"); break;
+        //     case StateManager.GameState.SPEARHEAD: Play("DJ"); break;
+        //     case StateManager.GameState.SCORE: MusicOff(); break;
+        // }
     }
 
     public SoundData GetSound(string soundName)
     {
         if (soundLookup.TryGetValue(soundName, out SoundData sound))
         {
-            if (sound.clips.Length != 0) return sound;
+            if (sound.clips.Length != 0)
+                return sound;
         }
         Debug.LogWarning($"Sound '{soundName}' not found.");
         return null;
@@ -91,7 +100,6 @@ public class SoundManager : MonoBehaviour
             Play(sound, pos);
     }
 
-
     //2D Player
     public void Play(SoundData sound)
     {
@@ -119,7 +127,6 @@ public class SoundManager : MonoBehaviour
                 break;
         }
     }
-
 
     //3D Player
     public void Play(SoundData sound, Vector3 pos)

@@ -1,13 +1,16 @@
 using System.Collections;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager Instance { get; private set; }
 
-    [SerializeField] GameObject hands;
-    [SerializeField] GameObject enemyHolder;
+    [SerializeField]
+    GameObject hands;
+
+    [SerializeField]
+    GameObject enemyHolder;
     public List<Enemy> enemies;
     float spawnInterval = 5f;
     PlayerController player;
@@ -19,12 +22,11 @@ public class EnemyManager : MonoBehaviour
         player = FindObjectOfType<PlayerController>();
         enemies = new List<Enemy>();
     }
+
     void Start()
     {
         Active();
     }
-
-
 
     void OnEnable()
     {
@@ -32,6 +34,7 @@ public class EnemyManager : MonoBehaviour
 
         StateChange(StateManager.State);
     }
+
     void OnDisable()
     {
         StateManager.OnStateChanged -= StateChange;
@@ -39,11 +42,13 @@ public class EnemyManager : MonoBehaviour
 
     //FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU
     List<Enemy> staticEnemies = new List<Enemy>();
+
     void StateChange(StateManager.GameState state)
     {
         if (StateManager.IsActive())
             Active();
-        else return;
+        else
+            return;
 
         foreach (Enemy enemy in enemies)
         {
@@ -69,10 +74,11 @@ public class EnemyManager : MonoBehaviour
         // CallHands();
         CollectEnemies();
     }
+
     void CollectEnemies()
     {
-        enemies.Clear(); 
-        enemies.AddRange(FindObjectsOfType<Enemy>()); 
+        enemies.Clear();
+        enemies.AddRange(FindObjectsOfType<Enemy>());
     }
 
     public void Brawl()
@@ -105,14 +111,13 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-
     public void Kill(Enemy enemy)
     {
         enemies.Remove(enemy);
         Destroy(enemy.gameObject);
 
         if (enemies.Count == 0)
-            ScenesManager.Instance.ElimCheck();
+            SceneScript.Instance.ElimCheck();
 
         SoundManager.Instance.Play("EnemyDeath", enemy.transform.position);
     }

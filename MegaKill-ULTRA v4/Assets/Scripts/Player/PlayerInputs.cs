@@ -13,15 +13,16 @@ public class PlayerInputs : InputManager
 
     protected override void UpdateItems()
     {
-        if (!StateManager.IsActive()) return;
+        if (!StateManager.IsActive())
+            return;
 
         interacts.isHighlightAll = Input.GetKey(KeyCode.Tab);
     }
 
     protected override void UpdatePlayer()
     {
-        if (!StateManager.IsActive()) return;
-        Debug.Log("MOVING");
+        if (!StateManager.IsActive())
+            return;
 
         // MOVE/JUMP
         Vector2 moveDir = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -32,7 +33,6 @@ public class PlayerInputs : InputManager
         //INTERACT
         if (Input.GetKeyDown(KeyCode.F))
             controller.interact?.Interact();
-
 
         // USE/SHOOT
         if (Input.GetMouseButton(0))
@@ -55,5 +55,3 @@ public class PlayerInputs : InputManager
             controller.items?.Right();
     }
 }
-
-
