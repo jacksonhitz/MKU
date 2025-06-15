@@ -15,6 +15,8 @@ public class Tango : SceneScript
 
     public override void StartLevel()
     {
+        base.StartLevel();
+        SoundManager.Instance.Play("Witch");
         _ = dialogue.TypeText("F TO GIVE DRUGS");
     }
 

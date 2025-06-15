@@ -53,7 +53,6 @@ public class Dialogue : MonoBehaviour
             textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
         }
-        // TODO: Move this timer to the play loop
         yield return new WaitForSeconds(1f);
 
         SoundManager.Instance.Stop();

@@ -35,6 +35,10 @@ public static class StateManager
     public static GameState previous;
 
     public static event Action<GameState> OnStateChanged;
+
+    // TODO: REMOVE AND REFACTOR RELEVANT UI COMPONENTS
+    // this will likely require emitting an event when the scene state changes and thus also suggests reconsidering
+    // the existing state event and the separation between game and scene states.
     public static event Action<GameState> OnSilentChanged;
 
     static readonly List<GameState> Order = new()
@@ -107,6 +111,7 @@ public static class StateManager
         CancellationToken cancellationToken
     )
     {
+        // TODO: Start loading scene during delay period and activate it when the delay is over
         if (SceneScript.Instance?.State is not SceneState.TRANSITION)
         {
             SceneScript.Instance?.EndLevel();

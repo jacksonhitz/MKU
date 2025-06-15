@@ -17,5 +17,6 @@ public class Rehearsal : SceneScript
     public override void StartLevel()
     {
         base.StartLevel();
+        SoundManager.Instance.Play("Acid");
     }
 }

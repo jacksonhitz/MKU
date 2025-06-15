@@ -5,10 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class Spearhead : SceneScript
 {
-    void Start()
+    public override void StartLevel()
     {
+        base.StartLevel();
         SoundManager.Instance.Play("DJ");
     }
-
-    public override void StartLevel() { }
 }

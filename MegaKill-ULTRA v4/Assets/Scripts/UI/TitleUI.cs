@@ -24,7 +24,6 @@ public class TitleUI : MonoBehaviour
 
     public void StartButton()
     {
-        // TODO: Check to see if this needs to be awaited
         _ = introText.Play().ContinueWith(() => title.StartGame());
         titleScreen.SetActive(false);
     }
@@ -67,12 +66,5 @@ public class TitleUI : MonoBehaviour
     {
         Debug.Log("Quitting/Exiting Application");
         Application.Quit();
-    }
-
-    public void TangoFile()
-    {
-        // TODO: Check to see if this needs to be awaited
-        _ = tangoText.Play();
-        titleScreen.SetActive(false);
     }
 }

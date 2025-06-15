@@ -51,6 +51,7 @@ public class Tutorial : SceneScript
         FileUI.Instance.Visible = false;
         State = StateManager.SceneState.PLAYING;
         lvl.SetActive(true);
+        SoundManager.Instance.Play("Hot");
     }
 
     void EnumLogic()
