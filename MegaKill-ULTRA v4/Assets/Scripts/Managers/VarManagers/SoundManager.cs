@@ -34,33 +34,6 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    void OnEnable()
-    {
-        StateManager.OnStateChanged += StateChange;
-
-        StateChange(StateManager.State);
-    }
-
-    void OnDisable()
-    {
-        StateManager.OnStateChanged -= StateChange;
-    }
-
-    // TODO: MOVE THIS TO LEVEL SCRIPTS
-    void StateChange(StateManager.GameState state)
-    {
-        // switch (state)
-        // {
-        //     case StateManager.GameState.TUTORIAL: Play("Hot"); break;
-        //     case StateManager.GameState.REHEARSAL: Play("Acid"); break;
-        //     case StateManager.GameState.TANGO: Play("Witch"); break;
-        //     case StateManager.GameState.TANGO2: Play("Magic"); break;
-        //     case StateManager.GameState.SABLE: Play("4L"); break;
-        //     case StateManager.GameState.SPEARHEAD: Play("DJ"); break;
-        //     case StateManager.GameState.SCORE: MusicOff(); break;
-        // }
-    }
-
     public SoundData GetSound(string soundName)
     {
         if (soundLookup.TryGetValue(soundName, out SoundData sound))

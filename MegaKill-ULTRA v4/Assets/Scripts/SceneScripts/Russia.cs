@@ -5,5 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class Russia : SceneScript
 {
-    public override void StartLevel() { }
+    public override void StartLevel()
+    {
+        base.StartLevel();
+        SoundManager.Instance.Play("4L");
+    }
 }

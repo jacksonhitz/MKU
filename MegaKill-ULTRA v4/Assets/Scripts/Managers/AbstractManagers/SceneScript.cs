@@ -33,6 +33,7 @@ public abstract class SceneScript : MonoBehaviour, IInteractable
 
     protected virtual void Start()
     {
+        // TODO: Only show file UI on first load, not on respawns
         if (FileUI.Instance)
         {
             FileUI.Instance.Visible = true;
@@ -67,9 +68,9 @@ public abstract class SceneScript : MonoBehaviour, IInteractable
             return;
         State = SceneState.SCORE;
         // TODO: FIX SCORE SCENE SHOWING
-        // StartCoroutine(StateManager.LoadState(StateManager.GameState.SCORE, 2f));
         StateChanged?.Invoke(SceneState.SCORE);
         await SceneManager.LoadSceneAsync("OUTRO", LoadSceneMode.Additive);
         ScoreUI.Instance.Visible = true;
+        SoundManager.Instance.Stop();
     }
 }
