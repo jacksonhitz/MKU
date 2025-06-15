@@ -28,8 +28,6 @@ public class Dialogue : MonoBehaviour
         {
             await Moroutine.Run(TypeLine(NextLine())).WaitForComplete();
         }
-        await UniTask.Delay(2000);
-        Done();
     }
 
     private string NextLine()
@@ -71,14 +69,5 @@ public class Dialogue : MonoBehaviour
     {
         StopAllCoroutines();
         textComponent.text = string.Empty;
-    }
-
-    void Done()
-    {
-        textComponent.text = string.Empty;
-
-        // TODO: Remove this once you understand when this is necessary
-        if (StateManager.IsPassive())
-            StateManager.LoadNext();
     }
 }
