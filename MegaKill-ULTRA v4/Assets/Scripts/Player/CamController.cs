@@ -112,7 +112,7 @@ public class CamController : MonoBehaviour
         if (state is StateManager.SceneState.PLAYING)
             StartCoroutine(Blink());
 
-        if (state is StateManager.SceneState.TRANSITION or StateManager.SceneState.SCORE)
+        if (state is StateManager.SceneState.FILE or StateManager.SceneState.SCORE)
             Reset();
     }
 
