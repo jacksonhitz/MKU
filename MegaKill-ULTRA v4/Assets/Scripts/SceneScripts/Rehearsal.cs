@@ -3,13 +3,7 @@ using Cysharp.Threading.Tasks;
 
 public class Rehearsal : SceneScript
 {
-    public override void EndLevel()
-    {
-        base.EndLevel();
-        NewsDialogue().Forget();
-    }
-
-    private async UniTaskVoid NewsDialogue()
+    protected override async UniTaskVoid NewsDialogue()
     {
         await Dialogue
             .Instance.TypeText(
@@ -17,14 +11,13 @@ public class Rehearsal : SceneScript
                     + " operating out of the abandoned downtown subway system - that's right folks, Reds here on American soil...  "
             )
             .WaitForComplete();
-        _ = Dialogue.Instance.TypeText("PRESS SPACE TO CONTINUE");
+        base.NewsDialogue().Forget();
     }
 
     public override void StartLevel()
     {
         base.StartLevel();
         SoundManager.Instance.Play("Acid");
-        PlayerController.Instance.commandUI.On();
     }
 
     protected override void OnEnemyKilled((Type type, int enemiesRemaining) tuple)
