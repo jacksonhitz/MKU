@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using IngameDebugConsole;
 using NaughtyAttributes;
@@ -25,8 +26,8 @@ public abstract class SceneScript : MonoBehaviour
         {
             if (value == _state)
                 return;
-            StateChanged?.Invoke(value);
             _state = value;
+            StateChanged?.Invoke(_state);
         }
     }
 
@@ -106,11 +107,17 @@ public abstract class SceneScript : MonoBehaviour
         SoundManager.Instance.MusicOff();
         ScoreUI.Instance.Visible = true;
         SoundManager.Instance.Play("All");
+        NewsDialogue().Forget();
     }
 
     [ConsoleMethod("EndLevel", "Ends the current level and goes to the score screen")]
     public static void EndLevelCommand()
     {
         Instance.EndLevel();
+    }
+
+    protected virtual async UniTaskVoid NewsDialogue()
+    {
+        await Dialogue.Instance.TypeText("PRESS SPACE TO CONTINUE").WaitForComplete();
     }
 }
