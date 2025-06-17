@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Interactable : MonoBehaviour, IInteractable
 {
     //CONVERT TO ABSTRACT AND REFACTOR
-
+    public static event Action<(Type type, Interactable interactable)> InteractableUsed;
 
     [SerializeField]
     Material glow;
@@ -38,19 +40,15 @@ public class Interactable : MonoBehaviour, IInteractable
 
     public virtual void Interact()
     {
-        if (isInteractable)
+        if (!isInteractable)
+            return;
+        isInteractable = false;
+        InteractableUsed?.Invoke((type, this));
+        if (type == Type.Enemy)
         {
-            isInteractable = false;
-            if (type == Type.Door) { }
-            else if (type == Type.Extract)
-                StateManager.LoadNext();
-            else if (type == Type.Enemy)
-            {
-                EnemyPunch enemy = GetComponent<EnemyPunch>();
-                enemy.dosed = true;
-                SceneScript.Instance.Interact();
-                sound.Play("Interact");
-            }
+            EnemyPunch enemy = GetComponent<EnemyPunch>();
+            enemy.dosed = true;
+            sound.Play("Interact");
         }
     }
 
@@ -84,10 +82,10 @@ public class Interactable : MonoBehaviour, IInteractable
 
     void LateUpdate()
     {
-        if (!StateManager.IsActive() || interacts == null || rend == null)
+        if (!StateManager.IsActive || interacts == null || rend == null)
             return;
 
-        if (StateManager.IsActive())
+        if (StateManager.IsActive)
         {
             if (isHovering || interacts.isHighlightAll)
                 rend.material = glow;

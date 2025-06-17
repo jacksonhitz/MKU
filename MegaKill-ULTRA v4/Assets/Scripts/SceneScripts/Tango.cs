@@ -10,8 +10,8 @@ public class Tango : SceneScript
     [SerializeField]
     PopUp popUp;
 
-    int dosedCount;
-    bool started;
+    private int dosedCount;
+    private bool started;
 
     public override void StartLevel()
     {
@@ -21,8 +21,11 @@ public class Tango : SceneScript
     }
 
     //DOSED WITH MKU
-    public override void Interact()
+    protected override void OnInteract((Interactable.Type type, Interactable interactable) tuple)
     {
+        if (tuple.type is not Interactable.Type.Enemy)
+            return;
+
         if (dosedCount == 0)
             dialogue.Off();
 
@@ -30,7 +33,6 @@ public class Tango : SceneScript
 
         popUp.UpdatePopUp("MKU DISTRIBUTED");
         dosedCount++;
-        Debug.Log("dosed");
 
         if (dosedCount > 10 && !started)
             StartCoroutine(Countdown());

@@ -55,7 +55,7 @@ public class Dialogue : MonoBehaviour
         }
         yield return new WaitForSeconds(1f);
 
-        SoundManager.Instance.Stop();
+        SoundManager.Instance.Stop(SoundData.SoundType.Dialogue);
     }
 
     public Moroutine TypeText(string customText)
@@ -68,5 +68,6 @@ public class Dialogue : MonoBehaviour
     {
         StopAllCoroutines();
         textComponent.text = string.Empty;
+        SoundManager.Instance.Stop(SoundData.SoundType.Dialogue);
     }
 }

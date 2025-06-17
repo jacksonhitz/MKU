@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class SettingsManager : MonoBehaviour
@@ -51,7 +52,7 @@ public class SettingsManager : MonoBehaviour
     public void Restart()
     {
         Time.timeScale = 1;
-        _ = StateManager.RestartLevel(2f, destroyCancellationToken);
+        StateManager.RestartLevel(2f, Application.exitCancellationToken).Forget();
     }
 
     void SetSettings()

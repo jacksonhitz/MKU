@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using IngameDebugConsole;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
@@ -31,15 +32,9 @@ public static class StateManager
         SCORE,
     }
 
-    private static GameState state;
-    public static GameState previous;
+    private static GameState _level;
 
-    public static event Action<GameState> OnStateChanged;
-
-    // TODO: REMOVE AND REFACTOR RELEVANT UI COMPONENTS
-    // this will likely require emitting an event when the scene state changes and thus also suggests reconsidering
-    // the existing state event and the separation between game and scene states.
-    public static event Action<GameState> OnSilentChanged;
+    public static event Action<GameState> LevelChanged;
 
     static readonly List<GameState> Order = new()
     {
@@ -52,23 +47,12 @@ public static class StateManager
         GameState.SPEARHEAD,
     };
 
-    static readonly HashSet<GameState> Scene = new()
-    {
-        GameState.TITLE,
-        GameState.TUTORIAL,
-        GameState.REHEARSAL,
-        GameState.TANGO,
-        GameState.SABLE,
-        GameState.SPEARHEAD,
-    };
-
     // TODO: REMOVE COMMENTS
     static readonly HashSet<GameState> Active = new()
     {
         GameState.TUTORIAL,
         GameState.REHEARSAL,
         GameState.TANGO,
-        // GameState.TANGO2,
         GameState.SABLE,
         GameState.SPEARHEAD,
     };
@@ -81,32 +65,34 @@ public static class StateManager
         // GameState.SCORE
     };
 
-    public static GameState State
+    public static GameState Level
     {
-        get => state;
-        set
+        get => _level;
+        private set
         {
-            previous = state;
-            state = value;
+            PreviousLevel = _level;
+            _level = value;
 
-            OnStateChanged?.Invoke(state);
-            Debug.Log($"State changed to {state}");
+            LevelChanged?.Invoke(_level);
+            Debug.Log($"State changed to {_level}");
         }
     }
 
-    private static bool GroupCheck(HashSet<GameState> group) => group.Contains(state);
+    public static GameState PreviousLevel { get; private set; } = GameState.TITLE;
 
-    public static bool IsActive() =>
+    private static bool GroupCheck(HashSet<GameState> group) => group.Contains(_level);
+
+    public static bool IsActive =>
         GroupCheck(Active) && SceneScript.Instance?.State is SceneState.PLAYING;
 
-    public static bool IsPassive() => GroupCheck(Passive);
+    public static bool IsPassive => GroupCheck(Passive);
 
-    public static bool IsScene() => GroupCheck(Scene);
+    public static bool IsTransition => SceneScript.Instance?.State is SceneState.TRANSITION;
 
-    public static bool IsTransition() => SceneScript.Instance?.State is SceneState.TRANSITION;
+    public static bool IsFirstAttempt { get; private set; } = true;
 
     public static async UniTask LoadLevel(
-        GameState newState,
+        GameState newLevel,
         float delay,
         CancellationToken cancellationToken
     )
@@ -114,7 +100,7 @@ public static class StateManager
         // TODO: Start loading scene during delay period and activate it when the delay is over
         if (SceneScript.Instance?.State is not SceneState.TRANSITION)
         {
-            SceneScript.Instance?.EndLevel();
+            SceneScript.Instance?.ExitLevel();
             await UniTask.Delay(
                 TimeSpan.FromSeconds(delay),
                 DelayType.Realtime,
@@ -127,22 +113,52 @@ public static class StateManager
             return;
         }
 
-        if (Scene.Contains(newState))
+        if (_level != newLevel)
         {
-            await SceneManager.LoadSceneAsync(newState.ToString());
-            state = newState;
+            PreviousLevel = newLevel;
+            IsFirstAttempt = true;
         }
+        else
+        {
+            IsFirstAttempt = false;
+        }
+        await SceneManager.LoadSceneAsync(newLevel.ToString());
+        _level = newLevel;
+        Debug.Log($"Loaded level {_level}");
     }
 
+    [ConsoleMethod("GoToNextLevel", "Loads the next level in the order")]
     public static void LoadNext()
     {
-        int currentIndex = Order.IndexOf(state);
+        int currentIndex = Order.IndexOf(_level);
         int nextIndex = (currentIndex + 1) % Order.Count;
-        _ = LoadLevel(Order[nextIndex], 2f, CancellationToken.None);
+        _ = LoadLevel(Order[nextIndex], 2f, Application.exitCancellationToken);
     }
 
     public static async UniTask RestartLevel(float delay, CancellationToken cancellationToken)
     {
-        await LoadLevel(state, delay, cancellationToken);
+        Debug.Log("Restarting level");
+        await LoadLevel(_level, delay, cancellationToken);
+    }
+
+    [ConsoleMethod("RestartLevel", "Restart the current level")]
+    public static void RestartLevelCommand()
+    {
+        RestartLevel(2f, CancellationToken.None).Forget();
+    }
+
+    [ConsoleMethod("GoToLevel", "Loads the specified level")]
+    public static void LoadLevelCommand(GameState newLevel)
+    {
+        _level = newLevel;
+        LoadLevel(newLevel, 2f, Application.exitCancellationToken).Forget();
+    }
+
+    [ConsoleMethod("GoToLevel", "Loads the specified level")]
+    public static void LoadLevelCommand(GameState newLevel, bool showFileScreen)
+    {
+        if (!showFileScreen)
+            _level = newLevel;
+        LoadLevel(newLevel, 2f, Application.exitCancellationToken).Forget();
     }
 }

@@ -7,23 +7,26 @@ public class EnemyPunch : Enemy
     {
         attackRange = 6f;
         attackRate = 1f;
-        dmg = 10f;
+        damage = 10f;
     }
+
     protected override void CallAttack()
     {
         StartCoroutine(Punch());
     }
+
     public override void CallUse()
     {
         StartCoroutine(Shoot());
     }
+
     IEnumerator Punch()
     {
         animator.SetTrigger("Punch");
         yield return new WaitForSeconds(0.2f);
 
         IHitable iHit = target.GetComponent<IHitable>();
-        iHit?.Hit(dmg);
+        iHit?.Hit(damage);
 
         sound.Play("Punch", transform.position);
         yield break;

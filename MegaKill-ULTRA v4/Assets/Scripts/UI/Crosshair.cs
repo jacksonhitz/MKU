@@ -5,6 +5,7 @@ using UnityEngine;
 public class Crosshair : MonoBehaviour
 {
     GameObject obj;
+
     void Awake()
     {
         obj = transform.GetChild(0).gameObject;
@@ -12,20 +13,17 @@ public class Crosshair : MonoBehaviour
 
     void OnEnable()
     {
-        StateManager.OnStateChanged += StateChange;
-        StateManager.OnSilentChanged += StateChange;
-
-        StateChange(StateManager.State);
+        SceneScript.StateChanged += StateChange;
     }
 
     void OnDisable()
     {
-        StateManager.OnStateChanged -= StateChange;
-        StateManager.OnSilentChanged -= StateChange;
+        SceneScript.StateChanged -= StateChange;
     }
-    void StateChange(StateManager.GameState state)
+
+    void StateChange(StateManager.SceneState state)
     {
-        if (StateManager.IsActive())
+        if (StateManager.IsActive)
         {
             On();
         }
@@ -34,10 +32,12 @@ public class Crosshair : MonoBehaviour
             Off();
         }
     }
+
     public void On()
     {
         obj.SetActive(true);
     }
+
     void Off()
     {
         obj.SetActive(false);

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FileUI : MonoBehaviour
 {
-    public static FileUI Instance { get; set; }
+    public static FileUI Instance { get; private set; }
     public bool Visible
     {
         get => file.enabled;
@@ -17,5 +17,6 @@ public class FileUI : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        Visible = false;
     }
 }

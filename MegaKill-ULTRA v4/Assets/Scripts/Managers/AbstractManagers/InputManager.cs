@@ -18,9 +18,6 @@ public abstract class InputManager : MonoBehaviour
 
     void UpdateBase()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
-            StateManager.LoadNext();
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (SceneScript.Instance?.State == StateManager.SceneState.FILE)
@@ -30,7 +27,7 @@ public abstract class InputManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Z))
-            _ = SceneScript.Instance?.LoadScore();
+            SceneScript.Instance?.EndLevel();
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
