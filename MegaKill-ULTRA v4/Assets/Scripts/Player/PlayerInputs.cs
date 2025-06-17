@@ -13,7 +13,7 @@ public class PlayerInputs : InputManager
 
     protected override void UpdateItems()
     {
-        if (!StateManager.IsActive())
+        if (!StateManager.IsActive)
             return;
 
         interacts.isHighlightAll = Input.GetKey(KeyCode.Tab);
@@ -21,7 +21,7 @@ public class PlayerInputs : InputManager
 
     protected override void UpdatePlayer()
     {
-        if (!StateManager.IsActive())
+        if (!StateManager.IsActive)
             return;
 
         // MOVE/JUMP

@@ -1,12 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using Redcode.Moroutines;
 using TMPro;
 using UnityEngine;
 
 public class Command : MonoBehaviour
 {
+    public bool Active
+    {
+        get => text.enabled;
+        set
+        {
+            if (value)
+            {
+                On();
+            }
+            else
+            {
+                Off();
+            }
+        }
+    }
     TextMeshProUGUI text;
     Vector3 ogPos;
+    private Moroutine _jitter;
 
     void Awake()
     {
@@ -18,45 +35,23 @@ public class Command : MonoBehaviour
     void Start()
     {
         Off();
+        _jitter = Moroutine.Create(gameObject, Jitter());
     }
 
-    void OnEnable()
-    {
-        StateManager.OnStateChanged += StateChange;
-
-        StateChange(StateManager.State);
-    }
-
-    void OnDisable()
-    {
-        StateManager.OnStateChanged -= StateChange;
-    }
-
-    void StateChange(StateManager.GameState state)
-    {
-        // TODO: Remove this while keeping the effect
-        switch (state)
-        {
-            case StateManager.GameState.REHEARSAL:
-                On();
-                break;
-            // case StateManager.GameState.TANGO2: On(); break;
-        }
-    }
-
-    void On()
+    public void On()
     {
         text.enabled = true;
-        StartCoroutine(Jitter());
+        _jitter.Rerun();
     }
 
-    void Off()
+    public void Off()
     {
         text.enabled = false;
         transform.localPosition = ogPos;
+        _jitter?.Stop();
     }
 
-    IEnumerator Jitter()
+    private IEnumerable Jitter()
     {
         float timer = 0f;
         float jitterAmount = 10f;

@@ -1,10 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using IngameDebugConsole;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager Instance { get; private set; }
+
+    public static event Action<(Type enemyType, int enemiesRemaining)> EnemyKilled;
 
     [SerializeField]
     GameObject hands;
@@ -12,14 +17,10 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     GameObject enemyHolder;
     public List<Enemy> enemies;
-    float spawnInterval = 5f;
-    PlayerController player;
 
     void Awake()
     {
         Instance = this;
-
-        player = FindObjectOfType<PlayerController>();
         enemies = new List<Enemy>();
     }
 
@@ -30,26 +31,24 @@ public class EnemyManager : MonoBehaviour
 
     void OnEnable()
     {
-        StateManager.OnStateChanged += StateChange;
+        StateManager.LevelChanged += LevelChange;
 
-        StateChange(StateManager.State);
+        LevelChange(StateManager.Level);
     }
 
     void OnDisable()
     {
-        StateManager.OnStateChanged -= StateChange;
+        StateManager.LevelChanged -= LevelChange;
     }
 
-    //FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU
-    List<Enemy> staticEnemies = new List<Enemy>();
-
-    void StateChange(StateManager.GameState state)
+    void LevelChange(StateManager.GameState state)
     {
-        if (StateManager.IsActive())
+        if (StateManager.IsActive)
             Active();
         else
             return;
 
+        // TODO: PULL THIS INTO SCENE SCRIPTS
         foreach (Enemy enemy in enemies)
         {
             if (enemy.currentState == Enemy.EnemyState.Static)
@@ -71,7 +70,6 @@ public class EnemyManager : MonoBehaviour
     void Active()
     {
         enemyHolder.SetActive(true);
-        // CallHands();
         CollectEnemies();
     }
 
@@ -100,8 +98,6 @@ public class EnemyManager : MonoBehaviour
             }
         }
 
-        int numToConvert = Mathf.CeilToInt(nonDosedEnemies.Count * 0.5f);
-
         for (int i = 0; i < nonDosedEnemies.Count; i++)
         {
             Enemy temp = nonDosedEnemies[i];
@@ -115,27 +111,30 @@ public class EnemyManager : MonoBehaviour
     {
         enemies.Remove(enemy);
         Destroy(enemy.gameObject);
-
-        if (enemies.Count == 0)
-            SceneScript.Instance.ElimCheck();
+        EnemyKilled?.Invoke((enemy.GetType(), enemies.Count));
 
         SoundManager.Instance.Play("EnemyDeath", enemy.transform.position);
     }
 
-    public void CallHands()
+    private void OnApplicationQuit()
     {
-        // StartCoroutine(SpawnHands());
+        EnemyKilled = null;
     }
 
-    IEnumerator SpawnHands()
+    [ConsoleMethod("KillAllEnemies", "Kills all enemies in the scene.")]
+    public static void KillAllEnemiesCommand()
     {
-        while (true)
+        if (!Instance)
         {
-            yield return new WaitForSeconds(spawnInterval);
-
-            Vector3 spawnPos = player.transform.position;
-            spawnPos.y -= 4f;
-            Instantiate(hands, spawnPos, Quaternion.identity);
+            Debug.LogError("No enemy manager in scene.");
+            return;
         }
+
+        int count = Instance.enemies.Count;
+        while (Instance.enemies.Count > 0)
+        {
+            Instance.Kill(Instance.enemies[0]);
+        }
+        Debug.Log($"Killed {count - Instance.enemies.Count} enemies.");
     }
 }

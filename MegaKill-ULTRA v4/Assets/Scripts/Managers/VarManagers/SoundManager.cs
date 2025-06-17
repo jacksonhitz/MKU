@@ -56,6 +56,22 @@ public class SoundManager : MonoBehaviour
         dialogue.Stop();
     }
 
+    public void Stop(SoundData.SoundType type)
+    {
+        switch (type)
+        {
+            case SoundData.SoundType.Music:
+                music.Stop();
+                break;
+            case SoundData.SoundType.Sfx:
+                sfx.Stop();
+                break;
+            case SoundData.SoundType.Dialogue:
+                dialogue.Stop();
+                break;
+        }
+    }
+
     //2D Grabber
     public void Play(string soundName)
     {
@@ -85,6 +101,7 @@ public class SoundManager : MonoBehaviour
             case SoundData.SoundType.Music:
                 music.clip = clip;
                 music.volume = sound.volume * music.volume;
+                music.loop = true;
                 music.Play();
                 Debug.Log("Music: " + sound);
                 break;
@@ -96,6 +113,7 @@ public class SoundManager : MonoBehaviour
             case SoundData.SoundType.Dialogue:
                 dialogue.clip = clip;
                 dialogue.volume = sound.volume * sfx.volume;
+                dialogue.loop = true;
                 dialogue.Play();
                 break;
         }

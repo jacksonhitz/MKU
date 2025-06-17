@@ -1,4 +1,5 @@
 using System.Collections;
+using Redcode.Moroutines;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -65,7 +66,6 @@ public class CamController : MonoBehaviour
     void Start()
     {
         Reset();
-        Blink();
     }
 
     void Reset()
@@ -99,25 +99,26 @@ public class CamController : MonoBehaviour
 
     void OnEnable()
     {
-        StateManager.OnStateChanged += OnStateChanged;
+        SceneScript.StateChanged += OnStateChanged;
     }
 
     void OnDisable()
     {
-        StateManager.OnStateChanged -= OnStateChanged;
+        SceneScript.StateChanged -= OnStateChanged;
     }
 
-    void OnStateChanged(StateManager.GameState state)
+    void OnStateChanged(StateManager.SceneState state)
     {
-        if (StateManager.IsActive() && StateManager.IsScene())
+        if (state is StateManager.SceneState.PLAYING)
             StartCoroutine(Blink());
 
-        Reset();
+        if (state is StateManager.SceneState.TRANSITION or StateManager.SceneState.SCORE)
+            Reset();
     }
 
     void Update()
     {
-        if (StateManager.IsTransition())
+        if (StateManager.IsTransition)
             TransitionOn();
         else
         {
@@ -130,7 +131,7 @@ public class CamController : MonoBehaviour
 
     void MoveCheck()
     {
-        if (StateManager.IsActive() && Mathf.Approximately(Time.timeScale, 1))
+        if (StateManager.IsActive && Mathf.Approximately(Time.timeScale, 1))
         {
             MoveCam();
             Cursor.lockState = CursorLockMode.Locked;
@@ -330,5 +331,10 @@ public class CamController : MonoBehaviour
             greenStart + Mathf.PingPong(Time.time * mixerSpd, greenRandom);
         channelMixer.blueOutBlueIn.value =
             blueStart + Mathf.PingPong(Time.time * mixerSpd, blueRandom);
+    }
+
+    private void OnDestroy()
+    {
+        Reset();
     }
 }

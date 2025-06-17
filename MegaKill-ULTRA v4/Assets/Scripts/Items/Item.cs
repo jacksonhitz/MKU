@@ -169,8 +169,6 @@ public abstract class Item : Interactable
 
     public void CollidersOn()
     {
-        Debug.Log("colliders on");
-
         rb.useGravity = true;
         rb.isKinematic = false;
 
@@ -183,8 +181,6 @@ public abstract class Item : Interactable
 
     public void CollidersOff()
     {
-        Debug.Log("colliders off");
-
         rb.useGravity = false;
         rb.isKinematic = true;
 

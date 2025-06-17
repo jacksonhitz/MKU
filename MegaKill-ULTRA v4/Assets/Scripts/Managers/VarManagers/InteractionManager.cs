@@ -6,7 +6,8 @@ public class InteractionManager : MonoBehaviour
 {
     public static InteractionManager Instance { get; private set; }
 
-    [SerializeField] List<Item> items;
+    [SerializeField]
+    List<Item> items;
     public List<Interactable> interactables;
 
     public bool isHighlightAll;
@@ -24,23 +25,25 @@ public class InteractionManager : MonoBehaviour
 
     void OnEnable()
     {
-        StateManager.OnStateChanged += StateChange;
+        StateManager.LevelChanged += LevelChange;
 
-        StateChange(StateManager.State);
+        LevelChange(StateManager.Level);
     }
+
     void OnDisable()
     {
-        StateManager.OnStateChanged -= StateChange;
+        StateManager.LevelChanged -= LevelChange;
     }
-    void StateChange(StateManager.GameState state)
+
+    void LevelChange(StateManager.GameState state)
     {
         Debug.Log("INTERACT CALLED");
 
-        if (StateManager.IsActive())
+        if (StateManager.IsActive)
         {
             Collect();
             Debug.Log("COLLECTING");
-        } 
+        }
     }
 
     public void Collect()
@@ -52,16 +55,14 @@ public class InteractionManager : MonoBehaviour
         interactables.AddRange(FindObjectsOfType<Interactable>());
     }
 
-
     public void ExtractOn()
     {
         foreach (Interactable interactable in interactables)
         {
-            if (interactable.type == Interactable.Type.Extract) interactable.isInteractable = true;
-            else if (interactable.type == Interactable.Type.Enemy) interactable.isInteractable = false;
+            if (interactable.type == Interactable.Type.Extract)
+                interactable.isInteractable = true;
+            else if (interactable.type == Interactable.Type.Enemy)
+                interactable.isInteractable = false;
         }
     }
 }
-
-
-

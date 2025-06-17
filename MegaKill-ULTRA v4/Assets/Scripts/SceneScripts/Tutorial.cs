@@ -40,7 +40,7 @@ public class Tutorial : SceneScript
 
     private void Update()
     {
-        if (StateManager.IsActive())
+        if (StateManager.IsActive)
         {
             EnumLogic();
         }
@@ -48,9 +48,7 @@ public class Tutorial : SceneScript
 
     public override void StartLevel()
     {
-        FileUI.Instance.Visible = false;
-        State = StateManager.SceneState.PLAYING;
-        lvl.SetActive(true);
+        base.StartLevel();
         SoundManager.Instance.Play("Hot");
     }
 
@@ -89,7 +87,6 @@ public class Tutorial : SceneScript
                 itemHeldR = rightHand.childCount > 0;
                 break;
             case TutorialStateManager.TutorialState.Interact:
-                Interact();
                 break;
         }
     }
@@ -227,27 +224,6 @@ public class Tutorial : SceneScript
         }
     }
 
-    // void Items()
-    // {
-    //     // tab to see items
-    //     if (Input.GetKeyDown(KeyCode.Tab))
-    //     {
-    //         TutorialStateManager.State = TutorialStateManager.TutorialState.Use;
-    //         instruction.text = "USE";
-    //         controls[0].gameObject.SetActive(true);
-    //         controls[0].color = header;
-    //         controls[0].text = "CLICK";
-    //         controls[1].gameObject.SetActive(true);
-    //         controls[1].color = todo;
-    //         controls[1].text = "LEFT";
-    //         controls[2].gameObject.SetActive(false);
-    //         controls[3].gameObject.SetActive(true);
-    //         controls[3].color = todo;
-    //         controls[3].text = "RIGHT";
-
-    //         Debug.Log("Changed state to Use");
-    //     }
-    // }
     void Use()
     {
         // left/right click to use left/right item
@@ -314,16 +290,16 @@ public class Tutorial : SceneScript
         }
     }
 
-    public override void Interact()
+    protected override void OnInteract((Interactable.Type type, Interactable interactable) tuple)
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            TutorialStateManager.State = TutorialStateManager.TutorialState.Fight;
-            instruction.text = "";
-            controls[2].gameObject.SetActive(false);
+        if (tuple.type is not Interactable.Type.Door)
+            return;
 
-            StateManager.LoadNext();
-        }
+        TutorialStateManager.State = TutorialStateManager.TutorialState.Fight;
+        instruction.text = "";
+        controls[2].gameObject.SetActive(false);
+
+        StateManager.LoadNext();
     }
 
     void OnTriggerEnter(Collider other)

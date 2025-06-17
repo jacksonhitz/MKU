@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -12,11 +14,9 @@ public class PlayerController : MonoBehaviour
     public Camera cam;
     public SoundManager sound;
 
-
     [Header("Hands")]
     public Transform left;
     public Transform right;
-
 
     [Header("Compartments")]
     public PlayerCombat combat;
@@ -25,8 +25,25 @@ public class PlayerController : MonoBehaviour
     public PlayerItems items;
     public PlayerHealth health;
 
+    [Foldout("UI")]
+    public Command commandUI;
 
-    void Awake()
+    [Foldout("UI")]
+    public Dialogue tutorialUI;
+
+    [Foldout("UI")]
+    public Dialogue dialogueUI;
+
+    [Foldout("UI")]
+    public Dialogue infoUI;
+
+    [Foldout("UI")]
+    public PopUp popUpUI;
+
+    [Foldout("UI")]
+    public UEye uEye;
+
+    public void Awake()
     {
         Instance = this;
 
@@ -35,5 +52,10 @@ public class PlayerController : MonoBehaviour
         interact = GetComponent<PlayerInteract>();
         items = GetComponent<PlayerItems>();
         health = GetComponent<PlayerHealth>();
+    }
+
+    public void OnApplicationQuit()
+    {
+        Instance = null;
     }
 }
