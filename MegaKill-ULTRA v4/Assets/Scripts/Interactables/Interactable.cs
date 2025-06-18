@@ -2,31 +2,25 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Interactable : MonoBehaviour, IInteractable
+public abstract class Interactable : MonoBehaviour, IInteractable
 {
-    //CONVERT TO ABSTRACT AND REFACTOR
     public static event Action<(Type type, Interactable interactable)> InteractableUsed;
 
     [SerializeField]
     Material glow;
 
     [SerializeField]
-    Material def;
+    Material defaultMaterial;
 
     [SerializeField]
     Renderer rend;
 
     [SerializeField]
-    Material[] mats;
+    Material[] randomMaterials;
 
     public bool isHovering;
-    public bool isInteractable;
-    public bool isRandomTex;
-
-    protected PlayerController player;
-    protected SoundManager sound;
-    protected EnemyManager enemies;
-    protected InteractionManager interacts;
+    public bool isInteractable = true;
+    public bool useRandomMaterial;
 
     public enum Type
     {
@@ -36,64 +30,30 @@ public class Interactable : MonoBehaviour, IInteractable
         Enemy,
     }
 
-    public Type type;
-
-    public virtual void Interact()
-    {
-        if (!isInteractable)
-            return;
-        isInteractable = false;
-        InteractableUsed?.Invoke((type, this));
-        if (type == Type.Enemy)
-        {
-            EnemyPunch enemy = GetComponent<EnemyPunch>();
-            enemy.dosed = true;
-            sound.Play("Interact");
-        }
-    }
+    public abstract Type InteractableType { get; }
 
     protected virtual void Awake()
     {
-        if (rend == null)
-            rend = GetRenderer();
+        // if rend is null, getrend
+        rend ??= GetRenderer();
 
-        player = PlayerController.Instance;
-        sound = SoundManager.Instance;
-        enemies = EnemyManager.Instance;
-        interacts = InteractionManager.Instance;
-
-        if (isRandomTex && mats != null && mats.Length > 0)
-        {
-            def = mats[Random.Range(0, mats.Length)];
-        }
-        else if (def == null)
-        {
-            def = rend.material;
-        }
+        if (useRandomMaterial && randomMaterials != null && randomMaterials.Length > 0)
+            defaultMaterial = randomMaterials[Random.Range(0, randomMaterials.Length)];
+        else if (defaultMaterial == null)
+            defaultMaterial = rend.material;
     }
 
-    protected virtual void Start()
+    protected virtual void LateUpdate()
     {
-        player = PlayerController.Instance;
-        sound = SoundManager.Instance;
-        enemies = EnemyManager.Instance;
-        interacts = InteractionManager.Instance;
-    }
-
-    void LateUpdate()
-    {
-        if (!StateManager.IsActive || interacts == null || rend == null)
+        if (!StateManager.IsActive || InteractionManager.Instance == null || rend == null)
             return;
 
-        if (StateManager.IsActive)
-        {
-            if (isHovering || interacts.isHighlightAll)
-                rend.material = glow;
-            else
-                rend.material = def;
-        }
+        // if ishovering or isHighlightAll, glow, otherwise set to default material
+        rend.material = (isHovering || InteractionManager.Instance.isHighlightAll)
+            ? glow
+            : defaultMaterial;
     }
-
+    
     Renderer GetRenderer()
     {
         Renderer renderer = GetComponentInParent<Renderer>();
@@ -103,4 +63,16 @@ public class Interactable : MonoBehaviour, IInteractable
             renderer = GetComponentInChildren<Renderer>();
         return renderer;
     }
+
+    public void Interact()
+    {
+        if (!isInteractable)
+            return;
+
+        isInteractable = false;
+        InteractableUsed?.Invoke((InteractableType, this));
+        OnInteract();
+    }
+
+     protected abstract void OnInteract();
 }
