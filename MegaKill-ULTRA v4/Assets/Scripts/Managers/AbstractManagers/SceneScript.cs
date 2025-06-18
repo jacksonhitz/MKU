@@ -31,17 +31,16 @@ public abstract class SceneScript : MonoBehaviour
         }
     }
 
-    // TODO: Remove this shit
-    protected GameObject lvl;
+    private GameObject level;
 
     protected virtual void Awake()
     {
         Instance = this;
-        lvl = transform.GetChild(0).gameObject;
+        level = transform.GetChild(0).gameObject;
         StateChanged?.Invoke(SceneState.TRANSITION);
         if (StateManager.PreviousLevel != StateManager.Level)
         {
-            lvl.SetActive(false);
+            level.SetActive(false);
         }
 
         Interactable.InteractableUsed += OnInteract;
@@ -50,7 +49,6 @@ public abstract class SceneScript : MonoBehaviour
 
     protected virtual void Start()
     {
-        // TODO: Only show file UI on first load, not on respawns
         if (!FileUI.Instance)
         {
             Debug.LogWarning("FileUI is NULL");
@@ -82,7 +80,7 @@ public abstract class SceneScript : MonoBehaviour
     {
         FileUI.Instance.Visible = false;
         State = SceneState.PLAYING;
-        lvl.SetActive(true);
+        level.SetActive(true);
         StateChanged?.Invoke(SceneState.PLAYING);
     }
 
@@ -94,7 +92,7 @@ public abstract class SceneScript : MonoBehaviour
 
     public virtual void EndLevel()
     {
-        lvl.SetActive(false);
+        level.SetActive(false);
         GoToScoreScreen();
     }
 
