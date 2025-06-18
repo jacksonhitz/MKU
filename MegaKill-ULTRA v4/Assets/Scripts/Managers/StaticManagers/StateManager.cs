@@ -16,9 +16,6 @@ public static class StateManager
         TUTORIAL,
         REHEARSAL,
         TANGO,
-
-        // TANGO2,
-        // TODO: make this scene code
         SABLE,
         SPEARHEAD,
     }
@@ -42,27 +39,8 @@ public static class StateManager
         GameState.TUTORIAL,
         GameState.REHEARSAL,
         GameState.TANGO,
-        // GameState.TANGO2,
         GameState.SABLE,
         GameState.SPEARHEAD,
-    };
-
-    // TODO: REMOVE COMMENTS
-    static readonly HashSet<GameState> Active = new()
-    {
-        GameState.TUTORIAL,
-        GameState.REHEARSAL,
-        GameState.TANGO,
-        GameState.SABLE,
-        GameState.SPEARHEAD,
-    };
-
-    static readonly HashSet<GameState> Passive = new()
-    {
-        GameState.TITLE,
-        // GameState.FILE,
-        // GameState.TRANSITION,
-        // GameState.SCORE
     };
 
     public static GameState Level
@@ -83,9 +61,10 @@ public static class StateManager
     private static bool GroupCheck(HashSet<GameState> group) => group.Contains(_level);
 
     public static bool IsActive =>
-        GroupCheck(Active) && SceneScript.Instance?.State is SceneState.PLAYING;
+        _level is not GameState.TITLE && SceneScript.Instance?.State is SceneState.PLAYING;
 
-    public static bool IsPassive => GroupCheck(Passive);
+    public static bool IsPassive =>
+        _level is GameState.TITLE || SceneScript.Instance?.State is not SceneState.PLAYING;
 
     public static bool IsTransition => SceneScript.Instance?.State is SceneState.TRANSITION;
 
