@@ -33,9 +33,17 @@ public abstract class SceneScript : MonoBehaviour
 
     private GameObject level;
 
+    protected bool LevelActive
+    {
+        get => level.activeInHierarchy;
+        set => level.SetActive(value);
+    }
+
     protected virtual void Awake()
     {
         Instance = this;
+        if (StateManager.Level == StateManager.GameState.TITLE)
+            StateManager.DebugSetLevel(StateManager.LevelMapping[GetType()]);
         level = transform.GetChild(0).gameObject;
         StateChanged?.Invoke(SceneState.TRANSITION);
         if (StateManager.PreviousLevel != StateManager.Level)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Russia : SceneScript
+public class Sable : SceneScript
 {
     public override void StartLevel()
     {

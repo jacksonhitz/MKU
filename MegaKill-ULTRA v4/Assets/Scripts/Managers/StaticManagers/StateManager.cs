@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using IngameDebugConsole;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
 
 public static class StateManager
 {
@@ -41,6 +43,16 @@ public static class StateManager
         GameState.TANGO,
         GameState.SABLE,
         GameState.SPEARHEAD,
+    };
+
+    public static readonly Dictionary<Type, GameState> LevelMapping = new()
+    {
+        { typeof(Title), GameState.TITLE },
+        { typeof(Tutorial), GameState.TUTORIAL },
+        { typeof(Rehearsal), GameState.REHEARSAL },
+        { typeof(Tango), GameState.TANGO },
+        { typeof(Sable), GameState.SABLE },
+        { typeof(Spearhead), GameState.SPEARHEAD },
     };
 
     public static GameState Level
@@ -102,8 +114,15 @@ public static class StateManager
             IsFirstAttempt = false;
         }
         await SceneManager.LoadSceneAsync(newLevel.ToString());
-        _level = newLevel;
+        Level = newLevel;
         Debug.Log($"Loaded level {_level}");
+    }
+
+    [Conditional("UNITY_EDITOR")]
+    public static void DebugSetLevel(GameState level)
+    {
+        Debug.LogWarning("Level set manually in StateManager, make sure this is intentional.");
+        Level = level;
     }
 
     [ConsoleMethod("GoToNextLevel", "Loads the next level in the order")]

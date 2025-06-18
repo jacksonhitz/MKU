@@ -6,6 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class Title : SceneScript
 {
+    private new void Awake()
+    {
+        base.Awake();
+        LevelActive = true;
+    }
+
     private new void Start()
     {
         base.Start();
