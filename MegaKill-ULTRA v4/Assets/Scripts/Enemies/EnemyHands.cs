@@ -15,7 +15,7 @@ public class EnemyHands : Enemy
 
     protected override void DropItem(){}
     protected override void CallAttack(){}
-    protected override void Start()
+    protected void Start()
     {
         int childCount = transform.childCount;
         children = new Transform[childCount];

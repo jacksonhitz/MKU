@@ -1,8 +1,10 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class Item : Interactable
+public class Item : Interactable
 {
+    public override Type InteractableType => Type.Item;
+
     [HideInInspector]
     public Rigidbody rb;
 
@@ -29,6 +31,8 @@ public abstract class Item : Interactable
     protected override void Awake()
     {
         base.Awake();
+        player = PlayerController.Instance;
+        sound = SoundManager.Instance;
         rb = GetComponent<Rigidbody>();
         popUp = FindObjectOfType<PopUp>();
     }
@@ -55,7 +59,7 @@ public abstract class Item : Interactable
             }
 
             holder = GetComponentInParent<PlayerController>();
-            var player = holder as PlayerController;
+            player = holder as PlayerController;
             if (player != null)
             {
                 SetState(ItemState.Player);
@@ -189,5 +193,9 @@ public abstract class Item : Interactable
 
         if (TryGetComponent(out CapsuleCollider capsuleCollider))
             capsuleCollider.enabled = false;
+    }
+    protected override void OnInteract()
+    {
+
     }
 }

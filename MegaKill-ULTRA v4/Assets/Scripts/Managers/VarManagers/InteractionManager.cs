@@ -59,9 +59,9 @@ public class InteractionManager : MonoBehaviour
     {
         foreach (Interactable interactable in interactables)
         {
-            if (interactable.type == Interactable.Type.Extract)
+            if (interactable.InteractableType  == Interactable.Type.Extract)
                 interactable.isInteractable = true;
-            else if (interactable.type == Interactable.Type.Enemy)
+            else if (interactable.InteractableType  == Interactable.Type.Enemy)
                 interactable.isInteractable = false;
         }
     }

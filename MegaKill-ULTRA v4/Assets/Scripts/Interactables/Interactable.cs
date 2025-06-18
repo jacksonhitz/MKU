@@ -7,20 +7,24 @@ public abstract class Interactable : MonoBehaviour, IInteractable
     public static event Action<(Type type, Interactable interactable)> InteractableUsed;
 
     [SerializeField]
-    Material glow;
+    private Material glow;
 
     [SerializeField]
-    Material defaultMaterial;
+    private Material defaultMaterial;
+
+    private Renderer rend;
 
     [SerializeField]
-    Renderer rend;
-
-    [SerializeField]
-    Material[] randomMaterials;
+    private Material[] randomMaterials;
 
     public bool isHovering;
     public bool isInteractable = true;
     public bool useRandomMaterial;
+
+    // managers
+    protected PlayerController player;
+    protected SoundManager sound;
+    protected InteractionManager interacts;
 
     public enum Type
     {
@@ -42,26 +46,33 @@ public abstract class Interactable : MonoBehaviour, IInteractable
         else if (defaultMaterial == null)
             defaultMaterial = rend.material;
     }
+    protected virtual void Start()
+    {
+        player = PlayerController.Instance;
+        sound = SoundManager.Instance;
+        interacts = InteractionManager.Instance;
+    }
 
     protected virtual void LateUpdate()
     {
         if (!StateManager.IsActive || InteractionManager.Instance == null || rend == null)
             return;
 
-        // if ishovering or isHighlightAll, glow, otherwise set to default material
-        rend.material = (isHovering || InteractionManager.Instance.isHighlightAll)
+        // Ff ishovering or isHighlightAll, glow, otherwise set to default material
+        rend.material = ((isHovering && isInteractable) || InteractionManager.Instance.isHighlightAll)
             ? glow
             : defaultMaterial;
     }
-    
+
     Renderer GetRenderer()
     {
-        Renderer renderer = GetComponentInParent<Renderer>();
-        if (renderer == null)
-            renderer = GetComponent<Renderer>();
-        if (renderer == null)
-            renderer = GetComponentInChildren<Renderer>();
-        return renderer;
+        // Search all Renderer components in children
+        Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+
+        if (renderers.Length == 0)
+            throw new Exception($"No Renderer found in GameObject '{gameObject.name}' or its children.");
+
+        return renderers[0]; // Use the first valid renderer found
     }
 
     public void Interact()

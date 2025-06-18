@@ -19,9 +19,9 @@ public class EnemyFlyingEye : Enemy
 
     protected override void DropItem() { }
 
-    protected override void Start()
+    protected void Start()
     {
-        base.Start(); // important!
+        //base.Start(); // important!
         rb = GetComponent<Rigidbody>();
         attackRange = 25f;
         attackRate = 5f;

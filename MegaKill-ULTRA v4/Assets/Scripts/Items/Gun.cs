@@ -13,7 +13,6 @@ public class Gun : Item
     Quaternion ogRot;
 
     public float bullets;
-
     protected override void Start()
     {
         base.Start();

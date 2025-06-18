@@ -7,6 +7,10 @@ using Random = UnityEngine.Random;
 
 public class Enemy : Interactable, IHitable
 {
+    public override Type InteractableType => Type.Enemy;
+
+    // Managers
+    protected EnemyManager enemies;
     private static readonly int GunKey = Animator.StringToHash("Gun");
     private static readonly int SpdKey = Animator.StringToHash("Spd");
     private static readonly int DanceKey = Animator.StringToHash("Dance");
@@ -85,6 +89,7 @@ public class Enemy : Interactable, IHitable
     protected override void Awake()
     {
         base.Awake();
+        enemies = EnemyManager.Instance;
         agent = GetComponent<NavMeshAgent>();
         sfx = GetComponent<AudioSource>();
         animator = GetComponentInChildren<Animator>();
@@ -170,7 +175,9 @@ public class Enemy : Interactable, IHitable
         item = newItem;
         attackRate = item.itemData.rate;
         if (item.itemData is GunData gunData)
+        {
             attackRange = gunData.range;
+        }
     }
 
     void ItemCheck()
@@ -401,5 +408,16 @@ public class Enemy : Interactable, IHitable
             Instantiate(deathEffect, transform.position, Quaternion.identity);
             hasSpawnedDeathEffect = true;
         }
+    }
+
+    protected override void OnInteract()
+    {
+        EnemyPunch enemy = GetComponent<EnemyPunch>();
+        if (enemy != null)
+        {
+            enemy.dosed = true;
+        }
+
+        SoundManager.Instance?.Play("Interact");
     }
 }

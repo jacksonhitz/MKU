@@ -5,7 +5,7 @@ public class EnemyDog : Enemy
 {
     protected override void DropItem() { }
 
-    protected override void Start()
+    protected void Start()
     {
         attackRange = 2f;
         attackRate = 2f;
