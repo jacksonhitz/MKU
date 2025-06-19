@@ -1,76 +1,55 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using IngameDebugConsole;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
+using SceneState = StateManager.SceneState;
 
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager Instance { get; private set; }
 
-    public static event Action<(Type enemyType, int enemiesRemaining)> EnemyKilled;
+    public static event Action<(Type enemyType, int enemiesRemaining)> EnemyKilled = delegate { };
 
     [SerializeField]
     GameObject hands;
 
     [SerializeField]
     GameObject enemyHolder;
-    public List<Enemy> enemies;
+    public List<Enemy> enemies = new();
+
+    private bool Active
+    {
+        get => enemyHolder.activeInHierarchy;
+        set
+        {
+            enemyHolder.SetActive(value);
+            if (enemyHolder.activeInHierarchy)
+                CollectEnemies();
+        }
+    }
 
     void Awake()
     {
         Instance = this;
-        enemies = new List<Enemy>();
-    }
-
-    void Start()
-    {
-        Active();
+        Active = false;
     }
 
     void OnEnable()
     {
-        StateManager.LevelChanged += LevelChange;
-
-        LevelChange(StateManager.Level);
+        SceneScript.StateChanged += LevelChange;
     }
 
     void OnDisable()
     {
-        StateManager.LevelChanged -= LevelChange;
+        SceneScript.StateChanged -= LevelChange;
     }
 
-    void LevelChange(StateManager.GameState state)
+    void LevelChange(SceneState sceneState)
     {
-        if (StateManager.IsActive)
-            Active();
-        else
-            return;
-
-        // TODO: PULL THIS INTO SCENE SCRIPTS
-        foreach (Enemy enemy in enemies)
-        {
-            if (enemy.currentState == Enemy.EnemyState.Static)
-            {
-                int rand = Random.Range(0, 3);
-                if (rand == 0)
-                    StartCoroutine(DanceTimer(enemy));
-            }
-        }
-    }
-
-    IEnumerator DanceTimer(Enemy enemy)
-    {
-        int delay = Random.Range(0, 10);
-        yield return new WaitForSeconds(delay);
-        enemy.isDance = true;
-    }
-
-    void Active()
-    {
-        enemyHolder.SetActive(true);
-        CollectEnemies();
+        Active = StateManager.IsActive;
     }
 
     void CollectEnemies()
@@ -116,6 +95,7 @@ public class EnemyManager : MonoBehaviour
         SoundManager.Instance.Play("EnemyDeath", enemy.transform.position);
     }
 
+    [Conditional("UNITY_EDITOR")]
     private void OnApplicationQuit()
     {
         EnemyKilled = null;
