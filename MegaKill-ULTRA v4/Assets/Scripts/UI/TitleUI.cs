@@ -12,9 +12,6 @@ public class TitleUI : MonoBehaviour
     Dialogue introText;
 
     [SerializeField]
-    Dialogue tangoText;
-
-    [SerializeField]
     GameObject titleScreen;
 
     void Awake()
@@ -31,7 +28,6 @@ public class TitleUI : MonoBehaviour
     //Not sure if this will be used as it's simple to connect to them through the Unity UI
     public void ChaptersButton() { }
 
-    // Todo: Change these to use one method with a parameter
     public void InstructionButton()
     {
         _ = StateManager.LoadLevel(StateManager.GameState.TUTORIAL, 2f, destroyCancellationToken);
