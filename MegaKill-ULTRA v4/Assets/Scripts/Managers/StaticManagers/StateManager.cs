@@ -82,20 +82,19 @@ public static class StateManager
 
     public static bool IsFirstAttempt { get; private set; } = true;
 
-    public static async UniTask LoadLevel(
-        GameState newLevel,
-        float delay,
-        CancellationToken cancellationToken
-    )
+    public static async UniTask LoadLevel(GameState newLevel, float delay, CancellationToken token)
     {
-        // TODO: Start loading scene during delay period and activate it when the delay is over
+        AsyncOperation sceneLoading;
         if (SceneScript.Instance?.State is not SceneState.TRANSITION)
         {
             SceneScript.Instance?.ExitLevel();
+            sceneLoading = SceneManager.LoadSceneAsync(newLevel.ToString());
+            Assert.IsNotNull(sceneLoading);
+            sceneLoading.allowSceneActivation = false;
             await UniTask.Delay(
                 TimeSpan.FromSeconds(delay),
                 DelayType.Realtime,
-                cancellationToken: cancellationToken
+                cancellationToken: token
             );
         }
         else
@@ -113,7 +112,8 @@ public static class StateManager
         {
             IsFirstAttempt = false;
         }
-        await SceneManager.LoadSceneAsync(newLevel.ToString());
+        sceneLoading.allowSceneActivation = true;
+        await sceneLoading;
         Level = newLevel;
         Debug.Log($"Loaded level {_level}");
     }
