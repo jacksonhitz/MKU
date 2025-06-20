@@ -1,37 +1,38 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager Instance { get; set; }
-
     [Header("Audio Sources")]
     public AudioSource music;
+
     public AudioSource sfx;
     public AudioSource dialogue;
 
     [Header("3D Settings")]
     [SerializeField]
-    float minDistance = 5f;
+    private float minDistance = 5f;
 
     [SerializeField]
-    float maxDistance = 30f;
+    private float maxDistance = 30f;
 
     [SerializeField]
-    AnimationCurve falloffCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+    private AnimationCurve falloffCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
 
-    Dictionary<string, SoundData> soundLookup = new();
+    private readonly Dictionary<string, SoundData> soundLookup = new();
 
-    void Awake()
+    [ResetOnPlay]
+    public static SoundManager Instance { get; private set; }
+
+    private void Awake()
     {
         Instance = this;
 
         SoundData[] loadedSounds = Resources.LoadAll<SoundData>("Sounds");
-        foreach (var sound in loadedSounds)
-        {
-            if (!soundLookup.ContainsKey(sound.name))
-                soundLookup.Add(sound.name, sound);
-        }
+        foreach (SoundData sound in loadedSounds)
+            soundLookup.TryAdd(sound.name, sound);
     }
 
     public SoundData GetSound(string soundName)
@@ -39,7 +40,9 @@ public class SoundManager : MonoBehaviour
         if (soundLookup.TryGetValue(soundName, out SoundData sound))
         {
             if (sound.clips.Length != 0)
+            {
                 return sound;
+            }
         }
         Debug.LogWarning($"Sound '{soundName}' not found.");
         return null;
@@ -77,16 +80,20 @@ public class SoundManager : MonoBehaviour
     {
         SoundData sound = GetSound(soundName);
         Debug.Log("Sound: " + sound);
-        if (sound != null)
+        if (sound)
+        {
             Play(sound);
+        }
     }
 
     //3D Grabber
     public void Play(string soundName, Vector3 pos)
     {
         SoundData sound = GetSound(soundName);
-        if (sound != null)
+        if (sound)
+        {
             Play(sound, pos);
+        }
     }
 
     //2D Player
@@ -124,10 +131,10 @@ public class SoundManager : MonoBehaviour
     {
         AudioClip clip = sound.clips[Random.Range(0, sound.clips.Length)];
 
-        GameObject audioHolder = new GameObject("Holding: " + clip.name);
+        var audioHolder = new GameObject("Holding: " + clip.name);
         audioHolder.transform.position = pos;
 
-        AudioSource audioSource = audioHolder.AddComponent<AudioSource>();
+        var audioSource = audioHolder.AddComponent<AudioSource>();
         audioSource.clip = clip;
         audioSource.spatialBlend = 1f;
         audioSource.rolloffMode = AudioRolloffMode.Custom;

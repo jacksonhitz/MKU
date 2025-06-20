@@ -85,10 +85,10 @@ public class TitleButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         isHovered = true;
         rectTransform.DOKill();
-        TweenerCore<Vector2, Vector2, VectorOptions> hoverForwardTween = rectTransform
+        rectTransform
             .DOAnchorPos(targetPosition, animationSpeed)
-            .SetSpeedBased();
-        hoverForwardTween.SetEase(Ease.OutSine);
+            .SetSpeedBased()
+            .SetEase(Ease.OutSine);
         //TODO: play hover sound
     }
 
@@ -101,10 +101,10 @@ public class TitleButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
         isHovered = false;
         rectTransform.DOKill();
-        TweenerCore<Vector2, Vector2, VectorOptions> hoverBackTween = rectTransform
+        rectTransform
             .DOAnchorPos(originalPosition, animationSpeed)
-            .SetSpeedBased();
-        hoverBackTween.SetEase(Ease.InSine);
+            .SetSpeedBased()
+            .SetEase(Ease.InSine);
     }
 }
 
