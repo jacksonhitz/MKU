@@ -1,17 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using System;
-using UnityEngine;
-using UnityEngine.UI;
+using System.Collections.Generic;
 using TMPro;
-using UnityEngine.SceneManagement;
-using UnityEngine.Events;
+using UnityEngine;
 
-public class Tutorial : ScenesManager
+public class Tutorial : SceneScript
 {
     //Main instruction text
     [SerializeField]
     private TMP_Text instruction;
+
     //Four text boxes mapping control name -> TMP_Text in counterclockwise order.
     //0 -> top, 1 -> left, 2 -> bottom, 3 -> right.
     [SerializeField]
@@ -23,14 +20,17 @@ public class Tutorial : ScenesManager
     //Reusable values
     [SerializeField]
     private Color32 todo;
+
     [SerializeField]
     private Color32 done;
+
     [SerializeField]
     private Color32 header;
 
     //Hands
     [SerializeField]
     private Transform leftHand;
+
     [SerializeField]
     private Transform rightHand;
 
@@ -38,24 +38,18 @@ public class Tutorial : ScenesManager
     public bool itemHeldL = false;
     public bool itemHeldR = false;
 
-
-    protected override void Awake()
+    private void Update()
     {
-        base.Awake();
-        StateManager.lvl = StateManager.GameState.TUTORIAL;
-        if (StateManager.State != StateManager.GameState.FILE)
-        {
-            StateManager.StartLvl();
-        }
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-        if (StateManager.IsActive())
+        if (StateManager.IsActive)
         {
             EnumLogic();
         }
+    }
+
+    public override void StartLevel()
+    {
+        base.StartLevel();
+        SoundManager.Instance.Play("Hot");
     }
 
     void EnumLogic()
@@ -93,7 +87,6 @@ public class Tutorial : ScenesManager
                 itemHeldR = rightHand.childCount > 0;
                 break;
             case TutorialStateManager.TutorialState.Interact:
-                Interact();
                 break;
         }
     }
@@ -138,8 +131,8 @@ public class Tutorial : ScenesManager
 
             Debug.Log("Changed state to Jump");
         }
-
     }
+
     void Jump()
     {
         //space
@@ -163,6 +156,7 @@ public class Tutorial : ScenesManager
             Debug.Log("Changed state to Punch");
         }
     }
+
     void Punch()
     {
         // left/right click to punch
@@ -194,6 +188,7 @@ public class Tutorial : ScenesManager
             Debug.Log("Changed state to Pickup");
         }
     }
+
     void Pickup()
     {
         // q/e to pickup to left/right hand
@@ -228,27 +223,7 @@ public class Tutorial : ScenesManager
             Debug.Log("Changed state to Use");
         }
     }
-    // void Items()
-    // {
-    //     // tab to see items
-    //     if (Input.GetKeyDown(KeyCode.Tab))
-    //     {
-    //         TutorialStateManager.State = TutorialStateManager.TutorialState.Use;
-    //         instruction.text = "USE";
-    //         controls[0].gameObject.SetActive(true);
-    //         controls[0].color = header;
-    //         controls[0].text = "CLICK";
-    //         controls[1].gameObject.SetActive(true);
-    //         controls[1].color = todo;
-    //         controls[1].text = "LEFT";
-    //         controls[2].gameObject.SetActive(false);
-    //         controls[3].gameObject.SetActive(true);
-    //         controls[3].color = todo;
-    //         controls[3].text = "RIGHT";
 
-    //         Debug.Log("Changed state to Use");
-    //     }
-    // }
     void Use()
     {
         // left/right click to use left/right item
@@ -280,6 +255,7 @@ public class Tutorial : ScenesManager
             Debug.Log("Changed state to Throw");
         }
     }
+
     void Throw()
     {
         // q/e to throw left/right
@@ -311,20 +287,19 @@ public class Tutorial : ScenesManager
             controls[3].gameObject.SetActive(false);
 
             Debug.Log("Changed state to Interact");
-
         }
     }
 
-    public override void Interact()
+    protected override void OnInteract((Interactable.Type type, Interactable interactable) tuple)
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            TutorialStateManager.State = TutorialStateManager.TutorialState.Fight;
-            instruction.text = "";
-            controls[2].gameObject.SetActive(false);
+        if (tuple.type is not Interactable.Type.Door)
+            return;
 
-            StateManager.LoadNext();
-        }
+        TutorialStateManager.State = TutorialStateManager.TutorialState.Fight;
+        instruction.text = "";
+        controls[2].gameObject.SetActive(false);
+
+        StateManager.LoadNext();
     }
 
     void OnTriggerEnter(Collider other)
@@ -336,7 +311,6 @@ public class Tutorial : ScenesManager
     }
 }
 
-
 //Tutorial-specific state machine
 public static class TutorialStateManager
 {
@@ -345,13 +319,14 @@ public static class TutorialStateManager
         WASD,
         Jump,
         Punch,
+
         // Items,
         Pickup,
         Use,
         Throw,
         Interact,
         Fight,
-        Done
+        Done,
     }
 
     private static TutorialState state;
@@ -385,10 +360,5 @@ public static class TutorialStateManager
             OnStateChanged?.Invoke(state);
             Debug.Log($"Tutorial state changed to {state}");
         }
-    }
-
-    public static bool GroupCheck(HashSet<TutorialState> group)
-    {
-        return group.Contains(state);
     }
 }

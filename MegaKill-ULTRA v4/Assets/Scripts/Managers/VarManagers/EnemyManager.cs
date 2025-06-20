@@ -1,78 +1,63 @@
-using System.Collections;
-using UnityEngine;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using IngameDebugConsole;
+using UnityEngine;
+using Debug = UnityEngine.Debug;
+using Random = UnityEngine.Random;
+using SceneState = StateManager.SceneState;
 
 public class EnemyManager : MonoBehaviour
 {
+    [ResetOnPlay]
     public static EnemyManager Instance { get; private set; }
 
-    [SerializeField] GameObject hands;
-    [SerializeField] GameObject enemyHolder;
-    public List<Enemy> enemies;
-    float spawnInterval = 5f;
-    PlayerController player;
+    [ResetOnPlay("delegate { }")]
+    public static event Action<(Type enemyType, int enemiesRemaining)> EnemyKilled = delegate { };
+
+    [SerializeField]
+    GameObject hands;
+
+    [SerializeField]
+    GameObject enemyHolder;
+    public List<Enemy> enemies = new();
+
+    private bool Active
+    {
+        get => enemyHolder.activeInHierarchy;
+        set
+        {
+            enemyHolder.SetActive(value);
+            if (enemyHolder.activeInHierarchy)
+                CollectEnemies();
+        }
+    }
 
     void Awake()
     {
         Instance = this;
-
-        player = FindObjectOfType<PlayerController>();
-        enemies = new List<Enemy>();
+        Active = false;
     }
-    void Start()
-    {
-        Active();
-    }
-
-
 
     void OnEnable()
     {
-        StateManager.OnStateChanged += StateChange;
-
-        StateChange(StateManager.State);
+        SceneScript.StateChanged += LevelChange;
     }
+
     void OnDisable()
     {
-        StateManager.OnStateChanged -= StateChange;
+        SceneScript.StateChanged -= LevelChange;
     }
 
-    //FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU
-    List<Enemy> staticEnemies = new List<Enemy>();
-    void StateChange(StateManager.GameState state)
+    void LevelChange(SceneState sceneState)
     {
-        if (StateManager.IsActive())
-            Active();
-        else return;
-
-        foreach (Enemy enemy in enemies)
-        {
-            if (enemy.currentState == Enemy.EnemyState.Static)
-            {
-                int rand = Random.Range(0, 3);
-                if (rand == 0)
-                    StartCoroutine(DanceTimer(enemy));
-            }
-        }
+        Active = StateManager.IsActive;
     }
 
-    IEnumerator DanceTimer(Enemy enemy)
-    {
-        int delay = Random.Range(0, 10);
-        yield return new WaitForSeconds(delay);
-        enemy.isDance = true;
-    }
-
-    void Active()
-    {
-        enemyHolder.SetActive(true);
-        // CallHands();
-        CollectEnemies();
-    }
     void CollectEnemies()
     {
-        enemies.Clear(); 
-        enemies.AddRange(FindObjectsOfType<Enemy>()); 
+        enemies.Clear();
+        enemies.AddRange(FindObjectsOfType<Enemy>());
     }
 
     public void Brawl()
@@ -94,8 +79,6 @@ public class EnemyManager : MonoBehaviour
             }
         }
 
-        int numToConvert = Mathf.CeilToInt(nonDosedEnemies.Count * 0.5f);
-
         for (int i = 0; i < nonDosedEnemies.Count; i++)
         {
             Enemy temp = nonDosedEnemies[i];
@@ -105,32 +88,29 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-
     public void Kill(Enemy enemy)
     {
         enemies.Remove(enemy);
         Destroy(enemy.gameObject);
-
-        if (enemies.Count == 0)
-            ScenesManager.Instance.ElimCheck();
+        EnemyKilled?.Invoke((enemy.GetType(), enemies.Count));
 
         SoundManager.Instance.Play("EnemyDeath", enemy.transform.position);
     }
 
-    public void CallHands()
+    [ConsoleMethod("KillAllEnemies", "Kills all enemies in the scene.")]
+    public static void KillAllEnemiesCommand()
     {
-        // StartCoroutine(SpawnHands());
-    }
-
-    IEnumerator SpawnHands()
-    {
-        while (true)
+        if (!Instance)
         {
-            yield return new WaitForSeconds(spawnInterval);
-
-            Vector3 spawnPos = player.transform.position;
-            spawnPos.y -= 4f;
-            Instantiate(hands, spawnPos, Quaternion.identity);
+            Debug.LogError("No enemy manager in scene.");
+            return;
         }
+
+        int count = Instance.enemies.Count;
+        while (Instance.enemies.Count > 0)
+        {
+            Instance.Kill(Instance.enemies[0]);
+        }
+        Debug.Log($"Killed {count - Instance.enemies.Count} enemies.");
     }
 }

@@ -1,7 +1,9 @@
+using System.Diagnostics;
 using UnityEngine;
 
 public abstract class InputManager : MonoBehaviour
 {
+    [ResetOnPlay]
     public static InputManager Instance { get; private set; }
 
     void Awake()
@@ -14,30 +16,24 @@ public abstract class InputManager : MonoBehaviour
         UpdateBase();
         UpdateItems();
         UpdatePlayer();
-
-        Debug.Log(StateManager.State);
     }
 
     void UpdateBase()
     {
-        if (Input.GetKeyDown(KeyCode.Return)) StateManager.LoadNext();
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (StateManager.State == StateManager.GameState.FILE) StartCoroutine(StateManager.LoadState(StateManager.lvl, 2f));
-            if (StateManager.State == StateManager.GameState.SCORE) StateManager.LoadNext();
+            if (SceneScript.Instance?.State == StateManager.SceneState.FILE)
+                SceneScript.Instance.StartLevel();
+            if (SceneScript.Instance?.State == StateManager.SceneState.SCORE)
+                StateManager.LoadNext();
         }
-            
 
-
-        if (Input.GetKeyDown(KeyCode.B))
-            StateManager.State = StateManager.GameState.TANGO2;
         if (Input.GetKeyDown(KeyCode.Z))
-            StartCoroutine(StateManager.LoadState(StateManager.GameState.SCORE, 2f));
+            SceneScript.Instance?.EndLevel();
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (Time.timeScale == 1)
+            if (Mathf.Approximately(Time.timeScale, 1))
                 SettingsManager.Instance.Pause();
             else
                 SettingsManager.Instance.Resume();
@@ -47,5 +43,3 @@ public abstract class InputManager : MonoBehaviour
     protected abstract void UpdateItems();
     protected abstract void UpdatePlayer();
 }
-
-

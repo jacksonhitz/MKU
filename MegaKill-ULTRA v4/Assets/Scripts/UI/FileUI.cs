@@ -1,35 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class FileUI : MonoBehaviour
 {
-    public static FileUI Instance { get; set; }
+    [ResetOnPlay]
+    public static FileUI Instance { get; private set; }
+    public bool Visible
+    {
+        get => file.enabled;
+        set => file.enabled = value;
+    }
 
-    [SerializeField] SpriteRenderer file;
+    [SerializeField]
+    SpriteRenderer file;
 
     void Awake()
     {
         Instance = this;
-    }
-
-    void OnEnable()
-    {
-        StateManager.OnStateChanged += StateChange;
-        StateManager.OnSilentChanged += StateChange;
-
-        StateChange(StateManager.State);
-    }
-    void OnDisable()
-    {
-        StateManager.OnStateChanged -= StateChange;
-        StateManager.OnSilentChanged -= StateChange;
-    }
-    void StateChange(StateManager.GameState state)
-    {
-        if (StateManager.State == StateManager.GameState.FILE || StateManager.previous == StateManager.GameState.FILE)
-            file.enabled = true;
-        else
-            file.enabled = false;
+        Visible = false;
     }
 }

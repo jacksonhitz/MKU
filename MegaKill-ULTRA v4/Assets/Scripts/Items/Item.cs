@@ -3,9 +3,12 @@ using UnityEngine;
 
 public abstract class Item : Interactable
 {
-    [HideInInspector] public Rigidbody rb;
-    [HideInInspector] public PopUp popUp;
-    
+    [HideInInspector]
+    public Rigidbody rb;
+
+    [HideInInspector]
+    public PopUp popUp;
+
     public bool thrown;
 
     public ItemData itemData;
@@ -18,8 +21,9 @@ public abstract class Item : Interactable
     {
         Available,
         Enemy,
-        Player
+        Player,
     }
+
     public ItemState currentState;
 
     protected override void Awake()
@@ -28,6 +32,7 @@ public abstract class Item : Interactable
         rb = GetComponent<Rigidbody>();
         popUp = FindObjectOfType<PopUp>();
     }
+
     protected override void Start()
     {
         base.Start();
@@ -35,7 +40,7 @@ public abstract class Item : Interactable
         isUseable = true;
     }
 
-    //STATE MANAGING (Set State should probably be rewritten in a dict or something to match states with scripts) 
+    //STATE MANAGING (Set State should probably be rewritten in a dict or something to match states with scripts)
     public void GetState()
     {
         if (transform.parent != null)
@@ -48,7 +53,7 @@ public abstract class Item : Interactable
                 SetState(ItemState.Enemy);
                 return;
             }
-            
+
             holder = GetComponentInParent<PlayerController>();
             var player = holder as PlayerController;
             if (player != null)
@@ -59,6 +64,7 @@ public abstract class Item : Interactable
         }
         SetState(ItemState.Available);
     }
+
     public void SetState(ItemState state)
     {
         currentState = state;
@@ -76,12 +82,12 @@ public abstract class Item : Interactable
                 break;
         }
     }
+
     public void Grabbed(Transform newHand)
     {
         GetState();
         hand = newHand;
     }
-
 
     //USE
     IEnumerator UseTimer()
@@ -90,6 +96,7 @@ public abstract class Item : Interactable
         yield return new WaitForSeconds(itemData.rate);
         isUseable = true;
     }
+
     public void UseCheck()
     {
         Debug.Log("check1");
@@ -100,9 +107,8 @@ public abstract class Item : Interactable
             Debug.Log("check2");
         }
     }
+
     public virtual void Use() { }
-
-
 
     public void Thrown()
     {
@@ -110,6 +116,7 @@ public abstract class Item : Interactable
         SetState(ItemState.Available);
         thrown = true;
     }
+
     public void Dropped()
     {
         transform.SetParent(null);
@@ -136,8 +143,6 @@ public abstract class Item : Interactable
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("collision");
-
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("player collision");
@@ -164,8 +169,6 @@ public abstract class Item : Interactable
 
     public void CollidersOn()
     {
-        Debug.Log("colliders on");
-
         rb.useGravity = true;
         rb.isKinematic = false;
 
@@ -175,10 +178,9 @@ public abstract class Item : Interactable
         if (TryGetComponent(out CapsuleCollider capsuleCollider))
             capsuleCollider.enabled = true;
     }
+
     public void CollidersOff()
     {
-        Debug.Log("colliders off");
-
         rb.useGravity = false;
         rb.isKinematic = true;
 

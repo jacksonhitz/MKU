@@ -1,63 +1,48 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class SoundManager : MonoBehaviour
 {
-    public static SoundManager Instance { get; set; }
-
     [Header("Audio Sources")]
     public AudioSource music;
+
     public AudioSource sfx;
     public AudioSource dialogue;
 
     [Header("3D Settings")]
-    [SerializeField] float minDistance = 5f;
-    [SerializeField] float maxDistance = 30f;
-    [SerializeField] AnimationCurve falloffCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+    [SerializeField]
+    private float minDistance = 5f;
 
-    Dictionary<string, SoundData> soundLookup = new();
+    [SerializeField]
+    private float maxDistance = 30f;
 
-    void Awake()
+    [SerializeField]
+    private AnimationCurve falloffCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
+
+    private readonly Dictionary<string, SoundData> soundLookup = new();
+
+    [ResetOnPlay]
+    public static SoundManager Instance { get; private set; }
+
+    private void Awake()
     {
         Instance = this;
 
         SoundData[] loadedSounds = Resources.LoadAll<SoundData>("Sounds");
-        foreach (var sound in loadedSounds)
-        {
-            if (!soundLookup.ContainsKey(sound.name))
-                soundLookup.Add(sound.name, sound);
-        }
-    }
-    void OnEnable()
-    {
-        StateManager.OnStateChanged += StateChange;
-
-        StateChange(StateManager.State);
-    }
-    void OnDisable()
-    {
-        StateManager.OnStateChanged -= StateChange;
-    }
-    void StateChange(StateManager.GameState state)
-    {
-        switch (state)
-        {
-            case StateManager.GameState.TUTORIAL: Play("Hot"); break;
-            case StateManager.GameState.REHEARSAL: Play("Acid"); break;
-            case StateManager.GameState.TANGO: Play("Witch"); break;
-            case StateManager.GameState.TANGO2: Play("Magic"); break;
-            case StateManager.GameState.SABLE: Play("4L"); break;
-            case StateManager.GameState.SPEARHEAD: Play("DJ"); break;
-            case StateManager.GameState.SCORE: MusicOff(); break;
-        }
-
+        foreach (SoundData sound in loadedSounds)
+            soundLookup.TryAdd(sound.name, sound);
     }
 
     public SoundData GetSound(string soundName)
     {
         if (soundLookup.TryGetValue(soundName, out SoundData sound))
         {
-            if (sound.clips.Length != 0) return sound;
+            if (sound.clips.Length != 0)
+            {
+                return sound;
+            }
         }
         Debug.LogWarning($"Sound '{soundName}' not found.");
         return null;
@@ -74,23 +59,42 @@ public class SoundManager : MonoBehaviour
         dialogue.Stop();
     }
 
+    public void Stop(SoundData.SoundType type)
+    {
+        switch (type)
+        {
+            case SoundData.SoundType.Music:
+                music.Stop();
+                break;
+            case SoundData.SoundType.Sfx:
+                sfx.Stop();
+                break;
+            case SoundData.SoundType.Dialogue:
+                dialogue.Stop();
+                break;
+        }
+    }
+
     //2D Grabber
     public void Play(string soundName)
     {
         SoundData sound = GetSound(soundName);
         Debug.Log("Sound: " + sound);
-        if (sound != null)
+        if (sound)
+        {
             Play(sound);
+        }
     }
 
     //3D Grabber
     public void Play(string soundName, Vector3 pos)
     {
         SoundData sound = GetSound(soundName);
-        if (sound != null)
+        if (sound)
+        {
             Play(sound, pos);
+        }
     }
-
 
     //2D Player
     public void Play(SoundData sound)
@@ -104,6 +108,7 @@ public class SoundManager : MonoBehaviour
             case SoundData.SoundType.Music:
                 music.clip = clip;
                 music.volume = sound.volume * music.volume;
+                music.loop = true;
                 music.Play();
                 Debug.Log("Music: " + sound);
                 break;
@@ -115,21 +120,21 @@ public class SoundManager : MonoBehaviour
             case SoundData.SoundType.Dialogue:
                 dialogue.clip = clip;
                 dialogue.volume = sound.volume * sfx.volume;
+                dialogue.loop = true;
                 dialogue.Play();
                 break;
         }
     }
-
 
     //3D Player
     public void Play(SoundData sound, Vector3 pos)
     {
         AudioClip clip = sound.clips[Random.Range(0, sound.clips.Length)];
 
-        GameObject audioHolder = new GameObject("Holding: " + clip.name);
+        var audioHolder = new GameObject("Holding: " + clip.name);
         audioHolder.transform.position = pos;
 
-        AudioSource audioSource = audioHolder.AddComponent<AudioSource>();
+        var audioSource = audioHolder.AddComponent<AudioSource>();
         audioSource.clip = clip;
         audioSource.spatialBlend = 1f;
         audioSource.rolloffMode = AudioRolloffMode.Custom;

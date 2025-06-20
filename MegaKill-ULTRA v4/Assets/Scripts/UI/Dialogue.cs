@@ -1,9 +1,15 @@
 using System.Collections;
-using UnityEngine;
+using System.Diagnostics;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using Redcode.Moroutines;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Assertions;
 
 public class Dialogue : MonoBehaviour
 {
+    [ResetOnPlay]
     public static Dialogue Instance { get; set; }
 
     public TextMeshProUGUI textComponent;
@@ -11,99 +17,59 @@ public class Dialogue : MonoBehaviour
     public string[] lines;
     public float textSpeed;
 
-    int index = -1;
-    bool customTyping = false;
-
+    int index = 0;
 
     void Awake()
     {
         Instance = this;
     }
-    void Update()
-    {
-      //  if (Input.GetKeyDown(KeyCode.Space) && !started)
-      //  {
-      //     started = true;
-      //     ClearText();
-      //     NextLine();
-      //  }
-    }
 
-    public void Play()
+    public async UniTask Play()
     {
-        StartCoroutine(DelayDialogue());
-    }
-
-    IEnumerator DelayDialogue()
-    {
-        yield return new WaitForSeconds(1.5f);
-        NextLine();
-    }
-
-    public void NextLine()
-    {
-        if (index < lines.Length - 1)
+        while (HasNextLine())
         {
-            index++;
-            StartCoroutine(TypeLine(lines[index]));
+            await Moroutine.Run(TypeLine(NextLine())).WaitForComplete();
         }
-        else
-        {
-            Invoke("Done", 2f);
-        }
+    }
+
+    private string NextLine()
+    {
+        Assert.IsTrue(HasNextLine());
+        return lines[index++];
+    }
+
+    private bool HasNextLine()
+    {
+        return index < lines.Length;
     }
 
     IEnumerator TypeLine(string text)
     {
-        
         textComponent.text = string.Empty;
         yield return new WaitForSeconds(0.1f);
 
         SoundManager.Instance.Play("Line");
 
-        foreach (char c in text.ToCharArray())
+        foreach (char c in text)
         {
             textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
         }
-
         yield return new WaitForSeconds(1f);
 
-        SoundManager.Instance.Stop();
-
-        if (customTyping)
-        {
-            customTyping = false;
-        }
-        else
-        {
-            NextLine();
-        }
+        SoundManager.Instance.Stop(SoundData.SoundType.Dialogue);
     }
 
-    public void TypeText(string customText, float timer)
+    public Moroutine TypeText(string customText)
     {
         StopAllCoroutines();
-        customTyping = true;
-        StartCoroutine(TypeLine(customText));
-
-        if (timer != 0)
-            Invoke("Done", timer);
+        return Moroutine.Run(TypeLine(customText));
     }
 
     public void Off()
     {
         StopAllCoroutines();
         textComponent.text = string.Empty;
-    }
-
-    void Done()
-    {
-        textComponent.text = string.Empty;
-
-        if (StateManager.State == StateManager.GameState.FILE)
-            StateManager.StartLvl();
-        else if (StateManager.IsPassive())
-            StateManager.LoadNext();
+        SoundManager.Instance.Stop(SoundData.SoundType.Dialogue);
     }
 }

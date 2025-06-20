@@ -1,19 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Title : ScenesManager
+public class Title : SceneScript
 {
-    protected override void Awake()
+    private new void Awake()
     {
-        StateManager.State = StateManager.GameState.TITLE;
-        Instance = this;
-        
+        base.Awake();
+        LevelActive = true;
     }
-    void Start()
+
+    private new void Start()
+    {
+        base.Start();
+        StartLevel();
+    }
+
+    public override void StartLevel()
     {
         SoundManager.Instance.Play("Title");
+        State = StateManager.SceneState.PAUSED;
     }
-    protected override void Update() { }
+
+    public void StartGame()
+    {
+        _ = StateManager.LoadLevel(StateManager.GameState.TUTORIAL, 1f, destroyCancellationToken);
+    }
 }

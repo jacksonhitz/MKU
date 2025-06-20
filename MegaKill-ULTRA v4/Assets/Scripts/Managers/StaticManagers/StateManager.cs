@@ -1,8 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using IngameDebugConsole;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
 
 public static class StateManager
 {
@@ -12,23 +17,24 @@ public static class StateManager
         TUTORIAL,
         REHEARSAL,
         TANGO,
-        TANGO2,
         SABLE,
         SPEARHEAD,
-
-        TRANSITION,
-        FILE,
-        SCORE
-
-            //pause
     }
 
-    public static GameState state;
-    public static GameState previous;
-    public static GameState lvl;
+    public enum SceneState
+    {
+        TRANSITION,
+        FILE,
+        PLAYING,
+        PAUSED,
+        SCORE,
+    }
 
-    public static event Action<GameState> OnStateChanged;
-    public static event Action<GameState> OnSilentChanged;
+    [ResetOnPlay(GameState.TITLE)]
+    private static GameState _level;
+
+    [ResetOnPlay]
+    public static event Action<GameState> LevelChanged;
 
     static readonly List<GameState> Order = new()
     {
@@ -36,107 +42,137 @@ public static class StateManager
         GameState.TUTORIAL,
         GameState.REHEARSAL,
         GameState.TANGO,
-        GameState.TANGO2,
-        GameState.SABLE,
-        GameState.SPEARHEAD
-    };
-
-    static readonly HashSet<GameState> Scene = new()
-    {
-        GameState.TITLE,
-        GameState.TUTORIAL,
-        GameState.REHEARSAL,
-        GameState.TANGO,
         GameState.SABLE,
         GameState.SPEARHEAD,
     };
 
-    static readonly HashSet<GameState> Transition = new()
+    public static readonly Dictionary<Type, GameState> LevelMapping = new()
     {
-        GameState.TITLE,
-        GameState.TUTORIAL,
-        GameState.REHEARSAL,
-        GameState.TANGO,
-        GameState.SABLE,
-        GameState.SPEARHEAD,
-        GameState.SCORE
+        { typeof(Title), GameState.TITLE },
+        { typeof(Tutorial), GameState.TUTORIAL },
+        { typeof(Rehearsal), GameState.REHEARSAL },
+        { typeof(Tango), GameState.TANGO },
+        { typeof(Sable), GameState.SABLE },
+        { typeof(Spearhead), GameState.SPEARHEAD },
     };
 
-    static readonly HashSet<GameState> Active = new()
+    public static GameState Level
     {
-        GameState.TUTORIAL,
-        GameState.REHEARSAL,
-        GameState.TANGO,
-        GameState.TANGO2,
-        GameState.SABLE,
-        GameState.SPEARHEAD,
-    };
-
-    static readonly HashSet<GameState> Passive = new()
-    {
-        GameState.TITLE,
-        GameState.FILE,
-        GameState.TRANSITION,
-        GameState.SCORE
-    };
-
-    public static GameState State
-    {
-        get => state;
-        set
+        get => _level;
+        private set
         {
-            previous = state;
-            state = value;
+            PreviousLevel = _level;
+            _level = value;
 
-            OnStateChanged?.Invoke(state);
-            Debug.Log($"State changed to {state}");
-        }
-    }
-    public static GameState SilentState
-    {
-        get => state;
-        set
-        {
-            previous = state;
-            state = value;
-
-            OnSilentChanged?.Invoke(state);
-            Debug.Log($"State changed to {state}");
-
+            LevelChanged?.Invoke(_level);
+            Debug.Log($"State changed to {_level}");
         }
     }
 
-    public static bool GroupCheck(HashSet<GameState> group) => group.Contains(state);
+    [ResetOnPlay(GameState.TITLE)]
+    public static GameState PreviousLevel { get; private set; } = GameState.TITLE;
 
-    public static bool IsActive() => GroupCheck(Active);
-    public static bool IsPassive() => GroupCheck(Passive);
-    public static bool IsScene() => GroupCheck(Scene);
+    private static bool GroupCheck(HashSet<GameState> group) => group.Contains(_level);
 
-    //this is the worst fucking thing ive ever made
-    public static IEnumerator LoadState(GameState newState, float delay)
+    public static bool IsActive =>
+        _level is not GameState.TITLE && SceneScript.Instance?.State is SceneState.PLAYING;
+
+    public static bool IsPassive =>
+        _level is GameState.TITLE || SceneScript.Instance?.State is not SceneState.PLAYING;
+
+    public static bool IsTransition => SceneScript.Instance?.State is SceneState.TRANSITION;
+
+    [ResetOnPlay(true)]
+    public static bool IsFirstAttempt { get; private set; } = true;
+
+    public static async UniTask LoadLevel(GameState newLevel, float delay, CancellationToken token)
     {
-        if (Transition.Contains(newState))
+        AsyncOperation sceneLoading;
+        if (SceneScript.Instance?.State is not SceneState.TRANSITION)
         {
-            State = GameState.TRANSITION;
-            yield return new WaitForSeconds(delay);
+            SceneScript.Instance?.ExitLevel();
+            sceneLoading = SceneManager.LoadSceneAsync(newLevel.ToString());
+            Assert.IsNotNull(sceneLoading);
+            sceneLoading.allowSceneActivation = false;
+            await UniTask.Delay(
+                TimeSpan.FromSeconds(delay),
+                DelayType.Realtime,
+                cancellationToken: token
+            );
+        }
+        else
+        {
+            Debug.LogWarning("Trying to load state while already transitioning, ignoring request");
+            return;
         }
 
-        if (Scene.Contains(newState)) SceneManager.LoadScene(newState.ToString());
-
-        if (Active.Contains(newState) && lvl != newState)
+        if (_level != newLevel)
         {
-            State = GameState.FILE;
-            lvl = newState;
+            PreviousLevel = newLevel;
+            IsFirstAttempt = true;
         }
-        else State = newState;
-
+        else
+        {
+            IsFirstAttempt = false;
+        }
+        sceneLoading.allowSceneActivation = true;
+        await sceneLoading;
+        Level = newLevel;
+        Debug.Log($"Loaded level {_level}");
     }
-    public static void StartLvl() => State = lvl;
 
+    [Conditional("UNITY_EDITOR")]
+    public static void DebugSetLevel(GameState level)
+    {
+        Debug.LogWarning("Level set manually in StateManager, make sure this is intentional.");
+        Level = level;
+    }
+
+    [ConsoleMethod("GoToNextLevel", "Loads the next level in the order")]
     public static void LoadNext()
     {
-        int currentIndex = Order.IndexOf(state);
+        int currentIndex = Order.IndexOf(_level);
         int nextIndex = (currentIndex + 1) % Order.Count;
-        ScenesManager.Instance.StartCoroutine(LoadState(Order[nextIndex], 2f)); //TEMP FIX THIS IS FUCKED
+        _ = LoadLevel(Order[nextIndex], 2f, Application.exitCancellationToken);
     }
+
+    public static async UniTask RestartLevel(float delay, CancellationToken cancellationToken)
+    {
+        Debug.Log("Restarting level");
+        await LoadLevel(_level, delay, cancellationToken);
+    }
+
+    [ConsoleMethod("RestartLevel", "Restart the current level")]
+    public static void RestartLevelCommand()
+    {
+        RestartLevel(2f, CancellationToken.None).Forget();
+    }
+
+    [ConsoleMethod("GoToLevel", "Loads the specified level")]
+    public static void LoadLevelCommand(GameState newLevel)
+    {
+        _level = newLevel;
+        LoadLevel(newLevel, 2f, Application.exitCancellationToken).Forget();
+    }
+
+    [ConsoleMethod("GoToLevel", "Loads the specified level")]
+    public static void LoadLevelCommand(GameState newLevel, bool showFileScreen)
+    {
+        if (!showFileScreen)
+            _level = newLevel;
+        LoadLevel(newLevel, 2f, Application.exitCancellationToken).Forget();
+    }
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// Hook to ensure our fields get reset when domain reloading is disabled.
+    /// The actual resetting is done by StaticFieldResetter at runtime initialization.
+    /// </summary>
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void RegisterForReset()
+    {
+        // The static fields with [ResetOnDomainReload] attribute will be reset automatically
+        // This empty method just ensures the class is initialized properly
+    }
+#endif
 }
