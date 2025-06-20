@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using KBCore.Refs;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -11,51 +11,63 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance { get; private set; }
 
     [Header("External")]
+    [Child]
     public Camera cam;
+
+    [KBCore.Refs.Scene]
     public SoundManager sound;
 
     [Header("Hands")]
+    [Anywhere]
     public Transform left;
+
+    [Anywhere]
     public Transform right;
 
     [Header("Compartments")]
+    [Self]
     public PlayerCombat combat;
+
+    [Self]
     public PlayerMovement movement;
+
+    [Self]
     public PlayerInteract interact;
+
+    [Self]
     public PlayerItems items;
+
+    [Self]
     public PlayerHealth health;
 
     [Foldout("UI")]
+    [Child]
     public Command commandUI;
 
     [Foldout("UI")]
+    [Child]
     public Dialogue tutorialUI;
 
     [Foldout("UI")]
+    [Child]
     public Dialogue dialogueUI;
 
     [Foldout("UI")]
+    [Child]
     public Dialogue infoUI;
 
     [Foldout("UI")]
+    [Child]
     public PopUp popUpUI;
 
     [Foldout("UI")]
+    [Child]
     public UEye uEye;
 
     public void Awake()
     {
         Instance = this;
-
-        combat = GetComponent<PlayerCombat>();
-        movement = GetComponent<PlayerMovement>();
-        interact = GetComponent<PlayerInteract>();
-        items = GetComponent<PlayerItems>();
-        health = GetComponent<PlayerHealth>();
     }
 
-    public void OnApplicationQuit()
-    {
-        Instance = null;
-    }
+    public void OnValidate() => this.ValidateRefs();
 }
