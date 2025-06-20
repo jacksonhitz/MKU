@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
@@ -31,8 +30,10 @@ public static class StateManager
         SCORE,
     }
 
+    [ResetOnPlay(GameState.TITLE)]
     private static GameState _level;
 
+    [ResetOnPlay]
     public static event Action<GameState> LevelChanged;
 
     static readonly List<GameState> Order = new()
@@ -68,6 +69,7 @@ public static class StateManager
         }
     }
 
+    [ResetOnPlay(GameState.TITLE)]
     public static GameState PreviousLevel { get; private set; } = GameState.TITLE;
 
     private static bool GroupCheck(HashSet<GameState> group) => group.Contains(_level);
@@ -80,6 +82,7 @@ public static class StateManager
 
     public static bool IsTransition => SceneScript.Instance?.State is SceneState.TRANSITION;
 
+    [ResetOnPlay(true)]
     public static bool IsFirstAttempt { get; private set; } = true;
 
     public static async UniTask LoadLevel(GameState newLevel, float delay, CancellationToken token)
@@ -159,4 +162,17 @@ public static class StateManager
             _level = newLevel;
         LoadLevel(newLevel, 2f, Application.exitCancellationToken).Forget();
     }
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// Hook to ensure our fields get reset when domain reloading is disabled.
+    /// The actual resetting is done by StaticFieldResetter at runtime initialization.
+    /// </summary>
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void RegisterForReset()
+    {
+        // The static fields with [ResetOnDomainReload] attribute will be reset automatically
+        // This empty method just ensures the class is initialized properly
+    }
+#endif
 }

@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class Interactable : MonoBehaviour, IInteractable
 {
     //CONVERT TO ABSTRACT AND REFACTOR
+    [ResetOnPlay]
     public static event Action<(Type type, Interactable interactable)> InteractableUsed;
 
     [SerializeField]

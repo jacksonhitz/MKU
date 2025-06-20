@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Redcode.Moroutines;
@@ -8,6 +9,7 @@ using UnityEngine.Assertions;
 
 public class Dialogue : MonoBehaviour
 {
+    [ResetOnPlay]
     public static Dialogue Instance { get; set; }
 
     public TextMeshProUGUI textComponent;

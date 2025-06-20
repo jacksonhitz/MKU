@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class ScoreUI : MonoBehaviour
 {
-    public static ScoreUI Instance { get; set; }
+    [ResetOnPlay]
+    public static ScoreUI Instance { get; private set; }
     public bool Visible
     {
         get => image.enabled;

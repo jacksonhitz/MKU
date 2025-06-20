@@ -47,8 +47,6 @@ public class EnemySpawning : MonoBehaviour
 
     void Update()
     {
-        // TODO: CHANGE THIS TO START AND END WHEN REQUESTED
-
         currentEnemyCount = CountEnemies();
         if (spawnsCompleted >= numberOfSpawns || currentEnemyCount >= maxEnemiesAtOnce)
             return;

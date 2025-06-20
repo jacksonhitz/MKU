@@ -1,7 +1,10 @@
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class DialogueManager : MonoBehaviour
 {
+    [ResetOnPlay]
     public static DialogueManager Instance { get; private set; }
 
     DialogueData[] lines;
@@ -16,8 +19,8 @@ public class DialogueManager : MonoBehaviour
 
     public void PlayRandomLine()
     {
-       // var matching = System.Array.FindAll(lines, d => d.trip == TripManager.Instance.trip);
-      //  string line = matching[Random.Range(0, matching.Length)].line;
-      //  Dialogue.Instance.TypeText(line, 5f);
+        // var matching = System.Array.FindAll(lines, d => d.trip == TripManager.Instance.trip);
+        //  string line = matching[Random.Range(0, matching.Length)].line;
+        //  Dialogue.Instance.TypeText(line, 5f);
     }
 }

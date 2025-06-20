@@ -1,7 +1,9 @@
+using System.Diagnostics;
 using UnityEngine;
 
 public abstract class InputManager : MonoBehaviour
 {
+    [ResetOnPlay]
     public static InputManager Instance { get; private set; }
 
     void Awake()

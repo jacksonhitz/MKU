@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class ScoreManager : MonoBehaviour
 {
+    [ResetOnPlay]
     public static ScoreManager Instance { get; private set; }
 
     public float timeCount;
@@ -18,7 +21,7 @@ public class ScoreManager : MonoBehaviour
     public float comboDuration = 3f;
     public float scoreMultiplier = 1f;
 
-    float timer; 
+    float timer;
 
     void Awake()
     {

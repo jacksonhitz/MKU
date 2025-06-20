@@ -9,8 +9,10 @@ using SceneState = StateManager.SceneState;
 
 public class EnemyManager : MonoBehaviour
 {
+    [ResetOnPlay]
     public static EnemyManager Instance { get; private set; }
 
+    [ResetOnPlay("delegate { }")]
     public static event Action<(Type enemyType, int enemiesRemaining)> EnemyKilled = delegate { };
 
     [SerializeField]
@@ -93,12 +95,6 @@ public class EnemyManager : MonoBehaviour
         EnemyKilled?.Invoke((enemy.GetType(), enemies.Count));
 
         SoundManager.Instance.Play("EnemyDeath", enemy.transform.position);
-    }
-
-    [Conditional("UNITY_EDITOR")]
-    private void OnApplicationQuit()
-    {
-        EnemyKilled = null;
     }
 
     [ConsoleMethod("KillAllEnemies", "Kills all enemies in the scene.")]

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using IngameDebugConsole;
@@ -6,13 +7,15 @@ using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
 using SceneState = StateManager.SceneState;
 
 public abstract class SceneScript : MonoBehaviour
 {
-    //HANDLE SAME SCENE STATES (PAUSE, FILE, TRANSITION)
-
+    [ResetOnPlay]
     public static SceneScript Instance { get; set; }
+
+    [ResetOnPlay]
     public static event Action<SceneState> StateChanged;
 
     [ReadOnly]
