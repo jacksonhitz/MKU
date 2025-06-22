@@ -13,7 +13,7 @@ using SceneState = StateManager.SceneState;
 public abstract class SceneScript : MonoBehaviour
 {
     [ResetOnPlay]
-    public static SceneScript Instance { get; set; }
+    public static SceneScript Instance { get; private set; }
 
     [ResetOnPlay]
     public static event Action<SceneState> StateChanged;
@@ -98,7 +98,6 @@ public abstract class SceneScript : MonoBehaviour
     public virtual void ExitLevel()
     {
         State = SceneState.TRANSITION;
-        PlayerController.Instance?.gameObject.transform.SetParent(null);
     }
 
     public virtual void EndLevel()
