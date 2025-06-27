@@ -1,74 +1,66 @@
-using System;
 using KBCore.Refs;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityUtils;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
     // All refrences in playerController are shared between multiple compartments in order to avoid extra refrences between compartments.
     // All other refrences that are specific to a compartment are stored within that compartment
 
-    [ResetOnPlay]
-    public static PlayerController Instance { get; private set; }
-
     [Header("External")]
-    [Child]
+    [SerializeField, Child]
     public Camera cam;
 
-    [KBCore.Refs.Scene]
+    [SerializeField, KBCore.Refs.Scene]
     public SoundManager sound;
 
     [Header("Hands")]
-    [Anywhere]
+    [SerializeField, Anywhere]
     public Transform left;
 
     [Anywhere]
     public Transform right;
 
     [Header("Compartments")]
-    [Self]
+    [SerializeField, Self]
     public PlayerCombat combat;
 
-    [Self]
+    [SerializeField, Self]
     public PlayerMovement movement;
 
-    [Self]
+    [SerializeField, Self]
     public PlayerInteract interact;
 
-    [Self]
+    [SerializeField, Self]
     public PlayerItems items;
 
-    [Self]
+    [SerializeField, Self]
     public PlayerHealth health;
 
     [Foldout("UI")]
-    [Child]
+    [SerializeField, Child]
     public Command commandUI;
 
     [Foldout("UI")]
-    [Child]
+    [SerializeField, Child]
     public Dialogue tutorialUI;
 
     [Foldout("UI")]
-    [Child]
+    [SerializeField, Child]
     public Dialogue dialogueUI;
 
     [Foldout("UI")]
-    [Child]
+    [SerializeField, Child]
     public Dialogue infoUI;
 
     [Foldout("UI")]
-    [Child]
+    [SerializeField, Child]
     public PopUp popUpUI;
 
     [Foldout("UI")]
-    [Child]
+    [SerializeField, Child]
     public UEye uEye;
-
-    public void Awake()
-    {
-        Instance = this;
-    }
 
     public void OnValidate() => this.ValidateRefs();
 }

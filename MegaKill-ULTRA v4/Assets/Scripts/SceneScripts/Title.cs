@@ -1,9 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-
 public class Title : SceneScript
 {
     private new void Awake()
@@ -21,7 +15,7 @@ public class Title : SceneScript
     public override void StartLevel()
     {
         SoundManager.Instance.Play("Title");
-        State = StateManager.SceneState.PAUSED;
+        State = StateManager.SceneState.FILE;
     }
 
     public void StartGame()

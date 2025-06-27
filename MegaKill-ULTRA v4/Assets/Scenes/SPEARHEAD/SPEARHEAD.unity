@@ -16739,6 +16739,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3770122598786963699, guid: 74efeb2ea6b0f499b879e3bce9313719, type: 3}
+      propertyPath: sound
+      value: 
+      objectReference: {fileID: 1333530381}
+    - target: {fileID: 3770122598786963699, guid: 74efeb2ea6b0f499b879e3bce9313719, type: 3}
       propertyPath: gravity
       value: -98
       objectReference: {fileID: 0}
@@ -145554,6 +145558,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86dbefdc978c74565a9c6c15765eb1b6, type: 3}
+--- !u!114 &1333530381 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8193952232300803230, guid: 86dbefdc978c74565a9c6c15765eb1b6, type: 3}
+  m_PrefabInstance: {fileID: 1333530380}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd6e504ec073d44638d2a25fce2bc771, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1333760394 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5124866672330385019, guid: 39e6b93a54094754f88367b0fc92d926, type: 3}

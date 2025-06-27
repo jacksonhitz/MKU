@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,15 +18,38 @@ public class PlayerMovement : MonoBehaviour
     float verticalVelocity;
     CharacterController characterController;
 
-    void Awake()
+    private void Awake()
     {
         characterController = GetComponent<CharacterController>();
+        InputManager.PlayerActionMap.Jump.performed += JumpOnPerformed;
     }
 
-    public void Move(Vector2 moveDir, bool jump)
+    private void JumpOnPerformed(InputAction.CallbackContext obj)
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        Jump();
+    }
 
+    private void OnDestroy()
+    {
+        InputManager.PlayerActionMap.Jump.performed -= JumpOnPerformed;
+    }
+
+    private void Update()
+    {
+        if (StateManager.IsPassive)
+            return;
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        Move(InputManager.PlayerActionMap.Move.ReadValue<Vector2>());
+    }
+
+    private void Jump()
+    {
+        if (isGrounded && !isRooted)
+            verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+    }
+
+    private void Move(Vector2 moveDir)
+    {
         Vector3 movement = transform.right * moveDir.x + transform.forward * moveDir.y;
 
         if (isGrounded && verticalVelocity < 0)
@@ -32,13 +57,10 @@ public class PlayerMovement : MonoBehaviour
         else
             verticalVelocity += gravity * Time.deltaTime;
 
-        if (jump && isGrounded && !isRooted)
-            verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        if (isRooted)
+            return;
 
-        if (!isRooted)
-        {
-            Vector3 finalMove = (movement * runSpd) + Vector3.up * verticalVelocity;
-            characterController.Move(finalMove * Time.deltaTime);
-        }
+        Vector3 finalMove = (movement * runSpd) + Vector3.up * verticalVelocity;
+        characterController.Move(finalMove * Time.deltaTime);
     }
 }

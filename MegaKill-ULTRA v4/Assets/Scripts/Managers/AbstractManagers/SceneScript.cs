@@ -1,12 +1,9 @@
 using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using IngameDebugConsole;
 using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.Assertions;
-using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 using Debug = UnityEngine.Debug;
 using SceneState = StateManager.SceneState;
 
@@ -75,6 +72,13 @@ public abstract class SceneScript : MonoBehaviour
 
         FileUI.Instance.Visible = true;
         State = SceneState.FILE;
+        InputManager.UIActionMap.Submit.performed += SubmitOnPerformed;
+
+        void SubmitOnPerformed(InputAction.CallbackContext ctx)
+        {
+            InputManager.UIActionMap.Submit.performed -= SubmitOnPerformed;
+            StartLevel();
+        }
     }
 
     protected void OnDestroy()
@@ -118,14 +122,22 @@ public abstract class SceneScript : MonoBehaviour
         NewsDialogue().Forget();
     }
 
+    protected virtual async UniTaskVoid NewsDialogue()
+    {
+        // TODO: Show correct input name based on binding
+        await Dialogue.Instance.TypeText("PRESS SPACE TO CONTINUE").WaitForComplete();
+        InputManager.UIActionMap.Submit.performed += SubmitOnPerformed;
+
+        void SubmitOnPerformed(InputAction.CallbackContext obj)
+        {
+            InputManager.UIActionMap.Submit.performed -= SubmitOnPerformed;
+            EndLevel();
+        }
+    }
+
     [ConsoleMethod("EndLevel", "Ends the current level and goes to the score screen")]
     public static void EndLevelCommand()
     {
         Instance.EndLevel();
-    }
-
-    protected virtual async UniTaskVoid NewsDialogue()
-    {
-        await Dialogue.Instance.TypeText("PRESS SPACE TO CONTINUE").WaitForComplete();
     }
 }

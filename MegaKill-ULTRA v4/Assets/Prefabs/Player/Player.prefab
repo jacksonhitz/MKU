@@ -4045,7 +4045,6 @@ GameObject:
   - component: {fileID: 4013446450485899524}
   - component: {fileID: 2738128887218828491}
   - component: {fileID: 2696409501945406757}
-  - component: {fileID: 4689944491773041080}
   - component: {fileID: 3224170306473505317}
   - component: {fileID: 4853229913406527991}
   m_Layer: 10
@@ -4138,6 +4137,7 @@ MonoBehaviour:
   leftItem: {fileID: 0}
   rightItem: {fileID: 0}
   throwForce: 200
+  controller: {fileID: 3770122598786963699}
 --- !u!114 &2738128887218828491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4157,6 +4157,8 @@ MonoBehaviour:
   punchR: {fileID: 282627973548570201}
   punchL: {fileID: 8885470995603086759}
   punchRange: {fileID: 372933160457287439}
+  punchCooldown: 0.75
+  controller: {fileID: 3770122598786963699}
 --- !u!114 &2696409501945406757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4170,18 +4172,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
---- !u!114 &4689944491773041080
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3958635896117000374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0cfc7ac0261c1400e8cb7a471de2e659, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3224170306473505317
 MonoBehaviour:
   m_ObjectHideFlags: 0

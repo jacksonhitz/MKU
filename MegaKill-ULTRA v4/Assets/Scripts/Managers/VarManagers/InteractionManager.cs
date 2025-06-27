@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class InteractionManager : MonoBehaviour
 {
+    [ResetOnPlay]
     public static InteractionManager Instance { get; private set; }
 
     [SerializeField]

@@ -1,8 +1,12 @@
 using System.Collections;
+using KBCore.Refs;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PlayerCombat : MonoBehaviour
+public class PlayerCombat : ValidatedMonoBehaviour
 {
+    private static readonly int PunchKey = Animator.StringToHash("Punch");
+
     [Header("Anim")]
     public Animator swingAnim;
     public Animator punchRAnim;
@@ -12,23 +16,45 @@ public class PlayerCombat : MonoBehaviour
     public Renderer punchL;
 
     [Header("Combat")]
-    public Collider punchRange;
+    [SerializeField]
+    private Collider punchRange;
 
-    bool canPunch = true;
+    [SerializeField]
     float punchCooldown = 0.75f;
 
+    [SerializeField, HideInInspector, Self]
     PlayerController controller;
 
-    //this script is stupid
+    bool canPunch = true;
 
-    void Awake()
+    private void Awake()
     {
-        controller = GetComponent<PlayerController>();
+        InputManager.PlayerActionMap.UseLeft.performed += UseLeftOnPerformed;
+        InputManager.PlayerActionMap.UseRight.performed += UseRightOnPerformed;
     }
 
-    public void Punch(Transform hand)
+    private void OnDestroy()
     {
-        if (!canPunch) return;
+        InputManager.PlayerActionMap.UseLeft.performed -= UseLeftOnPerformed;
+        InputManager.PlayerActionMap.UseRight.performed -= UseRightOnPerformed;
+    }
+
+    private void UseLeftOnPerformed(InputAction.CallbackContext obj)
+    {
+        if (!controller.items.leftItem)
+            Punch(controller.left);
+    }
+
+    private void UseRightOnPerformed(InputAction.CallbackContext obj)
+    {
+        if (!controller.items.rightItem)
+            Punch(controller.right);
+    }
+
+    private void Punch(Transform hand)
+    {
+        if (!canPunch)
+            return;
         canPunch = false;
         StartCoroutine(PunchCooldown());
 
@@ -36,13 +62,13 @@ public class PlayerCombat : MonoBehaviour
         {
             StartCoroutine(PunchOn(punchL));
             StartCoroutine(PunchOff(punchL));
-            punchLAnim.SetTrigger("Punch");
+            punchLAnim.SetTrigger(PunchKey);
         }
         else
         {
             StartCoroutine(PunchOn(punchR));
             StartCoroutine(PunchOff(punchR));
-            punchRAnim.SetTrigger("Punch");
+            punchRAnim.SetTrigger(PunchKey);
         }
     }
 
@@ -68,9 +94,13 @@ public class PlayerCombat : MonoBehaviour
         punchRange.enabled = false;
     }
 
-    public void Melee(Collider range)
+    private void Melee(Collider range)
     {
-        Collider[] hits = Physics.OverlapBox(range.bounds.center, range.bounds.extents, range.transform.rotation);
+        Collider[] hits = Physics.OverlapBox(
+            range.bounds.center,
+            range.bounds.extents,
+            range.transform.rotation
+        );
         foreach (Collider hit in hits)
         {
             if (hit.transform.CompareTag("Enemy"))
@@ -81,5 +111,4 @@ public class PlayerCombat : MonoBehaviour
             }
         }
     }
-
 }

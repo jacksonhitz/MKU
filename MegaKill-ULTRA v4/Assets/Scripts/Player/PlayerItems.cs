@@ -1,62 +1,89 @@
+using KBCore.Refs;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PlayerItems : MonoBehaviour
+public class PlayerItems : ValidatedMonoBehaviour
 {
     public Item leftItem;
     public Item rightItem;
     public float throwForce;
 
+    [SerializeField, Self]
     PlayerController controller;
 
-
-    void Awake()
+    private void Awake()
     {
-        controller = GetComponent<PlayerController>();
+        InputManager.PlayerActionMap.EquipLeft.performed += LeftEquip;
+        InputManager.PlayerActionMap.EquipRight.performed += RightEquip;
+        InputManager.PlayerActionMap.ThrowLeft.performed += LeftThrow;
+        InputManager.PlayerActionMap.RightThrow.performed += RightThrow;
+        InputManager.PlayerActionMap.UseRight.performed += UseRight;
+        InputManager.PlayerActionMap.UseLeft.performed += UseLeft;
     }
 
-    public void UseLeft()
+    private void OnDestroy()
     {
-        if (leftItem == null)
-            controller.combat.Punch(controller.left);
-        else
-            leftItem.Invoke("UseCheck", 0f);
+        InputManager.PlayerActionMap.EquipLeft.performed -= LeftEquip;
+        InputManager.PlayerActionMap.EquipRight.performed -= RightEquip;
+        InputManager.PlayerActionMap.ThrowLeft.performed -= LeftThrow;
+        InputManager.PlayerActionMap.RightThrow.performed -= RightThrow;
+        InputManager.PlayerActionMap.UseRight.performed -= UseRight;
+        InputManager.PlayerActionMap.UseLeft.performed -= UseLeft;
     }
 
-    public void UseRight()
+    private void UseLeft(InputAction.CallbackContext callbackContext)
     {
-        if (rightItem == null)
-            controller.combat.Punch(controller.right);
-        else
-            rightItem.Invoke("UseCheck", 0f);
+        if (leftItem)
+            leftItem.UseCheck();
     }
 
-    public void Left()
+    private void UseRight(InputAction.CallbackContext callbackContext)
     {
-        if (leftItem == null) GrabCheck(controller.left);
-        else Throw(leftItem);
+        if (rightItem)
+            rightItem.UseCheck();
     }
-    public void Right()
+
+    private void LeftThrow(InputAction.CallbackContext callbackContext)
     {
-        if (rightItem == null) GrabCheck(controller.right);
-        else Throw(rightItem);
+        if (leftItem)
+            Throw(leftItem);
+    }
+
+    private void RightThrow(InputAction.CallbackContext callbackContext)
+    {
+        if (rightItem)
+            Throw(rightItem);
+    }
+
+    private void LeftEquip(InputAction.CallbackContext callbackContext)
+    {
+        if (!leftItem)
+            GrabCheck(controller.left);
+    }
+
+    private void RightEquip(InputAction.CallbackContext callbackContext)
+    {
+        if (!rightItem)
+            GrabCheck(controller.right);
     }
 
     void GrabCheck(Transform hand)
     {
-        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
-        if (Physics.Raycast(ray, out RaycastHit hit, 30f))
+        Ray ray = Camera.main!.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+        if (!Physics.Raycast(ray, out RaycastHit hit, 30f))
+            return;
+        if (hit.collider.TryGetComponent(out Item item))
         {
-            if (hit.collider.TryGetComponent(out Item item))
-            {
-                Grab(item, hand);
-            }
+            Grab(item, hand);
         }
     }
 
     void Grab(Item item, Transform hand)
     {
-        if (hand == controller.left) leftItem = item;
-        else rightItem = item;
+        if (hand == controller.left)
+            leftItem = item;
+        else
+            rightItem = item;
         item.transform.SetParent(hand);
         item.Grabbed(hand);
 
@@ -64,12 +91,15 @@ public class PlayerItems : MonoBehaviour
         item.transform.localRotation = Quaternion.Euler(item.itemData.rot);
     }
 
-    public void Throw(Item item)
+    private void Throw(Item item)
     {
         item.Thrown();
-        item.rb.AddForce(Camera.main.transform.forward * throwForce, ForceMode.Impulse);
+        item.rb.AddForce(Camera.main!.transform.forward * throwForce, ForceMode.Impulse);
+        SoundManager.Instance.Play("Throw");
 
-        if (item == leftItem) leftItem = null;
-        else rightItem = null;
+        if (item == leftItem)
+            leftItem = null;
+        else
+            rightItem = null;
     }
 }

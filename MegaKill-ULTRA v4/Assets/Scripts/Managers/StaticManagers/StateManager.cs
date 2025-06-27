@@ -26,7 +26,8 @@ public static class StateManager
         TRANSITION,
         FILE,
         PLAYING,
-        PAUSED,
+
+        // PAUSED,
         SCORE,
     }
 
@@ -65,7 +66,6 @@ public static class StateManager
             _level = value;
 
             LevelChanged?.Invoke(_level);
-            Debug.Log($"State changed to {_level}");
         }
     }
 

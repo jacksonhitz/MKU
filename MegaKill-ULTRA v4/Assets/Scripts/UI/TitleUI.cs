@@ -61,6 +61,10 @@ public class TitleUI : MonoBehaviour
     public void ExitButton()
     {
         Debug.Log("Quitting/Exiting Application");
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.ExitPlaymode();
+#else
         Application.Quit();
+#endif
     }
 }
