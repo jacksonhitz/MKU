@@ -171,15 +171,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d62dc33965b4530afc963c943a9cea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mats: []
   glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
+  def: {fileID: 0}
+  rend: {fileID: 0}
+  mats: []
   isHovering: 0
   isInteractable: 1
+  isRandomTex: 0
   type: 1
   rb: {fileID: 0}
   popUp: {fileID: 0}
   thrown: 0
-  itemData: {fileID: 0}
+  itemData: {fileID: 11400000, guid: 3686a5ff459184a15a9b31dd0e1a1646, type: 2}
   holder: {fileID: 0}
   currentState: 0
   data: {fileID: 11400000, guid: 3686a5ff459184a15a9b31dd0e1a1646, type: 2}

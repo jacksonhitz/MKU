@@ -1,7 +1,6 @@
 using System.Collections;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Tango : SceneScript
 {
@@ -76,10 +75,11 @@ public class Tango : SceneScript
             yield return new WaitForSeconds(1f);
         }
         dialogue.Off();
-
+        PlayerController.Instance.commandUI.Active = true;
         SoundManager.Instance.Play("Magic");
         InteractionManager.Instance.ExtractOn();
         EnemyManager.Instance.Brawl();
+        yield return new WaitForSeconds(1.5f);
         dialogue.TypeText("F ON ANY VAN TO EXTRACT");
         extractsActive = true;
     }

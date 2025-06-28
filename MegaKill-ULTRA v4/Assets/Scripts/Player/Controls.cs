@@ -28,7 +28,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             ""id"": ""e3396114-51da-4203-83a1-d8905996a1f3"",
             ""actions"": [
                 {
-                    ""name"": ""RightThrow"",
+                    ""name"": ""ThrowRight"",
                     ""type"": ""Button"",
                     ""id"": ""7a6cf809-18de-438f-8195-742e1df274eb"",
                     ""expectedControlType"": ""Button"",
@@ -135,7 +135,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""KBM"",
-                    ""action"": ""RightThrow"",
+                    ""action"": ""ThrowRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -826,7 +826,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_RightThrow = m_Player.FindAction("RightThrow", throwIfNotFound: true);
+        m_Player_ThrowRight = m_Player.FindAction("ThrowRight", throwIfNotFound: true);
         m_Player_ThrowLeft = m_Player.FindAction("ThrowLeft", throwIfNotFound: true);
         m_Player_UseRight = m_Player.FindAction("UseRight", throwIfNotFound: true);
         m_Player_UseLeft = m_Player.FindAction("UseLeft", throwIfNotFound: true);
@@ -908,7 +908,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_RightThrow;
+    private readonly InputAction m_Player_ThrowRight;
     private readonly InputAction m_Player_ThrowLeft;
     private readonly InputAction m_Player_UseRight;
     private readonly InputAction m_Player_UseLeft;
@@ -923,7 +923,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     {
         private @Controls m_Wrapper;
         public PlayerActions(@Controls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @RightThrow => m_Wrapper.m_Player_RightThrow;
+        public InputAction @ThrowRight => m_Wrapper.m_Player_ThrowRight;
         public InputAction @ThrowLeft => m_Wrapper.m_Player_ThrowLeft;
         public InputAction @UseRight => m_Wrapper.m_Player_UseRight;
         public InputAction @UseLeft => m_Wrapper.m_Player_UseLeft;
@@ -943,9 +943,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @RightThrow.started += instance.OnRightThrow;
-            @RightThrow.performed += instance.OnRightThrow;
-            @RightThrow.canceled += instance.OnRightThrow;
+            @ThrowRight.started += instance.OnThrowRight;
+            @ThrowRight.performed += instance.OnThrowRight;
+            @ThrowRight.canceled += instance.OnThrowRight;
             @ThrowLeft.started += instance.OnThrowLeft;
             @ThrowLeft.performed += instance.OnThrowLeft;
             @ThrowLeft.canceled += instance.OnThrowLeft;
@@ -980,9 +980,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(IPlayerActions instance)
         {
-            @RightThrow.started -= instance.OnRightThrow;
-            @RightThrow.performed -= instance.OnRightThrow;
-            @RightThrow.canceled -= instance.OnRightThrow;
+            @ThrowRight.started -= instance.OnThrowRight;
+            @ThrowRight.performed -= instance.OnThrowRight;
+            @ThrowRight.canceled -= instance.OnThrowRight;
             @ThrowLeft.started -= instance.OnThrowLeft;
             @ThrowLeft.performed -= instance.OnThrowLeft;
             @ThrowLeft.canceled -= instance.OnThrowLeft;
@@ -1152,7 +1152,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     }
     public interface IPlayerActions
     {
-        void OnRightThrow(InputAction.CallbackContext context);
+        void OnThrowRight(InputAction.CallbackContext context);
         void OnThrowLeft(InputAction.CallbackContext context);
         void OnUseRight(InputAction.CallbackContext context);
         void OnUseLeft(InputAction.CallbackContext context);

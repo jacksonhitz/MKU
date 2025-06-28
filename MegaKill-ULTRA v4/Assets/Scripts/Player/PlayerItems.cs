@@ -1,3 +1,4 @@
+using IngameDebugConsole;
 using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,6 +8,8 @@ public class PlayerItems : ValidatedMonoBehaviour
     public Item leftItem;
     public Item rightItem;
     public float throwForce;
+    private bool usedLeft;
+    private bool usedRight;
 
     [SerializeField, Self]
     PlayerController controller;
@@ -16,7 +19,7 @@ public class PlayerItems : ValidatedMonoBehaviour
         InputManager.PlayerActionMap.EquipLeft.performed += LeftEquip;
         InputManager.PlayerActionMap.EquipRight.performed += RightEquip;
         InputManager.PlayerActionMap.ThrowLeft.performed += LeftThrow;
-        InputManager.PlayerActionMap.RightThrow.performed += RightThrow;
+        InputManager.PlayerActionMap.ThrowRight.performed += RightThrow;
         InputManager.PlayerActionMap.UseRight.performed += UseRight;
         InputManager.PlayerActionMap.UseLeft.performed += UseLeft;
     }
@@ -26,45 +29,63 @@ public class PlayerItems : ValidatedMonoBehaviour
         InputManager.PlayerActionMap.EquipLeft.performed -= LeftEquip;
         InputManager.PlayerActionMap.EquipRight.performed -= RightEquip;
         InputManager.PlayerActionMap.ThrowLeft.performed -= LeftThrow;
-        InputManager.PlayerActionMap.RightThrow.performed -= RightThrow;
+        InputManager.PlayerActionMap.ThrowRight.performed -= RightThrow;
         InputManager.PlayerActionMap.UseRight.performed -= UseRight;
         InputManager.PlayerActionMap.UseLeft.performed -= UseLeft;
     }
 
+    private void Update()
+    {
+        usedLeft = false;
+        usedRight = false;
+    }
+
     private void UseLeft(InputAction.CallbackContext callbackContext)
     {
-        if (leftItem)
-            leftItem.UseCheck();
+        if (!leftItem || usedLeft)
+            return;
+        usedLeft = true;
+        leftItem.UseCheck();
     }
 
     private void UseRight(InputAction.CallbackContext callbackContext)
     {
-        if (rightItem)
-            rightItem.UseCheck();
+        if (!rightItem || usedRight)
+            return;
+        usedRight = true;
+        rightItem.UseCheck();
     }
 
     private void LeftThrow(InputAction.CallbackContext callbackContext)
     {
-        if (leftItem)
-            Throw(leftItem);
+        if (!leftItem || usedLeft)
+            return;
+        usedLeft = true;
+        Throw(leftItem);
     }
 
     private void RightThrow(InputAction.CallbackContext callbackContext)
     {
-        if (rightItem)
-            Throw(rightItem);
+        if (!rightItem || usedRight)
+            return;
+        usedRight = true;
+        Throw(rightItem);
     }
 
     private void LeftEquip(InputAction.CallbackContext callbackContext)
     {
-        if (!leftItem)
-            GrabCheck(controller.left);
+        if (leftItem || usedLeft)
+            return;
+        usedLeft = true;
+        GrabCheck(controller.left);
     }
 
     private void RightEquip(InputAction.CallbackContext callbackContext)
     {
-        if (!rightItem)
-            GrabCheck(controller.right);
+        if (rightItem || usedRight)
+            return;
+        usedRight = true;
+        GrabCheck(controller.right);
     }
 
     void GrabCheck(Transform hand)
@@ -101,5 +122,54 @@ public class PlayerItems : ValidatedMonoBehaviour
             leftItem = null;
         else
             rightItem = null;
+    }
+
+    public enum ItemType
+    {
+        Revolver,
+        Shotgun,
+        MG,
+        Beer,
+        Meth,
+    }
+
+    [ConsoleMethod("GiveItem", "Give an item to the player")]
+    public static void GiveItem(ItemType item)
+    {
+        var pi = PlayerController.Instance.items;
+        bool isLeft = !pi.leftItem || (pi.leftItem && pi.rightItem);
+        var hand = isLeft ? pi.controller.left : pi.controller.right;
+        if (isLeft && pi.leftItem)
+        {
+            pi.leftItem.Dropped();
+        }
+        else if (!isLeft && pi.rightItem)
+        {
+            pi.rightItem.Dropped();
+        }
+
+        switch (item)
+        {
+            case ItemType.Revolver:
+                var rev = Resources.Load<ItemData>("Items/Rev").prefab;
+                pi.Grab(Instantiate(rev).GetComponent<Revolver>(), hand);
+                break;
+            case ItemType.MG:
+                var mg = Resources.Load<ItemData>("Items/MG").prefab;
+                pi.Grab(Instantiate(mg).GetComponent<MG>(), hand);
+                break;
+            case ItemType.Shotgun:
+                var sg = Resources.Load<ItemData>("Items/SG").prefab;
+                pi.Grab(Instantiate(sg).GetComponent<Shotgun>(), hand);
+                break;
+            case ItemType.Beer:
+                var beer = Resources.Load<ItemData>("Items/Beer").prefab;
+                pi.Grab(Instantiate(beer).GetComponent<Item>(), hand);
+                break;
+            case ItemType.Meth:
+                var meth = Resources.Load<ItemData>("Items/Meth").prefab;
+                pi.Grab(Instantiate(meth).GetComponent<Item>(), hand);
+                break;
+        }
     }
 }

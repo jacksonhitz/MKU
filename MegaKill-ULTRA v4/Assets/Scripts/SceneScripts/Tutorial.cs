@@ -299,7 +299,7 @@ public class Tutorial : SceneScript
         instruction.text = "";
         controls[2].gameObject.SetActive(false);
 
-        StateManager.LoadNext();
+        EndLevel();
     }
 
     void OnTriggerEnter(Collider other)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using IngameDebugConsole;
 using NaughtyAttributes;
@@ -10,6 +11,9 @@ public class PlayerHealth : MonoBehaviour, IHitable
     float health;
     float maxHealth = 100;
     UEye uEye;
+
+    [ResetOnPlay]
+    public static event Action PlayerDied = delegate { };
 
     void Awake()
     {
@@ -32,17 +36,15 @@ public class PlayerHealth : MonoBehaviour, IHitable
         health -= dmg;
         uEye.UpdateHealth(health);
 
-        if (StateManager.IsActive && health <= 0)
-        {
-            SoundManager.Instance.Play("PlayerDeath");
-            _ = StateManager.RestartLevel(3f, Application.exitCancellationToken);
-        }
+        if (!StateManager.IsActive || !(health <= 0) || !enabled)
+            return;
+        SoundManager.Instance.Play("PlayerDeath");
+        PlayerDied?.Invoke();
     }
 
     [ConsoleMethod("Kill", "Kills the player")]
-    public static void Kill(string message)
+    public static void Kill()
     {
-        Debug.Log(message);
         var player = FindObjectOfType<PlayerController>();
         player.health.Hit(999);
     }

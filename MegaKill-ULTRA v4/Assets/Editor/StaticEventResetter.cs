@@ -1,4 +1,4 @@
-﻿#define STATIC_RESET_VERBOSE_LOGGING
+﻿// #define STATIC_RESET_VERBOSE_LOGGING
 
 using System;
 using System.Collections.Generic;
@@ -31,9 +31,11 @@ public static class StaticFieldResetter
             && state != PlayModeStateChange.ExitingPlayMode
         )
             return;
+#if STATIC_RESET_VERBOSE_LOGGING
         Debug.Log(
             $"Resetting static fields marked with {nameof(ResetOnPlayAttribute)} (Play Mode Change)"
         );
+#endif
         ResetAllMarkedStaticFields("play mode change");
     }
 
@@ -41,9 +43,11 @@ public static class StaticFieldResetter
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void RuntimeResetStaticFields()
     {
+#if STATIC_RESET_VERBOSE_LOGGING
         Debug.Log(
             $"Resetting static fields marked with {nameof(ResetOnPlayAttribute)} (Domain Reload)"
         );
+#endif
         ResetAllMarkedStaticFields("domain reload");
     }
 

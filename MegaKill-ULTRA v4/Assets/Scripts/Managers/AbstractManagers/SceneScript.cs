@@ -53,6 +53,7 @@ public abstract class SceneScript : MonoBehaviour
 
         Interactable.InteractableUsed += OnInteract;
         EnemyManager.EnemyKilled += OnEnemyKilled;
+        PlayerHealth.PlayerDied += OnPlayerDied;
     }
 
     protected virtual void Start()
@@ -85,6 +86,14 @@ public abstract class SceneScript : MonoBehaviour
     {
         Interactable.InteractableUsed -= OnInteract;
         EnemyManager.EnemyKilled -= OnEnemyKilled;
+        PlayerHealth.PlayerDied -= OnPlayerDied;
+    }
+
+    protected virtual void OnPlayerDied()
+    {
+        PlayerController.Instance.Active = false;
+        StateManager.RestartLevel(2f, Application.exitCancellationToken).Forget();
+        State = SceneState.TRANSITION;
     }
 
     protected virtual void OnInteract((Interactable.Type type, Interactable interactable) tuple) { }
@@ -99,14 +108,21 @@ public abstract class SceneScript : MonoBehaviour
         StateChanged?.Invoke(SceneState.PLAYING);
     }
 
-    public virtual void ExitLevel()
+    public void Transition()
     {
         State = SceneState.TRANSITION;
     }
 
-    public virtual void EndLevel()
+    private void ExitLevel()
+    {
+        StateManager.LoadNext();
+        State = SceneState.TRANSITION;
+    }
+
+    protected void EndLevel()
     {
         level.SetActive(false);
+        PlayerController.Instance.Active = false;
         GoToScoreScreen();
     }
 
@@ -131,7 +147,7 @@ public abstract class SceneScript : MonoBehaviour
         void SubmitOnPerformed(InputAction.CallbackContext obj)
         {
             InputManager.UIActionMap.Submit.performed -= SubmitOnPerformed;
-            EndLevel();
+            ExitLevel();
         }
     }
 

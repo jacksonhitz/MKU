@@ -72,8 +72,6 @@ public static class StateManager
     [ResetOnPlay(GameState.TITLE)]
     public static GameState PreviousLevel { get; private set; } = GameState.TITLE;
 
-    private static bool GroupCheck(HashSet<GameState> group) => group.Contains(_level);
-
     public static bool IsActive =>
         _level is not GameState.TITLE && SceneScript.Instance?.State is SceneState.PLAYING;
 
@@ -90,7 +88,7 @@ public static class StateManager
         AsyncOperation sceneLoading;
         if (SceneScript.Instance?.State is not SceneState.TRANSITION)
         {
-            SceneScript.Instance?.ExitLevel();
+            SceneScript.Instance?.Transition();
             sceneLoading = SceneManager.LoadSceneAsync(newLevel.ToString());
             Assert.IsNotNull(sceneLoading);
             sceneLoading.allowSceneActivation = false;
@@ -115,16 +113,18 @@ public static class StateManager
         {
             IsFirstAttempt = false;
         }
+        Level = newLevel;
         sceneLoading.allowSceneActivation = true;
         await sceneLoading;
-        Level = newLevel;
         Debug.Log($"Loaded level {_level}");
     }
 
     [Conditional("UNITY_EDITOR")]
     public static void DebugSetLevel(GameState level)
     {
-        Debug.LogWarning("Level set manually in StateManager, make sure this is intentional.");
+        Debug.LogWarning(
+            $"Level set to {level} manually in StateManager, make sure this is intentional."
+        );
         Level = level;
     }
 

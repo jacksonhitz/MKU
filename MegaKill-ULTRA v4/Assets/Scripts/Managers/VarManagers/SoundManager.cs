@@ -78,7 +78,6 @@ public class SoundManager : MonoBehaviour
     public void Play(string soundName)
     {
         SoundData sound = GetSound(soundName);
-        Debug.Log("Sound: " + sound);
         if (sound)
         {
             Play(sound);
@@ -100,8 +99,6 @@ public class SoundManager : MonoBehaviour
     {
         AudioClip clip = sound.clips[Random.Range(0, sound.clips.Length)];
 
-        Debug.Log("Sound: " + sound);
-
         switch (sound.soundType)
         {
             case SoundData.SoundType.Music:
@@ -113,6 +110,7 @@ public class SoundManager : MonoBehaviour
                 break;
             case SoundData.SoundType.Sfx:
                 sfx.clip = clip;
+                Debug.Log("Sound: " + sound);
                 sfx.volume = sound.volume * sfx.volume;
                 sfx.Play();
                 break;

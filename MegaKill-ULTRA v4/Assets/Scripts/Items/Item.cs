@@ -99,12 +99,10 @@ public abstract class Item : Interactable
 
     public void UseCheck()
     {
-        Debug.Log("check1");
         if (isUseable)
         {
             StartCoroutine(UseTimer());
             Use();
-            Debug.Log("check2");
         }
     }
 

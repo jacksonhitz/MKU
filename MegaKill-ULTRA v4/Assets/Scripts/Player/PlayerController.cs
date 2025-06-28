@@ -5,6 +5,23 @@ using UnityUtils;
 
 public class PlayerController : Singleton<PlayerController>
 {
+    private bool active = true;
+    public bool Active
+    {
+        get => active;
+        set
+        {
+            bool wasActive = active;
+            active = value;
+            if (active == wasActive)
+                return;
+            if (active)
+                Enable();
+            else
+                Disable();
+        }
+    }
+
     // All refrences in playerController are shared between multiple compartments in order to avoid extra refrences between compartments.
     // All other refrences that are specific to a compartment are stored within that compartment
 
@@ -63,4 +80,24 @@ public class PlayerController : Singleton<PlayerController>
     public UEye uEye;
 
     public void OnValidate() => this.ValidateRefs();
+
+    private void Disable()
+    {
+        items.enabled = false;
+        combat.enabled = false;
+        movement.enabled = false;
+        interact.enabled = false;
+        health.enabled = false;
+        commandUI.enabled = false;
+    }
+
+    private void Enable()
+    {
+        items.enabled = true;
+        combat.enabled = true;
+        movement.enabled = true;
+        interact.enabled = true;
+        health.enabled = true;
+        commandUI.enabled = true;
+    }
 }

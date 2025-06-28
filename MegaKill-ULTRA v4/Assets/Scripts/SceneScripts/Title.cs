@@ -6,12 +6,6 @@ public class Title : SceneScript
         LevelActive = true;
     }
 
-    private new void Start()
-    {
-        base.Start();
-        StartLevel();
-    }
-
     public override void StartLevel()
     {
         SoundManager.Instance.Play("Title");

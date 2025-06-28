@@ -18,6 +18,7 @@ public class Rehearsal : SceneScript
     {
         base.StartLevel();
         SoundManager.Instance.Play("Acid");
+        PlayerController.Instance.commandUI.Active = true;
     }
 
     protected override void OnEnemyKilled((Type type, int enemiesRemaining) tuple)
