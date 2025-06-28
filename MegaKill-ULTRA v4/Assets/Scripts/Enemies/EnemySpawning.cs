@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -72,7 +71,8 @@ public class EnemySpawning : MonoBehaviour
             {
                 if (entry.enemyPrefab != null)
                 {
-                    Instantiate(entry.enemyPrefab, transform.position, transform.rotation);
+                    var e = Instantiate(entry.enemyPrefab, transform.position, transform.rotation);
+                    e.transform.parent = transform;
                     Debug.Log($"Spawned {entry.enemyPrefab.name} at {transform.position}");
                 }
             }

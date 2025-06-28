@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using IngameDebugConsole;
+using KBCore.Refs;
 using UnityEngine;
+using UnityUtils;
 using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 using SceneState = StateManager.SceneState;
 
-public class EnemyManager : MonoBehaviour
+public class EnemyManager : ValidatedMonoBehaviour
 {
     [ResetOnPlay]
     public static EnemyManager Instance { get; private set; }
@@ -21,6 +23,15 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     GameObject enemyHolder;
     public List<Enemy> enemies = new();
+
+    [SerializeField, Anywhere(Flag.Optional)]
+    private GameObject spawnerHolder;
+
+    public bool EnemySpawning
+    {
+        get => spawnerHolder.activeInHierarchy;
+        set => spawnerHolder.SetActive(value);
+    }
 
     private bool Active
     {
@@ -37,6 +48,7 @@ public class EnemyManager : MonoBehaviour
     {
         Instance = this;
         Active = false;
+        EnemySpawning = false;
     }
 
     void OnEnable()
@@ -95,6 +107,12 @@ public class EnemyManager : MonoBehaviour
         EnemyKilled?.Invoke((enemy.GetType(), enemies.Count));
 
         SoundManager.Instance.Play("EnemyDeath", enemy.transform.position);
+    }
+
+    public void AddEnemy(Enemy enemy)
+    {
+        enemies.Add(enemy);
+        enemy.transform.SetParent(spawnerHolder.transform);
     }
 
     [ConsoleMethod("KillAllEnemies", "Kills all enemies in the scene.")]

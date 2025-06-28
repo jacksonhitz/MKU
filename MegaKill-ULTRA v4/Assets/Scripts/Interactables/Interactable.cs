@@ -84,16 +84,13 @@ public class Interactable : MonoBehaviour, IInteractable
 
     void LateUpdate()
     {
-        if (!StateManager.IsActive || interacts == null || rend == null)
+        if (!StateManager.IsActive || interacts == null || rend == null || !isInteractable)
             return;
 
-        if (StateManager.IsActive)
-        {
-            if (isHovering || interacts.isHighlightAll)
-                rend.material = glow;
-            else
-                rend.material = def;
-        }
+        if (isHovering || interacts.isHighlightAll)
+            rend.material = glow;
+        else
+            rend.material = def;
     }
 
     Renderer GetRenderer()

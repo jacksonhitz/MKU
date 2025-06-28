@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using IngameDebugConsole;
 using NaughtyAttributes;
@@ -32,6 +33,7 @@ public abstract class SceneScript : MonoBehaviour
     }
 
     private GameObject level;
+    protected List<string> newsDialogue = new();
 
     protected bool LevelActive
     {
@@ -135,19 +137,28 @@ public abstract class SceneScript : MonoBehaviour
         SoundManager.Instance.MusicOff();
         ScoreUI.Instance.Visible = true;
         SoundManager.Instance.Play("All");
-        NewsDialogue().Forget();
+        NewsDialogue();
     }
 
-    protected virtual async UniTaskVoid NewsDialogue()
+    private void NewsDialogue()
     {
         // TODO: Show correct input name based on binding
-        await Dialogue.Instance.TypeText("PRESS SPACE TO CONTINUE").WaitForComplete();
+        newsDialogue.Add("PRESS SPACE TO CONTINUE");
+        Dialogue.Instance.lines = newsDialogue.ToArray();
+        var textTask = Dialogue.Instance.Play();
         InputManager.UIActionMap.Submit.performed += SubmitOnPerformed;
 
         void SubmitOnPerformed(InputAction.CallbackContext obj)
         {
-            InputManager.UIActionMap.Submit.performed -= SubmitOnPerformed;
-            ExitLevel();
+            if (textTask.Status is UniTaskStatus.Pending)
+            {
+                PlayerController.Instance.dialogueUI.Complete();
+            }
+            else
+            {
+                InputManager.UIActionMap.Submit.performed -= SubmitOnPerformed;
+                ExitLevel();
+            }
         }
     }
 

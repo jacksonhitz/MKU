@@ -1,61 +1,17 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using KBCore.Refs;
 using UnityEngine;
+using UnityUtils;
 
-public class InteractionManager : MonoBehaviour
+public class InteractionManager : Singleton<InteractionManager>
 {
-    [ResetOnPlay]
-    public static InteractionManager Instance { get; private set; }
+    [SerializeField, Scene(Flag.Optional | Flag.IncludeInactive)]
+    private List<Item> items;
 
-    [SerializeField]
-    List<Item> items;
-    public List<Interactable> interactables;
+    [SerializeField, Scene(Flag.Optional | Flag.IncludeInactive)]
+    private List<Interactable> interactables;
 
     public bool isHighlightAll;
-
-    void Awake()
-    {
-        Instance = this;
-    }
-
-    void Start()
-    {
-        items = new List<Item>();
-        interactables = new List<Interactable>();
-    }
-
-    void OnEnable()
-    {
-        StateManager.LevelChanged += LevelChange;
-
-        LevelChange(StateManager.Level);
-    }
-
-    void OnDisable()
-    {
-        StateManager.LevelChanged -= LevelChange;
-    }
-
-    void LevelChange(StateManager.GameState state)
-    {
-        Debug.Log("INTERACT CALLED");
-
-        if (StateManager.IsActive)
-        {
-            Collect();
-            Debug.Log("COLLECTING");
-        }
-    }
-
-    public void Collect()
-    {
-        items.Clear();
-        items.AddRange(FindObjectsOfType<Item>());
-
-        interactables.Clear();
-        interactables.AddRange(FindObjectsOfType<Interactable>());
-    }
 
     public void ExtractOn()
     {
@@ -66,5 +22,12 @@ public class InteractionManager : MonoBehaviour
             else if (interactable.type == Interactable.Type.Enemy)
                 interactable.isInteractable = false;
         }
+    }
+
+    private void OnValidate()
+    {
+        if (Application.isPlaying)
+            return;
+        this.ValidateRefs();
     }
 }

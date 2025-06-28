@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Diagnostics;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using Redcode.Moroutines;
 using TMPro;
 using UnityEngine;
@@ -16,6 +14,8 @@ public class Dialogue : MonoBehaviour
 
     public string[] lines;
     public float textSpeed;
+    private Moroutine dialogue;
+    private bool completeNow;
 
     int index = 0;
 
@@ -28,8 +28,17 @@ public class Dialogue : MonoBehaviour
     {
         while (HasNextLine())
         {
-            await Moroutine.Run(TypeLine(NextLine())).WaitForComplete();
+            dialogue = Moroutine.Run(TypeLine(NextLine())).SetOwner(this);
+            await dialogue.WaitForComplete();
         }
+    }
+
+    public void Complete()
+    {
+        if (dialogue?.IsCompleted ?? true)
+            return;
+
+        completeNow = true;
     }
 
     private string NextLine()
@@ -52,6 +61,14 @@ public class Dialogue : MonoBehaviour
 
         foreach (char c in text)
         {
+            if (completeNow)
+            {
+                textComponent.text = text;
+                completeNow = false;
+                SoundManager.Instance.Stop(SoundData.SoundType.Dialogue);
+                yield return null;
+                break;
+            }
             textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
         }
@@ -63,7 +80,8 @@ public class Dialogue : MonoBehaviour
     public Moroutine TypeText(string customText)
     {
         StopAllCoroutines();
-        return Moroutine.Run(TypeLine(customText));
+        dialogue = Moroutine.Run(TypeLine(customText)).SetOwner(this);
+        return dialogue;
     }
 
     public void Off()

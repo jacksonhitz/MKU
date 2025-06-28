@@ -1,24 +1,31 @@
 using System.Collections;
 using Cysharp.Threading.Tasks;
+using IngameDebugConsole;
 using UnityEngine;
 
 public class Tango : SceneScript
 {
-    [SerializeField]
-    Dialogue dialogue;
-
-    [SerializeField]
-    PopUp popUp;
-
     private int dosedCount;
     private bool started;
     private bool extractsActive;
 
     public override void StartLevel()
     {
+        newsDialogue = new()
+        {
+            "We are just now receiving reports from the authorities that an underground USSR base has been discovered"
+                + " operating out of the abandoned downtown subway system - that's right folks, Reds here on American soil...  ",
+        };
         base.StartLevel();
+        EnemyManager.Instance.EnemySpawning = false;
         SoundManager.Instance.Play("Witch");
-        _ = dialogue.TypeText("F TO GIVE DRUGS");
+        Dialogue.Instance.TypeText("F TO GIVE DRUGS");
+        DebugLogConsole.AddCommandInstance(
+            "SkipToPhase2",
+            "Skip to phase 2 of Tango",
+            nameof(Phase2),
+            this
+        );
 
         foreach (Enemy enemy in EnemyManager.Instance.enemies)
         {
@@ -44,11 +51,11 @@ public class Tango : SceneScript
             return;
 
         if (dosedCount == 0)
-            dialogue.Off();
+            Dialogue.Instance.Off();
 
         DialogueManager.Instance.PlayRandomLine();
 
-        popUp.UpdatePopUp("MKU DISTRIBUTED");
+        PlayerController.Instance.popUpUI.UpdatePopUp("MKU DISTRIBUTED");
         dosedCount++;
 
         if (dosedCount > 10 && !started)
@@ -59,40 +66,35 @@ public class Tango : SceneScript
     {
         started = true;
 
-        dialogue.TypeText(
+        PlayerController.Instance.dialogueUI.TypeText(
             "LADIES AND GENTLEMEN! THE GROOVES WILL START IN 1 MINUTE, MAKE YOUR WAY TO THE MAIN STAGE!"
         );
         yield return new WaitForSeconds(10f);
-        dialogue.Off();
+        PlayerController.Instance.dialogueUI.Off();
         yield return new WaitForSeconds(20f);
-        dialogue.TypeText("30 SECONDS!");
+        PlayerController.Instance.dialogueUI.TypeText("30 SECONDS!");
         yield return new WaitForSeconds(10f);
-        dialogue.Off();
+        PlayerController.Instance.dialogueUI.Off();
         yield return new WaitForSeconds(10f);
         for (int i = 10; i > 0; i--)
         {
-            dialogue.TypeText($"{i}!");
+            PlayerController.Instance.dialogueUI.TypeText($"{i}!");
             yield return new WaitForSeconds(1f);
         }
-        dialogue.Off();
+        PlayerController.Instance.dialogueUI.Off();
         PlayerController.Instance.commandUI.Active = true;
+        yield return new WaitForSeconds(2.5f);
+        Phase2();
+    }
+
+    public void Phase2()
+    {
+        EnemyManager.Instance.EnemySpawning = true;
         SoundManager.Instance.Play("Magic");
         InteractionManager.Instance.ExtractOn();
         EnemyManager.Instance.Brawl();
-        yield return new WaitForSeconds(1.5f);
-        dialogue.TypeText("F ON ANY VAN TO EXTRACT");
         extractsActive = true;
-    }
-
-    protected override async UniTaskVoid NewsDialogue()
-    {
-        await dialogue
-            .TypeText(
-                "We are just now receiving reports from the authorities that an underground USSR base has been discovered"
-                    + " operating out of the abandoned downtown subway system - that's right folks, Reds here on American soil...  "
-            )
-            .WaitForComplete();
-        base.NewsDialogue().Forget();
+        PlayerController.Instance.dialogueUI.TypeText("F ON ANY VAN TO EXTRACT");
     }
 
     private IEnumerator DanceTimer(Enemy enemy)
