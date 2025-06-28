@@ -12,17 +12,19 @@ public class PlayerInteract : MonoBehaviour
         _camera = Camera.main;
         InputManager.PlayerActionMap.Interact.performed += InteractOnPerformed;
         InputManager.PlayerActionMap.Highlight.performed += HighlightOnPerformed;
+        InputManager.PlayerActionMap.Highlight.canceled += HighlightOnPerformed;
     }
 
     private void OnDestroy()
     {
         InputManager.PlayerActionMap.Interact.performed -= InteractOnPerformed;
         InputManager.PlayerActionMap.Highlight.performed -= HighlightOnPerformed;
+        InputManager.PlayerActionMap.Highlight.canceled -= HighlightOnPerformed;
     }
 
-    private void HighlightOnPerformed(InputAction.CallbackContext obj)
+    private void HighlightOnPerformed(InputAction.CallbackContext ctx)
     {
-        InteractionManager.Instance.isHighlightAll = true;
+        InteractionManager.Instance.isHighlightAll = ctx.performed;
     }
 
     private void InteractOnPerformed(InputAction.CallbackContext obj)
