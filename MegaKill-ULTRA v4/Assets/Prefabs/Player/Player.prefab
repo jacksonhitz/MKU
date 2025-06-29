@@ -3453,10 +3453,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8abf67d2c61164ba9a06630161e8ba4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inactiveScenePhase: 1
+  phase: 5
+  lerpSpeed: 0.0001
+  swayIntensity: 0.01
+  chromSpd: 0.25
+  player: {fileID: 3770122598786963699}
+  cam: {fileID: 2527585751099497462}
   dynamicVolume: {fileID: 6555766784306998197}
   staticVolume: {fileID: 7349664064886857514}
   camMat: {fileID: -876546973899608171, guid: a79a40f83dc6f4a0f8b6ca0f61778ec5, type: 3}
-  phase: 0
 --- !u!1 &3250518133123902029
 GameObject:
   m_ObjectHideFlags: 0

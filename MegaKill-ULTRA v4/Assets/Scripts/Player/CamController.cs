@@ -1,31 +1,31 @@
+using System;
 using System.Collections;
+using KBCore.Refs;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using Random = UnityEngine.Random;
 
 public class CamController : MonoBehaviour
 {
+    private const float DefaultFrequency = 10f;
+    private const float DefaultAmplitude = 2f;
+    private const float DefaultLerp = 0.1f;
+    private const float PhaseFrequencyFactor = 5f;
     private static readonly int Frequency = Shader.PropertyToID("_Frequency");
     private static readonly int Amplitude = Shader.PropertyToID("_Amplitude");
     private static readonly int Lerp = Shader.PropertyToID("_Lerp");
     private static readonly int SpeedX = Shader.PropertyToID("_SpeedX");
     private static readonly int SpeedY = Shader.PropertyToID("_SpeedY");
-    Camera cam;
 
     float xRotation;
     float yRotation;
-
-    [SerializeField]
-    Volume dynamicVolume;
-
-    [SerializeField]
-    Volume staticVolume;
 
     ChromaticAberration chromaticAberration;
     ColorAdjustments colorGrading;
     ChannelMixer channelMixer;
 
-    float chromSpd = 0.25f;
     float mixerSpd;
     float hueSpd;
     float fovSpd;
@@ -40,46 +40,67 @@ public class CamController : MonoBehaviour
     float originalFOV;
 
     Vector3 originalPosition;
-    float swayIntensity = 0.01f;
 
-    public Material camMat;
-    float currentLerp = 0;
-    float currentFrequency = 0;
-    float currentAmplitude = 0;
+    float currentLerp;
+    float currentFrequency;
+    float currentAmplitude;
 
-    public int phase;
+    [Header("Shader")]
+    [SerializeField]
+    private int inactiveScenePhase = 1;
+
+    [SerializeField]
+    private int phase = 5;
+
+    private int defaultPhase;
 
     float targetSpeedX;
     float targetSpeedY;
-    float lerpSpeed = 0.001f;
 
-    PlayerController player;
+    [SerializeField, Range(0, 0.001f)]
+    private float lerpSpeed = 0.0001f;
 
-    void Awake()
-    {
-        cam = GetComponent<Camera>();
-        player = FindObjectOfType<PlayerController>();
-    }
+    [SerializeField, Range(0f, 0.1f)]
+    private float swayIntensity = 0.01f;
+
+    [SerializeField, Range(0f, 1f)]
+    private float chromSpd = 0.25f;
+
+    [Header("References")]
+    [SerializeField, Parent]
+    private PlayerController player;
+
+    [SerializeField, Self]
+    private Camera cam;
+
+    [SerializeField, Self(Flag.Editable)]
+    private Volume dynamicVolume;
+
+    [SerializeField, Self(Flag.Editable)]
+    private Volume staticVolume;
+
+    [SerializeField, Anywhere]
+    private Material camMat;
 
     void Start()
     {
+        defaultPhase = phase;
         Reset();
     }
 
     void Reset()
     {
-        phase = 5;
         SetEffects();
         SetClr();
     }
 
     void SetEffects()
     {
-        currentLerp = 0.1f;
+        currentLerp = DefaultLerp;
 
         //PHASE 1 BY DEFAULT
-        currentFrequency = 10f;
-        currentAmplitude = 2f;
+        currentFrequency = DefaultFrequency;
+        currentAmplitude = DefaultAmplitude;
 
         camMat.SetFloat(Lerp, currentLerp);
         camMat.SetFloat(Frequency, currentFrequency);
@@ -108,10 +129,21 @@ public class CamController : MonoBehaviour
     void OnStateChanged(StateManager.SceneState state)
     {
         if (state is StateManager.SceneState.PLAYING)
+        {
             StartCoroutine(Blink());
+            cam.clearFlags = CameraClearFlags.Skybox;
+            phase = defaultPhase;
+            Reset();
+        }
 
         if (state is StateManager.SceneState.FILE or StateManager.SceneState.SCORE)
-            Reset();
+        {
+            phase = inactiveScenePhase;
+            currentFrequency = phase * PhaseFrequencyFactor;
+            currentAmplitude = phase;
+            cam.backgroundColor = Color.black;
+            cam.clearFlags = CameraClearFlags.Color;
+        }
     }
 
     void Update()
@@ -129,7 +161,7 @@ public class CamController : MonoBehaviour
 
     void MoveCheck()
     {
-        if (StateManager.IsActive && Mathf.Approximately(Time.timeScale, 1))
+        if (StateManager.IsActive && !SettingsManager.IsPaused)
         {
             MoveCam();
             Cursor.lockState = CursorLockMode.Locked;
@@ -174,11 +206,19 @@ public class CamController : MonoBehaviour
     {
         if (currentAmplitude < phase)
         {
-            currentAmplitude += 0.0001f;
+            currentAmplitude += lerpSpeed;
         }
-        if (currentFrequency < phase * 5)
+        else if (currentAmplitude > phase)
         {
-            currentFrequency += 0.0001f;
+            currentAmplitude -= lerpSpeed;
+        }
+        if (currentFrequency < phase * PhaseFrequencyFactor)
+        {
+            currentFrequency += lerpSpeed;
+        }
+        else if (currentFrequency > phase * PhaseFrequencyFactor)
+        {
+            currentFrequency -= lerpSpeed;
         }
 
         camMat.SetFloat(Lerp, currentLerp);
