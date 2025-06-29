@@ -84,10 +84,10 @@ public class Interactable : MonoBehaviour, IInteractable
 
     void LateUpdate()
     {
-        if (!StateManager.IsActive || interacts == null || rend == null || !isInteractable)
+        if (!StateManager.IsActive || !interacts || !rend)
             return;
 
-        if (isHovering || interacts.isHighlightAll)
+        if (isInteractable && (isHovering || interacts.isHighlightAll))
             rend.material = glow;
         else
             rend.material = def;
