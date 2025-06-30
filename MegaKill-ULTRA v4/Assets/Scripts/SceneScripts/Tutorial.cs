@@ -49,6 +49,7 @@ public class Tutorial : SceneScript
     public override void StartLevel()
     {
         base.StartLevel();
+        TutorialStateManager.State = TutorialStateManager.TutorialState.WASD;
         SoundManager.Instance.Play("Hot");
     }
 
@@ -329,9 +330,13 @@ public static class TutorialStateManager
         Done,
     }
 
+    [ResetOnPlay]
     private static TutorialState state;
+
+    [ResetOnPlay]
     private static TutorialState previous;
 
+    [ResetOnPlay]
     public static event Action<TutorialState> OnStateChanged;
     public static TutorialState Previous => previous;
 
