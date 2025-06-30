@@ -27,13 +27,13 @@ public class PlayerCombat : ValidatedMonoBehaviour
 
     bool canPunch = true;
 
-    private void Awake()
+    private void OnEnable()
     {
         InputManager.PlayerActionMap.UseLeft.performed += UseLeftOnPerformed;
         InputManager.PlayerActionMap.UseRight.performed += UseRightOnPerformed;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         InputManager.PlayerActionMap.UseLeft.performed -= UseLeftOnPerformed;
         InputManager.PlayerActionMap.UseRight.performed -= UseRightOnPerformed;

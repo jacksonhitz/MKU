@@ -10,12 +10,16 @@ public class PlayerInteract : MonoBehaviour
     private void Awake()
     {
         _camera = Camera.main;
+    }
+
+    private void OnEnable()
+    {
         InputManager.PlayerActionMap.Interact.performed += InteractOnPerformed;
         InputManager.PlayerActionMap.Highlight.performed += HighlightOnPerformed;
         InputManager.PlayerActionMap.Highlight.canceled += HighlightOnPerformed;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         InputManager.PlayerActionMap.Interact.performed -= InteractOnPerformed;
         InputManager.PlayerActionMap.Highlight.performed -= HighlightOnPerformed;

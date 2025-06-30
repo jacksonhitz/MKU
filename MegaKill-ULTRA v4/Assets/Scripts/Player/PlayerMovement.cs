@@ -1,4 +1,5 @@
 using System;
+using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,22 +17,23 @@ public class PlayerMovement : MonoBehaviour
     public bool isRooted;
 
     float verticalVelocity;
+
+    [SerializeField, Self]
     CharacterController characterController;
 
-    private void Awake()
+    private void OnEnable()
     {
-        characterController = GetComponent<CharacterController>();
         InputManager.PlayerActionMap.Jump.performed += JumpOnPerformed;
+    }
+
+    private void OnDisable()
+    {
+        InputManager.PlayerActionMap.Jump.performed -= JumpOnPerformed;
     }
 
     private void JumpOnPerformed(InputAction.CallbackContext obj)
     {
         Jump();
-    }
-
-    private void OnDestroy()
-    {
-        InputManager.PlayerActionMap.Jump.performed -= JumpOnPerformed;
     }
 
     private void Update()
