@@ -33,6 +33,8 @@ public abstract class SceneScript : MonoBehaviour
     }
 
     private GameObject level;
+    public GameObject LevelRoot => level;
+
     protected List<string> newsDialogue = new();
 
     protected bool LevelActive

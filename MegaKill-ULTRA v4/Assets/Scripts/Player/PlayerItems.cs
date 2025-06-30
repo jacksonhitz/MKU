@@ -2,6 +2,7 @@ using IngameDebugConsole;
 using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityUtils;
 
 public class PlayerItems : ValidatedMonoBehaviour
 {
@@ -14,7 +15,7 @@ public class PlayerItems : ValidatedMonoBehaviour
     [SerializeField, Self]
     PlayerController controller;
 
-    private void Awake()
+    private void OnEnable()
     {
         InputManager.PlayerActionMap.EquipLeft.performed += LeftEquip;
         InputManager.PlayerActionMap.EquipRight.performed += RightEquip;
@@ -22,9 +23,11 @@ public class PlayerItems : ValidatedMonoBehaviour
         InputManager.PlayerActionMap.ThrowRight.performed += RightThrow;
         InputManager.PlayerActionMap.UseRight.performed += UseRight;
         InputManager.PlayerActionMap.UseLeft.performed += UseLeft;
+        leftItem?.SetActive();
+        rightItem?.SetActive();
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         InputManager.PlayerActionMap.EquipLeft.performed -= LeftEquip;
         InputManager.PlayerActionMap.EquipRight.performed -= RightEquip;
@@ -32,6 +35,8 @@ public class PlayerItems : ValidatedMonoBehaviour
         InputManager.PlayerActionMap.ThrowRight.performed -= RightThrow;
         InputManager.PlayerActionMap.UseRight.performed -= UseRight;
         InputManager.PlayerActionMap.UseLeft.performed -= UseLeft;
+        leftItem?.SetInactive();
+        rightItem?.SetInactive();
     }
 
     private void Update()

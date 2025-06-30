@@ -110,14 +110,14 @@ public abstract class Item : Interactable
 
     public void Thrown()
     {
-        transform.SetParent(null);
+        transform.SetParent(SceneScript.Instance.LevelRoot.transform);
         SetState(ItemState.Available);
         thrown = true;
     }
 
     public void Dropped()
     {
-        transform.SetParent(null);
+        transform.SetParent(SceneScript.Instance.LevelRoot.transform);
         SetState(ItemState.Available);
 
         isInteractable = true;
