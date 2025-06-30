@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -9,10 +7,12 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            if (_instance is null) Debug.LogError("Enemy Manager is NULL");
+            if (_instance is null)
+                Debug.LogError("Enemy Manager is NULL");
             return _instance;
         }
     }
+
     private void Awake()
     {
         if (_instance != null && _instance != this)

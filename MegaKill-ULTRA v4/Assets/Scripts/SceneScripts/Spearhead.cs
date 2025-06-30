@@ -3,17 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Spearhead : ScenesManager
+public class Spearhead : SceneScript
 {
-    protected override void Awake()
+    public override void StartLevel()
     {
-        base.Awake();
-        StateManager.lvl = StateManager.GameState.SPEARHEAD;
-        if (StateManager.State != StateManager.GameState.FILE)
-            StateManager.StartLvl();
-    }
-    void Start()
-    {
+        base.StartLevel();
         SoundManager.Instance.Play("DJ");
     }
 }

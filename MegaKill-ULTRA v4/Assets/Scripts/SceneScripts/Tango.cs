@@ -1,118 +1,106 @@
 using System.Collections;
+using Cysharp.Threading.Tasks;
+using IngameDebugConsole;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class Tango : ScenesManager
+public class Tango : SceneScript
 {
-    [SerializeField] Dialogue dialogue;
-    [SerializeField] PopUp popUp;
+    private int dosedCount;
+    private bool started;
+    private bool extractsActive;
 
-    int dosedCount;
-    bool started;
-
-    protected override void Awake()
+    public override void StartLevel()
     {
-        base.Awake();
-        StateManager.lvl = StateManager.GameState.TANGO;
-        if (StateManager.State != StateManager.GameState.FILE)
-            StateManager.StartLvl();
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-    }
-
-    void Start() //STUPID AND BAD
-    {
-        StateChange(StateManager.State);
-    }
-
-    void OnEnable()
-    {
-        StateManager.OnStateChanged += StateChange;
-    }
-    void OnDisable()
-    {
-        StateManager.OnStateChanged -= StateChange;
-    }
-    void StateChange(StateManager.GameState state)
-    {
-        switch (state)
+        newsDialogue = new()
         {
-            case StateManager.GameState.TANGO: StartLvl(); break;
-            case StateManager.GameState.SCORE: NewsDialogue(); break;
+            "We are just now receiving reports from the authorities that an underground USSR base has been discovered"
+                + " operating out of the abandoned downtown subway system - that's right folks, Reds here on American soil...  ",
+        };
+        base.StartLevel();
+        EnemyManager.Instance.EnemySpawning = false;
+        SoundManager.Instance.Play("Witch");
+        Dialogue.Instance.TypeText("F TO GIVE DRUGS");
+        DebugLogConsole.AddCommandInstance(
+            "SkipToPhase2",
+            "Skip to phase 2 of Tango",
+            nameof(Phase2),
+            this
+        );
+
+        foreach (Enemy enemy in EnemyManager.Instance.enemies)
+        {
+            if (enemy.currentState is not Enemy.EnemyState.Static)
+                continue;
+            int rand = Random.Range(0, 3);
+            if (rand == 0)
+                StartCoroutine(DanceTimer(enemy));
         }
     }
 
-    void StartLvl()
-    {
-        dialogue.TypeText("F TO GIVE DRUGS", 0f);
-    }
-
     //DOSED WITH MKU
-    public override void Interact()
+    protected override void OnInteract((Interactable.Type type, Interactable interactable) tuple)
     {
+        if (tuple.type is Interactable.Type.Extract && extractsActive)
+        {
+            EndLevel();
+            // TODO: Add van sound
+            return;
+        }
+
+        if (tuple.type is not Interactable.Type.Enemy)
+            return;
+
         if (dosedCount == 0)
-            dialogue.Off();
+            Dialogue.Instance.Off();
 
         DialogueManager.Instance.PlayRandomLine();
 
-        popUp.UpdatePopUp("MKU DISTRIBUTED");
+        PlayerController.Instance.popUpUI.UpdatePopUp("MKU DISTRIBUTED");
         dosedCount++;
-        Debug.Log("dosed");
 
         if (dosedCount > 10 && !started)
             StartCoroutine(Countdown());
     }
 
-    //YO WHAT THE HELL WAS I THINKING WHEN I MADE THIS BULLSHIT
     IEnumerator Countdown()
     {
         started = true;
 
-        dialogue.TypeText("LADIES AND GENTLEMEN! THE GROOVES WILL START IN 1 MINUTE, MAKE YOUR WAY TO THE MAIN STAGE!", 0f);
+        PlayerController.Instance.dialogueUI.TypeText(
+            "LADIES AND GENTLEMEN! THE GROOVES WILL START IN 1 MINUTE, MAKE YOUR WAY TO THE MAIN STAGE!"
+        );
         yield return new WaitForSeconds(10f);
-        dialogue.Off();
+        PlayerController.Instance.dialogueUI.Off();
         yield return new WaitForSeconds(20f);
-        dialogue.TypeText("30 SECONDS!", 0f);
+        PlayerController.Instance.dialogueUI.TypeText("30 SECONDS!");
         yield return new WaitForSeconds(10f);
-        dialogue.Off();
+        PlayerController.Instance.dialogueUI.Off();
         yield return new WaitForSeconds(10f);
-        dialogue.TypeText("10!", 0f);
-        yield return new WaitForSeconds(1f);
-        dialogue.TypeText("9!", 0f);
-        yield return new WaitForSeconds(1f);
-        dialogue.TypeText("8!", 0f);
-        yield return new WaitForSeconds(1f);
-        dialogue.TypeText("7!", 0f);
-        yield return new WaitForSeconds(1f);
-        dialogue.TypeText("6!", 0f);
-        yield return new WaitForSeconds(1f);
-        dialogue.TypeText("5!", 0f);
-        yield return new WaitForSeconds(1f);
-        dialogue.TypeText("4!", 0f);
-        yield return new WaitForSeconds(1f);
-        dialogue.TypeText("3!", 0f);
-        yield return new WaitForSeconds(1f);
-        dialogue.TypeText("2!", 0f);
-        yield return new WaitForSeconds(1f);
-        dialogue.TypeText("1!", 0f);
-        yield return new WaitForSeconds(1f);
-        dialogue.Off();
+        for (int i = 10; i > 0; i--)
+        {
+            PlayerController.Instance.dialogueUI.TypeText($"{i}!");
+            yield return new WaitForSeconds(1f);
+        }
+        PlayerController.Instance.dialogueUI.Off();
+        PlayerController.Instance.commandUI.Active = true;
+        yield return new WaitForSeconds(2.5f);
+        Phase2();
+    }
 
-        StateManager.State = StateManager.GameState.TANGO2;
-
+    public void Phase2()
+    {
+        EnemyManager.Instance.EnemySpawning = true;
         SoundManager.Instance.Play("Magic");
         InteractionManager.Instance.ExtractOn();
         EnemyManager.Instance.Brawl();
-
-        dialogue.TypeText("F ON ANY VAN TO EXTRACT", 0f);
+        extractsActive = true;
+        PlayerController.Instance.dialogueUI.TypeText("F ON ANY VAN TO EXTRACT");
     }
 
-    void NewsDialogue()
+    private IEnumerator DanceTimer(Enemy enemy)
     {
-        dialogue.TypeText("We are just now receiving reports from the authorities that an underground USSR base has been discovered operating out of the abandoned downtown subway system - that's right folks, Reds here on American soil...  ", 2f);
+        int delay = Random.Range(0, 10);
+        yield return new WaitForSeconds(delay);
+        enemy.isDance = true;
     }
 }

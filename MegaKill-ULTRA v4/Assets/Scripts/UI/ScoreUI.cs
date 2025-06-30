@@ -1,35 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class ScoreUI : MonoBehaviour
 {
-    public static ScoreUI Instance { get; set; }
+    [ResetOnPlay]
+    public static ScoreUI Instance { get; private set; }
+    public bool Visible
+    {
+        get => image.enabled;
+        set => image.enabled = value;
+    }
 
-    [SerializeField] SpriteRenderer image;
+    [SerializeField]
+    private SpriteRenderer image;
 
-    void Awake()
+    private void Awake()
     {
         Instance = this;
-    }
-
-    void OnEnable()
-    {
-        StateManager.OnStateChanged += StateChange;
-        StateManager.OnSilentChanged += StateChange;
-
-        StateChange(StateManager.State);
-    }
-    void OnDisable()
-    {
-        StateManager.OnStateChanged -= StateChange;
-        StateManager.OnSilentChanged -= StateChange;
-    }
-    void StateChange(StateManager.GameState state)
-    {
-        if (StateManager.State == StateManager.GameState.SCORE || StateManager.previous == StateManager.GameState.SCORE)
-            image.enabled = true;
-        else
-            image.enabled = false;
+        Visible = false;
     }
 }

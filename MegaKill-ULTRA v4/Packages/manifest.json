@@ -1,11 +1,18 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": "2.5.10",
+    "com.dbrizov.naughtyattributes": "2.1.4",
+    "com.gitamend.unityutils": "https://github.com/adammyhre/Unity-Utils.git",
+    "com.kylewbanks.scenerefattribute": "0.13.0",
+    "com.manefunction.dotween-ui-controller": "1.1.0",
     "com.unity.ai.navigation": "1.1.5",
     "com.unity.feature.development": "1.0.1",
+    "com.unity.inputsystem": "1.7.0",
     "com.unity.polybrush": "1.1.8",
     "com.unity.postprocessing": "3.4.0",
     "com.unity.probuilder": "5.2.4",
     "com.unity.render-pipelines.universal": "14.0.10",
+    "com.unity.terrain-tools": "5.0.6",
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.timeline": "1.7.6",
     "com.unity.toolchain.win-x86_64-linux-x86_64": "2.0.10",
@@ -41,10 +48,7 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "com.dbrizov.naughtyattributes": "2.1.4",
-    "com.manefunction.dotween-ui-controller": "1.1.0",
-    "com.cysharp.unitask": "2.5.10"
+    "com.unity.modules.xr": "1.0.0"
   },
   "scopedRegistries": [
     {
@@ -53,6 +57,7 @@
       "scopes": [
         "com.cysharp.unitask",
         "com.dbrizov.naughtyattributes",
+        "com.kylewbanks.scenerefattribute",
         "com.manefunction.dotween-ui-controller"
       ]
     }

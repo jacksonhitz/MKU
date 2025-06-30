@@ -1,21 +1,44 @@
+using System;
+using System.Diagnostics;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using Debug = UnityEngine.Debug;
 
 public class SettingsManager : MonoBehaviour
 {
-
     //CALL AWAKE/START SHIT EXTERNALLY SO THAT MANAGERS WITHOUT VAR CAN BE STATIC/ABSTRACT
 
-    public static SettingsManager Instance { get; set; }
+    [ResetOnPlay]
+    public static SettingsManager Instance { get; private set; }
+
+    [ResetOnPlay]
+    public static event Action<bool> OnPauseChange = delegate { };
+
+    [SerializeField]
+    private static bool _isPaused;
+
+    public static bool IsPaused
+    {
+        get => _isPaused;
+        private set
+        {
+            if (value != _isPaused)
+                OnPauseChange?.Invoke(value);
+            _isPaused = value;
+        }
+    }
 
     SettingsData settings;
 
-    [SerializeField] GameObject menu;
+    [SerializeField]
+    GameObject menu;
 
     public float MusicVolume => settings.musicVolume;
     public float SFXVolume => settings.sFXVolume;
     public float Sensitivity => settings.sensitivity;
 
-    void Awake()
+    private void Awake()
     {
         Instance = this;
 
@@ -23,6 +46,17 @@ public class SettingsManager : MonoBehaviour
         Debug.Log("Settings Found: " + settings);
         if (settings == null)
             Debug.LogError("SettingsData asset not found at Resources/Settings/Settings");
+        InputManager.PlayerActionMap.Pause.performed += OnPausePerformed;
+    }
+
+    private void OnDestroy()
+    {
+        InputManager.PlayerActionMap.Pause.performed -= OnPausePerformed;
+    }
+
+    private void OnPausePerformed(InputAction.CallbackContext obj)
+    {
+        TogglePause();
     }
 
     void Start()
@@ -32,23 +66,36 @@ public class SettingsManager : MonoBehaviour
 
     public void Pause()
     {
+        IsPaused = true;
         Time.timeScale = 0;
         menu.SetActive(true);
     }
+
     public void Resume()
     {
+        IsPaused = false;
         Time.timeScale = 1;
         menu.SetActive(false);
     }
+
+    public void TogglePause()
+    {
+        if (IsPaused)
+            Resume();
+        else
+            Pause();
+    }
+
     public void Exit()
     {
         Time.timeScale = 1;
-        StartCoroutine(StateManager.LoadState(StateManager.GameState.TITLE, 2f));
+        _ = StateManager.LoadLevel(StateManager.GameState.TITLE, 2f, destroyCancellationToken);
     }
+
     public void Restart()
     {
         Time.timeScale = 1;
-        StartCoroutine(StateManager.LoadState(StateManager.State, 2f));
+        StateManager.RestartLevel(2f, Application.exitCancellationToken).Forget();
     }
 
     void SetSettings()
@@ -74,14 +121,13 @@ public class SettingsManager : MonoBehaviour
         value = Mathf.Clamp(value, 0, 100);
         settings.sFXVolume = value;
 
-        if (SoundManager.Instance != null)
-        {
-            if (SoundManager.Instance.sfx != null)
-                SoundManager.Instance.sfx.volume = value / 100f;
+        if (SoundManager.Instance == null)
+            return;
+        if (SoundManager.Instance.sfx != null)
+            SoundManager.Instance.sfx.volume = value / 100f;
 
-            if (SoundManager.Instance.dialogue != null)
-                SoundManager.Instance.dialogue.volume = value / 100f;
-        }
+        if (SoundManager.Instance.dialogue != null)
+            SoundManager.Instance.dialogue.volume = value / 100f;
     }
 
     public void SetSensitivity(float value)

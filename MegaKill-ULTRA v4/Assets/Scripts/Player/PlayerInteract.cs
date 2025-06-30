@@ -1,40 +1,74 @@
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.InputSystem;
 
 public class PlayerInteract : MonoBehaviour
 {
-    void LateUpdate()
+    private Camera _camera;
+
+    private void Awake()
+    {
+        _camera = Camera.main;
+    }
+
+    private void OnEnable()
+    {
+        InputManager.PlayerActionMap.Interact.performed += InteractOnPerformed;
+        InputManager.PlayerActionMap.Highlight.performed += HighlightOnPerformed;
+        InputManager.PlayerActionMap.Highlight.canceled += HighlightOnPerformed;
+    }
+
+    private void OnDisable()
+    {
+        InputManager.PlayerActionMap.Interact.performed -= InteractOnPerformed;
+        InputManager.PlayerActionMap.Highlight.performed -= HighlightOnPerformed;
+        InputManager.PlayerActionMap.Highlight.canceled -= HighlightOnPerformed;
+    }
+
+    private void HighlightOnPerformed(InputAction.CallbackContext ctx)
+    {
+        InteractionManager.Instance.isHighlightAll = ctx.performed;
+    }
+
+    private void InteractOnPerformed(InputAction.CallbackContext obj)
+    {
+        Interact();
+    }
+
+    private void LateUpdate()
     {
         Highlight();
     }
 
     void Highlight()
     {
-        Assert.IsNotNull(Camera.main);
-        Ray ray = new(Camera.main.transform.position, Camera.main.transform.forward);
-        if (!Physics.Raycast(ray, out RaycastHit hit, 30f)) return;
+        Assert.IsNotNull(_camera);
+        Ray ray = new(_camera.transform.position, _camera.transform.forward);
+        if (!Physics.Raycast(ray, out RaycastHit hit, 30f))
+            return;
 
         Interactable hovered = GetInteractable(hit.collider);
-        if (hovered == null) return;
+        if (hovered == null)
+            return;
         hovered.isHovering = true;
         if (DOTween.Restart(hovered) == 0)
         {
-            DOTween.Sequence()
+            DOTween
+                .Sequence()
                 .AppendInterval(0.1f)
                 .AppendCallback(() => hovered.isHovering = false)
                 .SetId(hovered);
         }
     }
 
-    public void Interact()
+    private void Interact()
     {
-        Assert.IsNotNull(Camera.main);
-        Ray ray = new(Camera.main.transform.position, Camera.main.transform.forward);
-        if (!Physics.Raycast(ray, out RaycastHit hit, 30f)) return;
-        
+        Assert.IsNotNull(_camera);
+        Ray ray = new(_camera.transform.position, _camera.transform.forward);
+        if (!Physics.Raycast(ray, out RaycastHit hit, 30f))
+            return;
+
         Interactable interactable = GetInteractable(hit.collider);
         if (interactable != null)
             interactable.Interact();

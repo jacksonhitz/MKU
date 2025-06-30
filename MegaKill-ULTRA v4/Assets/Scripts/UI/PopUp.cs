@@ -1,6 +1,6 @@
 using System.Collections;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class PopUp : MonoBehaviour
 {
@@ -20,12 +20,10 @@ public class PopUp : MonoBehaviour
             {
                 return;
             }
-            else
-            {
-                StopCoroutine(currentCoroutine);
-                popupText.text = "";
-                currentCoroutine = null;
-            }
+
+            StopCoroutine(currentCoroutine);
+            popupText.text = "";
+            currentCoroutine = null;
         }
 
         popupText.text = text;

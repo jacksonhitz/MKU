@@ -1,109 +1,93 @@
 using System.Collections;
-using UnityEngine;
+using Cysharp.Threading.Tasks;
+using Redcode.Moroutines;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Assertions;
 
 public class Dialogue : MonoBehaviour
 {
+    [ResetOnPlay]
     public static Dialogue Instance { get; set; }
 
     public TextMeshProUGUI textComponent;
 
     public string[] lines;
     public float textSpeed;
+    private Moroutine dialogue;
+    private bool completeNow;
 
-    int index = -1;
-    bool customTyping = false;
-
+    int index = 0;
 
     void Awake()
     {
         Instance = this;
     }
-    void Update()
-    {
-      //  if (Input.GetKeyDown(KeyCode.Space) && !started)
-      //  {
-      //     started = true;
-      //     ClearText();
-      //     NextLine();
-      //  }
-    }
 
-    public void Play()
+    public async UniTask Play()
     {
-        StartCoroutine(DelayDialogue());
-    }
-
-    IEnumerator DelayDialogue()
-    {
-        yield return new WaitForSeconds(1.5f);
-        NextLine();
-    }
-
-    public void NextLine()
-    {
-        if (index < lines.Length - 1)
+        while (HasNextLine())
         {
-            index++;
-            StartCoroutine(TypeLine(lines[index]));
+            dialogue = Moroutine.Run(TypeLine(NextLine())).SetOwner(this);
+            await dialogue.WaitForComplete();
         }
-        else
-        {
-            Invoke("Done", 2f);
-        }
+    }
+
+    public void Complete()
+    {
+        if (dialogue?.IsCompleted ?? true)
+            return;
+
+        completeNow = true;
+    }
+
+    private string NextLine()
+    {
+        Assert.IsTrue(HasNextLine());
+        return lines[index++];
+    }
+
+    private bool HasNextLine()
+    {
+        return index < lines.Length;
     }
 
     IEnumerator TypeLine(string text)
     {
-        
         textComponent.text = string.Empty;
         yield return new WaitForSeconds(0.1f);
 
         SoundManager.Instance.Play("Line");
 
-        foreach (char c in text.ToCharArray())
+        foreach (char c in text)
         {
+            if (completeNow)
+            {
+                textComponent.text = text;
+                completeNow = false;
+                SoundManager.Instance.Stop(SoundData.SoundType.Dialogue);
+                yield return null;
+                break;
+            }
             textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
         }
-
         yield return new WaitForSeconds(1f);
 
-        SoundManager.Instance.Stop();
-
-        if (customTyping)
-        {
-            customTyping = false;
-        }
-        else
-        {
-            NextLine();
-        }
+        SoundManager.Instance.Stop(SoundData.SoundType.Dialogue);
     }
 
-    public void TypeText(string customText, float timer)
+    public Moroutine TypeText(string customText)
     {
         StopAllCoroutines();
-        customTyping = true;
-        StartCoroutine(TypeLine(customText));
-
-        if (timer != 0)
-            Invoke("Done", timer);
+        dialogue = Moroutine.Run(TypeLine(customText)).SetOwner(this);
+        return dialogue;
     }
 
     public void Off()
     {
         StopAllCoroutines();
         textComponent.text = string.Empty;
-    }
-
-    void Done()
-    {
-        textComponent.text = string.Empty;
-
-        if (StateManager.State == StateManager.GameState.FILE)
-            StateManager.StartLvl();
-        else if (StateManager.IsPassive())
-            StateManager.LoadNext();
+        SoundManager.Instance.Stop(SoundData.SoundType.Dialogue);
     }
 }

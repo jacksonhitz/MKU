@@ -1,16 +1,25 @@
+using System;
+using System.Diagnostics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Interactable : MonoBehaviour, IInteractable
 {
-
     //CONVERT TO ABSTRACT AND REFACTOR
+    [ResetOnPlay]
+    public static event Action<(Type type, Interactable interactable)> InteractableUsed;
 
+    [SerializeField]
+    Material glow;
 
-    [SerializeField] Material glow;
-    [SerializeField] Material def;
-    [SerializeField] Renderer rend;
+    [SerializeField]
+    Material def;
 
-    [SerializeField] Material[] mats;
+    [SerializeField]
+    Renderer rend;
+
+    [SerializeField]
+    Material[] mats;
 
     public bool isHovering;
     public bool isInteractable;
@@ -26,29 +35,22 @@ public class Interactable : MonoBehaviour, IInteractable
         Door,
         Item,
         Extract,
-        Enemy
+        Enemy,
     }
-    public Type type;
 
-    
+    public Type type;
 
     public virtual void Interact()
     {
-        if (isInteractable)
+        if (!isInteractable)
+            return;
+        isInteractable = false;
+        InteractableUsed?.Invoke((type, this));
+        if (type == Type.Enemy)
         {
-            isInteractable = false;
-            if (type == Type.Door)
-            {
-
-            }
-            else if (type == Type.Extract) StateManager.LoadNext();
-            else if (type == Type.Enemy)
-            {
-                EnemyPunch enemy = GetComponent<EnemyPunch>();
-                enemy.dosed = true;
-                ScenesManager.Instance.Interact();
-                sound.Play("Interact");
-            }
+            EnemyPunch enemy = GetComponent<EnemyPunch>();
+            enemy.dosed = true;
+            sound.Play("Interact");
         }
     }
 
@@ -82,24 +84,22 @@ public class Interactable : MonoBehaviour, IInteractable
 
     void LateUpdate()
     {
-
-        if (!StateManager.IsActive() || interacts == null || rend == null)
+        if (!StateManager.IsActive || !interacts || !rend)
             return;
 
-        if (StateManager.IsActive())
-        {
-            if (isHovering || interacts.isHighlightAll)
-                rend.material = glow;
-            else
-                rend.material = def;
-        }
+        if (isInteractable && (isHovering || interacts.isHighlightAll))
+            rend.material = glow;
+        else
+            rend.material = def;
     }
 
     Renderer GetRenderer()
     {
         Renderer renderer = GetComponentInParent<Renderer>();
-        if (renderer == null) renderer = GetComponent<Renderer>();
-        if (renderer == null) renderer = GetComponentInChildren<Renderer>();
+        if (renderer == null)
+            renderer = GetComponent<Renderer>();
+        if (renderer == null)
+            renderer = GetComponentInChildren<Renderer>();
         return renderer;
     }
 }

@@ -1,6 +1,6 @@
-using UnityEngine;
 using System.Collections;
 using Unity.VisualScripting;
+using UnityEngine;
 
 public class EnemyFlyingEye : Enemy
 {
@@ -16,8 +16,8 @@ public class EnemyFlyingEye : Enemy
     float hoverSmoothness = 8f;
     float bulletSpd = 18f;
     float targetAdjust = 0.3f;
-    
-    protected override void DropItem() {}
+
+    protected override void DropItem() { }
 
     protected override void Start()
     {
@@ -25,16 +25,18 @@ public class EnemyFlyingEye : Enemy
         rb = GetComponent<Rigidbody>();
         attackRange = 25f;
         attackRate = 5f;
-        dmg = 20f;
+        damage = 20f;
     }
 
     protected override void CallAttack()
     {
         StartCoroutine(Attack());
     }
+
     protected override void Update()
     {
-        if (isDead) return;
+        if (isDead)
+            return;
         LOS();
         Pathfind();
 
@@ -53,13 +55,23 @@ public class EnemyFlyingEye : Enemy
             target = player.gameObject;
             LookTowards(player.transform.position);
             StartCoroutine(AttackCheck());
-
         }
-        else if (detectedPlayer && Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
+        else if (
+            detectedPlayer
+            && Vector3.Distance(transform.position, player.transform.position) <= detectionRange
+        )
         {
             Vector3 targetPosition = player.transform.position + Vector3.up * hoverHeight;
             Vector3 direction = (targetPosition - transform.position).normalized;
-            rb.velocity = new Vector3(direction.x * moveSpeed, Mathf.Lerp(rb.velocity.y, direction.y * moveSpeed, Time.deltaTime * hoverSmoothness), direction.z * moveSpeed);
+            rb.velocity = new Vector3(
+                direction.x * moveSpeed,
+                Mathf.Lerp(
+                    rb.velocity.y,
+                    direction.y * moveSpeed,
+                    Time.deltaTime * hoverSmoothness
+                ),
+                direction.z * moveSpeed
+            );
             LookTowards(player.transform.position);
         }
         else
@@ -72,7 +84,7 @@ public class EnemyFlyingEye : Enemy
     {
         Debug.Log("EnemyFlyingEye Attack");
         animator.SetTrigger("Atk");
-       // SoundManager.Instance.EnemySFX(sfx, attackClip);
+        // SoundManager.Instance.EnemySFX(sfx, attackClip);
 
         Vector3 targetPos = player.transform.position;
         targetPos.y += targetAdjust;
@@ -87,7 +99,7 @@ public class EnemyFlyingEye : Enemy
 
         bullet.vel = bulletSpd;
         bullet.dir = targetDir;
-        bullet.dmg = dmg;
+        bullet.dmg = damage;
 
         yield break;
     }

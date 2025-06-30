@@ -3,13 +3,15 @@ using UnityEngine;
 public class MG : Gun
 {
     float targetAdjust = 0.25f;
+    private bool isFiring;
 
     public override void Use()
     {
-        Vector3 dir = Camera.main.transform.forward; // default fallback direction
+        Vector3 dir = camera.transform.forward; // default fallback direction
 
         if (currentState == ItemState.Player)
         {
+            isFiring = true;
             if (bullets > 0)
             {
                 bullets--;
@@ -19,7 +21,7 @@ public class MG : Gun
                     Random.Range(-data.spreadAngle, data.spreadAngle),
                     0f
                 );
-                Quaternion rotation = Quaternion.Euler(Camera.main.transform.eulerAngles + spread);
+                Quaternion rotation = Quaternion.Euler(camera.transform.eulerAngles + spread);
                 Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
                 dir = ray.direction;
 
@@ -54,6 +56,26 @@ public class MG : Gun
             FireBullet(dir);
 
             sound.Play("MGShot", enemy.transform.position);
+        }
+    }
+
+    private new void Update()
+    {
+        base.Update();
+        if (!isFiring || currentState is not ItemState.Player || bullets <= 0)
+            return;
+        if (
+            PlayerController.Instance.items.leftItem == this
+                && InputManager.PlayerActionMap.UseLeft.IsPressed()
+            || PlayerController.Instance.items.rightItem == this
+                && InputManager.PlayerActionMap.UseRight.IsPressed()
+        )
+        {
+            UseCheck();
+        }
+        else
+        {
+            isFiring = false;
         }
     }
 }

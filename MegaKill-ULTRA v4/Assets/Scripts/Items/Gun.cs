@@ -11,6 +11,7 @@ public class Gun : Item
     Vector3 firePos;
     Vector3 recoilRot;
     Quaternion ogRot;
+    protected Camera camera;
 
     public float bullets;
 
@@ -22,14 +23,14 @@ public class Gun : Item
 
         ogRot = Quaternion.Euler(data.rot);
         firePos = firePoint.transform.position;
+        camera = Camera.main;
     }
 
     float recoilTimer;
     Vector3 recoilStartRot;
 
-
     //this is stupid and bad
-    void Update()
+    protected void Update()
     {
         if (currentState == ItemState.Player)
         {
@@ -46,7 +47,7 @@ public class Gun : Item
             }
             transform.localRotation = Quaternion.Euler(recoilRot) * ogRot;
         }
-        else 
+        else
         {
             recoilRot = Vector3.zero;
             firePos = firePoint.transform.position;
@@ -55,7 +56,13 @@ public class Gun : Item
 
     public void FireRecoil()
     {
-        recoilStartRot = recoilRot + new Vector3(-data.recoilMag, Random.Range(-data.recoilMag * 0.5f, data.recoilMag * 0.5f), 0f);
+        recoilStartRot =
+            recoilRot
+            + new Vector3(
+                -data.recoilMag,
+                Random.Range(-data.recoilMag * 0.5f, data.recoilMag * 0.5f),
+                0f
+            );
         recoilRot = recoilStartRot;
         recoilTimer = data.recoilSpd;
     }
@@ -83,7 +90,11 @@ public class Gun : Item
 
     public void FireBullet(Vector3 dir)
     {
-        GameObject bulletObj = Instantiate(data.bulletPrefab, firePos, Quaternion.LookRotation(dir));
+        GameObject bulletObj = Instantiate(
+            data.bulletPrefab,
+            firePos,
+            Quaternion.LookRotation(dir)
+        );
         Bullet bullet = bulletObj.GetComponent<Bullet>();
         bullet.dir = dir;
         bullet.vel = data.vel;
@@ -101,7 +112,11 @@ public class Gun : Item
         {
             while (elapsedTime < data.tracerDuration)
             {
-                tracer.transform.position = Vector3.Lerp(firePos, dir, elapsedTime / data.tracerDuration);
+                tracer.transform.position = Vector3.Lerp(
+                    firePos,
+                    dir,
+                    elapsedTime / data.tracerDuration
+                );
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
@@ -110,7 +125,7 @@ public class Gun : Item
         {
             while (elapsedTime < tracer.time)
             {
-                tracer.transform.position += dir.normalized * data.vel * Time.deltaTime;
+                tracer.transform.position += dir.normalized * (data.vel * Time.deltaTime);
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
