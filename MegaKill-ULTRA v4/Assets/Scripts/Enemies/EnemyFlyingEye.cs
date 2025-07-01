@@ -43,7 +43,7 @@ public class EnemyFlyingEye : Enemy
         // Optional: animate speed using Rigidbody velocity
         if (animator != null)
         {
-            float speed = rb.velocity.magnitude;
+            float speed = rb.linearVelocity.magnitude;
             animator.SetFloat("Spd", speed);
         }
     }
@@ -63,10 +63,10 @@ public class EnemyFlyingEye : Enemy
         {
             Vector3 targetPosition = player.transform.position + Vector3.up * hoverHeight;
             Vector3 direction = (targetPosition - transform.position).normalized;
-            rb.velocity = new Vector3(
+            rb.linearVelocity = new Vector3(
                 direction.x * moveSpeed,
                 Mathf.Lerp(
-                    rb.velocity.y,
+                    rb.linearVelocity.y,
                     direction.y * moveSpeed,
                     Time.deltaTime * hoverSmoothness
                 ),
@@ -76,7 +76,7 @@ public class EnemyFlyingEye : Enemy
         }
         else
         {
-            rb.velocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;
         }
     }
 
@@ -95,7 +95,7 @@ public class EnemyFlyingEye : Enemy
         Bullet bullet = bulletObj.GetComponent<Bullet>();
         Rigidbody rb = bulletObj.GetComponent<Rigidbody>();
 
-        rb.velocity = targetDir * bulletSpd;
+        rb.linearVelocity = targetDir * bulletSpd;
 
         bullet.vel = bulletSpd;
         bullet.dir = targetDir;

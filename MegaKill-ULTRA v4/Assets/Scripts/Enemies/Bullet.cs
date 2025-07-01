@@ -3,9 +3,15 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     float lifeTime = 5f;
-    [HideInInspector] public Vector3 dir;
-    [HideInInspector] public float vel;
-    [HideInInspector] public float dmg;
+
+    [HideInInspector]
+    public Vector3 dir;
+
+    [HideInInspector]
+    public float vel;
+
+    [HideInInspector]
+    public float dmg;
 
     Rigidbody rb;
     int nullLayer;
@@ -25,13 +31,13 @@ public class Bullet : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.velocity = dir * vel;
+        rb.linearVelocity = dir * vel;
     }
 
     void OnCollisionEnter(Collision collision)
     {
         Debug.Log("bullet hit: " + collision.gameObject.name);
-        
+
         if (collision.gameObject.CompareTag("Player"))
         {
             PlayerController player = collision.gameObject.GetComponentInParent<PlayerController>();
