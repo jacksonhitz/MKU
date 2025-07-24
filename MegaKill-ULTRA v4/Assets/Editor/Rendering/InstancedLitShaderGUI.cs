@@ -126,6 +126,8 @@ namespace Rendering
                 new GUIContent("Culling", "Face culling mode")
             );
 
+            materialEditor.EnableInstancingField();
+
             // Apply changes
             if (EditorGUI.EndChangeCheck())
             {
