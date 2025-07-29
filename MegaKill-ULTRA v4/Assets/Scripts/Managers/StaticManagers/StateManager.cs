@@ -57,6 +57,9 @@ public static class StateManager
         { typeof(Spearhead), GameState.SPEARHEAD },
     };
 
+    /// <summary>
+    /// The current level. Invokes <see cref="LevelChanged"/> when the level is changed.
+    /// </summary>
     public static GameState Level
     {
         get => _level;
@@ -69,17 +72,32 @@ public static class StateManager
         }
     }
 
+    /// <summary>
+    /// The last level loaded, or the title level.
+    /// </summary>
     [ResetOnPlay(GameState.TITLE)]
     public static GameState PreviousLevel { get; private set; } = GameState.TITLE;
 
+    /// <summary>
+    /// Is the current scene active? (the game is being played rather than in a non-game scene)
+    /// </summary>
     public static bool IsActive =>
         _level is not GameState.TITLE && SceneScript.Instance?.State is SceneState.PLAYING;
 
+    /// <summary>
+    /// Is the current scene loading or a UI scene?
+    /// </summary>
     public static bool IsPassive =>
         _level is GameState.TITLE || SceneScript.Instance?.State is not SceneState.PLAYING;
 
+    /// <summary>
+    /// Is the current scene transitioning?
+    /// </summary>
     public static bool IsTransition => SceneScript.Instance?.State is SceneState.TRANSITION;
 
+    /// <summary>
+    /// Is this the player's first attempt on this level during this run (always true if loaded from a menu).
+    /// </summary>
     [ResetOnPlay(true)]
     public static bool IsFirstAttempt { get; private set; } = true;
 
