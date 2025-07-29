@@ -1,13 +1,11 @@
 using System.Collections.Generic;
 using AudioSystem;
-using Lean.Pool;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Pool;
 using UnityUtils;
 using Debug = UnityEngine.Debug;
-using Random = UnityEngine.Random;
 
 public class SoundManager : PersistentSingleton<SoundManager>
 {
@@ -22,14 +20,6 @@ public class SoundManager : PersistentSingleton<SoundManager>
 
     [SerializeField]
     private float maxDistance = 30f;
-
-    [SerializeField]
-    private AnimationCurve falloffCurve = AnimationCurve.EaseInOut(0f, 1f, 1f, 0f);
-
-    [Header("Prefabs")]
-    [SerializeField]
-    [Required]
-    private GameObject sfxPrefab;
 
     [Header("Mixers")]
     [SerializeField]
@@ -163,25 +153,25 @@ public class SoundManager : PersistentSingleton<SoundManager>
     // }
 
     //3D Player
-    public void Play(SoundData sound, Vector3 pos)
-    {
-        AudioClip clip = sound.clips[Random.Range(0, sound.clips.Length)];
-
-        var audioHolder = new GameObject("Holding: " + clip.name);
-        audioHolder.transform.position = pos;
-
-        var audioSource = audioHolder.AddComponent<AudioSource>();
-        audioSource.clip = clip;
-        audioSource.spatialBlend = 1f;
-        audioSource.rolloffMode = AudioRolloffMode.Custom;
-        audioSource.SetCustomCurve(AudioSourceCurveType.CustomRolloff, falloffCurve);
-        audioSource.minDistance = minDistance;
-        audioSource.maxDistance = maxDistance;
-        audioSource.volume = sound.volume;
-
-        audioSource.Play();
-        Destroy(audioHolder, clip.length + 0.1f);
-    }
+    // public void Play(SoundData sound, Vector3 pos)
+    // {
+    //     AudioClip clip = sound.clips[Random.Range(0, sound.clips.Length)];
+    //
+    //     var audioHolder = new GameObject("Holding: " + clip.name);
+    //     audioHolder.transform.position = pos;
+    //
+    //     var audioSource = audioHolder.AddComponent<AudioSource>();
+    //     audioSource.clip = clip;
+    //     audioSource.spatialBlend = 1f;
+    //     audioSource.rolloffMode = AudioRolloffMode.Custom;
+    //     audioSource.SetCustomCurve(AudioSourceCurveType.CustomRolloff, falloffCurve);
+    //     audioSource.minDistance = minDistance;
+    //     audioSource.maxDistance = maxDistance;
+    //     audioSource.volume = sound.volume;
+    //
+    //     audioSource.Play();
+    //     Destroy(audioHolder, clip.length + 0.1f);
+    // }
 
     public SoundBuilder CreateSoundBuilder() => new SoundBuilder(this);
 

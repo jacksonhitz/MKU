@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d82afadbc24149799f62b4efe2e6bc9, type: 3}
-  m_Name: DJ
+  m_Name: ButtonHover
   m_EditorClassIdentifier: 
   soundType: 0
   clips:
-  - {fileID: 8300000, guid: 24e45c323391a4442891385e4acba8ee, type: 3}
-  mixerGroup: {fileID: 8241156685671839764, guid: 621b5db07a257044fabac401a31c47fb, type: 2}
+  - {fileID: 8300000, guid: 36597abbc211e5843b688bd6897146d2, type: 3}
+  mixerGroup: {fileID: -3251265907122313286, guid: 621b5db07a257044fabac401a31c47fb, type: 2}
   loop: 0
   playOnAwake: 0
   frequentSound: 0
   mute: 0
-  bypassEffects: 0
-  bypassListenerEffects: 0
-  bypassReverbZones: 0
-  priority: 128
+  bypassEffects: 1
+  bypassListenerEffects: 1
+  bypassReverbZones: 1
+  priority: 10
   volume: 1
   pitch: 1
   panStereo: 0
@@ -34,5 +34,5 @@ MonoBehaviour:
   minDistance: 1
   maxDistance: 500
   ignoreListenerVolume: 0
-  ignoreListenerPause: 0
-  rolloffMode: 0
+  ignoreListenerPause: 1
+  rolloffMode: 1

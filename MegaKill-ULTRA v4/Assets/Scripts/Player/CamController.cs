@@ -79,7 +79,7 @@ public class CamController : MonoBehaviour
     [SerializeField, Self(Flag.Editable)]
     private Volume staticVolume;
 
-    [SerializeField, Anywhere]
+    [SerializeField, Required]
     private Material camMat;
 
     void Start()

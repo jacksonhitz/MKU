@@ -119,20 +119,20 @@ public class SettingsManager : PersistentSingleton<SettingsManager>
 
     public void SetMusicVolume(float value)
     {
-        value = Mathf.Clamp(value, 0, 100);
+        value = Mathf.Clamp(value, 0, 100) / 100f;
         settings.musicVolume = value;
         musicMixer.audioMixer.SetFloat(
-            "Volume",
+            "musicVolume",
             AudioSystem.AudioExtensions.ToLogarithmicVolume(value)
         );
     }
 
     public void SetSFXVolume(float value)
     {
-        value = Mathf.Clamp(value, 0, 100);
+        value = Mathf.Clamp(value, 0, 100) / 100f;
         settings.sFXVolume = value;
         sfxMixer.audioMixer.SetFloat(
-            "Volume",
+            "sfxVolume",
             AudioSystem.AudioExtensions.ToLogarithmicVolume(value)
         );
     }

@@ -89,7 +89,7 @@ public class TitleButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             .DOAnchorPos(targetPosition, animationSpeed)
             .SetSpeedBased()
             .SetEase(Ease.OutSine);
-        //TODO: play hover sound
+        SoundManager.Instance.CreateSoundBuilder().Play("ButtonHover");
     }
 
     public void TriggerHoverExit()

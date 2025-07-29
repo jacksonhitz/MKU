@@ -258,63 +258,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1 &1534496971311886196
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4284183216932966821}
-  - component: {fileID: 2738128716887219403}
-  m_Layer: 0
-  m_Name: SfxPool
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4284183216932966821
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1534496971311886196}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.77411264, z: -0, w: 0.63304794}
-  m_LocalPosition: {x: 1309.8951, y: 137.00244, z: 516.6739}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5344833658782385552}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2738128716887219403
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1534496971311886196}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eea08375da243a441b88d1e6b0713006, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefab: {fileID: 3054276293616313278, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-  notification: 3
-  strategy: 0
-  preload: 10
-  capacity: 25
-  recycle: 0
-  persist: 0
-  stamp: 0
-  warnings: 1
-  spawnedClonesList: []
-  despawnedClones: []
-  delays: []
-  deactivatedChild: {fileID: 0}
 --- !u!1 &5614947834900109385
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,9 +289,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7560134853317885130}
-  - {fileID: 6983757025620173604}
   - {fileID: 4316691958864669505}
-  - {fileID: 4284183216932966821}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5831916374222043343
@@ -363,100 +304,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd6e504ec073d44638d2a25fce2bc771, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AutoUnparentOnAwake: 1
   music: {fileID: 2348635790274783627}
-  sfx: {fileID: 6213767217333908935}
   dialogue: {fileID: 1054915251827819283}
   minDistance: 5
   maxDistance: 65
-  falloffCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  sfxPrefab: {fileID: 0}
---- !u!1001 &6294670490263365649
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 5344833658782385552}
-    m_Modifications:
-    - target: {fileID: 3054276293616313278, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-      propertyPath: m_Name
-      value: SFX
-      objectReference: {fileID: 0}
-    - target: {fileID: 4012816629463419701, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4012816629463419701, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4012816629463419701, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4012816629463419701, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4012816629463419701, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4012816629463419701, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4012816629463419701, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4012816629463419701, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4012816629463419701, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4012816629463419701, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
---- !u!82 &6213767217333908935 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 99243196947602902, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-  m_PrefabInstance: {fileID: 6294670490263365649}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6983757025620173604 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4012816629463419701, guid: ce7e5fd565ec41e41bede4b0053522f4, type: 3}
-  m_PrefabInstance: {fileID: 6294670490263365649}
-  m_PrefabAsset: {fileID: 0}
+  musicMixer: {fileID: 8241156685671839764, guid: 621b5db07a257044fabac401a31c47fb, type: 2}
+  sfxMixer: {fileID: -3251265907122313286, guid: 621b5db07a257044fabac401a31c47fb, type: 2}
+  dialogueMixer: {fileID: -4270199264933731931, guid: 621b5db07a257044fabac401a31c47fb, type: 2}
+  soundEmitterPrefab: {fileID: 9089927037093433055, guid: 71fb9aaef429da140ad161f623c69f77, type: 3}
+  collectionCheck: 1
+  defaultCapacity: 10
+  maxPoolSize: 100
+  maxSoundInstances: 30
