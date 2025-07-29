@@ -7,7 +7,7 @@ public class Revolver : Gun
 
     public override void Use()
     {
-        Vector3 dir = Camera.main.transform.forward; 
+        Vector3 dir = Camera.main.transform.forward;
 
         if (currentState == ItemState.Player)
         {
@@ -15,7 +15,9 @@ public class Revolver : Gun
             {
                 bullets--;
 
-                Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
+                Ray ray = Camera.main.ScreenPointToRay(
+                    new Vector3(Screen.width / 2f, Screen.height / 2f, 0f)
+                );
                 if (Physics.Raycast(ray, out RaycastHit hitInfo, 1000f))
                     dir = (hitInfo.point - firePoint.position).normalized;
 
@@ -23,12 +25,12 @@ public class Revolver : Gun
                 FireRecoil();
                 FireRay(dir);
 
-                sound.Play("RevShot");
+                sound.CreateSoundBuilder().Play("RevShot");
             }
             else
             {
                 popUp?.UpdatePopUp("EMPTY");
-                sound.Play("RevEmpty");
+                sound.CreateSoundBuilder().Play("RevEmpty");
             }
         }
         else if (currentState == ItemState.Enemy && holder is Enemy enemy)
@@ -42,8 +44,7 @@ public class Revolver : Gun
             FireVFX();
             FireBullet(dir);
 
-            sound.Play("RevShot", enemy.transform.position);
+            sound.CreateSoundBuilder().WithPosition(enemy.transform.position).Play("RevShot");
         }
     }
-
 }

@@ -365,9 +365,9 @@ public class Enemy : Interactable, IHitable
 
             if (!isStatic)
                 currentState = EnemyState.Active;
-            sound.Play("EnemyStun", transform.position);
+            sound.CreateSoundBuilder().WithPosition(transform.position).Play("EnemyStun");
         }
-        sound.Play("EnemyHit", transform.position);
+        sound.CreateSoundBuilder().WithPosition(transform.position).Play("EnemyHit");
     }
 
     IEnumerator Stun()

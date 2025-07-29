@@ -11,7 +11,7 @@ public class Rehearsal : SceneScript
                 + " operating out of the abandoned downtown subway system - that's right folks, Reds here on American soil...",
         };
         base.StartLevel();
-        SoundManager.Instance.Play("Acid");
+        SoundManager.Instance.CreateSoundBuilder().Play("Acid");
         PlayerController.Instance.commandUI.Active = true;
     }
 

@@ -14,14 +14,16 @@ public class Shotgun : Gun
 
                 for (int i = 0; i < data.pellets; i++)
                 {
-                    Vector3 dir = Camera.main.transform.forward; 
+                    Vector3 dir = Camera.main.transform.forward;
 
                     Vector3 spread = new Vector3(
                         Random.Range(-data.spreadAngle, data.spreadAngle),
                         Random.Range(-data.spreadAngle, data.spreadAngle),
                         0f
                     );
-                    Quaternion rotation = Quaternion.Euler(Camera.main.transform.eulerAngles + spread);
+                    Quaternion rotation = Quaternion.Euler(
+                        Camera.main.transform.eulerAngles + spread
+                    );
                     Ray ray = new Ray(firePoint.position, rotation * Vector3.forward);
                     dir = ray.direction;
 
@@ -29,12 +31,12 @@ public class Shotgun : Gun
                     FireRecoil();
                     FireRay(dir);
                 }
-                sound.Play("SGShot");
+                sound.CreateSoundBuilder().Play("SGShot");
             }
             else
             {
                 popUp?.UpdatePopUp("EMPTY");
-                sound.Play("SGEmpty");
+                sound.CreateSoundBuilder().Play("SGEmpty");
             }
         }
         else if (currentState == ItemState.Enemy && holder is Enemy enemy)
@@ -56,10 +58,8 @@ public class Shotgun : Gun
 
                 FireVFX();
                 FireBullet(dir);
-
-                
             }
-            sound.Play("SGShot", enemy.transform.position);
+            sound.CreateSoundBuilder().WithPosition(enemy.transform.position).Play("SGShot");
         }
     }
 }

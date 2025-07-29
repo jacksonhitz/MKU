@@ -50,7 +50,7 @@ public class Tutorial : SceneScript
     {
         base.StartLevel();
         TutorialStateManager.State = TutorialStateManager.TutorialState.WASD;
-        SoundManager.Instance.Play("Hot");
+        SoundManager.Instance.CreateSoundBuilder().Play("Hot");
     }
 
     void EnumLogic()

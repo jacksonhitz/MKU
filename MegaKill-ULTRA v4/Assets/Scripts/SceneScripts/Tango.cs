@@ -18,7 +18,7 @@ public class Tango : SceneScript
         };
         base.StartLevel();
         EnemyManager.Instance.EnemySpawning = false;
-        SoundManager.Instance.Play("Witch");
+        SoundManager.Instance.CreateSoundBuilder().Play("Witch");
         Dialogue.Instance.TypeText("F TO GIVE DRUGS");
         DebugLogConsole.AddCommandInstance(
             "SkipToPhase2",
@@ -90,7 +90,7 @@ public class Tango : SceneScript
     public void Phase2()
     {
         EnemyManager.Instance.EnemySpawning = true;
-        SoundManager.Instance.Play("Magic");
+        SoundManager.Instance.CreateSoundBuilder().Play("Magic");
         InteractionManager.Instance.ExtractOn();
         EnemyManager.Instance.Brawl();
         extractsActive = true;

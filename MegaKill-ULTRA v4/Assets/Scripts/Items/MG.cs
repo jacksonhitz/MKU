@@ -29,12 +29,12 @@ public class MG : Gun
                 FireRecoil();
                 FireRay(dir);
 
-                sound.Play("MGShot");
+                sound.CreateSoundBuilder().Play("MGShot");
             }
             else
             {
                 popUp?.UpdatePopUp("EMPTY");
-                sound.Play("MGEmpty");
+                sound.CreateSoundBuilder().Play("MGEmpty");
             }
         }
         else if (currentState == ItemState.Enemy && holder is Enemy enemy)
@@ -55,7 +55,7 @@ public class MG : Gun
             FireVFX();
             FireBullet(dir);
 
-            sound.Play("MGShot", enemy.transform.position);
+            sound.CreateSoundBuilder().WithPosition(enemy.transform.position).Play("MGShot");
         }
     }
 

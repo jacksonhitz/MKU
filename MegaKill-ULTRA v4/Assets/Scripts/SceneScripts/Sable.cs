@@ -8,6 +8,6 @@ public class Sable : SceneScript
     public override void StartLevel()
     {
         base.StartLevel();
-        SoundManager.Instance.Play("4L");
+        SoundManager.Instance.CreateSoundBuilder().Play("4L");
     }
 }

@@ -1,17 +1,13 @@
 using System;
-using System.Diagnostics;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
+using UnityUtils;
 using Debug = UnityEngine.Debug;
 
-public class SettingsManager : MonoBehaviour
+public class SettingsManager : PersistentSingleton<SettingsManager>
 {
-    //CALL AWAKE/START SHIT EXTERNALLY SO THAT MANAGERS WITHOUT VAR CAN BE STATIC/ABSTRACT
-
-    [ResetOnPlay]
-    public static SettingsManager Instance { get; private set; }
-
     [ResetOnPlay]
     public static event Action<bool> OnPauseChange = delegate { };
 
@@ -34,14 +30,28 @@ public class SettingsManager : MonoBehaviour
     [SerializeField]
     GameObject menu;
 
+    [Header("Mixers")]
+    [SerializeField]
+    private AudioMixerGroup masterMixer;
+
+    [SerializeField]
+    private AudioMixerGroup sfxMixer;
+
+    [SerializeField]
+    private AudioMixerGroup musicMixer;
+
+    [SerializeField]
+    private AudioMixerGroup dialogueMixer;
+
     public float MusicVolume => settings.musicVolume;
     public float SFXVolume => settings.sFXVolume;
     public float Sensitivity => settings.sensitivity;
 
-    private void Awake()
+    protected override void Awake()
     {
-        Instance = this;
-
+        base.Awake();
+        if (gameObject == null)
+            return;
         settings = Resources.Load<SettingsData>("Settings/Settings");
         Debug.Log("Settings Found: " + settings);
         if (settings == null)
@@ -111,23 +121,20 @@ public class SettingsManager : MonoBehaviour
     {
         value = Mathf.Clamp(value, 0, 100);
         settings.musicVolume = value;
-
-        if (SoundManager.Instance != null && SoundManager.Instance.music != null)
-            SoundManager.Instance.music.volume = value / 300f;
+        musicMixer.audioMixer.SetFloat(
+            "Volume",
+            AudioSystem.AudioExtensions.ToLogarithmicVolume(value)
+        );
     }
 
     public void SetSFXVolume(float value)
     {
         value = Mathf.Clamp(value, 0, 100);
         settings.sFXVolume = value;
-
-        if (SoundManager.Instance == null)
-            return;
-        if (SoundManager.Instance.sfx != null)
-            SoundManager.Instance.sfx.volume = value / 100f;
-
-        if (SoundManager.Instance.dialogue != null)
-            SoundManager.Instance.dialogue.volume = value / 100f;
+        sfxMixer.audioMixer.SetFloat(
+            "Volume",
+            AudioSystem.AudioExtensions.ToLogarithmicVolume(value)
+        );
     }
 
     public void SetSensitivity(float value)

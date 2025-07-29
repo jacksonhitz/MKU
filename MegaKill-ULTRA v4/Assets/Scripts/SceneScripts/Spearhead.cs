@@ -8,6 +8,6 @@ public class Spearhead : SceneScript
     public override void StartLevel()
     {
         base.StartLevel();
-        SoundManager.Instance.Play("DJ");
+        SoundManager.Instance.CreateSoundBuilder().Play("DJ");
     }
 }

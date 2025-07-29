@@ -106,7 +106,10 @@ public class EnemyManager : ValidatedMonoBehaviour
         Destroy(enemy.gameObject);
         EnemyKilled?.Invoke((enemy.GetType(), enemies.Count));
 
-        SoundManager.Instance.Play("EnemyDeath", enemy.transform.position);
+        SoundManager
+            .Instance.CreateSoundBuilder()
+            .WithPosition(enemy.transform.position)
+            .Play("EnemyDeath");
     }
 
     public void AddEnemy(Enemy enemy)

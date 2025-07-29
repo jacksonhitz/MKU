@@ -135,10 +135,10 @@ public abstract class SceneScript : MonoBehaviour
         if (State == SceneState.SCORE)
             return;
         State = SceneState.SCORE;
-        SoundManager.Instance.Stop();
+        SoundManager.Instance.StopAll();
         SoundManager.Instance.MusicOff();
         ScoreUI.Instance.Visible = true;
-        SoundManager.Instance.Play("All");
+        SoundManager.Instance.CreateSoundBuilder().Play("All");
         NewsDialogue();
     }
 

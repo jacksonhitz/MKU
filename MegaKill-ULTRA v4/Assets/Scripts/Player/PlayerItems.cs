@@ -121,7 +121,7 @@ public class PlayerItems : ValidatedMonoBehaviour
     {
         item.Thrown();
         item.rb.AddForce(Camera.main!.transform.forward * throwForce, ForceMode.Impulse);
-        SoundManager.Instance.Play("Throw");
+        SoundManager.Instance.CreateSoundBuilder().Play("Throw");
 
         if (item == leftItem)
             leftItem = null;

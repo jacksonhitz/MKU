@@ -81,7 +81,7 @@ public class PlayerCombat : ValidatedMonoBehaviour
     IEnumerator PunchOn(Renderer punch)
     {
         yield return new WaitForSeconds(0.2f);
-        SoundManager.Instance.Play("Punch");
+        SoundManager.Instance.CreateSoundBuilder().Play("Punch");
         punch.enabled = true;
         punchRange.enabled = true;
         Melee(punchRange);

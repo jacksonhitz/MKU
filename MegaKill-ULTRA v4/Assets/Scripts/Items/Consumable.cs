@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Consumable : Item
 {
-    [SerializeField] ConsumableData data;
+    [SerializeField]
+    ConsumableData data;
 
     float charge;
 
@@ -22,13 +23,13 @@ public class Consumable : Item
             player.health.Heal(data.heal);
             //trip
 
-            sound.Play("Gulp");
+            sound.CreateSoundBuilder().Play("Gulp");
             popUp.UpdatePopUp("HEALTH UP");
         }
         else
         {
             popUp.UpdatePopUp("EMPTY");
-            sound.Play("PillEmpty");
+            sound.CreateSoundBuilder().Play("PillEmpty");
         }
     }
 }

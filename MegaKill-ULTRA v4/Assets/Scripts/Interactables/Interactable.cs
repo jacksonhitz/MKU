@@ -50,7 +50,7 @@ public class Interactable : MonoBehaviour, IInteractable
         {
             EnemyPunch enemy = GetComponent<EnemyPunch>();
             enemy.dosed = true;
-            sound.Play("Interact");
+            sound.CreateSoundBuilder().Play("Interact");
         }
     }
 

@@ -8,7 +8,7 @@ public class Title : SceneScript
 
     public override void StartLevel()
     {
-        SoundManager.Instance.Play("Title");
+        SoundManager.Instance.CreateSoundBuilder().Play("Title");
         State = StateManager.SceneState.FILE;
     }
 

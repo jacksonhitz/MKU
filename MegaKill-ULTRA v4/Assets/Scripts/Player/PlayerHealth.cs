@@ -17,7 +17,7 @@ public class PlayerHealth : MonoBehaviour, IHitable
 
     void Awake()
     {
-        uEye = FindObjectOfType<UEye>();
+        uEye = FindAnyObjectByType<UEye>();
     }
 
     void Start()
@@ -38,7 +38,7 @@ public class PlayerHealth : MonoBehaviour, IHitable
 
         if (!StateManager.IsActive || !(health <= 0) || !enabled)
             return;
-        SoundManager.Instance.Play("PlayerDeath");
+        SoundManager.Instance.CreateSoundBuilder().Play("PlayerDeath");
         PlayerDied?.Invoke();
     }
 

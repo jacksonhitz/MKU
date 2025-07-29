@@ -57,7 +57,7 @@ public class Dialogue : MonoBehaviour
         textComponent.text = string.Empty;
         yield return new WaitForSeconds(0.1f);
 
-        SoundManager.Instance.Play("Line");
+        SoundManager.Instance.CreateSoundBuilder().Play("Line");
 
         foreach (char c in text)
         {
