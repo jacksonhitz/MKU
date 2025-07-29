@@ -29,8 +29,9 @@ public static class InputManager
             }
             else
             {
-                SetActionMapState(PlayerActionMap, true);
                 SetActionMapState(UIActionMap, false);
+                if (StateManager.IsActive)
+                    SetActionMapState(PlayerActionMap, true);
             }
         };
     }
