@@ -206,9 +206,9 @@ public class SoundManager : PersistentSingleton<SoundManager>
 
     public void StopAll()
     {
-        foreach (var soundEmitter in activeSoundEmitters)
+        for (int i = activeSoundEmitters.Count - 1; i >= 0; i--)
         {
-            soundEmitter.Stop();
+            activeSoundEmitters[i].Stop();
         }
 
         FrequentSoundEmitters.Clear();

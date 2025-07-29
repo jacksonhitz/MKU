@@ -27,11 +27,10 @@ public static class InputManager
                 SetActionMapState(PlayerActionMap, false);
                 SetActionMapState(UIActionMap, true);
             }
-            else
+            else if (StateManager.IsActive)
             {
                 SetActionMapState(UIActionMap, false);
-                if (StateManager.IsActive)
-                    SetActionMapState(PlayerActionMap, true);
+                SetActionMapState(PlayerActionMap, true);
             }
         };
     }
