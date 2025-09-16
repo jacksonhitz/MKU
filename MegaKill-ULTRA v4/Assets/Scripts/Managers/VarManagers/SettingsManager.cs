@@ -1,4 +1,5 @@
 using System;
+using AudioSystem;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -61,6 +62,9 @@ public class SettingsManager : PersistentSingleton<SettingsManager>
 
     private void OnDestroy()
     {
+        if (!InputManager.Enabled)
+            return;
+
         InputManager.PlayerActionMap.Pause.performed -= OnPausePerformed;
     }
 
@@ -119,22 +123,16 @@ public class SettingsManager : PersistentSingleton<SettingsManager>
 
     public void SetMusicVolume(float value)
     {
-        value = Mathf.Clamp(value, 0, 100) / 100f;
+        value = Mathf.Clamp01(value);
         settings.musicVolume = value;
-        musicMixer.audioMixer.SetFloat(
-            "musicVolume",
-            AudioSystem.AudioExtensions.ToLogarithmicVolume(value)
-        );
+        musicMixer.audioMixer.SetFloat("musicVolume", AudioExtensions.ToLogarithmicVolume(value));
     }
 
     public void SetSFXVolume(float value)
     {
-        value = Mathf.Clamp(value, 0, 100) / 100f;
+        value = Mathf.Clamp01(value);
         settings.sFXVolume = value;
-        sfxMixer.audioMixer.SetFloat(
-            "sfxVolume",
-            AudioSystem.AudioExtensions.ToLogarithmicVolume(value)
-        );
+        sfxMixer.audioMixer.SetFloat("sfxVolume", AudioExtensions.ToLogarithmicVolume(value));
     }
 
     public void SetSensitivity(float value)

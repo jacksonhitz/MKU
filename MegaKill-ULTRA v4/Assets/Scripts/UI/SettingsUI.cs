@@ -1,7 +1,6 @@
-using System.Diagnostics;
+using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SettingsUI : MonoBehaviour
@@ -52,22 +51,22 @@ public class SettingsUI : MonoBehaviour
 
     public void Restart() => SettingsManager.Instance.Restart();
 
-    void Init(Slider slider, TMP_InputField input, float initial, System.Action<float> apply)
+    void Init(Slider slider, TMP_InputField input, float initial, Action<float> apply)
     {
-        slider.value = initial;
-        input.text = Mathf.RoundToInt(initial).ToString();
+        slider.value = initial * 100f;
+        input.text = Mathf.RoundToInt(slider.value).ToString();
         input.characterValidation = TMP_InputField.CharacterValidation.Integer;
 
         slider.onValueChanged.AddListener(v =>
         {
-            apply(v);
+            apply(v / 100f);
             input.text = Mathf.RoundToInt(v).ToString();
         });
 
         input.onEndEdit.AddListener(text =>
         {
             if (float.TryParse(text, out float val))
-                apply(val);
+                apply(val / 100f);
             slider.value = initial = slider.value;
             input.text = Mathf.RoundToInt(slider.value).ToString();
         });
