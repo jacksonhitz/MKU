@@ -29,6 +29,8 @@ public class PlayerItems : ValidatedMonoBehaviour
 
     private void OnDisable()
     {
+        if (!InputManager.Enabled)
+            return;
         InputManager.PlayerActionMap.EquipLeft.performed -= LeftEquip;
         InputManager.PlayerActionMap.EquipRight.performed -= RightEquip;
         InputManager.PlayerActionMap.ThrowLeft.performed -= LeftThrow;

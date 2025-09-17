@@ -21,6 +21,8 @@ public class PlayerInteract : MonoBehaviour
 
     private void OnDisable()
     {
+        if (!InputManager.Enabled)
+            return;
         InputManager.PlayerActionMap.Interact.performed -= InteractOnPerformed;
         InputManager.PlayerActionMap.Highlight.performed -= HighlightOnPerformed;
         InputManager.PlayerActionMap.Highlight.canceled -= HighlightOnPerformed;

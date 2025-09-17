@@ -35,6 +35,8 @@ public class PlayerCombat : ValidatedMonoBehaviour
 
     private void OnDisable()
     {
+        if (!InputManager.Enabled)
+            return;
         InputManager.PlayerActionMap.UseLeft.performed -= UseLeftOnPerformed;
         InputManager.PlayerActionMap.UseRight.performed -= UseRightOnPerformed;
     }

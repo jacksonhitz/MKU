@@ -1,4 +1,3 @@
-using System;
 using KBCore.Refs;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -28,7 +27,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnDisable()
     {
-        InputManager.PlayerActionMap.Jump.performed -= JumpOnPerformed;
+        if (InputManager.Enabled)
+            InputManager.PlayerActionMap.Jump.performed -= JumpOnPerformed;
     }
 
     private void JumpOnPerformed(InputAction.CallbackContext obj)

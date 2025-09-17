@@ -1,3 +1,5 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static Controls;
@@ -5,6 +7,8 @@ using SceneState = StateManager.SceneState;
 
 public static class InputManager
 {
+    public static bool Enabled { get; private set; } = false;
+
     [ResetOnPlay]
     public static UIActions UIActionMap { get; private set; }
 
@@ -19,6 +23,7 @@ public static class InputManager
         UIActionMap.Enable();
         PlayerActionMap = controls.Player;
         PlayerActionMap.Enable();
+        Enabled = true;
         SceneScript.StateChanged += SceneScriptOnStateChanged;
         SettingsManager.OnPauseChange += isPaused =>
         {
@@ -33,6 +38,14 @@ public static class InputManager
                 SetActionMapState(PlayerActionMap, true);
             }
         };
+
+        CancellationToken quitToken = Application.exitCancellationToken;
+        quitToken.WaitUntilCanceled().GetAwaiter().OnCompleted(OnApplicationQuit);
+    }
+
+    private static void OnApplicationQuit()
+    {
+        Enabled = false;
     }
 
     private static void SceneScriptOnStateChanged(SceneState scene)
