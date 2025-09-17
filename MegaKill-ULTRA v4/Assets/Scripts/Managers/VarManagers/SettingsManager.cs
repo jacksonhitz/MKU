@@ -75,7 +75,9 @@ public class SettingsManager : PersistentSingleton<SettingsManager>
 
     void Start()
     {
-        SetSettings();
+        SetMusicVolume(settings.musicVolume);
+        SetSFXVolume(settings.sFXVolume);
+        SetSensitivity(settings.sensitivity);
     }
 
     public void Pause()
@@ -112,27 +114,18 @@ public class SettingsManager : PersistentSingleton<SettingsManager>
         StateManager.RestartLevel(2f, Application.exitCancellationToken).Forget();
     }
 
-    void SetSettings()
-    {
-        SetMusicVolume(settings.musicVolume);
-        SetSFXVolume(settings.sFXVolume);
-        SetSensitivity(settings.sensitivity);
-
-        Resume();
-    }
-
     public void SetMusicVolume(float value)
     {
         value = Mathf.Clamp01(value);
         settings.musicVolume = value;
-        musicMixer.audioMixer.SetFloat("musicVolume", AudioExtensions.ToLogarithmicVolume(value));
+        musicMixer.audioMixer.SetFloat("musicVolume", value.ToLogarithmicVolume());
     }
 
     public void SetSFXVolume(float value)
     {
         value = Mathf.Clamp01(value);
         settings.sFXVolume = value;
-        sfxMixer.audioMixer.SetFloat("sfxVolume", AudioExtensions.ToLogarithmicVolume(value));
+        sfxMixer.audioMixer.SetFloat("sfxVolume", value.ToLogarithmicVolume());
     }
 
     public void SetSensitivity(float value)

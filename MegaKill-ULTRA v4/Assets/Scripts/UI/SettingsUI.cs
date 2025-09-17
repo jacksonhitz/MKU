@@ -28,14 +28,14 @@ public class SettingsUI : MonoBehaviour
         Init(
             sfxSlider,
             sfxInput,
-            SettingsManager.Instance.SFXVolume,
-            SettingsManager.Instance.SetSFXVolume
+            SettingsManager.Instance.SFXVolume * 100f,
+            x => SettingsManager.Instance.SetSFXVolume(x / 100f)
         );
         Init(
             musicSlider,
             musicInput,
-            SettingsManager.Instance.MusicVolume,
-            SettingsManager.Instance.SetMusicVolume
+            SettingsManager.Instance.MusicVolume * 100f,
+            x => SettingsManager.Instance.SetMusicVolume(x / 100f)
         );
         Init(
             sensSlider,
@@ -53,20 +53,20 @@ public class SettingsUI : MonoBehaviour
 
     void Init(Slider slider, TMP_InputField input, float initial, Action<float> apply)
     {
-        slider.value = initial * 100f;
+        slider.value = initial;
         input.text = Mathf.RoundToInt(slider.value).ToString();
         input.characterValidation = TMP_InputField.CharacterValidation.Integer;
 
         slider.onValueChanged.AddListener(v =>
         {
-            apply(v / 100f);
+            apply(v);
             input.text = Mathf.RoundToInt(v).ToString();
         });
 
         input.onEndEdit.AddListener(text =>
         {
             if (float.TryParse(text, out float val))
-                apply(val / 100f);
+                apply(val);
             slider.value = initial = slider.value;
             input.text = Mathf.RoundToInt(slider.value).ToString();
         });
