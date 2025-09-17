@@ -1,5 +1,5 @@
 using System.Collections;
-using Cysharp.Threading.Tasks;
+using AudioSystem;
 using IngameDebugConsole;
 using UnityEngine;
 
@@ -18,7 +18,7 @@ public class Tango : SceneScript
         };
         base.StartLevel();
         EnemyManager.Instance.EnemySpawning = false;
-        SoundManager.Instance.CreateSoundBuilder().Play("Witch");
+        MusicManager.Instance.Play(musicTracks[0]);
         Dialogue.Instance.TypeText("F TO GIVE DRUGS");
         DebugLogConsole.AddCommandInstance(
             "SkipToPhase2",
@@ -90,7 +90,7 @@ public class Tango : SceneScript
     public void Phase2()
     {
         EnemyManager.Instance.EnemySpawning = true;
-        SoundManager.Instance.CreateSoundBuilder().Play("Magic");
+        MusicManager.Instance.Play(musicTracks[1]);
         InteractionManager.Instance.ExtractOn();
         EnemyManager.Instance.Brawl();
         extractsActive = true;

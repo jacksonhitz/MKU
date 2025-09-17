@@ -1,4 +1,5 @@
 using System.Collections;
+using AudioSystem;
 using Cysharp.Threading.Tasks;
 using Redcode.Moroutines;
 using TMPro;
@@ -16,6 +17,7 @@ public class Dialogue : MonoBehaviour
     public float textSpeed;
     private Moroutine dialogue;
     private bool completeNow;
+    private SoundEmitter soundEmitter;
 
     int index = 0;
 
@@ -57,7 +59,7 @@ public class Dialogue : MonoBehaviour
         textComponent.text = string.Empty;
         yield return new WaitForSeconds(0.1f);
 
-        SoundManager.Instance.CreateSoundBuilder().Play("Line");
+        soundEmitter = SoundManager.Instance.CreateSoundBuilder().Play("Line");
 
         foreach (char c in text)
         {
@@ -65,7 +67,9 @@ public class Dialogue : MonoBehaviour
             {
                 textComponent.text = text;
                 completeNow = false;
-                SoundManager.Instance.Stop(SoundData.SoundType.Dialogue);
+                if (soundEmitter != null && soundEmitter.isActiveAndEnabled)
+                    soundEmitter.Stop();
+                soundEmitter = null;
                 yield return null;
                 break;
             }
@@ -74,7 +78,9 @@ public class Dialogue : MonoBehaviour
         }
         yield return new WaitForSeconds(1f);
 
-        SoundManager.Instance.Stop(SoundData.SoundType.Dialogue);
+        if (soundEmitter != null && soundEmitter.isActiveAndEnabled)
+            soundEmitter.Stop();
+        soundEmitter = null;
     }
 
     public Moroutine TypeText(string customText)
@@ -88,6 +94,8 @@ public class Dialogue : MonoBehaviour
     {
         StopAllCoroutines();
         textComponent.text = string.Empty;
-        SoundManager.Instance.Stop(SoundData.SoundType.Dialogue);
+        if (soundEmitter != null && soundEmitter.isActiveAndEnabled)
+            soundEmitter.Stop();
+        soundEmitter = null;
     }
 }

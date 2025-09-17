@@ -17,7 +17,6 @@ public class SoundData : ScriptableObject
     public AudioClip[] clips;
     public AudioMixerGroup mixerGroup;
     public bool loop;
-    public bool playOnAwake;
     public bool frequentSound;
 
     public bool mute;
@@ -42,4 +41,6 @@ public class SoundData : ScriptableObject
     public bool ignoreListenerPause;
 
     public AudioRolloffMode rolloffMode = AudioRolloffMode.Logarithmic;
+
+    public void OnValidate() { }
 }

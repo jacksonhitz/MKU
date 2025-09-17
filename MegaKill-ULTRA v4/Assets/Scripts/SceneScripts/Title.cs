@@ -1,3 +1,5 @@
+using AudioSystem;
+
 public class Title : SceneScript
 {
     private new void Awake()
@@ -8,7 +10,7 @@ public class Title : SceneScript
 
     public override void StartLevel()
     {
-        SoundManager.Instance.CreateSoundBuilder().Play("Title");
+        MusicManager.Instance.Play(musicTracks[0]);
         State = StateManager.SceneState.FILE;
     }
 

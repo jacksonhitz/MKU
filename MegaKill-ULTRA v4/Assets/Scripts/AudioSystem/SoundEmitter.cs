@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityUtils;
 using Random = UnityEngine.Random;
@@ -11,11 +12,12 @@ namespace AudioSystem
     {
         public SoundData Data { get; private set; }
         public LinkedListNode<SoundEmitter> Node { get; set; }
+        public SoundData.SoundType Type => Data.soundType;
 
-        AudioSource audioSource;
+        private AudioSource audioSource;
         Coroutine playingCoroutine;
 
-        void Awake()
+        private void Awake()
         {
             audioSource = gameObject.GetOrAdd<AudioSource>();
         }
@@ -23,32 +25,7 @@ namespace AudioSystem
         public void Initialize(SoundData data)
         {
             Data = data;
-            audioSource.clip = data.clips[Random.Range(0, data.clips.Length)];
-            audioSource.outputAudioMixerGroup = data.mixerGroup;
-            audioSource.loop = data.loop;
-            audioSource.playOnAwake = data.playOnAwake;
-
-            audioSource.mute = data.mute;
-            audioSource.bypassEffects = data.bypassEffects;
-            audioSource.bypassListenerEffects = data.bypassListenerEffects;
-            audioSource.bypassReverbZones = data.bypassReverbZones;
-
-            audioSource.priority = data.priority;
-            audioSource.volume = data.volume;
-            audioSource.pitch = data.pitch;
-            audioSource.panStereo = data.panStereo;
-            audioSource.spatialBlend = data.spatialBlend;
-            audioSource.reverbZoneMix = data.reverbZoneMix;
-            audioSource.dopplerLevel = data.dopplerLevel;
-            audioSource.spread = data.spread;
-
-            audioSource.minDistance = data.minDistance;
-            audioSource.maxDistance = data.maxDistance;
-
-            audioSource.ignoreListenerVolume = data.ignoreListenerVolume;
-            audioSource.ignoreListenerPause = data.ignoreListenerPause;
-
-            audioSource.rolloffMode = data.rolloffMode;
+            audioSource.InitializeSource(data);
         }
 
         public void Play()
@@ -62,9 +39,9 @@ namespace AudioSystem
             playingCoroutine = StartCoroutine(WaitForSoundToEnd());
         }
 
-        IEnumerator WaitForSoundToEnd()
+        private IEnumerator WaitForSoundToEnd()
         {
-            yield return new WaitWhile(() => audioSource.isPlaying);
+            yield return UniTask.WaitWhile(() => audioSource.isPlaying).ToCoroutine();
             Stop();
         }
 

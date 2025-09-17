@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+using AudioSystem;
 using TMPro;
 using UnityEngine;
 
 public class Tutorial : SceneScript
 {
+    [SerializeField]
+    private SoundData tutorialMusic;
+
     //Main instruction text
     [SerializeField]
     private TMP_Text instruction;
@@ -50,7 +54,7 @@ public class Tutorial : SceneScript
     {
         base.StartLevel();
         TutorialStateManager.State = TutorialStateManager.TutorialState.WASD;
-        SoundManager.Instance.CreateSoundBuilder().Play("Hot");
+        MusicManager.Instance.Play(tutorialMusic);
     }
 
     void EnumLogic()

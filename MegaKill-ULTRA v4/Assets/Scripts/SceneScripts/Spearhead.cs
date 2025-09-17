@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+using AudioSystem;
 
 public class Spearhead : SceneScript
 {
     public override void StartLevel()
     {
         base.StartLevel();
-        SoundManager.Instance.CreateSoundBuilder().Play("DJ");
+        MusicManager.Instance.Play(musicTracks[0]);
     }
 }

@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace AudioSystem
 {
@@ -35,6 +37,46 @@ namespace AudioSystem
         public static float ToLogarithmicFraction(this float fraction)
         {
             return Mathf.Log10(1 + 9 * fraction) / Mathf.Log10(10);
+        }
+
+        /// <summary>
+        /// Initializes the AudioSource with all fields supplied by a SoundData and assigns the first clip.
+        /// </summary>
+        /// <param name="audioSource">The audio source to initialize.</param>
+        /// <param name="data">The sound data to initialize the source with.</param>
+        /// <param name="clipSelector">A function that picks a clip from the list of possible clips in the data. Defaults to a random clip from the data.</param>
+        public static void InitializeSource(
+            this AudioSource audioSource,
+            SoundData data,
+            Func<SoundData, AudioClip> clipSelector = null
+        )
+        {
+            audioSource.outputAudioMixerGroup = data.mixerGroup;
+            audioSource.loop = data.loop;
+            clipSelector ??= (soundData) => soundData.clips[Random.Range(0, data.clips.Length)];
+            audioSource.clip = clipSelector(data);
+
+            audioSource.mute = data.mute;
+            audioSource.bypassEffects = data.bypassEffects;
+            audioSource.bypassListenerEffects = data.bypassListenerEffects;
+            audioSource.bypassReverbZones = data.bypassReverbZones;
+
+            audioSource.priority = data.priority;
+            audioSource.volume = data.volume;
+            audioSource.pitch = data.pitch;
+            audioSource.panStereo = data.panStereo;
+            audioSource.spatialBlend = data.spatialBlend;
+            audioSource.reverbZoneMix = data.reverbZoneMix;
+            audioSource.dopplerLevel = data.dopplerLevel;
+            audioSource.spread = data.spread;
+
+            audioSource.minDistance = data.minDistance;
+            audioSource.maxDistance = data.maxDistance;
+
+            audioSource.ignoreListenerVolume = data.ignoreListenerVolume;
+            audioSource.ignoreListenerPause = data.ignoreListenerPause;
+
+            audioSource.rolloffMode = data.rolloffMode;
         }
     }
 }

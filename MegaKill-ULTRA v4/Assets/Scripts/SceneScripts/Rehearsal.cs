@@ -1,5 +1,5 @@
 using System;
-using Cysharp.Threading.Tasks;
+using AudioSystem;
 
 public class Rehearsal : SceneScript
 {
@@ -11,7 +11,7 @@ public class Rehearsal : SceneScript
                 + " operating out of the abandoned downtown subway system - that's right folks, Reds here on American soil...",
         };
         base.StartLevel();
-        SoundManager.Instance.CreateSoundBuilder().Play("Acid");
+        MusicManager.Instance.Play(musicTracks[0]);
         PlayerController.Instance.commandUI.Active = true;
     }
 

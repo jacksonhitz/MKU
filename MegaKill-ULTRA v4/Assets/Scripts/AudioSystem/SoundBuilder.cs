@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace AudioSystem
@@ -25,18 +26,24 @@ namespace AudioSystem
             return this;
         }
 
-        public void Play(SoundData soundData)
+        /// <summary>
+        /// Play the sound specified by the <see cref="SoundData"/>.
+        /// </summary>
+        /// <param name="soundData">The sound to play with the specified configuration.</param>
+        /// <returns>The sound emitter used to play the sound, else null if the sound couldn't be played.</returns>
+        [CanBeNull]
+        public SoundEmitter Play(SoundData soundData)
         {
             if (soundData == null)
             {
                 Debug.LogError("SoundData is null");
-                return;
+                return null;
             }
 
             if (!soundManager.CanPlaySound(soundData))
-                return;
+                return null;
 
-            SoundEmitter soundEmitter = soundManager.Get();
+            var soundEmitter = soundManager.Get();
             soundEmitter.Initialize(soundData);
             soundEmitter.transform.position = position;
             soundEmitter.transform.parent = soundManager.transform;
@@ -52,14 +59,24 @@ namespace AudioSystem
             }
 
             soundEmitter.Play();
+            return soundEmitter;
         }
 
-        public void Play(string soundName)
+        /// <summary>
+        /// Play the sound specified by the name.
+        /// </summary>
+        /// <param name="soundName">The name of the sound to play.</param>
+        /// <returns>The sound emitter used to play the sound, else null if the sound couldn't be found or played.</returns>'
+        [CanBeNull]
+        public SoundEmitter Play(string soundName)
         {
             var sound = soundManager.GetSound(soundName);
             if (sound == null)
-                return;
-            Play(sound);
+            {
+                Debug.LogError($"Sound {soundName} not found");
+                return null;
+            }
+            return Play(sound);
         }
     }
 }

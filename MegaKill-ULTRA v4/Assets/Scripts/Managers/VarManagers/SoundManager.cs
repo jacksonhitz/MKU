@@ -9,11 +9,6 @@ using Debug = UnityEngine.Debug;
 
 public class SoundManager : PersistentSingleton<SoundManager>
 {
-    [Header("Audio Sources")]
-    public AudioSource music;
-
-    public AudioSource dialogue;
-
     [Header("3D Settings")]
     [SerializeField]
     private float minDistance = 5f;
@@ -63,7 +58,7 @@ public class SoundManager : PersistentSingleton<SoundManager>
             soundLookup.TryAdd(sound.name, sound);
     }
 
-    void Start()
+    private void Start()
     {
         InitializePool();
     }
@@ -80,98 +75,6 @@ public class SoundManager : PersistentSingleton<SoundManager>
         Debug.LogWarning($"Sound '{soundName}' not found.");
         return null;
     }
-
-    public void MusicOff()
-    {
-        music.Stop();
-    }
-
-    public void Stop(SoundData.SoundType type)
-    {
-        switch (type)
-        {
-            case SoundData.SoundType.Music:
-                music.Stop();
-                break;
-            case SoundData.SoundType.Sfx:
-                // sfx.Stop();
-                break;
-            case SoundData.SoundType.Dialogue:
-                dialogue.Stop();
-                break;
-        }
-    }
-
-    // //2D Grabber
-    // public void Play(string soundName)
-    // {
-    //     SoundData sound = GetSound(soundName);
-    //     if (sound)
-    //     {
-    //         Play(sound);
-    //     }
-    // }
-    //
-    // //3D Grabber
-    // public void Play(string soundName, Vector3 pos)
-    // {
-    //     SoundData sound = GetSound(soundName);
-    //     if (sound)
-    //     {
-    //         Play(sound, pos);
-    //     }
-    // }
-    //
-    // //2D Player
-    // public void Play(SoundData sound)
-    // {
-    //     AudioClip clip = sound.clips[Random.Range(0, sound.clips.Length)];
-    //     var emitter = soundEmitterPool.Get();
-    //     var source = emitter.Node;
-    //     source.clip = clip;
-    //     source.volume = sound.volume;
-    //     source.spatialBlend = 0f;
-    //
-    //     switch (sound.soundType)
-    //     {
-    //         case SoundData.SoundType.Music:
-    //             source.loop = true;
-    //             source.outputAudioMixerGroup = musicMixer;
-    //             Debug.Log("Music: " + sound);
-    //             break;
-    //         case SoundData.SoundType.Sfx:
-    //             source.outputAudioMixerGroup = sfxMixer;
-    //             Debug.Log("Sound: " + sound);
-    //             break;
-    //         case SoundData.SoundType.Dialogue:
-    //             source.loop = true;
-    //             source.outputAudioMixerGroup = dialogueMixer;
-    //             break;
-    //     }
-    //
-    //     source.Play();
-    // }
-
-    //3D Player
-    // public void Play(SoundData sound, Vector3 pos)
-    // {
-    //     AudioClip clip = sound.clips[Random.Range(0, sound.clips.Length)];
-    //
-    //     var audioHolder = new GameObject("Holding: " + clip.name);
-    //     audioHolder.transform.position = pos;
-    //
-    //     var audioSource = audioHolder.AddComponent<AudioSource>();
-    //     audioSource.clip = clip;
-    //     audioSource.spatialBlend = 1f;
-    //     audioSource.rolloffMode = AudioRolloffMode.Custom;
-    //     audioSource.SetCustomCurve(AudioSourceCurveType.CustomRolloff, falloffCurve);
-    //     audioSource.minDistance = minDistance;
-    //     audioSource.maxDistance = maxDistance;
-    //     audioSource.volume = sound.volume;
-    //
-    //     audioSource.Play();
-    //     Destroy(audioHolder, clip.length + 0.1f);
-    // }
 
     public SoundBuilder CreateSoundBuilder() => new SoundBuilder(this);
 

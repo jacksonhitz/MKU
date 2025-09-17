@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using AudioSystem;
 using Cysharp.Threading.Tasks;
 using IngameDebugConsole;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 using Debug = UnityEngine.Debug;
 using SceneState = StateManager.SceneState;
@@ -20,6 +22,9 @@ public abstract class SceneScript : MonoBehaviour
     [SerializeField]
     private SceneState _state = SceneState.TRANSITION;
 
+    [SerializeField]
+    protected SoundData[] musicTracks;
+
     public SceneState State
     {
         get => _state;
@@ -33,6 +38,8 @@ public abstract class SceneScript : MonoBehaviour
     }
 
     private GameObject level;
+    private SoundData newsTheme;
+
     public GameObject LevelRoot => level;
 
     protected List<string> newsDialogue = new();
@@ -54,6 +61,8 @@ public abstract class SceneScript : MonoBehaviour
         {
             level.SetActive(false);
         }
+        newsTheme = Resources.Load<SoundData>("Sounds/Music/All");
+        Assert.IsNotNull(newsTheme);
 
         Interactable.InteractableUsed += OnInteract;
         EnemyManager.EnemyKilled += OnEnemyKilled;
@@ -121,6 +130,7 @@ public abstract class SceneScript : MonoBehaviour
     {
         StateManager.LoadNext();
         State = SceneState.TRANSITION;
+        MusicManager.Instance.Stop();
     }
 
     protected void EndLevel()
@@ -136,16 +146,16 @@ public abstract class SceneScript : MonoBehaviour
             return;
         State = SceneState.SCORE;
         SoundManager.Instance.StopAll();
-        SoundManager.Instance.MusicOff();
+        MusicManager.Instance.Clear();
         ScoreUI.Instance.Visible = true;
-        SoundManager.Instance.CreateSoundBuilder().Play("All");
+        MusicManager.Instance.Play(newsTheme);
         NewsDialogue();
     }
 
     private void NewsDialogue()
     {
-        // TODO: Show correct input name based on binding
-        newsDialogue.Add("PRESS SPACE TO CONTINUE");
+        string binding = InputManager.UIActionMap.Submit.GetBindingDisplayString();
+        newsDialogue.Add($"PRESS {binding.ToUpper()} TO CONTINUE");
         Dialogue.Instance.lines = newsDialogue.ToArray();
         var textTask = Dialogue.Instance.Play();
         InputManager.UIActionMap.Submit.performed += SubmitOnPerformed;

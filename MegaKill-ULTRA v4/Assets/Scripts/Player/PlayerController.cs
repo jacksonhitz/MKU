@@ -29,9 +29,6 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField, Child]
     public Camera cam;
 
-    [SerializeField, KBCore.Refs.Scene]
-    public SoundManager sound;
-
     [Header("Hands")]
     [SerializeField, Anywhere]
     public Transform left;
