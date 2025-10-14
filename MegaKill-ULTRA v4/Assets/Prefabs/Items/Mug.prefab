@@ -12,10 +12,8 @@ GameObject:
   - component: {fileID: 5591057511665136780}
   - component: {fileID: 5705108742293567975}
   - component: {fileID: 7163749752706492548}
-  - component: {fileID: 5632551698129183438}
   - component: {fileID: 7597598643244566200}
   - component: {fileID: 4430194091241659540}
-  - component: {fileID: -8923800153539051118}
   m_Layer: 6
   m_Name: Mug
   m_TagString: Item
@@ -63,6 +61,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -110,24 +111,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2534964839176971238, guid: 88ee255618e7946379bc9d5db50a9a90, type: 3}
---- !u!114 &5632551698129183438
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3018344668391811946}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db88e1bc7ad6e4676ad52bcce1d96a1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  available: 1
-  enemyHas: 0
-  def: {fileID: -6478536213147159724, guid: 88ee255618e7946379bc9d5db50a9a90, type: 3}
-  glow: {fileID: 2100000, guid: 3bab0ce2f88394f7f97a4c5fae10d5f5, type: 2}
-  isHovering: 0
-  thrown: 0
 --- !u!54 &7597598643244566200
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -178,15 +161,3 @@ CapsuleCollider:
   m_Height: 0.019999996
   m_Direction: 1
   m_Center: {x: -0.0028618136, y: 0, z: 0}
---- !u!114 &-8923800153539051118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3018344668391811946}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c67b6f22a26d64985849da8225808933, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
