@@ -19,7 +19,7 @@ public class Tango : SceneScript
         base.StartLevel();
         EnemyManager.Instance.EnemySpawning = false;
         MusicManager.Instance.Play(musicTracks[0]);
-        Dialogue.Instance.TypeText("F TO GIVE DRUGS");
+        Directions.Instance.TypeText("F TO GIVE DRUGS");
         DebugLogConsole.AddCommandInstance(
             "SkipToPhase2",
             "Skip to phase 2 of Tango",

@@ -1,11 +1,10 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Dialogue")]
+[CreateAssetMenu(menuName = "Dialogue/Dialogue Line", fileName = "Dialogue")]
 public class DialogueData : ScriptableObject
 {
-    //MERGE W SOUND DATA DIALOGUE SOON
     [TextArea(3, 10)]
     public string line;
+    public StateManager.GameState gameState;
     public int trip;
 }
-
