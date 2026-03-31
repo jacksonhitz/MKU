@@ -218,6 +218,9 @@ public class Enemy : Interactable, IHitable
         if (player == null)
             return;
 
+        if (!player.Aggressive)
+            return;
+
         isInteractable = false;
         target = player.gameObject;
 
@@ -372,6 +375,9 @@ public class Enemy : Interactable, IHitable
 
     IEnumerator Stun()
     {
+        if (!player.Aggressive)
+            player.Aggressive = true;
+
         isStunned = true;
         animator.SetBool(StunKey, true);
         if (agent != null)
@@ -392,6 +398,10 @@ public class Enemy : Interactable, IHitable
     {
         if (isDead)
             return;
+
+        if (!player.Aggressive)
+            player.Aggressive = true;
+
         isDead = true;
         enemies.Kill(this);
         StopAllCoroutines();

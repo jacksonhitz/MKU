@@ -27,6 +27,8 @@ public class PlayerCombat : ValidatedMonoBehaviour
 
     bool canPunch = true;
 
+    bool aggressive;
+
     private void OnEnable()
     {
         InputManager.PlayerActionMap.UseLeft.performed += UseLeftOnPerformed;

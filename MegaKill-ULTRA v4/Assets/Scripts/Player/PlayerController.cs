@@ -22,6 +22,8 @@ public class PlayerController : Singleton<PlayerController>
         }
     }
 
+    public bool Aggressive;
+
     // All refrences in playerController are shared between multiple compartments in order to avoid extra refrences between compartments.
     // All other refrences that are specific to a compartment are stored within that compartment
 

@@ -7,6 +7,8 @@ public class PlayerInteract : MonoBehaviour
 {
     private Camera _camera;
 
+    public bool isAggressive;
+
     private void Awake()
     {
         _camera = Camera.main;
