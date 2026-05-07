@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find \"C:\\\\Users\\\\jacks\\\\Downloads\\\\GitHub\\\\MKU\\\\MegaKill-ULTRA v4\\\\Assets\\\\Scripts\" -name \"*.cs\" -type f -exec wc -l {} +)",
+      "Bash(find \"C:\\\\Users\\\\jacks\\\\Downloads\\\\GitHub\\\\MKU\\\\MegaKill-ULTRA v4\\\\Assets\\\\Scripts\\\\LEGACY\" -name \"*.cs\" -type f -exec wc -l {} +)",
+      "Bash(__NEW_LINE_c650ba7b87dbbbf8__ echo:*)",
+      "Bash(tail -1 __NEW_LINE_c650ba7b87dbbbf8__ echo \"Managers:\" find \"C:\\\\Users\\\\jacks\\\\Downloads\\\\GitHub\\\\MKU\\\\MegaKill-ULTRA v4\\\\Assets\\\\Scripts\\\\Managers\" -name \"*.cs\" -type f -exec wc -l {} +)",
+      "Bash(tail -1 __NEW_LINE_c650ba7b87dbbbf8__ echo \"Enemies:\" find \"C:\\\\Users\\\\jacks\\\\Downloads\\\\GitHub\\\\MKU\\\\MegaKill-ULTRA v4\\\\Assets\\\\Scripts\\\\Enemies\" -name \"*.cs\" -type f -exec wc -l {} +)",
+      "Bash(tail -1 __NEW_LINE_c650ba7b87dbbbf8__ echo \"Items:\" find \"C:\\\\Users\\\\jacks\\\\Downloads\\\\GitHub\\\\MKU\\\\MegaKill-ULTRA v4\\\\Assets\\\\Scripts\\\\Items\" -name \"*.cs\" -type f -exec wc -l {} +)",
+      "Bash(tail -1 __NEW_LINE_c650ba7b87dbbbf8__ echo \"UI:\" find \"C:\\\\Users\\\\jacks\\\\Downloads\\\\GitHub\\\\MKU\\\\MegaKill-ULTRA v4\\\\Assets\\\\Scripts\\\\UI\" -name \"*.cs\" -type f -exec wc -l {} +)",
+      "Bash(tail -1 __NEW_LINE_c650ba7b87dbbbf8__ echo \"AI:\" find \"C:\\\\Users\\\\jacks\\\\Downloads\\\\GitHub\\\\MKU\\\\MegaKill-ULTRA v4\\\\Assets\\\\Scripts\\\\AI\" -name \"*.cs\" -type f -exec wc -l {} +)",
+      "Bash(tail -1 __NEW_LINE_c650ba7b87dbbbf8__ echo \"Audio System:\" find \"C:\\\\Users\\\\jacks\\\\Downloads\\\\GitHub\\\\MKU\\\\MegaKill-ULTRA v4\\\\Assets\\\\Scripts\\\\AudioSystem\" -name \"*.cs\" -type f -exec wc -l {} +)",
+      "Bash(tail -1 __NEW_LINE_c650ba7b87dbbbf8__ echo \"Data:\" find \"C:\\\\Users\\\\jacks\\\\Downloads\\\\GitHub\\\\MKU\\\\MegaKill-ULTRA v4\\\\Assets\\\\Scripts\\\\Data\" -name \"*.cs\" -type f -exec wc -l {} +)",
+      "Bash(tail -1 __NEW_LINE_c650ba7b87dbbbf8__ echo \"Scene Scripts:\" find \"C:\\\\Users\\\\jacks\\\\Downloads\\\\GitHub\\\\MKU\\\\MegaKill-ULTRA v4\\\\Assets\\\\Scripts\\\\SceneScripts\" -name \"*.cs\" -type f -exec wc -l {} +)",
+      "Bash(tail -1 __NEW_LINE_c650ba7b87dbbbf8__ echo \"All main Scripts \\(excluding Packages/Editor\\):\" find \"C:\\\\Users\\\\jacks\\\\Downloads\\\\GitHub\\\\MKU\\\\MegaKill-ULTRA v4\\\\Assets\\\\Scripts\" -name \"*.cs\" -type f -exec wc -l {} +)"
+    ]
+  }
+}
